@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">Lexi App</string>
     <string name="logo">LEXI</string>
+    <string name="continue_with_google">Continuar con Google</string>
+    <string name="continue_with_facebook">Continuar con Facebook</string>
+    <string name="name">Nombre</string>
+    <string name="email">Correo electrónico</string>
+    <string name="password">Contraseña</string>
+    <string name="confirm_email">Confirmar correo electrónico</string>
+    <string name="confirm_sign_up">Registrarme</string>
+    <string name="already_have_account">¿Ya tenés una cuenta?</string>
+    <string name="log_in">Iniciar Sesión</string>
 </resources>

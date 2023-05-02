@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.signup.SignUpActivity">
+
+    <TextView
+        android:id="@+id/tvLogoApp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textAppearance="@style/lexiLogo"
+        android:layout_marginTop="100dp"/>
+
+    <Button
+        android:id="@+id/btnSignUpWithGoogle"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvLogoApp"
+        android:layout_marginTop="20dp"
+        style="@style/Widget.MaterialComponents.Button.Icon"
+        android:backgroundTint="@color/google_button"
+        android:text="@string/continue_with_google"
+        android:textAppearance="@style/signUpText"
+        app:icon="@drawable/ic_google"
+        app:iconSize="15dp"
+        app:iconPadding="0dp"/>
+
+    <Button
+        android:id="@+id/btnSignUpWithFacebook"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnSignUpWithGoogle"
+        android:layout_marginTop="10dp"
+        android:textAppearance="@style/signUpText"
+        style="@style/Widget.MaterialComponents.Button.Icon"
+        android:text="@string/continue_with_facebook"
+        app:icon="@drawable/ic_fb"
+        app:iconPadding="0dp"
+        android:backgroundTint="@color/facebook_button"
+        app:iconSize="20dp"/>
+
+    <TextView
+        android:id="@+id/tvSeparator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/signUpText"
+        android:text="-o-"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnSignUpWithFacebook"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/etName"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:hint="@string/name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvSeparator"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:boxStrokeColor="@color/sign_up_fields"
+        app:hintTextColor="@color/sign_up_fields">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/etEmail"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:hint="@string/email"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etName"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_marginTop="5dp"
+        app:boxStrokeColor="@color/sign_up_fields"
+        app:hintTextColor="@color/sign_up_fields">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/etConfirmEmail"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:hint="@string/confirm_email"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etEmail"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_marginTop="5dp"
+        app:boxStrokeColor="@color/sign_up_fields"
+        app:hintTextColor="@color/sign_up_fields">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/etPassword"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:hint="@string/password"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etConfirmEmail"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_marginTop="5dp"
+        app:passwordToggleEnabled="true"
+        app:boxStrokeColor="@color/sign_up_fields"
+        app:hintTextColor="@color/sign_up_fields">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/etConfirmPassword"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:hint="@string/confirm_email"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etPassword"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_marginTop="5dp"
+        app:passwordToggleEnabled="true"
+        app:boxStrokeColor="@color/sign_up_fields"
+        app:hintTextColor="@color/sign_up_fields">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btnSignUp"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="30dp"
+        android:text="@string/confirm_sign_up"
+        android:textAppearance="@style/signUpText"
+        style="@style/Widget.MaterialComponents.Button"
+        app:backgroundTint="@color/sign_up_fields"/>
+
+    <TextView
+        android:id="@+id/tvAlreadyWithAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/btnSignUp"
+        android:text="@string/already_have_account"
+        app:layout_constraintTop_toBottomOf="@id/btnSignUp"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/tvLogin"/>
+
+    <TextView
+        android:id="@+id/tvLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/btnSignUp"
+        app:layout_constraintTop_toBottomOf="@id/btnSignUp"
+        android:text="@string/log_in"
+        android:textSize="14sp"
+        android:textColor="@color/sign_up_fields"
+        android:textStyle="bold"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
