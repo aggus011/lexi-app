@@ -1,29 +1,20 @@
 package com.example.lexiapp.ui.login
 
-import android.app.Activity
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isNotEmpty
 import com.example.lexiapp.R
-import com.example.lexiapp.domain.AuthProvider
 import com.example.lexiapp.databinding.ActivityLoginBinding
+import com.example.lexiapp.domain.AuthProvider
+import com.example.lexiapp.ui.home.HomeActivity
+import com.example.lexiapp.ui.signup.SignUpActivity
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.signin.SignInOptions
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var prefs: SharedPreferences
@@ -40,12 +31,19 @@ class LoginActivity : AppCompatActivity() {
         prefs=getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
         validateSesion()
         setUpLoginEmail()
+        setUpRegister()
+    }
+
+    private fun setUpRegister() {
+        binding.tvRegister.setOnClickListener{
+            startActivity(Intent(this,SignUpActivity::class.java))
+        }
     }
 
     private fun validateSesion() {
         if((prefs.getString("email",null))!=null){
             //showHomeActivity(prefs.getString("email",null))
-            startActivity(Intent(this,HomeActivity::class.java))
+            startActivity(Intent(this, HomeActivity::class.java))
         }
     }
 
@@ -55,10 +53,10 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setUpLoginEmail(){
         binding.btnLogin.setOnClickListener{
-            if (binding.etMail.text!!.isNotEmpty() && binding.etPassword.text!!.isNotEmpty()){
-                authProv.loginEmail(binding.etMail.text.toString(),binding.etPassword.text.toString()).addOnCompleteListener {
+            if (binding.etMail.editText?.text!!.isNotEmpty() && binding.etPassword.editText?.text!!.isNotEmpty()){
+                authProv.loginEmail(binding.etMail.editText?.text!!.toString(),binding.etPassword.editText?.text!!.toString()).addOnCompleteListener {
                     if (it.isSuccessful) {
-                        saveSeion(binding.etMail.text.toString())
+                        saveSeion(binding.etMail.editText?.text!!.toString())
                         goToHome()
                     } else {
                         showAlert()
@@ -72,7 +70,7 @@ class LoginActivity : AppCompatActivity() {
     private fun goToHome() {
         //Intent a la homePage
         Toast.makeText(this, "Se accedió correctamente",Toast.LENGTH_SHORT).show()
-        startActivity(Intent(this,HomeActivity::class.java))
+        startActivity(Intent(this, HomeActivity::class.java))
     }
 
     private fun showAlert(){
@@ -84,28 +82,3 @@ class LoginActivity : AppCompatActivity() {
         alert.show()
     }
 }
-//RegisterActivity
-/*lateinit var authProv: AuthProvider
-    lateinit var binding: ActivityMainBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding= ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        authProv= AuthProvider()
-        binding.h.setOnClickListener{ startActivity(Intent(this,LoginActivity::class.java)) }
-        setUp()
-    }
-    private fun setUp(){
-        binding.register.setOnClickListener{
-            if (binding.emailRegister.text!!.isNotEmpty() && binding.passRegister.text!!.isNotEmpty()){
-                //For create a New User use .createUserWhitEmailAndPassword(e,p)
-                authProv.singUpWithEmail(binding.emailRegister.text.toString(),binding.passRegister.text.toString()).addOnCompleteListener(this) {
-                    if (it.isSuccessful) {
-                        Toast.makeText(this, "Se registró correctamente",Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(this, "Hubo un error",Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
-    }*/

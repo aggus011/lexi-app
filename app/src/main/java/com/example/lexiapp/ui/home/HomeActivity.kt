@@ -1,4 +1,4 @@
-package com.example.lexiapp.ui
+package com.example.lexiapp.ui.home
 
 import android.content.Context
 import android.content.SharedPreferences
