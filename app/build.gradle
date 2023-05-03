@@ -6,6 +6,7 @@ plugins {
 android {
     namespace 'com.example.lexiapp'
     compileSdk 33
+    compileSdkPreview 'UpsideDownCake'
 
     defaultConfig {
         applicationId "com.example.lexiapp"
