@@ -55,7 +55,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
-    //material outlined input text
+    //Material
     implementation 'com.google.android.material:material:1.10.0-alpha01'
 
 }
