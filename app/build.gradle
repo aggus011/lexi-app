@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -57,5 +58,17 @@ dependencies {
 
     //Material
     implementation 'com.google.android.material:material:1.10.0-alpha01'
+
+    //Firebase
+    implementation platform('com.google.firebase:firebase-bom:31.5.0')
+
+    //Analytics
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    //Auth
+    implementation 'com.google.firebase:firebase-auth-ktx'
+
+    //Auth Google
+    implementation 'com.google.android.gms:play-services-auth:20.5.0'
 
 }

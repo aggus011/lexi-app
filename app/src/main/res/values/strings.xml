@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Lexi App</string>
+    <string name="prefs_file">com.example.lexiapp.PREFERENCES_FILE_KEY</string>
     <string name="logo">LEXI</string>
     <string name="name">Nombre</string>
     <string name="email">Correo electrónico</string>
