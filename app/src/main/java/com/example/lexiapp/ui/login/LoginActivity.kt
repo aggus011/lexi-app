@@ -1,8 +1,7 @@
-package com.example.lexiapp.ui
+package com.example.lexiapp.ui.login
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.lexiapp.R
+import androidx.appcompat.app.AppCompatActivity
 import com.example.lexiapp.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {

@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Lexi App</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="Google">Continuar con Google</string>
     <string name="Facebook">Continuar con Facebook</string>
     <string name="mail">Correo Electrónico</string>
@@ -10,4 +8,7 @@
     <string name="forgot_password"><a href="http://google.com/">Olvidé mi contraseña</a></string>
     <string name="need_account">¿Necesitas una cuenta?</string>
     <string name="register"><a href="http://google.com/">Registrarme</a></string>
+    <string name="games">Juegos</string>
+    <string name="objectives">Objetivos</string>
+    <string name="profile">Perfil</string>
 </resources>
