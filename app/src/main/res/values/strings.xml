@@ -11,4 +11,9 @@
     <string name="games">Juegos</string>
     <string name="objectives">Objetivos</string>
     <string name="profile">Perfil</string>
+    <string name="game_correct_word">Juego palabra correcta</string>
+    <string name="game_lets_read">Juego vamos a leer</string>
+    <string name="game_where_is_the_letter">Juego donde está la letra</string>
+    <string name="game_is_it_so_called">Juego así se dice</string>
+    <string name="read_my_text">¡Leamos mi texto!</string>
 </resources>

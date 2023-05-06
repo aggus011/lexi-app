@@ -6,4 +6,6 @@
     <color name="btn_facebook">#1877F2</color>
     <color name="btn_login">#035AA6</color>
     <color name="bottom_navigation_bg">#9417FF</color>
+    <color name="transparent">#00000000</color>
+    <color name="btn_patient_home">#CA9AF8</color>
 </resources>
