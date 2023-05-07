@@ -3,11 +3,10 @@ package com.example.lexiapp.ui.login
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.isNotEmpty
+import androidx.appcompat.app.AppCompatActivity
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityLoginBinding
 import com.example.lexiapp.domain.AuthProvider
