@@ -15,7 +15,7 @@
         android:theme="@style/Theme.LexiApp"
         tools:targetApi="31">
         <activity
-            android:name=".WordDiscriminationActivity"
+            android:name=".ui.game.correct_word.CorrectWordActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
