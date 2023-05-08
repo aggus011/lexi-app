@@ -3,15 +3,14 @@ package com.example.lexiapp.ui.login
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.isNotEmpty
+import androidx.appcompat.app.AppCompatActivity
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityLoginBinding
 import com.example.lexiapp.domain.AuthProvider
-import com.example.lexiapp.ui.home.HomeActivity
+import com.example.lexiapp.ui.MainActivity
 import com.example.lexiapp.ui.signup.SignUpActivity
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -29,7 +28,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         authProv= AuthProvider()
         prefs=getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
-        validateSesion()
+       // validateSesion()
         setUpLoginEmail()
         setUpRegister()
     }
@@ -43,7 +42,7 @@ class LoginActivity : AppCompatActivity() {
     private fun validateSesion() {
         if((prefs.getString("email",null))!=null){
             //showHomeActivity(prefs.getString("email",null))
-            startActivity(Intent(this, HomeActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
         }
     }
 
@@ -70,7 +69,7 @@ class LoginActivity : AppCompatActivity() {
     private fun goToHome() {
         //Intent a la homePage
         Toast.makeText(this, "Se accedió correctamente",Toast.LENGTH_SHORT).show()
-        startActivity(Intent(this, HomeActivity::class.java))
+        startActivity(Intent(this, MainActivity::class.java))
     }
 
     private fun showAlert(){
