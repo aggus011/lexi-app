@@ -30,4 +30,5 @@
     <string name="we_found_the_following">Encontramos lo siguiente:</string>
     <string name="scan_again">Escanear de nuevo</string>
     <string name="read_text">Leer</string>
+    <string name="try_recapture">Intenta sacar otra foto</string>
 </resources>

@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.speech.tts.TextToSpeech
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -107,6 +108,7 @@ class TextScannerActivity : AppCompatActivity() {
 
     private fun cleanPreviousRecognizedText() {
         textRecognized.text = ""
+        binding.clNoTextImage.visibility = View.VISIBLE
     }
 
     private fun setBtnReadTextRecognizedListener() {
@@ -145,7 +147,11 @@ class TextScannerActivity : AppCompatActivity() {
                 val textTaskResult = textRecognizer.process(inputImage)
                     .addOnSuccessListener { text ->
                         val recognizedText = text.text
-                        textRecognized.text = recognizedText
+                        if(recognizedText.isNotEmpty()){
+                            textRecognized.text = recognizedText
+                            textRecognized.movementMethod = ScrollingMovementMethod()
+                            binding.clNoTextImage.visibility = View.GONE
+                        }
                     }
                     .addOnFailureListener{
                         //A failure had occurred
@@ -271,5 +277,10 @@ class TextScannerActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cleanPreviousRecognizedText()
     }
 }
