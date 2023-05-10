@@ -9,4 +9,6 @@
     <color name="bottom_navigation_bg">#9417FF</color>
     <color name="transparent">#00000000</color>
     <color name="btn_patient_home">#CA9AF8</color>
+    <color name="btn_logout">#B22626</color>
+    <color name="profile_background">#C4C4C4</color>
 </resources>
