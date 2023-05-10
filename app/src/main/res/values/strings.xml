@@ -24,4 +24,11 @@
     <string name="game_where_is_the_letter">Juego donde está la letra</string>
     <string name="game_is_it_so_called">Juego así se dice</string>
     <string name="read_my_text">¡Leamos mi texto!</string>
+    <string name="edit_profile">Editar perfil</string>
+    <string name="link_account">Vincularme</string>
+    <string name="logout">Cerrar sesión</string>
+    <string name="icon_username">Ícono del campo nombre de usuario</string>
+    <string name="icon_user_email">Ícono del campo de correo electrónico del usuario</string>
+    <string name="icon_user_birthday">Ícono de fecha de nacimiento del usuario</string>
+    <string name="user_birthday">Fecha de nacimiento</string>
 </resources>
