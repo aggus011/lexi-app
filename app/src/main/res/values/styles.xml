@@ -9,4 +9,16 @@
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
+    <style name="Widget.AppCompat.BtnCorrectWord" parent="Widget.AppCompat.Button">
+        <item name="android:backgroundTint">@color/btn_word</item>
+        <item name="alpha">30</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="buttonWord" parent="@style/Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:background">@drawable/btn_word</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:layout_margin">6dp</item>
+    </style>
 </resources>
