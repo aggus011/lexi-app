@@ -71,4 +71,15 @@ dependencies {
     //Auth Google
     implementation 'com.google.android.gms:play-services-auth:20.5.0'
 
+    //OkHttp
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+
+    //Moshi
+    implementation 'com.squareup.moshi:moshi:1.14.0'
+
+    //Coroutines
+    def lifecycle_version = "2.6.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+
 }
