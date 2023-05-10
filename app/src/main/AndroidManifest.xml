@@ -15,6 +15,13 @@
         android:theme="@style/Theme.LexiApp"
         tools:targetApi="31">
         <activity
+            android:name=".ui.games.letsread.ListTextActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ui.games.whereistheletter.WhereIsTheLetterActivity"
             android:exported="false" />
         <activity
