@@ -106,7 +106,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvScannedTextTitle"
         app:layout_constraintBottom_toTopOf="@id/btnReScan"
-        tools:visibility="gone">
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/ivNoTextRecognized"

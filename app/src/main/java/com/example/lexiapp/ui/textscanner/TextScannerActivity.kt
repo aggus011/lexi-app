@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -51,7 +52,6 @@ class TextScannerActivity : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
         initArraysPermissions()
-        showBlackScreen()
         checkImageInput(intent.extras)
         getViews()
         setTextRecognizer()
@@ -165,18 +165,18 @@ class TextScannerActivity : AppCompatActivity() {
     private fun verifyCameraPermissions(){
         if(checkCameraPermissions()){
             takePhoto()
-            hideBlackScreen()
         }else{
             requestCameraPermissions()
+            showBlackScreen()
         }
     }
 
     private fun verifyStoragePermissions(){
         if(checkStoragePermissions()){
             pickImageFromGallery()
-            hideBlackScreen()
         }else{
             requestStoragePermissions()
+            showBlackScreen()
         }
     }
 
@@ -210,6 +210,7 @@ class TextScannerActivity : AppCompatActivity() {
     private val cameraActivityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
             if(result.resultCode == Activity.RESULT_OK){
+                hideBlackScreen()
                 photoToScan.setImageURI(imageUri)
                 recognizeTextFromImage()
             }else{
@@ -221,6 +222,7 @@ class TextScannerActivity : AppCompatActivity() {
     private val galleryActivityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
             if(result.resultCode == Activity.RESULT_OK){
+                hideBlackScreen()
                 val data = result.data
                 imageUri = data!!.data
                 photoToScan.setImageURI(imageUri)
@@ -259,6 +261,7 @@ class TextScannerActivity : AppCompatActivity() {
                     if (cameraAccepted && storageAccepted) {
                         takePhoto()
                     } else {
+                        Toast.makeText(this, "Necesitas darnos permiso para acceder a la cámara", Toast.LENGTH_SHORT).show()
                         //No camera and storage permissions granted
                         finish()
                     }
@@ -272,6 +275,7 @@ class TextScannerActivity : AppCompatActivity() {
                     //Open gallery
                     pickImageFromGallery()
                 }else{
+                    Toast.makeText(this, "Necesitas darnos permiso para acceder a la galeria", Toast.LENGTH_SHORT).show()
                     //No camera and storage permissions granted
                     finish()
                 }
