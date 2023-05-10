@@ -26,6 +26,7 @@
         app:labelVisibilityMode="selected"
         android:background="@color/bottom_navigation_bg"
         app:itemIconTint="@color/selector_items_bottom_navigation_patient"
-        app:itemPaddingBottom="4dp"/>
+        app:itemPaddingBottom="4dp"
+        app:itemTextColor="@color/white"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -31,4 +31,11 @@
     <string name="scan_again">Escanear de nuevo</string>
     <string name="read_text">Leer</string>
     <string name="try_recapture">Intenta sacar otra foto</string>
+    <string name="edit_profile">Editar perfil</string>
+    <string name="link_account">Vincularme</string>
+    <string name="logout">Cerrar sesión</string>
+    <string name="icon_username">Ícono del campo nombre de usuario</string>
+    <string name="icon_user_email">Ícono del campo de correo electrónico del usuario</string>
+    <string name="icon_user_birthday">Ícono de fecha de nacimiento del usuario</string>
+    <string name="user_birthday">Fecha de nacimiento</string>
 </resources>
