@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.patienthome.PatientHomeFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/ivMiniLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/mini_logo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/app_name"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clGames"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/ivMiniLogo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageButton
+                android:id="@+id/gameCorrectWord"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/puzzle_top_left"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/gameWhereIsTheLetter"
+                android:backgroundTint="@color/transparent"
+                android:contentDescription="@string/game_correct_word" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/correct_word"
+                app:layout_constraintEnd_toEndOf="@id/gameCorrectWord"
+                app:layout_constraintStart_toStartOf="@id/gameCorrectWord"
+                app:layout_constraintTop_toTopOf="@id/gameCorrectWord"
+                app:layout_constraintBottom_toBottomOf="@id/gameCorrectWord"
+                android:layout_marginBottom="50dp"
+                android:contentDescription="@string/game_correct_word"
+                />
+
+            <ImageButton
+                android:id="@+id/gameLetsRead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/puzzle_top_right"
+                app:layout_constraintStart_toEndOf="@id/gameCorrectWord"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/gameIsItSoCalled"
+                android:backgroundTint="@color/transparent"
+                android:contentDescription="@string/game_lets_read"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/lets_read"
+                app:layout_constraintEnd_toEndOf="@id/gameLetsRead"
+                app:layout_constraintStart_toStartOf="@id/gameLetsRead"
+                app:layout_constraintTop_toTopOf="@id/gameLetsRead"
+                app:layout_constraintBottom_toBottomOf="@id/gameLetsRead"
+                android:layout_marginStart="30dp"
+                android:layout_marginBottom="20dp"
+                android:contentDescription="@string/game_lets_read"/>
+
+            <ImageButton
+                android:id="@+id/gameWhereIsTheLetter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/puzzle_bottom_left"
+                app:layout_constraintTop_toBottomOf="@id/gameCorrectWord"
+                app:layout_constraintStart_toStartOf="parent"
+                android:backgroundTint="@color/transparent"
+                android:contentDescription="@string/game_where_is_the_letter"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/where_is_the_letter"
+                app:layout_constraintStart_toStartOf="@id/gameWhereIsTheLetter"
+                app:layout_constraintBottom_toBottomOf="@id/gameWhereIsTheLetter"
+                app:layout_constraintTop_toTopOf="@+id/gameWhereIsTheLetter"
+                android:layout_marginTop="50dp"
+                android:contentDescription="@string/game_where_is_the_letter"/>
+
+            <ImageButton
+                android:id="@+id/gameIsItSoCalled"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/puzzle_bottom_right"
+                app:layout_constraintTop_toBottomOf="@id/gameLetsRead"
+                app:layout_constraintStart_toEndOf="@id/gameWhereIsTheLetter"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:backgroundTint="@color/transparent"
+                android:contentDescription="@string/game_is_it_so_called"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/is_it_so_called"
+                app:layout_constraintEnd_toEndOf="@id/gameIsItSoCalled"
+                app:layout_constraintStart_toStartOf="@id/gameIsItSoCalled"
+                app:layout_constraintTop_toTopOf="@id/gameIsItSoCalled"
+                app:layout_constraintBottom_toBottomOf="@id/gameIsItSoCalled"
+                android:layout_marginTop="40dp"
+                android:contentDescription="@string/game_is_it_so_called"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnTextScanner"
+            android:layout_width="340dp"
+            android:layout_height="70dp"
+            android:text="@string/read_my_text"
+            app:cornerRadius="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/clGames"
+            android:backgroundTint="@color/btn_patient_home"
+            android:textColor="@color/black"
+            app:icon="@drawable/ic_text_scanner"
+            app:iconTint="@color/black"
+            app:iconSize="30dp"
+            app:iconPadding="-20dp"
+            app:iconGravity="end"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</FrameLayout>

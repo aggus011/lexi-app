@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.profile.ProfileFragment"
+    android:background="@color/profile_background">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/ivMiniLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/mini_logo"
+            android:contentDescription="@string/app_name"/>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="-50dp"
+            android:elevation="6dp"
+            android:src="@drawable/ic_user_photo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/cvUserInfo"
+            app:shapeAppearanceOverlay="@style/circleImageViewStyle" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvUserInfo"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/ivMiniLogo"
+            android:background="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="40dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="5dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+               <ImageView
+                   android:id="@+id/ivAccountIcon"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/ic_account"
+                   app:layout_constraintStart_toStartOf="@id/btnEditProfile"
+                   app:layout_constraintTop_toTopOf="parent"
+                   android:layout_marginTop="60dp"
+                   android:contentDescription="@string/icon_username"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/name"
+                    app:layout_constraintTop_toTopOf="@id/ivAccountIcon"
+                    app:layout_constraintStart_toEndOf="@id/ivAccountIcon"
+                    app:layout_constraintBottom_toBottomOf="@id/ivAccountIcon"
+                    android:layout_marginStart="4dp"/>
+
+                <com.google.android.material.divider.MaterialDivider
+                    app:layout_constraintTop_toBottomOf="@id/ivAccountIcon"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <ImageView
+                    android:id="@+id/ivEmailIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_email"
+                    app:layout_constraintStart_toStartOf="@id/btnEditProfile"
+                    app:layout_constraintTop_toBottomOf="@id/ivAccountIcon"
+                    android:layout_marginTop="20dp"
+                    android:contentDescription="@string/icon_user_email"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/email"
+                    app:layout_constraintTop_toTopOf="@id/ivEmailIcon"
+                    app:layout_constraintStart_toEndOf="@id/ivEmailIcon"
+                    app:layout_constraintBottom_toBottomOf="@id/ivEmailIcon"
+                    android:layout_marginStart="4dp"/>
+
+                <com.google.android.material.divider.MaterialDivider
+                    app:layout_constraintTop_toBottomOf="@id/ivEmailIcon"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <ImageView
+                    android:id="@+id/ivCalendarIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_calendar"
+                    app:layout_constraintStart_toStartOf="@id/btnEditProfile"
+                    app:layout_constraintTop_toBottomOf="@id/ivEmailIcon"
+                    android:layout_marginTop="20dp"
+                    android:contentDescription="@string/icon_user_birthday"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_birthday"
+                    app:layout_constraintTop_toTopOf="@id/ivCalendarIcon"
+                    app:layout_constraintStart_toEndOf="@id/ivCalendarIcon"
+                    app:layout_constraintBottom_toBottomOf="@id/ivCalendarIcon"
+                    android:layout_marginStart="4dp"/>
+
+                <com.google.android.material.divider.MaterialDivider
+                    app:layout_constraintTop_toBottomOf="@id/ivCalendarIcon"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEditProfile"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ivCalendarIcon"
+                    android:backgroundTint="@color/btn_login"
+                    android:text="@string/edit_profile"
+                    app:icon="@drawable/ic_edit"
+                    app:iconPadding="-5dp"
+                    android:layout_marginTop="20dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnLinkAccount"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btnEditProfile"
+                    android:backgroundTint="@color/btn_login"
+                    android:text="@string/link_account"
+                    app:icon="@drawable/ic_qr_code"
+                    app:iconPadding="-5dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnLogOut"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btnLinkAccount"
+                    android:backgroundTint="@color/btn_logout"
+                    android:text="@string/logout"
+                    app:icon="@drawable/ic_logout"
+                    app:iconPadding="-5dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginBottom="20dp"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</FrameLayout>

@@ -15,6 +15,30 @@
         android:theme="@style/Theme.LexiApp"
         tools:targetApi="31">
         <activity
+            android:name=".ui.games.whereistheletter.WhereIsTheLetterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.games.letsread.ListTextActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.games.letsread.LetsReadActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.games.correctword.CorrectWordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.games.isitsocalled.IsItSoCalledActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.login.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.signup.SignUpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.splash.SplashActivity"
+                  android:exported="true"/>
+        <activity
             android:name=".ui.games.LetterGameActivity"
             android:exported="false" />
         <activity
@@ -25,12 +49,13 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+         </activity>
         <activity
             android:name=".ui.signup.SignUpActivity"
             android:exported="false" />
         <activity
             android:name=".ui.splash.SplashActivity"
+            android:name=".ui.MainActivity"
             android:exported="false" />
         <activity
             android:name=".ui.home.HomeActivity"

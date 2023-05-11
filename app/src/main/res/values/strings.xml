@@ -16,4 +16,19 @@
     <string name="forgot_password"><a href="http://google.com/">Olvidé mi contraseña</a></string>
     <string name="need_account">¿Necesitas una cuenta?</string>
     <string name="register"><a href="http://google.com/">Registrarme</a></string>
+    <string name="games">Juegos</string>
+    <string name="objectives">Objetivos</string>
+    <string name="profile">Perfil</string>
+    <string name="game_correct_word">Juego palabra correcta</string>
+    <string name="game_lets_read">Juego vamos a leer</string>
+    <string name="game_where_is_the_letter">Juego donde está la letra</string>
+    <string name="game_is_it_so_called">Juego así se dice</string>
+    <string name="read_my_text">¡Leamos mi texto!</string>
+    <string name="edit_profile">Editar perfil</string>
+    <string name="link_account">Vincularme</string>
+    <string name="logout">Cerrar sesión</string>
+    <string name="icon_username">Ícono del campo nombre de usuario</string>
+    <string name="icon_user_email">Ícono del campo de correo electrónico del usuario</string>
+    <string name="icon_user_birthday">Ícono de fecha de nacimiento del usuario</string>
+    <string name="user_birthday">Fecha de nacimiento</string>
 </resources>
