@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.flow
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
+import java.util.stream.IntStream.range
 
 class RepositoryImpl(
     localSource: LetterGameDao
@@ -17,12 +18,16 @@ class RepositoryImpl(
 
     override fun getWordToLetterGame() = flow {
         val request = Request.Builder()
-            .url("https://clientes.api.greenborn.com.ar/public-random-word?c=1&l=8")
+            .url("https://clientes.api.greenborn.com.ar/public-random-word")
             .build()
-        client.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) throw IOException("Unexpected code $response")
-            emit(stringJsonAdapter.fromJson(response.body!!.source()))
-        }
+        var word = ""
+        do {
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+                word = stringJsonAdapter.fromJson(response.body!!.source()) ?: ""
+            }
+        } while (word.length !in (1..6))
+        emit(word)
     }
 
 }
