@@ -18,6 +18,9 @@
             android:name=".ui.games.whereistheletter.WhereIsTheLetterActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.games.letsread.ListTextActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.games.letsread.LetsReadActivity"
             android:exported="false" />
         <activity
