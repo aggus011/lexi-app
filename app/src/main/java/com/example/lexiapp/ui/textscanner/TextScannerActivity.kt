@@ -42,6 +42,32 @@ class TextScannerActivity : AppCompatActivity() {
     private lateinit var textRecognizer: TextRecognizer
     private lateinit var textToSpeech: TextToSpeech
 
+    private val cameraActivityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+            if(result.resultCode == Activity.RESULT_OK){
+                hideBlackScreen()
+                photoToScan.setImageURI(imageUri)
+                recognizeTextFromImage()
+            }else{
+                //When i close de camera, finish the activity
+                finish()
+            }
+        }
+
+    private val galleryActivityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+            if(result.resultCode == Activity.RESULT_OK){
+                hideBlackScreen()
+                val data = result.data
+                imageUri = data!!.data
+                photoToScan.setImageURI(imageUri)
+                recognizeTextFromImage()
+            }else{
+                //No one image picked from gallery
+                finish()
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -108,7 +134,6 @@ class TextScannerActivity : AppCompatActivity() {
 
     private fun cleanPreviousRecognizedText() {
         textRecognized.text = ""
-        binding.clNoTextImage.visibility = View.VISIBLE
     }
 
     private fun setBtnReadTextRecognizedListener() {
@@ -135,7 +160,7 @@ class TextScannerActivity : AppCompatActivity() {
 
     private fun pickImageFromGallery(){
         val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
+        intent.data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         galleryActivityResultLauncher.launch(intent)
     }
 
@@ -151,6 +176,8 @@ class TextScannerActivity : AppCompatActivity() {
                             textRecognized.text = recognizedText
                             textRecognized.movementMethod = ScrollingMovementMethod()
                             binding.clNoTextImage.visibility = View.GONE
+                        }else{
+                            binding.clNoTextImage.visibility = View.VISIBLE
                         }
                     }
                     .addOnFailureListener{
@@ -207,32 +234,6 @@ class TextScannerActivity : AppCompatActivity() {
         binding.vBlackScreen.visibility = View.GONE
     }
 
-    private val cameraActivityResultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
-            if(result.resultCode == Activity.RESULT_OK){
-                hideBlackScreen()
-                photoToScan.setImageURI(imageUri)
-                recognizeTextFromImage()
-            }else{
-                //When i close de camera, finish the activity
-                finish()
-            }
-        }
-
-    private val galleryActivityResultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
-            if(result.resultCode == Activity.RESULT_OK){
-                hideBlackScreen()
-                val data = result.data
-                imageUri = data!!.data
-                photoToScan.setImageURI(imageUri)
-                recognizeTextFromImage()
-            }else{
-                //No one image picked from gallery
-                finish()
-            }
-        }
-
     private val onBackPressedCallback: OnBackPressedCallback = object: OnBackPressedCallback(true){
         override fun handleOnBackPressed() {
             finish()
@@ -246,7 +247,7 @@ class TextScannerActivity : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
-        permissions: Array<out String>,
+        permissions: Array<String>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -276,7 +277,7 @@ class TextScannerActivity : AppCompatActivity() {
                     pickImageFromGallery()
                 }else{
                     Toast.makeText(this, "Necesitas darnos permiso para acceder a la galeria", Toast.LENGTH_SHORT).show()
-                    //No camera and storage permissions granted
+                    //No storage permissions granted
                     finish()
                 }
             }
