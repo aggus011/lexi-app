@@ -15,6 +15,7 @@ import com.example.lexiapp.databinding.FragmentPatientHomeBinding
 import com.example.lexiapp.ui.games.correctword.CorrectWordActivity
 import com.example.lexiapp.ui.games.isitsocalled.IsItSoCalledActivity
 import com.example.lexiapp.ui.games.letsread.LetsReadActivity
+import com.example.lexiapp.ui.games.letsread.ListTextActivity
 import com.example.lexiapp.ui.games.whereistheletter.WhereIsTheLetterActivity
 import com.example.lexiapp.ui.textscanner.TextScannerActivity
 import com.google.android.material.button.MaterialButton
@@ -110,7 +111,7 @@ class PatientHomeFragment : Fragment() {
 
     private fun gameLetsReadClick() {
         ibGameLetsRead.setOnClickListener {
-            startActivity(Intent(activity, LetsReadActivity::class.java))
+            startActivity(Intent(activity, ListTextActivity::class.java))
         }
     }
 
