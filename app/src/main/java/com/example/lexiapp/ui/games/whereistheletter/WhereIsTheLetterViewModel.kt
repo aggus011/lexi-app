@@ -16,33 +16,14 @@ import kotlinx.coroutines.launch
 
 class WhereIsTheLetterViewModel: ViewModel() {
     lateinit var repository: Repository
-    /*
-    private val _wordToPlay = MutableLiveData<String>()
-    val wordToPlay: LiveData<String> = _wordToPlay
-    private val _letter = MutableLiveData<String>()
-    val letter: LiveData<String> = _letter
-    private val _letterSelected = MutableLiveData<String>()
-    val letterSelected: LiveData<String> = _letterSelected
-
-    init {
-        setValues()
-    }
-
-    private fun setValues() {
-        _wordToPlay.value=""
-        _letter.value=""
-        _wordToPlay.value="Comodín"
-        _letter.value="d"
-    }
-     */
 
     private var _selectedPosition = MutableStateFlow<Int?>(null)
     val selectedPosition = _selectedPosition.asStateFlow()
 
-    private var _basicWord = MutableStateFlow<String?>(null)
+    private var _basicWord = MutableStateFlow("TESTEANDO")
     val basicWord = _basicWord.asStateFlow()
 
-    private var _correctPosition = MutableStateFlow(-1)
+    private var _correctPosition = MutableStateFlow(2)
     val correctPosition = _correctPosition.asStateFlow()
 
     private var _correctAnswerSubmitted = MutableStateFlow(false)
@@ -88,10 +69,15 @@ class WhereIsTheLetterViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             repository.getWordToLetterGame()
                 .collect {
-                    _basicWord.value = it
+                    _basicWord.value = it ?: "Testeando"
                 }
             selectLetter()
         }
+    }
+
+    fun resetSubmit() {
+        _correctAnswerSubmitted.value = false
+        _incorrectAnswerSubmitted.value = false
     }
 
     class Factory: ViewModelProvider.Factory {

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.lexiapp.R
@@ -16,6 +17,8 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
 
     //Should be inject
     private lateinit var vM: WhereIsTheLetterViewModel
+
+    private val positions = mutableMapOf<Int, Button>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +34,15 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
         binding.btnResult.setOnClickListener {
             //Validation: isSomeLetterSelected()-> if(is true)-> Go to result
             //chamge UI of button
+            vM.onSubmitAnswer()
+            if(vM.correctAnswerSubmitted.value) {
+                Toast.makeText(this, "Felicidades, elegiste la letra ${vM.basicWord.value[vM.selectedPosition.value!!]}", Toast.LENGTH_SHORT).show()
+                vM.resetSubmit()
+            } else {
+                Toast.makeText(this, "No es la letra correcta, elegiste la letra ${vM.basicWord.value[vM.selectedPosition.value!!]}", Toast.LENGTH_SHORT).show()
+                vM.resetSubmit()
+            }
+
         }
     }
 
@@ -44,15 +56,50 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
         }
 
          */
-        binding.txtVariableWord.text = word?.uppercase() ?: ""
-        binding.txtVariableLetter.text = word?.get(vM.correctPosition.value)?.toString()?.uppercase() ?: "?"
-        for (letter in (word?.toCharArray()) ?: "asdfasd".toCharArray()) {
-            createWordButton(letter.toString().uppercase())
+        binding.txtVariableWord.text = word.uppercase()
+        binding.txtVariableLetter.text =
+            word[vM.correctPosition.value].toString().uppercase()
+        for (letter in word.withIndex()) {
+            createWordButton(letter.value.uppercase(), { onLetterSelected(letter.index) }) { btn ->
+                saveBtnPosition(
+                    pos = letter.index,
+                    btn = btn
+                )
+            }
         }
     }
 
-    private fun createWordButton(letter: String) {
+    private fun onLetterSelected(pos: Int) {
+        resetAllBtns()
+        vM.onPositionSelected(pos)
+        positions[pos]!!.background = ContextCompat.getDrawable(applicationContext, R.drawable.btn_letter_select)
+        positions[pos]!!.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+    }
+
+    private fun resetAllBtns() {
+        for (pos in positions.keys) {
+            positions[pos]!!.background =
+                ContextCompat.getDrawable(applicationContext, R.drawable.btn_letter_not_select)
+            positions[pos]!!.setTextColor(
+                ContextCompat.getColor(
+                    applicationContext,
+                    R.color.black
+                )
+            )
+        }
+    }
+
+    private fun saveBtnPosition(btn: Button, pos: Int) {
+        positions[pos] = btn
+    }
+
+    private fun createWordButton(
+        letter: String,
+        listener: () -> Unit,
+        saveBtn: (Button) -> Unit
+    ) {
         val btnLetter = Button(this)
+        saveBtn(btnLetter)
         btnLetter.text = letter
         btnLetter.textSize = 38F
         val params = LinearLayout.LayoutParams(
@@ -64,9 +111,7 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
         btnLetter.background =
             ContextCompat.getDrawable(applicationContext, R.drawable.btn_letter_not_select)
         btnLetter.setOnClickListener {
-            btnLetter.background =
-                ContextCompat.getDrawable(applicationContext, R.drawable.btn_letter_select)
-            btnLetter.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+            listener()
         }
         binding.containerWord.addView(btnLetter)
     }
