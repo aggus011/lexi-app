@@ -6,12 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityWhereIsTheLetterBinding
-import kotlinx.coroutines.flow.StateFlow
 
 class WhereIsTheLetterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWhereIsTheLetterBinding
@@ -38,19 +36,22 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
 
     private fun setValues() {
         val word = vM.basicWord.value
+        /*
         if (word == null) {
             Toast.makeText(this, "No se pudo encontrar una palabra", Toast.LENGTH_SHORT).show()
             //Handle response null from api
             return
         }
-        binding.txtVariableWord.text = word.uppercase()
-        binding.txtVariableLetter.text = word[vM.correctPosition.value].toString().uppercase()
-        for (letter in (word.toCharArray())) {
-            crateWordButton(letter.toString().uppercase())
+
+         */
+        binding.txtVariableWord.text = word?.uppercase() ?: ""
+        binding.txtVariableLetter.text = word?.get(vM.correctPosition.value)?.toString()?.uppercase() ?: "?"
+        for (letter in (word?.toCharArray()) ?: "asdfasd".toCharArray()) {
+            createWordButton(letter.toString().uppercase())
         }
     }
 
-    private fun crateWordButton(letter: String) {
+    private fun createWordButton(letter: String) {
         val btnLetter = Button(this)
         btnLetter.text = letter
         btnLetter.textSize = 38F
