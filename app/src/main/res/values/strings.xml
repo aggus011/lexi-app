@@ -24,6 +24,13 @@
     <string name="game_where_is_the_letter">Juego donde está la letra</string>
     <string name="game_is_it_so_called">Juego así se dice</string>
     <string name="read_my_text">¡Leamos mi texto!</string>
+    <string name="camera">Cámara</string>
+    <string name="gallery">Galería</string>
+    <string name="taken_photo_to_recognize_its_text">Foto capturada para extraer su texto</string>
+    <string name="we_found_the_following">Encontramos lo siguiente:</string>
+    <string name="scan_again">Escanear de nuevo</string>
+    <string name="read_text">Leer</string>
+    <string name="try_recapture">Intenta sacar otra foto</string>
     <string name="edit_profile">Editar perfil</string>
     <string name="link_account">Vincularme</string>
     <string name="logout">Cerrar sesión</string>
