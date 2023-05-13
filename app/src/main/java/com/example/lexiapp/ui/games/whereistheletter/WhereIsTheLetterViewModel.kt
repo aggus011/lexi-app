@@ -45,6 +45,14 @@ class WhereIsTheLetterViewModel: ViewModel() {
         _selectedPosition.value = position
     }
 
+    fun onPositionDeselected() {
+        _selectedPosition.value = null
+    }
+
+    fun isItSelected(position: Int)= _selectedPosition.value==position
+
+    fun isAnyLetterSelected()= _selectedPosition.value!=null
+
     fun onOmitWord() {
         generateWord()
     }
@@ -58,18 +66,18 @@ class WhereIsTheLetterViewModel: ViewModel() {
     }
 
     private fun selectLetter() {
-        var pos = 0
+        var position = 0
         do {
-            pos = (Math.random() * 10).toInt()
-        } while (pos !in (0..basicWord.value!!.length))
-        _correctPosition.value = pos
+            position = (Math.random() * 10).toInt()
+        } while (position !in (0..basicWord.value.length))
+        _correctPosition.value = position
     }
 
     private fun generateWord() {
         viewModelScope.launch(Dispatchers.IO) {
             repository.getWordToLetterGame()
                 .collect {
-                    _basicWord.value = it ?: "Testeando"
+                    _basicWord.value = it?.uppercase() ?: "Testeando"
                 }
             selectLetter()
         }

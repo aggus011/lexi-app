@@ -3,6 +3,7 @@ package com.example.lexiapp.ui.games.whereistheletter
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.LinearLayout
@@ -32,33 +33,31 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
 
     private fun setListenerResult() {
         binding.btnResult.setOnClickListener {
-            //Validation: isSomeLetterSelected()-> if(is true)-> Go to result
-            //chamge UI of button
             vM.onSubmitAnswer()
-            if(vM.correctAnswerSubmitted.value) {
-                Toast.makeText(this, "Felicidades, elegiste la letra ${vM.basicWord.value[vM.selectedPosition.value!!]}", Toast.LENGTH_SHORT).show()
-                vM.resetSubmit()
-            } else {
-                Toast.makeText(this, "No es la letra correcta, elegiste la letra ${vM.basicWord.value[vM.selectedPosition.value!!]}", Toast.LENGTH_SHORT).show()
-                vM.resetSubmit()
+            if(vM.isAnyLetterSelected()){
+                validateLetterSelected()
+            }else{
+                Toast.makeText(this, "Debe elegir una letra", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
 
+    private fun validateLetterSelected() {
+        if(vM.correctAnswerSubmitted.value) {
+            //Go to ActivityGoodReult
+            Toast.makeText(this, "Felicidades, elegiste la letra ${vM.basicWord.value[vM.selectedPosition.value!!]}", Toast.LENGTH_SHORT).show()
+            vM.resetSubmit()
+        } else {
+            //Go to ActivityGoodReult
+            Toast.makeText(this, "No es la letra correcta, elegiste la letra ${vM.basicWord.value[vM.selectedPosition.value!!]}", Toast.LENGTH_SHORT).show()
+            vM.resetSubmit()
         }
     }
 
     private fun setValues() {
         val word = vM.basicWord.value
-        /*
-        if (word == null) {
-            Toast.makeText(this, "No se pudo encontrar una palabra", Toast.LENGTH_SHORT).show()
-            //Handle response null from api
-            return
-        }
-
-         */
-        binding.txtVariableWord.text = word.uppercase()
-        binding.txtVariableLetter.text =
-            word[vM.correctPosition.value].toString().uppercase()
+        binding.txtVariableWord.text = word
+        binding.txtVariableLetter.text = word[vM.correctPosition.value].toString()
         for (letter in word.withIndex()) {
             createWordButton(letter.value.uppercase(), { onLetterSelected(letter.index) }) { btn ->
                 saveBtnPosition(
@@ -71,21 +70,30 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
 
     private fun onLetterSelected(pos: Int) {
         resetAllBtns()
+        if(vM.isItSelected(pos)){
+            vM.onPositionDeselected()
+            return
+        }
         vM.onPositionSelected(pos)
-        positions[pos]!!.background = ContextCompat.getDrawable(applicationContext, R.drawable.btn_letter_select)
-        positions[pos]!!.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+        setStyle(pos, SetStyleButton.SELECTED)
     }
 
     private fun resetAllBtns() {
         for (pos in positions.keys) {
-            positions[pos]!!.background =
-                ContextCompat.getDrawable(applicationContext, R.drawable.btn_letter_not_select)
-            positions[pos]!!.setTextColor(
-                ContextCompat.getColor(
-                    applicationContext,
-                    R.color.black
-                )
-            )
+            setStyle(pos, SetStyleButton.NOT_SELECTED)
+        }
+    }
+
+    private fun setStyle(pos: Int, type: SetStyleButton){
+        when(type){
+            SetStyleButton.NOT_SELECTED->{
+                positions[pos]!!.background = ContextCompat.getDrawable(applicationContext, R.drawable.btn_letter_not_select)
+                positions[pos]!!.setTextColor(ContextCompat.getColor(applicationContext, R.color.black))
+            }
+            SetStyleButton.SELECTED->{
+                positions[pos]!!.background = ContextCompat.getDrawable(applicationContext, R.drawable.btn_letter_select)
+                positions[pos]!!.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+            }
         }
     }
 
@@ -106,6 +114,7 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
             100, 120
         )
         params.setMargins(8, 8, 8, 8)
+        params.gravity=Gravity.CENTER
         btnLetter.layoutParams = params
         btnLetter.typeface = Typeface.DEFAULT_BOLD
         btnLetter.background =
@@ -122,4 +131,8 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
         val factory = WhereIsTheLetterViewModel.Factory() // Factory
         vM = ViewModelProvider(this, factory)[WhereIsTheLetterViewModel::class.java]
     }
+}
+enum class SetStyleButton{
+    SELECTED,
+    NOT_SELECTED
 }
