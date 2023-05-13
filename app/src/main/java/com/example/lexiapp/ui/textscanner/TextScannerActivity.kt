@@ -138,11 +138,23 @@ class TextScannerActivity : AppCompatActivity() {
 
     private fun setBtnReadTextRecognizedListener() {
         btnReadText.setOnClickListener {
-            if(textRecognized.text.isNotEmpty()){
-                textToSpeech
-                    .speak(textRecognized.text.toString(), TextToSpeech.QUEUE_FLUSH, null)
+            if(!textToSpeech.isSpeaking){
+                readRecognizedText()
+            }else{
+                stopCurrentReading()
             }
         }
+    }
+
+    private fun readRecognizedText() {
+        if(textRecognized.text.isNotEmpty()) {
+            textToSpeech
+                .speak(textRecognized.text.toString(), TextToSpeech.QUEUE_FLUSH, null)
+        }
+    }
+
+    private fun stopCurrentReading() {
+        textToSpeech.stop()
     }
 
     private fun takePhoto(){
@@ -284,8 +296,13 @@ class TextScannerActivity : AppCompatActivity() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        textToSpeech.stop()
+    }
     override fun onDestroy() {
         super.onDestroy()
         cleanPreviousRecognizedText()
+        textToSpeech.shutdown()
     }
 }
