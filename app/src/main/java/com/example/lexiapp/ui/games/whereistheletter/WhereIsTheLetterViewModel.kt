@@ -1,26 +1,23 @@
 package com.example.lexiapp.ui.games.whereistheletter
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.lexiapp.domain.Repository
-import com.example.lexiapp.domain.RepositoryImpl
-import com.example.lexiapp.domain.model.TextToRead
-import com.example.lexiapp.ui.games.letsread.TextViewModel
+import com.example.lexiapp.domain.LetterRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class WhereIsTheLetterViewModel: ViewModel() {
-    lateinit var repository: Repository
+
+class WhereIsTheLetterViewModel : ViewModel() {
+    private lateinit var letterRepository: LetterRepository
 
     private var _selectedPosition = MutableStateFlow<Int?>(null)
     val selectedPosition = _selectedPosition.asStateFlow()
 
-    private var _basicWord = MutableStateFlow("TESTEANDO")
+    private var _basicWord = MutableStateFlow("TESTEADO")
     val basicWord = _basicWord.asStateFlow()
 
     private var _correctPosition = MutableStateFlow(2)
@@ -38,7 +35,7 @@ class WhereIsTheLetterViewModel: ViewModel() {
     }
 
     private fun initRepository() {
-        repository = RepositoryImpl()
+        letterRepository = LetterRepository()
     }
 
     fun onPositionSelected(position: Int) {
@@ -69,15 +66,18 @@ class WhereIsTheLetterViewModel: ViewModel() {
         var position = 0
         do {
             position = (Math.random() * 10).toInt()
-        } while (position !in (0..basicWord.value.length))
+        } while (position !in (0..(basicWord.value!!.length)))
         _correctPosition.value = position
     }
 
     private fun generateWord() {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.getWordToLetterGame()
+            letterRepository.getWord()
                 .collect {
-                    _basicWord.value = it?.uppercase() ?: "Testeando"
+                    Log.v("data_in_view_model", "response word: $it")
+                    _basicWord.value =it
+                    Log.v("asignate_data_to_variable",
+                        "response _basicWord: ${_basicWord.value} and basicWord: ${basicWord.value}")
                 }
             selectLetter()
         }

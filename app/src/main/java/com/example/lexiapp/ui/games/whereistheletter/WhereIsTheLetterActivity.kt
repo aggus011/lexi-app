@@ -3,6 +3,7 @@ package com.example.lexiapp.ui.games.whereistheletter
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.Button
@@ -10,8 +11,11 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityWhereIsTheLetterBinding
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class WhereIsTheLetterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWhereIsTheLetterBinding
@@ -27,11 +31,22 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
         binding = ActivityWhereIsTheLetterBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
         setVM()
-        setListenerResult()
         setValues()
+        setListeners()
     }
 
-    private fun setListenerResult() {
+    private fun setListeners() {
+        listenerResult()
+        listenerOtherWord()
+    }
+
+    private fun listenerOtherWord() {
+        binding.btnOtherWord.setOnClickListener {
+            vM.onOmitWord()
+        }
+    }
+
+    private fun listenerResult() {
         binding.btnResult.setOnClickListener {
             vM.onSubmitAnswer()
             if(vM.isAnyLetterSelected()){
@@ -56,9 +71,10 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
 
     private fun setValues() {
         val word = vM.basicWord.value
+        Log.v("init_word_in_activity", "response word: $word")
         binding.txtVariableWord.text = word
         binding.txtVariableLetter.text = word[vM.correctPosition.value].toString()
-        for (letter in word.withIndex()) {
+        for (letter in word.withIndex()){
             createWordButton(letter.value.uppercase(), { onLetterSelected(letter.index) }) { btn ->
                 saveBtnPosition(
                     pos = letter.index,
