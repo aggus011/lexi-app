@@ -38,4 +38,5 @@
     <string name="icon_user_email">Ícono del campo de correo electrónico del usuario</string>
     <string name="icon_user_birthday">Ícono de fecha de nacimiento del usuario</string>
     <string name="user_birthday">Fecha de nacimiento</string>
+    <string name="my_objectives">Mis Objetivos</string>
 </resources>
