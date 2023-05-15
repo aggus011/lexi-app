@@ -1,4 +1,4 @@
-package com.example.lexiapp.data.database.word_asociation_api
+package com.example.lexiapp.data.word_asociation_api
 
 import kotlinx.coroutines.flow.flow
 import retrofit2.Retrofit

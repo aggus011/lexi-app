@@ -1,6 +1,6 @@
-package com.example.lexiapp.data.database.word_asociation_api
+package com.example.lexiapp.data.word_asociation_api
 
-import com.example.lexiapp.data.database.word_asociation_api.model.WordAssociationResponse
+import com.example.lexiapp.data.word_asociation_api.model.WordAssociationResponse
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 import retrofit2.http.GET

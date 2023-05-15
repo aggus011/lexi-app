@@ -1,7 +1,7 @@
 package com.example.lexiapp.domain
 
 import android.util.Log
-import com.example.lexiapp.data.database.word_asociation_api.WordAssociationClient
+import com.example.lexiapp.data.word_asociation_api.WordAssociationClient
 import kotlinx.coroutines.flow.flow
 
 class LetterRepository {

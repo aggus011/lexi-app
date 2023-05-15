@@ -1,4 +1,4 @@
-package com.example.lexiapp.data.database.word_asociation_api.model
+package com.example.lexiapp.data.word_asociation_api.model
 
 import com.google.gson.annotations.SerializedName
 
