@@ -10,18 +10,15 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityWhereIsTheLetterBinding
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class WhereIsTheLetterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWhereIsTheLetterBinding
 
     //Should be inject
-    private lateinit var vM: WhereIsTheLetterViewModel
+    private var vM: WhereIsTheLetterViewModel by viewModel()
 
     private val positions = mutableMapOf<Int, Button>()
 
@@ -30,7 +27,7 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
 
         binding = ActivityWhereIsTheLetterBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
-        setVM()
+        //setVM()
         setValues()
         setListeners()
     }
@@ -142,11 +139,13 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
     }
 
     //Should be inject
+    /*
     private fun setVM() {
         //Should be inject
         val factory = WhereIsTheLetterViewModel.Factory() // Factory
         vM = ViewModelProvider(this, factory)[WhereIsTheLetterViewModel::class.java]
     }
+     */
 }
 enum class SetStyleButton{
     SELECTED,

@@ -4,13 +4,10 @@ import kotlinx.coroutines.flow.flow
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class WordAssociationClient {
+class WordAssociationClient(
+    private val service: WordAssociationService
+) {
     private val KEY=""
-    private val retrofit=Retrofit.Builder()
-        .baseUrl("https://api.wordassociations.net")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    private val service = retrofit.create(WordAssociationService::class.java)
 
     suspend fun getWordToWhereIsTheLetterGame()=flow {
         val response =service.getWordToWhereIsTheLetterGame(KEY,stimulus())
