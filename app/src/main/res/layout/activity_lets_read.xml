@@ -58,6 +58,7 @@
         android:layout_marginHorizontal="30dp"
         android:layout_marginBottom="30dp">
         <TextView
+            android:id="@+id/tvText"
             android:layout_margin="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

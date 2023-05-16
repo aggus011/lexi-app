@@ -87,4 +87,6 @@ dependencies {
     //Livedata
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.0'
 
+    //Gson
+    implementation 'com.google.code.gson:gson:2.9.0'
 }
