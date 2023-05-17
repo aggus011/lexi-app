@@ -5,10 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.lexiapp.domain.LetterRepository
+import com.example.lexiapp.ui.games.letsread.TextViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.security.AccessController.getContext
 
 
 class WhereIsTheLetterViewModel(
@@ -18,7 +20,7 @@ class WhereIsTheLetterViewModel(
     private var _selectedPosition = MutableStateFlow<Int?>(null)
     val selectedPosition = _selectedPosition.asStateFlow()
 
-    private var _basicWord = MutableStateFlow("TESTEADO")
+    private var _basicWord = MutableStateFlow("TESTEANDO")
     val basicWord = _basicWord.asStateFlow()
 
     private var _correctPosition = MutableStateFlow(2)
@@ -82,6 +84,12 @@ class WhereIsTheLetterViewModel(
     fun resetSubmit() {
         _correctAnswerSubmitted.value = false
         _incorrectAnswerSubmitted.value = false
+    }
+
+    class Factory(private val repo: LetterRepository) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return WhereIsTheLetterViewModel(repo) as T
+        }
     }
 
 }
