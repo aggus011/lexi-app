@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
+    //id 'kotlin-kapt'
 }
 
 android {
@@ -29,6 +30,16 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    /*kapt {
+        correctErrorTypes true
+        useBuildCache true
+        generateStubs = true
+        javacOptions {
+            // Asegurarse de que sea la misma versión que la del compilador Java
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
+    }*/
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -91,7 +102,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 
-    //Dagger-Hilt
+    //koin
+    /*implementation "io.insert-koin:koin-android:3.1.2"
+    implementation "io.insert-koin:koin-core:3.1.2"
 
-
+    kapt "io.insert-koin:koin-core:3.1.2"*/
 }
