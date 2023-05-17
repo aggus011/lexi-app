@@ -15,7 +15,7 @@ class LetterRepository(
                 word=it.uppercase()
                 Log.v("data_in_repository","response word: $word")
             }
-        } while (word.length !in (1..9))
+        } while (word.length !in (1..8))
         emit(word)
     }
 }

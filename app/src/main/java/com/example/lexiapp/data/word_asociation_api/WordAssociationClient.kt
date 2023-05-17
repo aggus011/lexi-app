@@ -1,5 +1,6 @@
 package com.example.lexiapp.data.word_asociation_api
 
+import com.example.lexiapp.utils.API_KEY
 import kotlinx.coroutines.flow.flow
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -7,14 +8,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 class WordAssociationClient(
     private val service: WordAssociationService
 ) {
-    private val KEY=""
-    private val retrofit=Retrofit.Builder()
-        .baseUrl("https://api.wordassociations.net")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
     suspend fun getWordToWhereIsTheLetterGame()=flow {
-        val response =service.getWordToWhereIsTheLetterGame(KEY,stimulus())
+        val response =service.getWordToWhereIsTheLetterGame(API_KEY,stimulus())
         if (response.isSuccessful) {
             val assciation = response.body()
             if (assciation != null) {
