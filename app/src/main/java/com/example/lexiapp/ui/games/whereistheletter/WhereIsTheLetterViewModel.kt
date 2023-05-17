@@ -11,9 +11,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 
-class WhereIsTheLetterViewModel(
-    private val letterRepository: LetterRepository
-) : ViewModel() {
+class WhereIsTheLetterViewModel : ViewModel() {
+    private lateinit var letterRepository: LetterRepository
 
     private var _selectedPosition = MutableStateFlow<Int?>(null)
     val selectedPosition = _selectedPosition.asStateFlow()
@@ -31,7 +30,12 @@ class WhereIsTheLetterViewModel(
     val incorrectAnswerSubmitted = _incorrectAnswerSubmitted.asStateFlow()
 
     init {
+        initRepository()
         generateWord()
+    }
+
+    private fun initRepository() {
+        letterRepository = LetterRepository()
     }
 
     fun onPositionSelected(position: Int) {
@@ -84,4 +88,9 @@ class WhereIsTheLetterViewModel(
         _incorrectAnswerSubmitted.value = false
     }
 
+    class Factory: ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return WhereIsTheLetterViewModel() as T
+        }
+    }
 }
