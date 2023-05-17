@@ -30,7 +30,6 @@ class TextAdapter (
         class TextViewHolder(val binding : ItemTitleTextBinding) : RecyclerView.ViewHolder(binding.root) {
             fun bind(text: TextToRead) {
                 binding.btnTitleText.text=text.title
-
             }
         }
     }
