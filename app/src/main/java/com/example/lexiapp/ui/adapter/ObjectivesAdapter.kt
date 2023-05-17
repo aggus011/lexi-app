@@ -1,10 +1,9 @@
-package com.example.lexiapp.domain.adapters.objectives
+package com.example.lexiapp.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lexiapp.databinding.ObjectiveItemBinding
-import com.example.lexiapp.domain.holders.objectives.ObjectivesAdapterViewHolder
 import com.example.lexiapp.domain.model.Objective
 
 class ObjectivesAdapter: RecyclerView.Adapter<ObjectivesAdapterViewHolder>() {
@@ -34,3 +33,5 @@ class ObjectivesAdapter: RecyclerView.Adapter<ObjectivesAdapterViewHolder>() {
         }
     }
 }
+
+class ObjectivesAdapterViewHolder(val binding: ObjectiveItemBinding): RecyclerView.ViewHolder(binding.root)

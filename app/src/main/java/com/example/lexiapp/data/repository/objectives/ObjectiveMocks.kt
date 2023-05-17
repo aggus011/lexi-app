@@ -1,4 +1,4 @@
-package com.example.lexiapp.domain.repositories.objectives
+package com.example.lexiapp.data.repository.objectives
 
 import com.example.lexiapp.domain.model.Objective
 

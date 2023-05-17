@@ -9,9 +9,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lexiapp.databinding.FragmentObjectivesBinding
-import com.example.lexiapp.domain.adapters.objectives.ObjectivesAdapter
+import com.example.lexiapp.ui.adapter.ObjectivesAdapter
 import com.example.lexiapp.domain.model.Objective
-import com.example.lexiapp.domain.repositories.objectives.ObjectiveMocks
+import com.example.lexiapp.data.repository.objectives.ObjectiveMocks
 
 
 class ObjectivesFragment : Fragment() {
