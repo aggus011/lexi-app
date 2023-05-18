@@ -14,10 +14,11 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.lexiapp.R
-import com.example.lexiapp.data.word_asociation_api.WordAssociationClient
-import com.example.lexiapp.data.word_asociation_api.WordAssociationService
+import com.example.lexiapp.data.api.word_asociation_api.WordAssociationClient
+import com.example.lexiapp.data.api.word_asociation_api.WordAssociationService
 import com.example.lexiapp.databinding.ActivityWhereIsTheLetterBinding
-import com.example.lexiapp.domain.LetterRepository
+import com.example.lexiapp.data.api.LetterRepository
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -25,6 +26,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+@AndroidEntryPoint
 class WhereIsTheLetterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWhereIsTheLetterBinding
 

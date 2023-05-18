@@ -1,13 +1,14 @@
-package com.example.lexiapp.configuration
+package com.example.lexiapp.di
 
-import com.example.lexiapp.data.word_asociation_api.WordAssociationClient
-import com.example.lexiapp.data.word_asociation_api.WordAssociationService
-import com.example.lexiapp.domain.LetterRepository
-import com.example.lexiapp.ui.games.whereistheletter.WhereIsTheLetterViewModel
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import dagger.Module
+import dagger.hilt.InstallIn
 
 //Configure dependency injection with Koin here
+@Module
+@InstallIn()
+object NetworkModule {
+
+}
 
 /*val appModule = module {
     single<WordAssociationService> {

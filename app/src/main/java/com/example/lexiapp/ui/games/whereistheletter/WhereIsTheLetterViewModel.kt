@@ -4,17 +4,18 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.lexiapp.domain.LetterRepository
-import com.example.lexiapp.ui.games.letsread.TextViewModel
+import com.example.lexiapp.data.api.LetterRepository
+import com.example.lexiapp.domain.useCases.LetterGameUseCases
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.security.AccessController.getContext
+import javax.inject.Inject
 
-
-class WhereIsTheLetterViewModel(
-    private val letterRepository: LetterRepository
+@HiltViewModel
+class WhereIsTheLetterViewModel @Inject constructor(
+    private val letterGameUseCases: LetterGameUseCases
 ) : ViewModel() {
 
     private var _selectedPosition = MutableStateFlow<Int?>(null)

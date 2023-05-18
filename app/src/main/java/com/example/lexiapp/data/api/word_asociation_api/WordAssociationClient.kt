@@ -1,11 +1,12 @@
-package com.example.lexiapp.data.word_asociation_api
+package com.example.lexiapp.data.api.word_asociation_api
 
 import com.example.lexiapp.utils.API_KEY
 import kotlinx.coroutines.flow.flow
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
-class WordAssociationClient(
+class WordAssociationClient @Inject constructor(
     private val service: WordAssociationService
 ) {
     suspend fun getWordToWhereIsTheLetterGame()=flow {
