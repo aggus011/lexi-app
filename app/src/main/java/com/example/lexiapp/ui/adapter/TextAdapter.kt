@@ -28,9 +28,8 @@ class TextAdapter (
         override fun getItemCount() = listText.size
 
         class TextViewHolder(val binding : ItemTitleTextBinding) : RecyclerView.ViewHolder(binding.root) {
-            fun bind(text: TextToRead) {
-                binding.btnTitleText.text=text.title
-
+            fun bind(textToRead: TextToRead) = with(binding.btnTitleText) {
+                text=textToRead.title
             }
         }
     }
