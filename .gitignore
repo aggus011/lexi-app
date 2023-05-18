@@ -33,4 +33,4 @@ google-services.json
 *.hprof
 
 # Secret
-src/main/java/com/example/lexiapp/utils/Secrets.kt
+/app/src/main/java/com/example/lexiapp/utils/Secrets.kt
