@@ -41,9 +41,6 @@
             android:name=".ui.splash.SplashActivity"
                   android:exported="true"/>
         <activity
-            android:name=".ui.games.whereistheletter.LetterGameActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.login.LoginActivity"
             android:exported="true">
             <intent-filter>
