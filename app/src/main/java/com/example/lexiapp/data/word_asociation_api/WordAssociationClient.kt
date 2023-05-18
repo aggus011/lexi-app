@@ -1,6 +1,5 @@
 package com.example.lexiapp.data.word_asociation_api
 
-import API_KEY_WORD_ASSOCIATION
 import android.util.Log
 import kotlinx.coroutines.flow.flow
 import kotlin.random.Random

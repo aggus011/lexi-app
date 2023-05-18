@@ -16,7 +16,6 @@ import androidx.lifecycle.lifecycleScope
 import com.example.lexiapp.R
 import com.example.lexiapp.data.word_asociation_api.WordAssociationClient
 import com.example.lexiapp.data.word_asociation_api.WordAssociationService
-import com.example.lexiapp.data.word_asociation_api.WordKeyInterceptor
 import com.example.lexiapp.databinding.ActivityWhereIsTheLetterBinding
 import com.example.lexiapp.domain.LetterRepository
 import kotlinx.coroutines.Dispatchers
@@ -196,13 +195,8 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
 
     //Should be inject
     private fun setVM() {
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(WordKeyInterceptor())
-            .build()
         val service= Retrofit.Builder()
-            /*.baseUrl("https://api.wordassociations.net")*/
             .baseUrl("https://random-word-api.herokuapp.com/")
-            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(WordAssociationService::class.java)

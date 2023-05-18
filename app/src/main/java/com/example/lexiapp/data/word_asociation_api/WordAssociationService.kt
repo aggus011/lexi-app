@@ -14,18 +14,4 @@ interface WordAssociationService {
         @Query("lang") language: String = "es"
     ): Response<List<String>>
 
-    /*@GET("/associations/v1.0/json/search")
-    suspend fun getWordToWhereIsTheLetterGame(
-        @Query("text") text: String,
-        @Query("lang") lang: String = "es",
-        @Query("limit") limit: Int = 1
-    ): Response<WordAssociationResponse>
-
-    @GET("/associations/v1.0/json/search")
-    suspend fun getWordToCorrectWordGame(
-        @Query("apikey") apiKey: String,
-        @Query("text") text: String,
-        @Query("lang") lang: String = "es",
-        @Query("limit") limit: Int = 4
-    ): Flow<WordAssociationResponse>*/
 }
