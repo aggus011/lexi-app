@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
     id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
 }
 
 android {
@@ -33,16 +34,6 @@ android {
     kotlin {
         jvmToolchain(11)
     }
-    /*kapt {
-        correctErrorTypes true
-        useBuildCache true
-        generateStubs = true
-        javacOptions {
-            // Asegurarse de que sea la misma versión que la del compilador Java
-            sourceCompatibility JavaVersion.VERSION_1_8
-            targetCompatibility JavaVersion.VERSION_1_8
-        }
-    }*/
     kotlinOptions {
         jvmTarget = '11'
     }
@@ -105,9 +96,10 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 
-    //koin
-    implementation "io.insert-koin:koin-android:3.1.2"
-    implementation "io.insert-koin:koin-core:3.1.2"
-
-    //kapt "io.insert-koin:koin-core:3.1.2"
+    //Dagger
+    implementation "com.google.dagger:hilt-android:2.44"
+    kapt "com.google.dagger:hilt-compiler:2.44"
+}
+kapt {
+    correctErrorTypes true
 }
