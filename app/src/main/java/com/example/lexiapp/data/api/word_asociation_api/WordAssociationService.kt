@@ -8,20 +8,11 @@ import retrofit2.http.Query
 
 
 interface WordAssociationService {
-
-    @GET("/associations/v1.0/json/search")
+    @GET("word")
     suspend fun getWordToWhereIsTheLetterGame(
-        @Query("apikey") apiKey: String,
-        @Query("text") text: String,
-        @Query("lang") lang: String = "es",
-        @Query("limit") limit: Int = 1
-    ): Response<WordAssociationResponse>
+        @Query("number") count: Int = 1,
+        @Query("length") maxLength: Int,
+        @Query("lang") language: String = "es"
+    ): Response<List<String>>
 
-    @GET("/associations/v1.0/json/search")
-    suspend fun getWordToCorrectWordGame(
-        @Query("apikey") apiKey: String,
-        @Query("text") text: String,
-        @Query("lang") lang: String = "es",
-        @Query("limit") limit: Int = 4
-    ): Flow<WordAssociationResponse>
 }

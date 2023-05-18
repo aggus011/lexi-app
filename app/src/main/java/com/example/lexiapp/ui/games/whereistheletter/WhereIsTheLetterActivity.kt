@@ -23,6 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -197,7 +198,7 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
     //Should be inject
     private fun setVM() {
         val service= Retrofit.Builder()
-            .baseUrl("https://api.wordassociations.net")
+            .baseUrl("https://random-word-api.herokuapp.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(WordAssociationService::class.java)

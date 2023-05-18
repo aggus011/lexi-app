@@ -11,13 +11,10 @@ class LetterRepositoryImpl @Inject constructor(
 ): LetterRepository {
 
     override suspend fun getWord()=flow {
-        var word=""
-        do {
-            apiWordClient.getWordToWhereIsTheLetterGame().collect{
-                word=it.uppercase()
-                Log.v("data_in_repository","response word: $word")
-            }
-        } while (word.length !in (1..8))
-        emit(word)
+        apiWordClient.getWordToWhereIsTheLetterGame().collect{
+            emit(it.uppercase())
+            Log.v("data_in_repository","response word: $it")
+        }
     }
+
 }

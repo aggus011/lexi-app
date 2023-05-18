@@ -11,14 +11,36 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
+        <ImageView
+            android:id="@+id/ivMiniLogo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fragment de Objetivos"
+            android:src="@drawable/mini_logo"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/app_name"/>
+
+        <TextView
+            android:id="@+id/tvObjectivesTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivMiniLogo"
+            android:text="@string/my_objectives"
+            android:textAppearance="@style/lexiLogo"
+            android:layout_marginTop="50dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvObjectives"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvObjectivesTitle"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            android:layout_marginTop="20dp"
+            tools:listitem="@layout/objective_item"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
