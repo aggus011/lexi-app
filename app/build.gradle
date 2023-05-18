@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
-    //id 'kotlin-kapt'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -30,6 +30,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+    kotlin {
+        jvmToolchain(11)
+    }
     /*kapt {
         correctErrorTypes true
         useBuildCache true
@@ -50,7 +53,7 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
@@ -103,8 +106,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 
     //koin
-    /*implementation "io.insert-koin:koin-android:3.1.2"
+    implementation "io.insert-koin:koin-android:3.1.2"
     implementation "io.insert-koin:koin-core:3.1.2"
 
-    kapt "io.insert-koin:koin-core:3.1.2"*/
+    //kapt "io.insert-koin:koin-core:3.1.2"
 }
