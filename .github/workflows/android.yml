@@ -22,7 +22,7 @@ jobs:
     - name: Putting data
       env:
         DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
-      run: echo $DATA > ./lexi-app/app/google-services.json
+      run: echo $DATA > ./android/app/google-services.json
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
