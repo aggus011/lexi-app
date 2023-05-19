@@ -2,9 +2,7 @@ package com.example.lexiapp.ui.games.whereistheletter
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.lexiapp.data.api.LetterRepository
 import com.example.lexiapp.domain.useCases.LetterGameUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -71,7 +69,7 @@ class WhereIsTheLetterViewModel @Inject constructor(
 
     private fun generateWord() {
         viewModelScope.launch(Dispatchers.IO) {
-            letterRepository.getWord()
+            letterGameUseCases.getWord()
                 .collect {
                     Log.v("data_in_view_model", "response word: $it")
                     _basicWord.value =it
@@ -86,11 +84,13 @@ class WhereIsTheLetterViewModel @Inject constructor(
         _correctAnswerSubmitted.value = false
         _incorrectAnswerSubmitted.value = false
     }
-
+/*
     class Factory(private val repo: LetterRepository) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return WhereIsTheLetterViewModel(repo) as T
         }
     }
+
+ */
 
 }

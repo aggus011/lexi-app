@@ -1,9 +1,12 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
+    ext.hilt_version = "2.44"
     dependencies {
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0'
         //Firebase
         classpath 'com.google.gms:google-services:4.3.15'
+        //Dagger Hilt
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
     }
 
     repositories{

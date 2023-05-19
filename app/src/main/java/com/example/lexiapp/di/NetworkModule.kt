@@ -1,26 +1,33 @@
 package com.example.lexiapp.di
 
+import com.example.lexiapp.data.api.word_asociation_api.WordAssociationClient
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
 
 //Configure dependency injection with Koin here
 @Module
-@InstallIn()
+@InstallIn(SingletonComponent::class)
 object NetworkModule {
-
-}
-
-/*val appModule = module {
-    single<WordAssociationService> {
-        Retrofit.Builder()
+    @Singleton
+    @Provides
+    fun provideRetrofit(): Retrofit {
+         return Retrofit.Builder()
             .baseUrl("https://api.wordassociations.net")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(WordAssociationService::class.java)
     }
-    single { WordAssociationClient(get()) }
-    single { LetterRepository(get()) }
-    viewModel { WhereIsTheLetterViewModel(get()) }
-}*/
+
+    @Singleton
+    @Provides
+    fun provideWordApiClient(retrofit: Retrofit): WordAssociationClient {
+        return retrofit.create(WordAssociationClient::class.java)
+    }
+
+}
 
 
