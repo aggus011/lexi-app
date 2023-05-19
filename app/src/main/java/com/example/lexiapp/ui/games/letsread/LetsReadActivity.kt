@@ -1,5 +1,6 @@
 package com.example.lexiapp.ui.games.letsread
 
+import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
@@ -11,7 +12,11 @@ import android.view.LayoutInflater
 import android.widget.ImageButton
 import android.widget.SeekBar
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityLetsReadBinding
 import com.example.lexiapp.domain.model.TextToRead
@@ -33,17 +38,22 @@ class LetsReadActivity : AppCompatActivity() {
     private lateinit var runnable: Runnable
     private var handler = Handler()
 
+    private lateinit var recordAudioPermissions: Array<String>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityLetsReadBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
+        //To handle when user do back gesture
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+
         getViews()
         btnBackListener()
         setTextToReadData()
         setTextToSpeech()
-        recordAudio()
+        btnRecordAudioListener()
     }
 
     private fun getViews(){
@@ -178,9 +188,70 @@ class LetsReadActivity : AppCompatActivity() {
         return String.format(Locale.getDefault(), "%d:%02d", minutes, seconds)
     }
 
-    private fun recordAudio(){
+    private fun btnRecordAudioListener(){
         btnRecordAudio.setOnClickListener {
-            //TO DO
+            initArrayPermissions()
+            if(checkRecordAudioPermissions()){
+                recordAudio()
+            }else{
+                requestRecordAudioPermissions()
+            }
+        }
+    }
+
+    private fun initArrayPermissions(){
+        recordAudioPermissions =
+            arrayOf(android.Manifest.permission.RECORD_AUDIO,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    }
+
+    private fun checkRecordAudioPermissions(): Boolean{
+        val recordAudioResult =
+            ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+        val storageResult =
+            ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+
+        return recordAudioResult && storageResult
+    }
+
+    private fun recordAudio(){
+        Toast.makeText(this, "Grabando...", Toast.LENGTH_LONG).show()
+    }
+
+    private fun requestRecordAudioPermissions(){
+        ActivityCompat.requestPermissions(this, recordAudioPermissions, RECORD_AUDIO_REQUEST_CODE)
+    }
+
+    private companion object{
+         private const val RECORD_AUDIO_REQUEST_CODE = 300
+    }
+
+    private val onBackPressedCallback: OnBackPressedCallback = object: OnBackPressedCallback(true){
+        override fun handleOnBackPressed() {
+            finish()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        //handle permission(s) results
+        if(requestCode == RECORD_AUDIO_REQUEST_CODE){
+            if(grantResults.isNotEmpty()){
+                val recordAudioAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED
+                val storageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED
+
+                if(recordAudioAccepted && storageAccepted){
+                    recordAudio()
+                }else{
+                    //No record audio and storage permissions granted
+                    Toast.makeText(this, "Necesitas darnos permiso para poder usar el micrófono", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
