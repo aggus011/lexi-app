@@ -44,9 +44,19 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
 
     private fun waitForValues() {
         lifecycleScope.launch {
-            delay(2500)
+            delay(3000)
             withContext(Dispatchers.Main) {
-                setValues()
+                try {
+                    setValues()
+                }catch (e: Exception){
+                    binding.progressBar.visibility=View.GONE
+                    binding.txtWord.visibility= View.GONE
+                    binding.txtVariableWord.visibility= View.GONE
+                    binding.iconVolume.visibility= View.GONE
+                    binding.txtFindLetter.visibility= View.GONE
+                    Toast.makeText(applicationContext ,"NO SE PUDO CARGAR LA PALABRA", Toast.LENGTH_SHORT).show()
+
+                }
             }
             progressBarOff()
         }

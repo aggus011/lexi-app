@@ -8,9 +8,12 @@ import kotlin.random.Random
 class WordAssociationService @Inject constructor(
     private val client: WordAssociationClient
 ) {
-    suspend fun getWordToWhereIsTheLetterGame()=flow {
+    suspend fun getWordToWhereIsTheLetterGame(count: Int, length: Int, language: String )=flow {
         try{
-            val response =client.getWordToWhereIsTheLetterGame(maxLength = Random.nextInt(2, 9))
+            val response =client.getWordToWhereIsTheLetterGame(
+                count=count,
+                length=length,
+                language=language)
             val word = if (response.isSuccessful && response.body()!=null) response.body()!![0] else stimulus()
             Log.v("", "${response.code()}${response.body()?.get(0)}")
             emit(word)

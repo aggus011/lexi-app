@@ -19,7 +19,7 @@ class WhereIsTheLetterViewModel @Inject constructor(
     private var _selectedPosition = MutableStateFlow<Int?>(null)
     val selectedPosition = _selectedPosition.asStateFlow()
 
-    private var _basicWord = MutableStateFlow("TESTEANDO")
+    private var _basicWord = MutableStateFlow("TEXTOS")
     val basicWord = _basicWord.asStateFlow()
 
     private var _correctPosition = MutableStateFlow(2)
@@ -30,10 +30,6 @@ class WhereIsTheLetterViewModel @Inject constructor(
 
     private var _incorrectAnswerSubmitted = MutableStateFlow(false)
     val incorrectAnswerSubmitted = _incorrectAnswerSubmitted.asStateFlow()
-
-    init {
-        generateWord()
-    }
 
     fun onPositionSelected(position: Int) {
         _selectedPosition.value = position
