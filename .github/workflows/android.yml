@@ -27,7 +27,7 @@ jobs:
       run: echo $DATA | base64 -d > /home/runner/work/lexi-app/lexi-app/app/google-services.json
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-    - name: Unit Test
-      run: ./gradlew testDebugUnitTest
     - name: Build with Gradle
       run: ./gradlew build
+    - name: Unit Test
+      run: ./gradlew testDebugUnitTest
