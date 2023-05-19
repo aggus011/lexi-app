@@ -1,18 +1,17 @@
 package com.example.lexiapp.ui.games.letsread
 
-import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.ImageButton
 import android.widget.SeekBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityLetsReadBinding
 import com.example.lexiapp.domain.model.TextToRead
@@ -28,10 +27,11 @@ class LetsReadActivity : AppCompatActivity() {
     private lateinit var tvAudioTextDuration: TextView
     private lateinit var tvTextTitle: TextView
     private lateinit var tvTextToRead: TextView
-    private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var btnBack: ImageButton
+    private lateinit var btnRecordAudio: ImageButton
+    private var mediaPlayer: MediaPlayer? = null
     private lateinit var runnable: Runnable
     private var handler = Handler()
-    private lateinit var currentAudioFile: File
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +40,10 @@ class LetsReadActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         getViews()
+        btnBackListener()
         setTextToReadData()
         setTextToSpeech()
+        recordAudio()
     }
 
     private fun getViews(){
@@ -50,6 +52,14 @@ class LetsReadActivity : AppCompatActivity() {
         btnPlayAudioText = binding.ibPlayAudioText
         seekBarAudioText = binding.seekBarAudioText
         tvAudioTextDuration = binding.tvAudioTextDuration
+        btnBack = binding.btnArrowBack
+        btnRecordAudio = binding.btnRec
+    }
+
+    private fun btnBackListener(){
+        btnBack.setOnClickListener {
+            finish()
+        }
     }
 
     private fun setTextToReadData(){
@@ -66,37 +76,48 @@ class LetsReadActivity : AppCompatActivity() {
             if (it != TextToSpeech.ERROR) {
                 textToSpeech.language = language
 
-                generateAudioFromTextToRead()
+                val audioTextFile = File(this.filesDir, "${tvTextTitle.text}.mp3")
+                generateAudioFromTextToRead(audioTextFile)
             }
         }
     }
 
-    private fun generateAudioFromTextToRead(){
-        if(tvTextTitle.text.isNotEmpty() &&
-            tvTextToRead.text.isNotEmpty() &&
-                checkWriteStoragePermission()){
-            saveToFile(tvTextTitle.text.toString(), tvTextToRead.text.toString())
-        }
+    private fun generateAudioFromTextToRead(audioTextFile: File) {
+        val textToSynthesize =
+            tvTextTitle.text.toString().plus("\n").plus(tvTextToRead.text.toString())
+
+        textToSpeech.synthesizeToFile(
+            textToSynthesize,
+            null,
+            audioTextFile,
+            "my_utterance_id"
+        )
+
+        textToSpeech.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+            override fun onStart(p0: String?) {
+                Log.i("Game Lets Read", "Empezando a convertir texto a audio")
+            }
+
+            override fun onDone(p0: String?) {
+                Log.i("Game Lets Read", "Texto convertido a audio")
+                runOnUiThread {
+                    setMediaPlayer(audioTextFile)
+                }
+            }
+
+            @Deprecated("Deprecated in Java")
+            override fun onError(p0: String?) {
+            }
+
+        })
     }
 
-    private fun checkWriteStoragePermission(): Boolean{
-        return ContextCompat.checkSelfPermission(
-            this,
-            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-    }
+    private fun setMediaPlayer(audioTextFile: File) {
+        val mediaPlayer =
+            MediaPlayer.create(this, Uri.fromFile(audioTextFile))
 
-    private fun setAudioTextPlayer(){
-        setMediaPlayer()
-    }
-
-    private fun setMediaPlayer() {
-        currentAudioFile = File(this.filesDir, "${tvTextTitle.text}.mp3")
-
-        if(currentAudioFile.exists()){
-            val mediaPlayer = MediaPlayer.create(this, Uri.fromFile(File(currentAudioFile.absolutePath)))
-
-
+        if(mediaPlayer != null) {
+            this.mediaPlayer = mediaPlayer
             setSeekBar(mediaPlayer)
             setPlayButtonListener(mediaPlayer)
             setRunnable(mediaPlayer)
@@ -111,7 +132,9 @@ class LetsReadActivity : AppCompatActivity() {
     private fun setSeekBar(mediaPlayer: MediaPlayer) {
         seekBarAudioText.progress = 0
         seekBarAudioText.max = mediaPlayer.duration
+        Log.i("Lucas2", "seekbar max seteado")
         tvAudioTextDuration.text = setAudioTextDuration(mediaPlayer.duration)
+        Log.i("Lucas2", "duracion seteada")
 
         seekBarAudioText.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(p0: SeekBar?, position: Int, changed: Boolean) {
@@ -148,25 +171,6 @@ class LetsReadActivity : AppCompatActivity() {
         handler.postDelayed(runnable, 500)
     }
 
-    private fun saveToFile(textTitle: String, text:String) {
-        val internalDir = this.filesDir
-        currentAudioFile = File(internalDir, "$textTitle.mp3")
-
-        if(!currentAudioFile.exists()){
-            val result = textToSpeech.synthesizeToFile(textTitle.plus("\n").plus(text), null, currentAudioFile, null)
-
-            if (result == TextToSpeech.SUCCESS) {
-                Toast.makeText(this, "Audio saved successfully", Toast.LENGTH_SHORT).show()
-                setAudioTextPlayer()
-            } else {
-                Toast.makeText(this, "Failed to save audio", Toast.LENGTH_SHORT).show()
-            }
-        }else{
-            setAudioTextPlayer()
-        }
-
-    }
-
     private fun setAudioTextDuration(duration: Int) : String {
         val seconds = (duration / 1000) % 60
         val minutes = (duration / (1000 * 60)) % 60
@@ -174,20 +178,27 @@ class LetsReadActivity : AppCompatActivity() {
         return String.format(Locale.getDefault(), "%d:%02d", minutes, seconds)
     }
 
-    /*override fun onPause() {
-        super.onPause()
-        if(mediaPlayer != null && mediaPlayer.isPlaying){
-            mediaPlayer.stop()
-            btnPlayAudioText.setImageResource(R.drawable.ic_play)
+    private fun recordAudio(){
+        btnRecordAudio.setOnClickListener {
+            //TO DO
         }
-        handler.removeCallbacks(runnable)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if(mediaPlayer != null && mediaPlayer!!.isPlaying){
+            mediaPlayer!!.stop()
+            btnPlayAudioText.setImageResource(R.drawable.ic_play)
+            handler.removeCallbacks(runnable)
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if(mediaPlayer != null){
-            mediaPlayer.release()
+            mediaPlayer!!.release()
+            handler.removeCallbacks(runnable)
         }
-        handler.removeCallbacks(runnable)
-    }*/
+        textToSpeech.shutdown()
+    }
 }
