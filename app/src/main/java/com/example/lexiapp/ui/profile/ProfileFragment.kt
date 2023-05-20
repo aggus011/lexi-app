@@ -40,7 +40,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setAuthProv() {
-        //authProv = LoginUseCases()
+        authProv = LoginUseCases()
     }
 
     private fun setPreferences() {
