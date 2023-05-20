@@ -21,7 +21,7 @@
     </style>
     <style name="buttonWord" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:textColor">@color/black</item>
-        <item name="android:background">@drawable/btn_word</item>
+        <item name="android:background">@drawable/btn_letter_not_select</item>
         <item name="android:padding">10dp</item>
         <item name="android:layout_margin">6dp</item>
     </style>
