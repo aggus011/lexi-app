@@ -10,15 +10,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.FragmentProfileBinding
-import com.example.lexiapp.domain.AuthProvider
+import com.example.lexiapp.domain.useCases.LoginUseCases
 import com.example.lexiapp.ui.login.LoginActivity
 import com.google.android.material.button.MaterialButton
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+    //val viewModel: ProfileViewModel by viewModels()
     private lateinit var prefs: SharedPreferences
-    private lateinit var authProv: AuthProvider
+    private lateinit var authProv: LoginUseCases
     private lateinit var btnLogout: MaterialButton
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,8 +40,9 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setAuthProv() {
-        authProv = AuthProvider()
+        //authProv = LoginUseCases()
     }
+
     private fun setPreferences() {
         prefs = requireContext()
             .getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)

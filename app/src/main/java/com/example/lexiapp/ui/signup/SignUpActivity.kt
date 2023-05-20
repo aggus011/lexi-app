@@ -1,38 +1,43 @@
 package com.example.lexiapp.ui.signup
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Toast
-import com.example.lexiapp.R
+import androidx.activity.viewModels
+import androidx.lifecycle.Observer
 import com.example.lexiapp.databinding.ActivitySignUpBinding
-import com.example.lexiapp.domain.AuthProvider
+import com.example.lexiapp.domain.useCases.LoginUseCases
+import com.example.lexiapp.ui.login.LoginViewModel
+import com.example.lexiapp.utils.FirebaseResult
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
-    lateinit var authProv: AuthProvider
+    private val viewModel: SignUpViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
-        authProv = AuthProvider()
+        val validationObserver = Observer<FirebaseResult> { authResult ->
+            if (authResult is FirebaseResult.TaskSuccess) {
+                Toast.makeText(this, "Se registró correctamente", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Hubo un error", Toast.LENGTH_SHORT).show()
+            }
+        }
+        viewModel.registerResult.observe(this, validationObserver)
         setUp()
     }
 
     private fun setUp() {
         binding.btnSignUp.setOnClickListener {
             if(fieldsNotEmpty() && fieldsNotNull()){
-                authProv.singUpWithEmail(
+                viewModel.singUpWithEmail(
                     binding.etEmail.editText?.text.toString(),
                     binding.etPassword.editText?.text.toString()
-                ).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        Toast.makeText(this, "Se registró correctamente", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(this, "Hubo un error", Toast.LENGTH_SHORT).show()
-                    }
-                }
+                )
             }
         }
     }
