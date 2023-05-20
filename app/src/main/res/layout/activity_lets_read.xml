@@ -73,7 +73,8 @@
         app:layout_constraintEnd_toStartOf="@id/tvAudioTextDuration"
         app:layout_constraintBottom_toTopOf="@id/scrollText"
         app:layout_constraintTop_toBottomOf="@id/txtNameText"
-        android:progress="70"
+        android:progress="0"
+        tools:progress="70"
         android:thumbTint="@color/bottom_navigation_bg"
         android:progressTint="@color/bottom_navigation_bg"
         app:layout_constraintStart_toEndOf="@id/ibPlayAudioText"/>
