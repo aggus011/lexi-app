@@ -1,6 +1,7 @@
 package com.example.lexiapp.domain.useCases
 
 import android.util.Patterns
+import androidx.lifecycle.MutableLiveData
 import com.example.lexiapp.utils.FirebaseResult
 import com.example.lexiapp.utils.SignUpException
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -12,9 +13,9 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class LoginUseCases @Inject constructor() {
-
-    private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+class LoginUseCases @Inject constructor(
+    private val mAuth: FirebaseAuth
+) {
 
     fun singUpWithEmail(email: String, password: String): Task<AuthResult> {
         if (!verifyEmail(email)){
@@ -27,14 +28,10 @@ class LoginUseCases @Inject constructor() {
     }
 
     fun loginEmail(email: String, password: String): Task<AuthResult> {
+        if(!verifyEmail(email)){
+            throw SignUpException.EmailException
+        }
         return mAuth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    FirebaseResult.TaskSuccess
-                } else {
-                    FirebaseResult.TaskFaliure
-                }
-            }
     }
 
     private fun verifyEmail(email: String): Boolean =

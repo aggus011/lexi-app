@@ -13,6 +13,7 @@ import com.example.lexiapp.databinding.FragmentProfileBinding
 import com.example.lexiapp.domain.useCases.LoginUseCases
 import com.example.lexiapp.ui.login.LoginActivity
 import com.google.android.material.button.MaterialButton
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,7 +41,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setAuthProv() {
-        authProv = LoginUseCases()
+        authProv = LoginUseCases(FirebaseAuth.getInstance())
     }
 
     private fun setPreferences() {
