@@ -1,6 +1,8 @@
 package com.example.lexiapp.domain.useCases
 
+import android.util.Patterns
 import com.example.lexiapp.utils.FirebaseResult
+import com.example.lexiapp.utils.SignUpException
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -15,6 +17,12 @@ class LoginUseCases @Inject constructor() {
     private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
     fun singUpWithEmail(email: String, password: String): Task<AuthResult> {
+        if (!verifyEmail(email)){
+            throw SignUpException.EmailException
+        }
+        if(!verifyPassword(password)) {
+            throw SignUpException.PasswordException
+        }
         return mAuth.createUserWithEmailAndPassword(email, password)
     }
 
@@ -28,6 +36,12 @@ class LoginUseCases @Inject constructor() {
                 }
             }
     }
+
+    private fun verifyEmail(email: String): Boolean =
+        Patterns.EMAIL_ADDRESS.matcher(email).matches()
+
+    private fun verifyPassword(pass: String): Boolean = pass.length >= 6
+
 
     fun googleLogin(account: GoogleSignInAccount): Task<AuthResult> {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)

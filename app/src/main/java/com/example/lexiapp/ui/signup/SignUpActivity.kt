@@ -21,10 +21,16 @@ class SignUpActivity : AppCompatActivity() {
         binding = ActivitySignUpBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
         val validationObserver = Observer<FirebaseResult> { authResult ->
-            if (authResult is FirebaseResult.TaskSuccess) {
-                Toast.makeText(this, "Se registró correctamente", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Hubo un error", Toast.LENGTH_SHORT).show()
+            when (authResult::class) {
+                FirebaseResult.TaskSuccess::class -> {
+                    Toast.makeText(this, "Se registró correctamente", Toast.LENGTH_SHORT).show()
+                }
+                FirebaseResult.TaskFaliure::class -> Toast.makeText(
+                    this,
+                    "Hubo un error",
+                    Toast.LENGTH_SHORT
+                ).show()
+                else -> {}
             }
         }
         viewModel.registerResult.observe(this, validationObserver)
@@ -33,7 +39,7 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun setUp() {
         binding.btnSignUp.setOnClickListener {
-            if(fieldsNotEmpty() && fieldsNotNull()){
+            if (fieldsNotEmpty() && fieldsNotNull()) {
                 viewModel.singUpWithEmail(
                     binding.etEmail.editText?.text.toString(),
                     binding.etPassword.editText?.text.toString()
@@ -42,8 +48,11 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    private fun fieldsNotEmpty(): Boolean=binding.etEmail.editText?.text!!.isNotEmpty() && binding.etPassword.editText?.text!!.isNotEmpty()
-    private fun fieldsNotNull(): Boolean=binding.etEmail.editText?.text!=null && binding.etPassword.editText?.text!=null
+    private fun fieldsNotEmpty(): Boolean =
+        binding.etEmail.editText?.text!!.isNotEmpty() && binding.etPassword.editText?.text!!.isNotEmpty()
+
+    private fun fieldsNotNull(): Boolean =
+        binding.etEmail.editText?.text != null && binding.etPassword.editText?.text != null
 }
 //RegisterActivity
 /*lateinit var authProv: AuthProvider

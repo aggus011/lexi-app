@@ -21,7 +21,6 @@ class LoginViewModel @Inject constructor(private val loginUseCases: LoginUseCase
     fun loginEmail(email: String, password: String) {
             loginUseCases.loginEmail(email, password)
                 .addOnCompleteListener {
-                    Log.d(TAG, "El resultado: $it")
                     if (it.isSuccessful) {
                         authResult.value = FirebaseResult.TaskSuccess
                     } else {

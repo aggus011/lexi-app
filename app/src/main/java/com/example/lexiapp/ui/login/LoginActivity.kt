@@ -21,7 +21,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
     private lateinit var prefs: SharedPreferences
-    //private lateinit var authProv: LoginUseCases
     private lateinit var binding: ActivityLoginBinding
     private val viewModel: LoginViewModel by viewModels()
 
@@ -31,14 +30,14 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
         val validationObserver = Observer<FirebaseResult> { authResult ->
-            Log.d(TAG, "Auth Result : $authResult")
             when(authResult::class) {
                 FirebaseResult.TaskSuccess::class -> {
                     saveSesion(binding.etMail.editText?.text!!.toString())
                     goToHome()
                 }
-                FirebaseResult.TaskFaliure::class -> showAlert()
-                else -> { }
+                FirebaseResult.TaskFaliure::class -> showAlert("Error en registro")
+                FirebaseResult.EmailError::class -> showAlert("Email Inválido")
+                FirebaseResult.PasswordError::class -> showAlert("Contraseña débil")
             }
         }
         viewModel.authResult.observe(this, validationObserver)
@@ -81,10 +80,10 @@ class LoginActivity : AppCompatActivity() {
         startActivity(Intent(this, MainActivity::class.java))
     }
 
-    private fun showAlert() {
+    private fun showAlert(message: String) {
         val alert = AlertDialog.Builder(this)
             .setTitle("Error")
-            .setMessage("Se ha producido un erron en la autenticación")
+            .setMessage(message)
             .setPositiveButton("Aceptar", null)
             .create()
         alert.show()
