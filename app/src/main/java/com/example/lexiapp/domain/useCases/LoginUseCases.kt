@@ -1,13 +1,18 @@
 package com.example.lexiapp.domain.useCases
 
+import com.example.lexiapp.utils.FirebaseResult
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class LoginUseCases @Inject constructor(private val mAuth: FirebaseAuth) {
+class LoginUseCases @Inject constructor() {
+
+    private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
     fun singUpWithEmail(email: String, password: String): Task<AuthResult> {
         return mAuth.createUserWithEmailAndPassword(email, password)
@@ -15,6 +20,13 @@ class LoginUseCases @Inject constructor(private val mAuth: FirebaseAuth) {
 
     fun loginEmail(email: String, password: String): Task<AuthResult> {
         return mAuth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    FirebaseResult.TaskSuccess
+                } else {
+                    FirebaseResult.TaskFaliure
+                }
+            }
     }
 
     fun googleLogin(account: GoogleSignInAccount): Task<AuthResult> {

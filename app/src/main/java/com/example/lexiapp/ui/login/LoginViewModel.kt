@@ -1,5 +1,7 @@
 package com.example.lexiapp.ui.login
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,16 +16,18 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val loginUseCases: LoginUseCases): ViewModel() {
 
-    val authResult: MutableLiveData<FirebaseResult> by lazy {
-        MutableLiveData<FirebaseResult>()
-    }
+    val authResult = MutableLiveData<FirebaseResult>()
 
-    fun loginEmail(email: String, password: String)= flow<FirebaseResult> {
-        viewModelScope.launch(Dispatchers.IO) {
+    fun loginEmail(email: String, password: String) {
             loginUseCases.loginEmail(email, password)
-                .addOnSuccessListener { authResult.value = FirebaseResult.TaskSuccess }
-                .addOnFailureListener { authResult.value = FirebaseResult.TaskFaliure }
-        }
+                .addOnCompleteListener {
+                    Log.d(TAG, "El resultado: $it")
+                    if (it.isSuccessful) {
+                        authResult.value = FirebaseResult.TaskSuccess
+                    } else {
+                        authResult.value = FirebaseResult.TaskFaliure
+                    }
+                }
     }
 }
 

@@ -1,9 +1,11 @@
 package com.example.lexiapp.ui.login
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -29,11 +31,14 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
         val validationObserver = Observer<FirebaseResult> { authResult ->
-            if (authResult is FirebaseResult.TaskSuccess) {
-                saveSesion(binding.etMail.editText?.text!!.toString())
-                goToHome()
-            } else {
-                showAlert()
+            Log.d(TAG, "Auth Result : $authResult")
+            when(authResult::class) {
+                FirebaseResult.TaskSuccess::class -> {
+                    saveSesion(binding.etMail.editText?.text!!.toString())
+                    goToHome()
+                }
+                FirebaseResult.TaskFaliure::class -> showAlert()
+                else -> { }
             }
         }
         viewModel.authResult.observe(this, validationObserver)
