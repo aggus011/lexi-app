@@ -2,8 +2,10 @@ package com.example.lexiapp.ui.games.letsread
 
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
+import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
@@ -37,6 +39,7 @@ class LetsReadActivity : AppCompatActivity() {
     private var mediaPlayer: MediaPlayer? = null
     private lateinit var runnable: Runnable
     private var handler = Handler()
+    private var isRecording = false
 
     private lateinit var recordAudioPermissions: Array<String>
 
@@ -215,6 +218,23 @@ class LetsReadActivity : AppCompatActivity() {
     }
 
     private fun recordAudio(){
+        val recordingFile = File(Environment.getExternalStorageDirectory(), "lexiAudio.mp3")
+        val mediaRecorder = MediaRecorder()
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+        mediaRecorder.setOutputFile(recordingFile.absolutePath)
+
+        mediaRecorder.prepare()
+
+        isRecording = if(!isRecording){
+
+            mediaRecorder.start()
+            !isRecording
+        }else{
+            mediaRecorder.stop()
+            !isRecording
+        }
         Toast.makeText(this, "Grabando...", Toast.LENGTH_LONG).show()
     }
 
