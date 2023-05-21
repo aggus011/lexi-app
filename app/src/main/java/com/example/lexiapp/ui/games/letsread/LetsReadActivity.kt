@@ -9,8 +9,10 @@ import android.os.Environment
 import android.os.Handler
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.ImageButton
 import android.widget.SeekBar
 import android.widget.TextView
@@ -22,6 +24,7 @@ import androidx.core.content.ContextCompat
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityLetsReadBinding
 import com.example.lexiapp.domain.model.TextToRead
+import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
 import java.io.File
 import java.util.*
@@ -36,10 +39,19 @@ class LetsReadActivity : AppCompatActivity() {
     private lateinit var tvTextToRead: TextView
     private lateinit var btnBack: ImageButton
     private lateinit var btnRecordAudio: ImageButton
-    private var mediaPlayer: MediaPlayer? = null
-    private lateinit var runnable: Runnable
-    private var handler = Handler()
+    private var mediaPlayerText: MediaPlayer? = null
+    private lateinit var runnableAudioText: Runnable
+    private var handlerAudioText = Handler()
+    private var mediaRecorder: MediaRecorder? = null
     private var isRecording = false
+    private lateinit var btnPlayAudioRecord: ImageButton
+    private lateinit var seekBarAudioRecord: SeekBar
+    private lateinit var tvAudioRecordDuration: TextView
+    private var mediaPlayerAudioRecord: MediaPlayer? = null
+    private lateinit var runnableAudioRecord: Runnable
+    private var handlerAudioRecord = Handler()
+    private lateinit var btnReRecordAudio: MaterialButton
+    private lateinit var btnShowResultsRecordAudio: MaterialButton
 
     private lateinit var recordAudioPermissions: Array<String>
 
@@ -67,6 +79,11 @@ class LetsReadActivity : AppCompatActivity() {
         tvAudioTextDuration = binding.tvAudioTextDuration
         btnBack = binding.btnArrowBack
         btnRecordAudio = binding.btnRec
+        btnPlayAudioRecord = binding.ibPlayAudioRecord
+        seekBarAudioRecord = binding.seekBarAudioRecord
+        tvAudioRecordDuration = binding.tvAudioRecordDuration
+        btnReRecordAudio = binding.btnReRecordAudio
+        btnShowResultsRecordAudio = binding.btnShowResults
     }
 
     private fun btnBackListener(){
@@ -81,6 +98,7 @@ class LetsReadActivity : AppCompatActivity() {
 
         tvTextTitle.text = textToRead.title
         tvTextToRead.text = textToRead.text
+        tvTextToRead.movementMethod = ScrollingMovementMethod()
     }
 
     private fun setTextToSpeech() {
@@ -108,13 +126,13 @@ class LetsReadActivity : AppCompatActivity() {
 
         textToSpeech.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
             override fun onStart(p0: String?) {
-                Log.i("Game Lets Read", "Empezando a convertir texto a audio")
+                Log.v("Game Lets Read", "Empezando a convertir texto a audio")
             }
 
             override fun onDone(p0: String?) {
-                Log.i("Game Lets Read", "Texto convertido a audio")
+                Log.v("Game Lets Read", "Texto convertido a audio")
                 runOnUiThread {
-                    setMediaPlayer(audioTextFile)
+                    setMediaPlayerText(audioTextFile, btnPlayAudioText, seekBarAudioText, tvAudioTextDuration)
                 }
             }
 
@@ -125,29 +143,35 @@ class LetsReadActivity : AppCompatActivity() {
         })
     }
 
-    private fun setMediaPlayer(audioTextFile: File) {
-        val mediaPlayer =
+    private fun setMediaPlayerText(
+        audioTextFile: File,
+        btnPlayAudioText: ImageButton,
+        seekBarAudioText: SeekBar,
+        tvAudioTextDuration: TextView
+    ) {
+        mediaPlayerText =
             MediaPlayer.create(this, Uri.fromFile(audioTextFile))
 
-        if(mediaPlayer != null) {
-            this.mediaPlayer = mediaPlayer
-            setSeekBar(mediaPlayer)
-            setPlayButtonListener(mediaPlayer)
-            setRunnable(mediaPlayer)
+        if(mediaPlayerText != null) {
+            setSeekBar(mediaPlayerText!!, seekBarAudioText, tvAudioTextDuration)
+            setPlayButtonAudioTextListener(mediaPlayerText!!, btnPlayAudioText)
+            setRunnableMediaPlayerText(mediaPlayerText!!, seekBarAudioText)
 
-            mediaPlayer.setOnCompletionListener {
+            mediaPlayerText!!.setOnCompletionListener {
                 btnPlayAudioText.setImageResource(R.drawable.ic_play)
                 seekBarAudioText.progress = 0
             }
         }
     }
 
-    private fun setSeekBar(mediaPlayer: MediaPlayer) {
+    private fun setSeekBar(
+        mediaPlayer: MediaPlayer,
+        seekBarAudioText: SeekBar,
+        tvAudioTextDuration: TextView
+    ) {
         seekBarAudioText.progress = 0
         seekBarAudioText.max = mediaPlayer.duration
-        Log.i("Lucas2", "seekbar max seteado")
         tvAudioTextDuration.text = setAudioTextDuration(mediaPlayer.duration)
-        Log.i("Lucas2", "duracion seteada")
 
         seekBarAudioText.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(p0: SeekBar?, position: Int, changed: Boolean) {
@@ -164,24 +188,27 @@ class LetsReadActivity : AppCompatActivity() {
         })
     }
 
-    private fun setPlayButtonListener(mediaPlayer: MediaPlayer) {
-        btnPlayAudioText.setOnClickListener {
+    private fun setPlayButtonAudioTextListener(mediaPlayer: MediaPlayer, btnPlayAudio: ImageButton) {
+        btnPlayAudio.setOnClickListener {
             if(!mediaPlayer.isPlaying){
+                pauseMediaPlayerAudioRecord()
                 mediaPlayer.start()
-                btnPlayAudioText.setImageResource(R.drawable.ic_pause)
+                btnPlayAudio.setImageResource(R.drawable.ic_pause)
             }else{
-                mediaPlayer.pause()
-                btnPlayAudioText.setImageResource(R.drawable.ic_play)
+                pauseMediaPlayerAudioText()
             }
         }
     }
 
-    private fun setRunnable(mediaPlayer: MediaPlayer) {
-        runnable = Runnable {
+    private fun setRunnableMediaPlayerText(
+        mediaPlayer: MediaPlayer,
+        seekBarAudioText: SeekBar,
+    ) {
+        this.runnableAudioText = Runnable {
             seekBarAudioText.progress = mediaPlayer.currentPosition
-            handler.postDelayed(runnable, 500)
+            handlerAudioText.postDelayed(this.runnableAudioText, 500)
         }
-        handler.postDelayed(runnable, 500)
+        handlerAudioText.postDelayed(this.runnableAudioText, 500)
     }
 
     private fun setAudioTextDuration(duration: Int) : String {
@@ -197,6 +224,7 @@ class LetsReadActivity : AppCompatActivity() {
             if(checkRecordAudioPermissions()){
                 recordAudio()
             }else{
+                pauseMediaPlayerAudioText()
                 requestRecordAudioPermissions()
             }
         }
@@ -218,24 +246,125 @@ class LetsReadActivity : AppCompatActivity() {
     }
 
     private fun recordAudio(){
-        val recordingFile = File(Environment.getExternalStorageDirectory(), "lexiAudio.mp3")
-        val mediaRecorder = MediaRecorder()
-        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
-        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-        mediaRecorder.setOutputFile(recordingFile.absolutePath)
-
-        mediaRecorder.prepare()
-
-        isRecording = if(!isRecording){
-
-            mediaRecorder.start()
-            !isRecording
+        val recordingFile = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC), "Lexi ${tvTextTitle.text} record.mp3")
+        if(!isRecording){
+            setMediaRecorder(recordingFile)
+            pauseMediaPlayerAudioText()
+            enableButtonPlayAudioText(btnPlayAudioText= false)
+            isRecording = !isRecording
+            Log.v("Game Lets Read", "Grabando audio...")
         }else{
-            mediaRecorder.stop()
-            !isRecording
+            releaseMediaAudioRecorder()
+            enableButtonPlayAudioText(btnPlayAudioText= true)
+            setMediaPlayerAudioRecord(recordingFile, btnPlayAudioRecord, seekBarAudioRecord, tvAudioRecordDuration)
+            isRecording = !isRecording
+            Log.v("Game Lets Read", "Guardando audio...")
         }
-        Toast.makeText(this, "Grabando...", Toast.LENGTH_LONG).show()
+    }
+
+    private fun setMediaRecorder(recordingFile: File) {
+        mediaRecorder = MediaRecorder()
+        mediaRecorder!!.setAudioSource(MediaRecorder.AudioSource.MIC)
+        mediaRecorder!!.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+        mediaRecorder!!.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+        mediaRecorder!!.setMaxDuration(120000) // 2 minutes as max recorder time
+        mediaRecorder!!.setOutputFile(recordingFile.absolutePath)
+        mediaRecorder!!.prepare()
+        mediaRecorder!!.start()
+    }
+
+    private fun setMediaPlayerAudioRecord(
+        audioFile: File,
+        btnPlayAudioRecord: ImageButton,
+        seekBarAudioRecord: SeekBar,
+        tvAudioRecordDuration: TextView) {
+
+        mediaPlayerAudioRecord = MediaPlayer.create(this, Uri.fromFile(audioFile))
+
+        if (mediaPlayerAudioRecord != null) {
+            setSeekBar(mediaPlayerAudioRecord!!, seekBarAudioRecord, tvAudioRecordDuration)
+            setPlayButtonAudioRecordListener(mediaPlayerAudioRecord!!, btnPlayAudioRecord)
+            setRunnableMediaPlayerAudioRecord(mediaPlayerAudioRecord!!, seekBarAudioRecord)
+
+            showMediaPlayerAudioRecord()
+            setReRecordAudioListener()
+            setShowResultsRecordAudio(audioFile)
+
+            mediaPlayerAudioRecord!!.setOnCompletionListener {
+                btnPlayAudioRecord.setImageResource(R.drawable.ic_play)
+                seekBarAudioRecord.progress = 0
+            }
+        }
+    }
+
+    private fun setPlayButtonAudioRecordListener(
+        mediaPlayerAudioRecord: MediaPlayer,
+        btnPlayAudioRecord: ImageButton
+    ) {
+        btnPlayAudioRecord.setOnClickListener {
+            if(!mediaPlayerAudioRecord.isPlaying){
+                pauseMediaPlayerAudioText()
+                mediaPlayerAudioRecord.start()
+                btnPlayAudioRecord.setImageResource(R.drawable.ic_pause)
+            }else{
+                pauseMediaPlayerAudioRecord()
+            }
+        }
+    }
+
+    private fun setRunnableMediaPlayerAudioRecord(
+        mediaPlayerAudioRecord: MediaPlayer,
+        seekBarAudioRecord: SeekBar
+    ) {
+        this.runnableAudioRecord = Runnable {
+            seekBarAudioRecord.progress = mediaPlayerAudioRecord.currentPosition
+            this.handlerAudioRecord.postDelayed(this.runnableAudioRecord, 500)
+        }
+        this.handlerAudioRecord.postDelayed(this.runnableAudioRecord, 500)
+    }
+
+    private fun showMediaPlayerAudioRecord(){
+        btnRecordAudio.visibility = View.GONE
+        binding.clAudioRecord.visibility = View.VISIBLE
+    }
+
+    private fun hideMediaPlayerAudioRecord(){
+        btnRecordAudio.visibility = View.VISIBLE
+        binding.clAudioRecord.visibility = View.GONE
+    }
+
+    private fun enableButtonPlayAudioText(btnPlayAudioText: Boolean) {
+        this.btnPlayAudioText.isEnabled = btnPlayAudioText
+    }
+
+    private fun pauseMediaPlayerAudioText() {
+        if (mediaPlayerText != null) {
+            mediaPlayerText!!.pause()
+            btnPlayAudioText.setImageResource(R.drawable.ic_play)
+        }
+    }
+
+    private fun pauseMediaPlayerAudioRecord() {
+        if (mediaPlayerAudioRecord != null) {
+            mediaPlayerAudioRecord!!.pause()
+            btnPlayAudioRecord.setImageResource(R.drawable.ic_play)
+        }
+    }
+
+    private fun setReRecordAudioListener(){
+        btnReRecordAudio.setOnClickListener {
+            pauseMediaPlayerAudioText()
+            pauseMediaPlayerAudioRecord()
+            isRecording = false
+            hideMediaPlayerAudioRecord()
+            recordAudio()
+        }
+    }
+
+    private fun setShowResultsRecordAudio(audioFile: File) {
+        btnShowResultsRecordAudio.setOnClickListener {
+            // SEND AUDIO FILE TO ANALYSIS
+        }
     }
 
     private fun requestRecordAudioPermissions(){
@@ -275,21 +404,46 @@ class LetsReadActivity : AppCompatActivity() {
         }
     }
 
+    private fun releaseMediaAudioRecorder(){
+        mediaRecorder?.stop()
+        mediaRecorder?.release()
+        mediaRecorder = null
+    }
+
+    private fun releaseMediaPlayerAudioText(){
+        mediaPlayerText?.stop()
+        mediaPlayerText?.release()
+
+        if(mediaPlayerText != null) {
+            handlerAudioText.removeCallbacks(runnableAudioText)
+        }
+
+        mediaPlayerText = null
+    }
+
+    private fun releaseMediaPlayerAudioRecorder(){
+        mediaRecorder?.stop()
+        mediaRecorder?.release()
+
+        if(mediaPlayerAudioRecord != null){
+            handlerAudioRecord.removeCallbacks(runnableAudioRecord)
+        }
+
+        mediaRecorder = null
+    }
+
     override fun onPause() {
         super.onPause()
-        if(mediaPlayer != null && mediaPlayer!!.isPlaying){
-            mediaPlayer!!.stop()
-            btnPlayAudioText.setImageResource(R.drawable.ic_play)
-            handler.removeCallbacks(runnable)
-        }
+        releaseMediaAudioRecorder()
+        releaseMediaPlayerAudioText()
+        releaseMediaPlayerAudioRecorder()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if(mediaPlayer != null){
-            mediaPlayer!!.release()
-            handler.removeCallbacks(runnable)
-        }
+        releaseMediaAudioRecorder()
+        releaseMediaPlayerAudioText()
+        releaseMediaPlayerAudioRecorder()
         textToSpeech.shutdown()
     }
 }
