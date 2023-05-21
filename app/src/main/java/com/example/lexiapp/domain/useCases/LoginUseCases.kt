@@ -1,7 +1,10 @@
 package com.example.lexiapp.domain.useCases
 
 import android.util.Patterns
+import androidx.core.util.PatternsCompat
 import androidx.lifecycle.MutableLiveData
+import com.example.lexiapp.data.network.AuthenticationService
+import com.example.lexiapp.data.response.LoginResult
 import com.example.lexiapp.utils.FirebaseResult
 import com.example.lexiapp.utils.SignUpException
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -14,9 +17,29 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class LoginUseCases @Inject constructor(
-    private val mAuth: FirebaseAuth
+    private val authenticationService: AuthenticationService
 ) {
 
+    suspend operator fun invoke(email: String, password: String): LoginResult {
+        if (!verifyEmail(email)) {
+            return LoginResult.Error
+        }
+        if(!verifyPassword(password)) {
+            return LoginResult.Error
+        }
+        return authenticationService.login(email, password)
+    }
+
+    fun signOut() {
+        authenticationService.signOut()
+    }
+
+    private fun verifyEmail(email: String): Boolean =
+        PatternsCompat.EMAIL_ADDRESS.matcher(email).matches()
+
+    private fun verifyPassword(pass: String): Boolean = pass.length >= 6
+
+    /*
     fun singUpWithEmail(email: String, password: String): Task<AuthResult> {
         if (!verifyEmail(email)){
             throw SignUpException.EmailException
@@ -24,18 +47,18 @@ class LoginUseCases @Inject constructor(
         if(!verifyPassword(password)) {
             throw SignUpException.PasswordException
         }
-        return mAuth.createUserWithEmailAndPassword(email, password)
+        return authenticationService.createUserWithEmailAndPassword(email, password)
     }
 
     fun loginEmail(email: String, password: String): Task<AuthResult> {
         if(!verifyEmail(email)){
             throw SignUpException.EmailException
         }
-        return mAuth.signInWithEmailAndPassword(email, password)
+        return authenticationService.login(email, password)
     }
 
     private fun verifyEmail(email: String): Boolean =
-        Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        PatternsCompat.EMAIL_ADDRESS.matcher(email).matches()
 
     private fun verifyPassword(pass: String): Boolean = pass.length >= 6
 
@@ -66,4 +89,8 @@ class LoginUseCases @Inject constructor(
     fun singOut() {
         mAuth.signOut()
     }
+
+     */
 }
+
+

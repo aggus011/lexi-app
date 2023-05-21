@@ -15,6 +15,7 @@ import com.example.lexiapp.ui.login.LoginActivity
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -22,7 +23,8 @@ class ProfileFragment : Fragment() {
     private val binding get() = _binding!!
     //val viewModel: ProfileViewModel by viewModels()
     private lateinit var prefs: SharedPreferences
-    private lateinit var authProv: LoginUseCases
+    @Inject
+    lateinit var authProv: LoginUseCases
     private lateinit var btnLogout: MaterialButton
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,7 +32,7 @@ class ProfileFragment : Fragment() {
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         setPreferences()
-        setAuthProv()
+        //setAuthProv()
         return binding.root
     }
 
@@ -39,10 +41,12 @@ class ProfileFragment : Fragment() {
         getViews()
         setListeners()
     }
-
+/*
     private fun setAuthProv() {
-        authProv = LoginUseCases(FirebaseAuth.getInstance())
+        @Inject
+        authProv = LoginUseCases()
     }
+     */
 
     private fun setPreferences() {
         prefs = requireContext()
@@ -60,7 +64,7 @@ class ProfileFragment : Fragment() {
     private fun btnLogoutClick() {
         btnLogout.setOnClickListener {
             prefs.edit().clear().apply()
-            authProv.singOut()
+            authProv.signOut()
             requireActivity().finish()
             startActivity(Intent(activity, LoginActivity::class.java))
         }

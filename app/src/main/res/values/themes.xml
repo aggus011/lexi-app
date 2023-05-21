@@ -6,5 +6,13 @@
         <item name="android:colorBackground">@color/white</item>
     </style>
 
+    <style name="TertiaryButton" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">12sp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:gravity">center</item>
+    </style>
+
     <style name="Theme.LexiApp" parent="Base.Theme.LexiApp" />
 </resources>
