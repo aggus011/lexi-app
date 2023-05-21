@@ -11,6 +11,7 @@ import com.example.lexiapp.core.dialog.ErrorDialog
 import com.example.lexiapp.databinding.ActivitySignUpBinding
 import com.example.lexiapp.ui.login.LoginActivity
 import com.example.lexiapp.core.ex.*
+import com.example.lexiapp.domain.model.UserSignUp
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -84,8 +85,11 @@ class SignUpActivity : AppCompatActivity() {
         binding.btnSignUp.setOnClickListener {
             if (fieldsNotEmpty() && fieldsNotNull()) {
                 viewModel.singUpWithEmail(
+                    UserSignUp(
+                    binding.etName.editText?.text.toString(),
                     binding.etEmail.editText?.text.toString(),
                     binding.etPassword.editText?.text.toString()
+                    )
                 )
             }
         }

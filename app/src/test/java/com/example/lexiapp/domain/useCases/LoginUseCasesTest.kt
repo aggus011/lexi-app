@@ -25,20 +25,34 @@ class LoginUseCasesTest {
     }
 
     @Test
-    fun `que dado un email valido me deje iniciar sesion`() = runBlocking {
+    fun `given a valid email address to let me log in`() = runBlocking {
         //Given
         val email = "email@fake.com"
         val password = "123456"
         coEvery { mAuth.login(email, password) } returns LoginResult.Success
+        //When
         val result = loginUseCases(email, password)
+        //Then
         assert(result.equals(LoginResult.Success))
     }
 
     @Test
-    fun `que dado un email invalido no me deje iniciar sesion`() = runBlocking {
+    fun `given an invalid email will not let me log in`() = runBlocking {
         //Given
         val email = "emailfake.com"
         val password = "123456"
+        coEvery { mAuth.login(email, password) } returns LoginResult.Success
+        //When
+        val result = loginUseCases(email, password)
+        //Then
+        assert(result.equals(LoginResult.Error))
+    }
+
+    @Test
+    fun `that given a too short password of an error`()= runBlocking {
+        //Given
+        val email = "email@fake.com"
+        val password = "123"
         coEvery { mAuth.login(email, password) } returns LoginResult.Success
         val result = loginUseCases(email, password)
         assert(result.equals(LoginResult.Error))

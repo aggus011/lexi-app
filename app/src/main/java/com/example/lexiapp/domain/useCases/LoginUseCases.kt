@@ -1,19 +1,8 @@
 package com.example.lexiapp.domain.useCases
 
-import android.util.Patterns
 import androidx.core.util.PatternsCompat
-import androidx.lifecycle.MutableLiveData
 import com.example.lexiapp.data.network.AuthenticationService
 import com.example.lexiapp.data.response.LoginResult
-import com.example.lexiapp.utils.FirebaseResult
-import com.example.lexiapp.utils.SignUpException
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class LoginUseCases @Inject constructor(
@@ -37,7 +26,7 @@ class LoginUseCases @Inject constructor(
     private fun verifyEmail(email: String): Boolean =
         PatternsCompat.EMAIL_ADDRESS.matcher(email).matches()
 
-    private fun verifyPassword(pass: String): Boolean = pass.length >= 6
+    private fun verifyPassword(pass: String): Boolean = pass.length >= PASSWORD_MIN_LENGHT
 
     /*
     fun singUpWithEmail(email: String, password: String): Task<AuthResult> {
@@ -91,6 +80,9 @@ class LoginUseCases @Inject constructor(
     }
 
      */
+    companion object {
+        private const val PASSWORD_MIN_LENGHT = 6
+    }
 }
 
 

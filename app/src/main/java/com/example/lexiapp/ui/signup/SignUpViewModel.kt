@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lexiapp.core.Event
+import com.example.lexiapp.domain.model.UserSignUp
 import com.example.lexiapp.domain.useCases.LoginUseCases
 import com.example.lexiapp.domain.useCases.SignUpUseCases
 import com.example.lexiapp.utils.FirebaseResult
@@ -29,10 +30,10 @@ class SignUpViewModel @Inject constructor(private val signUpUseCases: SignUpUseC
     val showErrorDialog: LiveData<Boolean>
         get() = _showErrorDialog
 
-    fun singUpWithEmail(email: String, password: String) {
+    fun singUpWithEmail(user: UserSignUp) {
         viewModelScope.launch(Dispatchers.IO) {
             //_viewState.value = SignInViewState(isLoading = true)
-            val accountCreated = signUpUseCases(email, password)
+            val accountCreated = signUpUseCases(user)
             if (accountCreated) {
                 _navigateToLogin.value = Event(true)
             } else {
