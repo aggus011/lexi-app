@@ -219,12 +219,11 @@ class LetsReadActivity : AppCompatActivity() {
     }
 
     private fun btnRecordAudioListener(){
+        initArrayPermissions()
         btnRecordAudio.setOnClickListener {
-            initArrayPermissions()
             if(checkRecordAudioPermissions()){
                 recordAudio()
             }else{
-                pauseMediaPlayerAudioText()
                 requestRecordAudioPermissions()
             }
         }
@@ -435,7 +434,7 @@ class LetsReadActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         releaseMediaAudioRecorder()
-        releaseMediaPlayerAudioText()
+        pauseMediaPlayerAudioText()
         releaseMediaPlayerAudioRecorder()
     }
 
