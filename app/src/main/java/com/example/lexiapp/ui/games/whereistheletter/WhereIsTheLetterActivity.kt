@@ -10,27 +10,25 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.lexiapp.R
-import com.example.lexiapp.data.word_asociation_api.WordAssociationClient
-import com.example.lexiapp.data.word_asociation_api.WordAssociationService
 import com.example.lexiapp.databinding.ActivityWhereIsTheLetterBinding
-import com.example.lexiapp.domain.LetterRepository
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
+@AndroidEntryPoint
 class WhereIsTheLetterActivity : AppCompatActivity() {
+
+    private val vM: WhereIsTheLetterViewModel by viewModels()
+
     private lateinit var binding: ActivityWhereIsTheLetterBinding
 
     //Should be inject
-    private lateinit var vM: WhereIsTheLetterViewModel
 
     private var positions = mutableMapOf<Int, Button>()
 
@@ -38,7 +36,7 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityWhereIsTheLetterBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
-        setVM()
+        //setVM()
         progressBarOn()
         setListeners()
         waitForValues()
@@ -46,9 +44,19 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
 
     private fun waitForValues() {
         lifecycleScope.launch {
-            delay(2500)
+            delay(3000)
             withContext(Dispatchers.Main) {
-                setValues()
+                try {
+                    setValues()
+                }catch (e: Exception){
+                    binding.progressBar.visibility=View.GONE
+                    binding.txtWord.visibility= View.GONE
+                    binding.txtVariableWord.visibility= View.GONE
+                    binding.iconVolume.visibility= View.GONE
+                    binding.txtFindLetter.visibility= View.GONE
+                    Toast.makeText(applicationContext ,"NO SE PUDO CARGAR LA PALABRA", Toast.LENGTH_SHORT).show()
+
+                }
             }
             progressBarOff()
         }
@@ -191,19 +199,6 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
                 positions[pos]!!.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
             }
         }
-    }
-
-    //Should be inject
-    private fun setVM() {
-        val service= Retrofit.Builder()
-            .baseUrl("https://random-word-api.herokuapp.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(WordAssociationService::class.java)
-        val client= WordAssociationClient(service)
-        val repo= LetterRepository(client)
-        val factory = WhereIsTheLetterViewModel.Factory(repo) // Factory
-        vM = ViewModelProvider(this, factory)[WhereIsTheLetterViewModel::class.java]
     }
 }
 enum class SetStyleButton{

@@ -1,15 +1,19 @@
-package com.example.lexiapp.data.word_asociation_api
+package com.example.lexiapp.data.api.word_asociation_api
 
 import android.util.Log
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 import kotlin.random.Random
 
-class WordAssociationClient(
-    private val service: WordAssociationService
+class WordAssociationService @Inject constructor(
+    private val client: WordAssociationClient
 ) {
-    suspend fun getWordToWhereIsTheLetterGame()=flow {
+    suspend fun getWordToWhereIsTheLetterGame(count: Int, length: Int, language: String )=flow {
         try{
-            val response =service.getWordToWhereIsTheLetterGame(maxLength = Random.nextInt(2, 9))
+            val response =client.getWordToWhereIsTheLetterGame(
+                count=count,
+                length=length,
+                language=language)
             val word = if (response.isSuccessful && response.body()!=null) response.body()!![0] else stimulus()
             Log.v("", "${response.code()}${response.body()?.get(0)}")
             emit(word)

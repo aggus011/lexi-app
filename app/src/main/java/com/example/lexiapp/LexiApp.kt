@@ -1,14 +1,7 @@
 package com.example.lexiapp
 
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 
-class LexiApp : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        /*startKoin {
-            androidLogger()
-            androidContext(this@LexiApp)
-            modules(appModule)
-        }*/
-    }
-}
+@HiltAndroidApp
+class LexiApp : Application()
