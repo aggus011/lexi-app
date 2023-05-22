@@ -2,25 +2,24 @@ package com.example.lexiapp.ui.games.whereistheletter
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.lexiapp.domain.LetterRepository
-import com.example.lexiapp.ui.games.letsread.TextViewModel
+import com.example.lexiapp.domain.useCases.LetterGameUseCases
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.security.AccessController.getContext
+import javax.inject.Inject
 
-
-class WhereIsTheLetterViewModel(
-    private val letterRepository: LetterRepository
+@HiltViewModel
+class WhereIsTheLetterViewModel @Inject constructor(
+    private val letterGameUseCases: LetterGameUseCases
 ) : ViewModel() {
 
     private var _selectedPosition = MutableStateFlow<Int?>(null)
     val selectedPosition = _selectedPosition.asStateFlow()
 
-    private var _basicWord = MutableStateFlow("TESTEANDO")
+    private var _basicWord = MutableStateFlow("TEXTOS")
     val basicWord = _basicWord.asStateFlow()
 
     private var _correctPosition = MutableStateFlow(2)
@@ -31,10 +30,6 @@ class WhereIsTheLetterViewModel(
 
     private var _incorrectAnswerSubmitted = MutableStateFlow(false)
     val incorrectAnswerSubmitted = _incorrectAnswerSubmitted.asStateFlow()
-
-    init {
-        generateWord()
-    }
 
     fun onPositionSelected(position: Int) {
         _selectedPosition.value = position
@@ -70,7 +65,7 @@ class WhereIsTheLetterViewModel(
 
     private fun generateWord() {
         viewModelScope.launch(Dispatchers.IO) {
-            letterRepository.getWord()
+            letterGameUseCases.getWord()
                 .collect {
                     Log.v("data_in_view_model", "response word: $it")
                     _basicWord.value =it
@@ -85,11 +80,13 @@ class WhereIsTheLetterViewModel(
         _correctAnswerSubmitted.value = false
         _incorrectAnswerSubmitted.value = false
     }
-
+/*
     class Factory(private val repo: LetterRepository) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return WhereIsTheLetterViewModel(repo) as T
         }
     }
+
+ */
 
 }

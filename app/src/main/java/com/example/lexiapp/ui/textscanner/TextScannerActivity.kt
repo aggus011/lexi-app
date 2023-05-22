@@ -25,8 +25,10 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
+@AndroidEntryPoint
 class TextScannerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTextScannerBinding
     private lateinit var photoToScan: ImageView

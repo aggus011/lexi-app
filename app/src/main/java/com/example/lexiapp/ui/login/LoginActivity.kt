@@ -14,7 +14,9 @@ import com.example.lexiapp.ui.MainActivity
 import com.example.lexiapp.ui.signup.SignUpActivity
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
     private lateinit var prefs: SharedPreferences
     private lateinit var authProv: AuthProvider

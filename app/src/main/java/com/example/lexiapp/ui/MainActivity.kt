@@ -11,7 +11,9 @@ import com.example.lexiapp.ui.objectives.ObjectivesFragment
 import com.example.lexiapp.ui.patienthome.PatientHomeFragment
 import com.example.lexiapp.ui.profile.ProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var bottomNavigationView: BottomNavigationView
