@@ -337,14 +337,14 @@ class LetsReadActivity : AppCompatActivity() {
     }
 
     private fun pauseMediaPlayerAudioText() {
-        if (mediaPlayerText != null) {
+        if (mediaPlayerText != null  && mediaPlayerText!!.isPlaying) {
             mediaPlayerText!!.pause()
             btnPlayAudioText.setImageResource(R.drawable.ic_play)
         }
     }
 
     private fun pauseMediaPlayerAudioRecord() {
-        if (mediaPlayerAudioRecord != null) {
+        if (mediaPlayerAudioRecord != null && mediaPlayerAudioRecord!!.isPlaying) {
             mediaPlayerAudioRecord!!.pause()
             btnPlayAudioRecord.setImageResource(R.drawable.ic_play)
         }
