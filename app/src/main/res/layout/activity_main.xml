@@ -27,6 +27,7 @@
         android:background="@color/bottom_navigation_bg"
         app:itemIconTint="@color/selector_items_bottom_navigation_patient"
         app:itemPaddingBottom="4dp"
-        app:itemTextColor="@color/white"/>
+        app:itemTextColor="@color/white"
+        app:itemTextAppearanceActive="@style/textItemsBottomNavigation"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

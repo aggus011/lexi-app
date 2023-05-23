@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lexiapp.databinding.ActivityListTextBinding
@@ -19,6 +20,10 @@ class ListTextActivity () : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityListTextBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
+
+        //To handle when user do back gesture
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+
         setVM()
         setListener()
         setRecyclerView()
@@ -31,8 +36,11 @@ class ListTextActivity () : AppCompatActivity() {
     }
 
     private fun setListener() {
+        binding.btnArrowBack.setOnClickListener {
+            finish()
+        }
         binding.btnRandomText.setOnClickListener {
-            startActivity(Intent(this, LetsReadActivity::class.java))
+            //startActivity(Intent(this, LetsReadActivity::class.java))
         }
     }
 
@@ -53,5 +61,10 @@ class ListTextActivity () : AppCompatActivity() {
     }
 
 
+    private val onBackPressedCallback: OnBackPressedCallback = object: OnBackPressedCallback(true){
+        override fun handleOnBackPressed() {
+            finish()
+        }
+    }
 
 }

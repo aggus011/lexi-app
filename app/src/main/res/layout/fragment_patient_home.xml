@@ -131,9 +131,12 @@
             android:textColor="@color/black"
             app:icon="@drawable/ic_text_scanner"
             app:iconTint="@color/black"
-            app:iconSize="30dp"
+            app:iconSize="35dp"
             app:iconPadding="-20dp"
-            app:iconGravity="end"/>
+            app:iconGravity="end"
+            android:textAppearance="@style/title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="10dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

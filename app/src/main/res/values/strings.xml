@@ -42,4 +42,6 @@
     <string name="record_audio_again">Volver a grabar</string>
     <string name="audio_record_results">Chequear</string>
     <string name="your_recording">Tu grabación</string>
+    <string name="pending_readings">MIS LECTURAS PENDIENTES</string>
+    <string name="challenge_reading">Lectura desafío</string>
 </resources>
