@@ -59,6 +59,7 @@ class LoginActivity : AppCompatActivity() {
                     if (it.isSuccessful) {
                         saveSeion(binding.etMail.editText?.text!!.toString())
                         goToHome()
+                        finish()
                     } else {
                         showAlert()
                     }
