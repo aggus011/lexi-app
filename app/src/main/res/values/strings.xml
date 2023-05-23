@@ -39,4 +39,7 @@
     <string name="icon_user_birthday">Ícono de fecha de nacimiento del usuario</string>
     <string name="user_birthday">Fecha de nacimiento</string>
     <string name="my_objectives">Mis Objetivos</string>
+    <string name="record_audio_again">Volver a grabar</string>
+    <string name="audio_record_results">Chequear</string>
+    <string name="your_recording">Tu grabación</string>
 </resources>

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lexiapp.databinding.ActivityListTextBinding
 import com.example.lexiapp.ui.adapter.TextAdapter
+import com.google.gson.Gson
 
 class ListTextActivity () : AppCompatActivity() {
     private lateinit var binding: ActivityListTextBinding
@@ -41,9 +42,12 @@ class ListTextActivity () : AppCompatActivity() {
     }
 
     private fun suscribeToVM() {
+        val gson = Gson()
         vM.listText.observe(this) { list ->
             binding.rvText.adapter = TextAdapter(list){
-                startActivity(Intent(this, LetsReadActivity::class.java))
+                val intent = Intent(this, LetsReadActivity::class.java)
+                intent.putExtra("TextToRead", gson.toJson(it))
+                startActivity(intent)
             }
         }
     }
