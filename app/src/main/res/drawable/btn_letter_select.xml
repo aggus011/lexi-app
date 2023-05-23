@@ -5,5 +5,5 @@
         android:right="1.5dp"
         android:bottom="1.5dp"/>
     <solid
-        android:color="@color/bottom_navigation_bg"/>
+        android:color="@color/purple"/>
 </shape>

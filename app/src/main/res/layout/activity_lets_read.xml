@@ -67,8 +67,8 @@
         app:layout_constraintBottom_toBottomOf="@id/ibPlayAudioText"
         android:progress="0"
         tools:progress="70"
-        android:thumbTint="@color/bottom_navigation_bg"
-        android:progressTint="@color/bottom_navigation_bg"
+        android:thumbTint="@color/purple"
+        android:progressTint="@color/purple"
         app:layout_constraintStart_toEndOf="@id/ibPlayAudioText"/>
 
     <TextView
@@ -132,8 +132,8 @@
             app:layout_constraintBottom_toBottomOf="@id/ibPlayAudioRecord"
             android:progress="0"
             tools:progress="60"
-            android:thumbTint="@color/bottom_navigation_bg"
-            android:progressTint="@color/bottom_navigation_bg"
+            android:thumbTint="@color/purple"
+            android:progressTint="@color/purple"
             app:layout_constraintStart_toEndOf="@id/ibPlayAudioRecord"
             app:layout_constraintTop_toTopOf="@id/ibPlayAudioRecord"/>
 
@@ -158,7 +158,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btnShowResults"
             android:layout_margin="10dp"
-            android:backgroundTint="@color/bottom_navigation_bg"
+            android:backgroundTint="@color/purple"
             app:icon="@drawable/ic_mic"
             app:iconPadding="-10dp"
             android:textAppearance="@style/textMaterialButton"

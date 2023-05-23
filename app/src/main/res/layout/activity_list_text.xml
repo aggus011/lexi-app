@@ -32,7 +32,7 @@
         app:layout_constraintTop_toBottomOf="@id/ivMiniLogo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:backgroundTint="@color/bottom_navigation_bg"
+        android:backgroundTint="@color/purple"
         android:textAppearance="@style/title"/>
 
     <TextView

@@ -24,7 +24,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:menu="@menu/bottom_navigation_patient"
         app:labelVisibilityMode="selected"
-        android:background="@color/bottom_navigation_bg"
+        android:background="@color/purple"
         app:itemIconTint="@color/selector_items_bottom_navigation_patient"
         app:itemPaddingBottom="4dp"
         app:itemTextColor="@color/white"
