@@ -1,6 +1,7 @@
 package com.example.lexiapp.data.api.word_asociation_api
 
 import android.util.Log
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import kotlin.random.Random
@@ -17,10 +18,11 @@ class WordAssociationService @Inject constructor(
             val word = if (response.isSuccessful && response.body()!=null) response.body()!![0] else stimulus()
             Log.v("", "${response.code()}${response.body()?.get(0)}")
             emit(word)
-        }catch (e: Exception){
+        } catch (e: Exception){
             Log.v("EXCEPTION", "${e.message}")
-            emit(stimulus())
         }
+    } .catch {
+        emit(stimulus())
     }
 
     private fun stimulus()=listOf("Esfínter", "Sintomático", "Sinestesia", "Austeridad", "Psicodélico", "Epistemología",

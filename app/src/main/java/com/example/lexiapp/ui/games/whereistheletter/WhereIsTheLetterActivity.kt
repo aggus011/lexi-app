@@ -55,6 +55,9 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
             }
             binding.btnOtherWord.isClickable=true
         }
+        vM.letter.observe(this){
+            binding.txtVariableLetter.text = it.uppercase()
+        }
     }
 
     private fun progressBarOn(){
@@ -178,7 +181,7 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
         val word=vM.basicWord.value!!
         Log.v("init_word_in_activity", "response word: $word")
         binding.txtVariableWord.text = word
-        binding.txtVariableLetter.text = word[vM.correctPosition.value!!].toString()
+        //binding.txtVariableLetter.text = word[vM.correctPosition.value!!].toString()
         for (letter in word.withIndex()){
             createWordButton(letter.value.uppercase(),letter.index, ::onLetterSelected ) { btn ->
                 saveBtnPosition(
