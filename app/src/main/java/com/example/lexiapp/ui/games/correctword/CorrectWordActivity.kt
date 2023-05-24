@@ -77,6 +77,9 @@ class CorrectWordActivity : AppCompatActivity() {
         binding.iconVolume.setOnClickListener {
             playWordSound()
         }
+        binding.btnBack.setOnClickListener {
+            finish()
+        }
     }
 
 
@@ -85,6 +88,7 @@ class CorrectWordActivity : AppCompatActivity() {
         mediaPlayer = MediaPlayer.create(this, wordSoundResId)
         mediaPlayer?.start()
     }
+
 
     override fun onStop() {
         super.onStop()
