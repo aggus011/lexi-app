@@ -18,17 +18,21 @@ import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityLetsReadBinding
 import com.example.lexiapp.domain.model.TextToRead
+import com.example.lexiapp.ui.games.whereistheletter.WhereIsTheLetterViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.util.*
 
+@AndroidEntryPoint
 class LetsReadActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLetsReadBinding
     private lateinit var textToSpeech: TextToSpeech
@@ -52,6 +56,8 @@ class LetsReadActivity : AppCompatActivity() {
     private var handlerAudioRecord = Handler()
     private lateinit var btnReRecordAudio: MaterialButton
     private lateinit var btnShowResultsRecordAudio: MaterialButton
+    private val vM: SpeechToTextViewModel by viewModels()
+
 
     private lateinit var recordAudioPermissions: Array<String>
 
@@ -361,7 +367,13 @@ class LetsReadActivity : AppCompatActivity() {
     }
 
     private fun setShowResultsRecordAudio(audioFile: File) {
+        val directorioMusica =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
+        val archivoAudio = File(directorioMusica, "Lexi ${tvTextTitle.text} record.mp3")
+
+        // languageViewModel.getDifference(document1, document2)
         btnShowResultsRecordAudio.setOnClickListener {
+            vM.transcription(archivoAudio)
             // SEND AUDIO FILE TO ANALYSIS
         }
     }
