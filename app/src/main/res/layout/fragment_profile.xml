@@ -133,11 +133,13 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/ivCalendarIcon"
-                    android:backgroundTint="@color/btn_login"
+                    android:backgroundTint="@color/blue"
                     android:text="@string/edit_profile"
                     app:icon="@drawable/ic_edit"
                     app:iconPadding="-5dp"
-                    android:layout_marginTop="20dp"/>
+                    android:layout_marginTop="20dp"
+                    app:cornerRadius="10dp"
+                    android:textAppearance="@style/textMaterialButton"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnLinkAccount"
@@ -146,10 +148,12 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/btnEditProfile"
-                    android:backgroundTint="@color/btn_login"
+                    android:backgroundTint="@color/blue"
                     android:text="@string/link_account"
                     app:icon="@drawable/ic_qr_code"
-                    app:iconPadding="-5dp"/>
+                    app:iconPadding="-5dp"
+                    app:cornerRadius="10dp"
+                    android:textAppearance="@style/textMaterialButton"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnLogOut"
@@ -158,12 +162,14 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/btnLinkAccount"
-                    android:backgroundTint="@color/btn_logout"
+                    android:backgroundTint="@color/red"
                     android:text="@string/logout"
                     app:icon="@drawable/ic_logout"
                     app:iconPadding="-5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginBottom="20dp"/>
+                    android:layout_marginBottom="20dp"
+                    app:cornerRadius="10dp"
+                    android:textAppearance="@style/textMaterialButton"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

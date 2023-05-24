@@ -28,8 +28,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivMiniLogo"
             android:text="@string/my_objectives"
-            android:textAppearance="@style/lexiLogo"
-            android:layout_marginTop="50dp"/>
+            android:textAppearance="@style/title"
+            android:layout_marginTop="50dp"
+            android:textSize="40sp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvObjectives"

@@ -27,6 +27,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:contentDescription="@string/app_name"/>
+
+    <ImageButton
+        android:id="@+id/btnArrowBack"
+        android:background="@drawable/arrow_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/ivMiniLogo"/>
     
     <androidx.cardview.widget.CardView
         android:id="@+id/cvPhoto"
@@ -55,7 +65,8 @@
         app:layout_constraintTop_toBottomOf="@id/cvPhoto"
         app:layout_constraintStart_toStartOf="parent"
         android:text="@string/we_found_the_following"
-        android:layout_margin="20dp" />
+        android:layout_margin="20dp"
+        android:textAppearance="@style/subtitle"/>
 
     <TextView
         android:id="@+id/tvScannedText"
@@ -71,32 +82,37 @@
         android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toTopOf="@+id/btnReScan"
         android:maxLines="100"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical"
+        android:textAppearance="@style/textToRead"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnReScan"
         android:layout_width="150dp"
-        android:layout_height="60dp"
+        android:layout_height="70dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_margin="30dp"
-        android:backgroundTint="@color/btn_patient_home"
+        android:backgroundTint="@color/light_purple"
         android:text="@string/scan_again"
         app:icon="@drawable/ic_text_scanner"
-        app:cornerRadius="10dp"/>
+        app:cornerRadius="10dp"
+        android:textAppearance="@style/textMaterialButton"
+        app:iconSize="30dp"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnReadText"
         android:layout_width="150dp"
-        android:layout_height="60dp"
+        android:layout_height="70dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_margin="30dp"
-        android:backgroundTint="@color/btn_patient_home"
+        android:backgroundTint="@color/light_purple"
         android:text="@string/read_text"
         app:icon="@drawable/ic_read_text"
         app:iconPadding="-20dp"
-        app:cornerRadius="10dp"/>
+        app:cornerRadius="10dp"
+        android:textAppearance="@style/textMaterialButton"
+        app:iconSize="30dp"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clNoTextImage"
@@ -124,7 +140,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivNoTextRecognized"/>
+            app:layout_constraintTop_toBottomOf="@id/ivNoTextRecognized"
+            android:textAppearance="@style/subtitle"
+            android:layout_marginTop="10dp"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

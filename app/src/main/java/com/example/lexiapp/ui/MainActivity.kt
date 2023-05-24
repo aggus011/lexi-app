@@ -3,6 +3,7 @@ package com.example.lexiapp.ui
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.lexiapp.R
@@ -24,6 +25,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
 
         setContentView(binding.root)
+
+        //To handle when user do back gesture
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+
         
         getViews()
         setDefaultFragment()
@@ -67,5 +72,11 @@ class MainActivity : AppCompatActivity() {
             .beginTransaction()
             .replace(R.id.flMainActivity, destinationFragment)
             .commit()
+    }
+
+    private val onBackPressedCallback: OnBackPressedCallback = object: OnBackPressedCallback(true){
+        override fun handleOnBackPressed() {
+            finish()
+        }
     }
 }

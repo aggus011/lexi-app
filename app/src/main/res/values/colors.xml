@@ -4,12 +4,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="btn_google">#BDBDBD</color>
     <color name="btn_facebook">#1877F2</color>
-    <color name="btn_login">#035AA6</color>
+    <color name="blue">#035AA6</color>
     <color name="btn_word">#409417FF</color>
-    <color name="bottom_navigation_bg">#9417FF</color>
+    <color name="purple">#9417FF</color>
     <color name="transparent">#00000000</color>
-    <color name="btn_patient_home">#CA9AF8</color>
-    <color name="btn_logout">#B22626</color>
+    <color name="light_purple">#C98FFF</color>
+    <color name="red">#B22626</color>
     <color name="profile_background">#C4C4C4</color>
     <color name="green">#17FF20</color>
 </resources>
