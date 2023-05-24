@@ -11,6 +11,7 @@ import android.speech.tts.TextToSpeech
 import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -31,6 +32,7 @@ import java.util.*
 @AndroidEntryPoint
 class TextScannerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTextScannerBinding
+    private lateinit var btnBack: ImageButton
     private lateinit var photoToScan: ImageView
     private lateinit var textRecognized: TextView
     private lateinit var btnReScan: MaterialButton
@@ -82,6 +84,7 @@ class TextScannerActivity : AppCompatActivity() {
         initArraysPermissions()
         checkImageInput(intent.extras)
         getViews()
+        btnBackListener()
         setTextRecognizer()
         setTextToSpeech()
         setListeners()
@@ -107,6 +110,13 @@ class TextScannerActivity : AppCompatActivity() {
         textRecognized = binding.tvScannedText
         btnReScan = binding.btnReScan
         btnReadText = binding.btnReadText
+        btnBack = binding.btnArrowBack
+    }
+
+    private fun btnBackListener(){
+        btnBack.setOnClickListener {
+            finish()
+        }
     }
 
     private fun setTextRecognizer() {

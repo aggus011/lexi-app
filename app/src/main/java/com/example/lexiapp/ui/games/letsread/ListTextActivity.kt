@@ -4,10 +4,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lexiapp.databinding.ActivityListTextBinding
 import com.example.lexiapp.ui.adapter.TextAdapter
+import com.google.gson.Gson
 
 class ListTextActivity () : AppCompatActivity() {
     private lateinit var binding: ActivityListTextBinding
@@ -18,6 +20,10 @@ class ListTextActivity () : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityListTextBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
+
+        //To handle when user do back gesture
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+
         setVM()
         setListener()
         setRecyclerView()
@@ -30,8 +36,11 @@ class ListTextActivity () : AppCompatActivity() {
     }
 
     private fun setListener() {
+        binding.btnArrowBack.setOnClickListener {
+            finish()
+        }
         binding.btnRandomText.setOnClickListener {
-            startActivity(Intent(this, LetsReadActivity::class.java))
+            //startActivity(Intent(this, LetsReadActivity::class.java))
         }
     }
 
@@ -41,13 +50,21 @@ class ListTextActivity () : AppCompatActivity() {
     }
 
     private fun suscribeToVM() {
+        val gson = Gson()
         vM.listText.observe(this) { list ->
             binding.rvText.adapter = TextAdapter(list){
-                startActivity(Intent(this, LetsReadActivity::class.java))
+                val intent = Intent(this, LetsReadActivity::class.java)
+                intent.putExtra("TextToRead", gson.toJson(it))
+                startActivity(intent)
             }
         }
     }
 
 
+    private val onBackPressedCallback: OnBackPressedCallback = object: OnBackPressedCallback(true){
+        override fun handleOnBackPressed() {
+            finish()
+        }
+    }
 
 }

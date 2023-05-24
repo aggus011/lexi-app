@@ -137,30 +137,4 @@ class LoginActivity : AppCompatActivity() {
         Toast.makeText(this, "Se accedió correctamente", Toast.LENGTH_SHORT).show()
         startActivity(Intent(this, MainActivity::class.java))
     }
-
-    /*
-    private fun setUpLoginEmail() {
-        binding.btnLogin.setOnClickListener {
-            if (binding.etMail.editText?.text!!.isNotEmpty() && binding.etPassword.editText?.text!!.isNotEmpty()) {
-                viewModel.loginEmail(
-                    binding.etMail.editText?.text!!.toString(),
-                    binding.etPassword.editText?.text!!.toString()
-                )
-            }
-        }
-
-    }
-
-
-
-
-    private fun showAlert(message: String) {
-        val alert = AlertDialog.Builder(this)
-            .setTitle("Error")
-            .setMessage(message)
-            .setPositiveButton("Aceptar", null)
-            .create()
-        alert.show()
-    }
-         */
 }
