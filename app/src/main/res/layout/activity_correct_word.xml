@@ -2,32 +2,36 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.games.correctword.CorrectWordActivity">
+
     <ImageView
         android:id="@+id/lexiLogo"
         android:layout_width="wrap_content"
-        android:background="@drawable/mini_logo"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        android:background="@drawable/mini_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_margin="8dp"
+        android:background="@drawable/arrow_back"
         app:layout_constraintEnd_toStartOf="@id/btnHelp"
-        android:background="@drawable/arrow_back"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/btnHelp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:background="@drawable/help_circle"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtSelectWord"
@@ -40,84 +44,102 @@
         android:text="ELIGE LA OPCIÓN CORRECTA"
         android:textColor="@color/black"
         android:textSize="38sp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/txtWordToPlay"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtSelectWord">
+
         <TextView
             android:id="@+id/txtWord"
-            android:text="PALABRA: "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="25sp"
-            android:textColor="@color/black" />
+            android:text="PALABRA: "
+            android:textColor="@color/black"
+            android:textSize="25sp" />
+
         <TextView
-            tools:text="WordToPlay"
             android:id="@+id/txtVariableWord"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:textSize="25sp"
-            android:textColor="@color/black"/>
+            tools:text="WordToPlay" />
+
         <ImageView
             android:id="@+id/iconVolume"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/volume_high"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/volume_high" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/option_word"
-        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/txtWordToPlay"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@id/btnOtherWord"
-        android:gravity="center">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtWordToPlay">
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/word_one"
-            tools:text="WordOne"
+            style="@style/buttonWord"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/buttonWord"/>
+            tools:text="WordOne" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/word_two"
-            tools:text="WordTwo"
+            style="@style/buttonWord"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/buttonWord"/>
+            tools:text="WordTwo" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/word_three"
-            tools:text="WordThree"
+            style="@style/buttonWord"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/buttonWord"/>
+            tools:text="WordThree" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/word_four"
-            tools:text="WordFour"
+            style="@style/buttonWord"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/buttonWord"/>
+            tools:text="WordFour" />
 
     </LinearLayout>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnOtherWord"
-        android:text="Otra palabra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
+        android:text="Otra palabra"
+        android:visibility="gone"
         app:icon="@drawable/swap_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar3"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="181dp"
+        tools:layout_editor_absoluteY="243dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
