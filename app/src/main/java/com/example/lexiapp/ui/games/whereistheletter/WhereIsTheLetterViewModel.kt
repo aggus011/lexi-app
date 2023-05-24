@@ -1,8 +1,7 @@
 package com.example.lexiapp.ui.games.whereistheletter
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.lexiapp.domain.useCases.LetterGameUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -17,19 +16,23 @@ class WhereIsTheLetterViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var _selectedPosition = MutableStateFlow<Int?>(null)
-    val selectedPosition = _selectedPosition.asStateFlow()
+    var selectedPosition: LiveData<Int?> = _selectedPosition.asLiveData()
 
-    private var _basicWord = MutableStateFlow("TEXTOS")
-    val basicWord = _basicWord.asStateFlow()
+    //private var _basicWord = MutableStateFlow("TEXTOS")
+    //val basicWord = _basicWord.asStateFlow()
+
+    private var _basicWord = MutableStateFlow<String?>(null)
+    var basicWord: LiveData<String?> = _basicWord.asLiveData()
 
     private var _correctPosition = MutableStateFlow(2)
-    val correctPosition = _correctPosition.asStateFlow()
 
     private var _correctAnswerSubmitted = MutableStateFlow(false)
     val correctAnswerSubmitted = _correctAnswerSubmitted.asStateFlow()
 
     private var _incorrectAnswerSubmitted = MutableStateFlow(false)
-    val incorrectAnswerSubmitted = _incorrectAnswerSubmitted.asStateFlow()
+
+    private var _letter = MutableStateFlow('*')
+    var letter: LiveData<Char> = _letter.asLiveData()
 
     fun onPositionSelected(position: Int) {
         _selectedPosition.value = position
@@ -44,11 +47,13 @@ class WhereIsTheLetterViewModel @Inject constructor(
     fun isAnyLetterSelected()= _selectedPosition.value!=null
 
     fun onOmitWord() {
+        resetSubmit()
         generateWord()
+        Log.v("HAVE_A_WORD","WORD: ${basicWord.value}, LETTER: ${letter.value}")
     }
 
     fun onSubmitAnswer() {
-        if(selectedPosition.value == correctPosition.value) {
+        if(_selectedPosition.value == _correctPosition.value) {
             _correctAnswerSubmitted.value = true
         } else {
             _incorrectAnswerSubmitted.value = true
@@ -56,15 +61,16 @@ class WhereIsTheLetterViewModel @Inject constructor(
     }
 
     private fun selectLetter() {
-        var position = 0
+        var position: Int
         do {
             position = (Math.random() * 10).toInt()
-        } while (position !in (0..(basicWord.value!!.length)))
+        } while (position !in (0 until (_basicWord.value!!.length)))
         _correctPosition.value = position
+        _letter.value = _basicWord.value!![position]
     }
 
     private fun generateWord() {
-        viewModelScope.launch(Dispatchers.IO) {
+       /*viewModelScope.launch(Dispatchers.IO) {
             letterGameUseCases.getWord()
                 .collect {
                     Log.v("data_in_view_model", "response word: $it")
@@ -73,20 +79,41 @@ class WhereIsTheLetterViewModel @Inject constructor(
                         "response _basicWord: ${_basicWord.value} and basicWord: ${basicWord.value}")
                 }
             selectLetter()
+        }*/
+        viewModelScope.launch(Dispatchers.IO) {
+            letterGameUseCases.getWord()
+                .collect {
+                    Log.v("data_in_view_model", "response word: $it")
+                    _basicWord.value = it
+                    Log.v(
+                        "asignate_data_to_variable",
+                        "response _basicWord: ${_basicWord.value} and basicWord: ${basicWord.value}"
+                    )
+                    _basicWord.value = it
+                    Log.v(
+                        "asignate_data_to_variable",
+                        "response _basicWord: ${_basicWord.value} and basicWord: ${basicWord.value}"
+                    )
+                    selectLetter()
+                }
         }
     }
 
     fun resetSubmit() {
+        _basicWord.value = null
+        _selectedPosition.value = null
         _correctAnswerSubmitted.value = false
         _incorrectAnswerSubmitted.value = false
     }
-/*
+
+    /*
     class Factory(private val repo: LetterRepository) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return WhereIsTheLetterViewModel(repo) as T
         }
     }
+    */
 
- */
+    fun getLetterWithPosition() = _selectedPosition.value?.let { _basicWord.value?.get(it) }
 
 }
