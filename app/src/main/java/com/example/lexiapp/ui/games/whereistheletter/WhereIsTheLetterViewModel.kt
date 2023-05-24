@@ -57,7 +57,7 @@ class WhereIsTheLetterViewModel @Inject constructor(
     }
 
     fun onSubmitAnswer() {
-        if (selectedPosition.value == correctPosition.value) {
+        if (selectedPosition.value!! == correctPosition.value) {
             _correctAnswerSubmitted.value = true
         } else {
             _incorrectAnswerSubmitted.value = true
@@ -93,10 +93,13 @@ class WhereIsTheLetterViewModel @Inject constructor(
     }
 
     fun resetSubmit() {
-        cleanBasicWord()
-        _selectedPosition.value = null
-        _correctAnswerSubmitted.value = false
-        _incorrectAnswerSubmitted.value = false
+        viewModelScope.launch(Dispatchers.IO) {
+            cleanBasicWord()
+            _selectedPosition.value = null
+            _correctAnswerSubmitted.value = false
+            _incorrectAnswerSubmitted.value = false
+            _letter.value = ' '
+        }
     }
 
 }
