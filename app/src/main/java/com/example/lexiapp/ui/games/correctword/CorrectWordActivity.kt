@@ -2,8 +2,6 @@ package com.example.lexiapp.ui.games.correctword
 
 import android.animation.ObjectAnimator
 import android.graphics.Color
-import android.icu.lang.UCharacter.GraphemeClusterBreak.V
-import android.icu.util.TimeUnit.values
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -36,9 +34,19 @@ class CorrectWordActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityCorrectWordBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
-        progressBarOn()
-        setListeners()
-        waitForValues()
+        setObservers()
+    }
+
+    private fun setObservers() {
+        vM.basicWords.observe(this){
+            if(!it.isNullOrEmpty()){
+                setListeners()
+                waitForValues()
+                progressBarOff()
+            } else {
+                progressBarOn()
+            }
+        }
     }
 
     private fun desactivateButton() {
@@ -60,7 +68,7 @@ class CorrectWordActivity : AppCompatActivity() {
         constraintLayout.setBackgroundColor(Color.WHITE)
         binding.btnOtherWord.visibility = View.GONE
         activateButton()
-        vM.generateWord()
+        vM.generateWords()
         progressBarOn()
         setListeners()
         waitForValues()
@@ -128,7 +136,6 @@ class CorrectWordActivity : AppCompatActivity() {
 
     private fun waitForValues() {
         lifecycleScope.launch {
-            delay(1000)
             withContext(Dispatchers.Main) {
                 try {
                     setValues()
@@ -141,7 +148,6 @@ class CorrectWordActivity : AppCompatActivity() {
 
                 }
             }
-            progressBarOff()
         }
     }
 
@@ -165,30 +171,10 @@ class CorrectWordActivity : AppCompatActivity() {
         binding.txtWordToPlay.visibility = View.VISIBLE
     }
 
-    fun shuffleString(input: String, numCharsToShuffle: Int): String {
-        val charArray = input.toCharArray()
-        val indicesToShuffle = (0 until charArray.size).shuffled().take(numCharsToShuffle)
-        val shuffledCharArray = charArray.mapIndexed { index, char ->
-            if (index in indicesToShuffle) {
-                charArray[(index + 1) % charArray.size]
-            } else {
-                char
-            }
-        }.toCharArray()
-        return String(shuffledCharArray)
-    }
-
-
-
-
     private fun setValues(){
-        val word = vM.basicWord.value
-        binding.txtVariableWord.text = word
-          val shuffledWord1 = shuffleString(word, 2)
-          val shuffledWord2 = shuffleString(word, 1)
-          val shuffledWord3 = shuffleString(word, 2)
-          val words = arrayOf(word, shuffledWord1, shuffledWord2, shuffledWord3)
-          val shuffledArray = words.toList().shuffled().toTypedArray()
+        val words = vM.basicWords.value!!
+        binding.txtVariableWord.text = words[0]
+          val shuffledArray = words.shuffled().toTypedArray()
 
           binding.wordOne.text = shuffledArray[0]
           binding.wordTwo.text = shuffledArray[1]
