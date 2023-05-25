@@ -106,13 +106,6 @@ class WhereIsTheLetterViewModel @Inject constructor(
         _incorrectAnswerSubmitted.value = false
     }
 
-    /*
-    class Factory(private val repo: LetterRepository) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return WhereIsTheLetterViewModel(repo) as T
-        }
-    }
-    */
 
     fun getLetterWithPosition() = _selectedPosition.value?.let { _basicWord.value?.get(it) }
 

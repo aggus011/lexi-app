@@ -10,15 +10,21 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.FragmentProfileBinding
-import com.example.lexiapp.domain.AuthProvider
+import com.example.lexiapp.domain.useCases.LoginUseCases
 import com.example.lexiapp.ui.login.LoginActivity
 import com.google.android.material.button.MaterialButton
+import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+    //val viewModel: ProfileViewModel by viewModels()
     private lateinit var prefs: SharedPreferences
-    private lateinit var authProv: AuthProvider
+    @Inject
+    lateinit var authProv: LoginUseCases
     private lateinit var btnLogout: MaterialButton
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,7 +32,7 @@ class ProfileFragment : Fragment() {
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         setPreferences()
-        setAuthProv()
+        //setAuthProv()
         return binding.root
     }
 
@@ -35,10 +41,13 @@ class ProfileFragment : Fragment() {
         getViews()
         setListeners()
     }
-
+/*
     private fun setAuthProv() {
-        authProv = AuthProvider()
+        @Inject
+        authProv = LoginUseCases()
     }
+     */
+
     private fun setPreferences() {
         prefs = requireContext()
             .getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
@@ -55,7 +64,7 @@ class ProfileFragment : Fragment() {
     private fun btnLogoutClick() {
         btnLogout.setOnClickListener {
             prefs.edit().clear().apply()
-            authProv.singOut()
+            authProv.signOut()
             requireActivity().finish()
             startActivity(Intent(activity, LoginActivity::class.java))
         }

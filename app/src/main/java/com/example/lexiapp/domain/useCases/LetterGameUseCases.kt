@@ -18,5 +18,5 @@ class LetterGameUseCases @Inject constructor(
         repository.getWord(ONE_WORD, LENGTH_WORD, SPANISH_LANGUAGE).collect { emit(it) }
     }
 
-    private fun getRandomInt()=Random.nextInt(2,8)
+    private fun getRandomInt()=Random.nextInt(4,7)
 }

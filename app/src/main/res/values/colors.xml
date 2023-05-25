@@ -11,5 +11,6 @@
     <color name="light_purple">#C98FFF</color>
     <color name="red">#B22626</color>
     <color name="profile_background">#C4C4C4</color>
+    <color name="primary">#035AA6</color>
     <color name="green">#17FF20</color>
 </resources>
