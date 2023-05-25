@@ -27,11 +27,24 @@ class SignUpUseCasesTest {
     }
 
     @Test
-    fun `que con campos vacíos no deje crear el usuario`() = runBlocking {
+    fun `with empty fields do not allow to create the user`() = runBlocking {
         //Given
         val name = ""
         val email = ""
         val password = ""
+        coEvery { mAuth.createAccount(email, password) } returns null
+        //When
+        val result = signUpUseCases(UserSignUp(name, email, password))
+        //Then
+        assertFalse(result)
+    }
+
+    @Test
+    fun `by entering an invalid main it will not let me create the user`()  = runBlocking {
+        //Given
+        val name = "asdfasdfasd"
+        val email = "asdjkfhadsj"
+        val password = "sdfasdsfsad"
         coEvery { mAuth.createAccount(email, password) } returns null
         //When
         val result = signUpUseCases(UserSignUp(name, email, password))
