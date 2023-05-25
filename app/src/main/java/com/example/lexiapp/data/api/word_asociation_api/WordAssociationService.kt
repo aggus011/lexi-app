@@ -10,18 +10,19 @@ class WordAssociationService @Inject constructor(
     private val client: WordAssociationClient
 ) {
     suspend fun getWordToWhereIsTheLetterGame(count: Int, length: Int, language: String )=flow {
-        try{
+       
+      try{
             val response =client.getWordToWhereIsTheLetterGame(
-                count=count,
-                length=length,
-                language=language)
+            count=count,
+            length=length,
+            language=language)
             val word = if (response.isSuccessful && response.body()!=null) response.body()!![0] else stimulus()
-            Log.v("", "${response.code()}${response.body()?.get(0)}")
+            Log.v("rta", "${response.code()}${response.body()?.get(0)}:: $word")
             emit(word)
-        } catch (e: Exception){
-            Log.v("EXCEPTION", "${e.message}")
+        } catch (e: NullPointerException){
+            Log.v("EXCEPTION", "${e.message}, NAME: $e")
         }
-    } .catch {
+    }.catch {
         emit(stimulus())
     }
 
