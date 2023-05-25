@@ -9,24 +9,28 @@ import kotlin.random.Random
 class WordAssociationService @Inject constructor(
     private val client: WordAssociationClient
 ) {
-    suspend fun getWordToWhereIsTheLetterGame(count: Int, length: Int, language: String )=flow {
-       
-      try{
-            val response =client.getWordToWhereIsTheLetterGame(
-            count=count,
-            length=length,
-            language=language)
-            val word = if (response.isSuccessful && response.body()!=null) response.body()!![0] else stimulus()
+    suspend fun getWordToWhereIsTheLetterGame(count: Int, length: Int, language: String) = flow {
+
+        try {
+            val response = client.getWordToWhereIsTheLetterGame(
+                count = count,
+                length = length,
+                language = language
+            )
+            val word: List<String> =
+                if (response.isSuccessful && response.body() != null) response.body()!! else stimulus()
             Log.v("rta", "${response.code()}${response.body()?.get(0)}:: $word")
             emit(word)
-        } catch (e: NullPointerException){
+        } catch (e: NullPointerException) {
             Log.v("EXCEPTION", "${e.message}, NAME: $e")
         }
     }.catch {
         emit(stimulus())
     }
 
-    private fun stimulus()=listOf("Esfínter", "Sintomático", "Sinestesia", "Austeridad", "Psicodélico", "Epistemología",
-            "Atemporal", "Ecléctico", "Abigarrado", "Vértigo", "Heterogéneo", "Sincrónico",
-            "Catártico", "Endémico", "Anodino", "Perplejidad").random().toString()
+    private fun stimulus() = listOf(
+        "Esfínter", "Sintomático", "Sinestesia", "Austeridad", "Psicodélico", "Epistemología",
+        "Atemporal", "Ecléctico", "Abigarrado", "Vértigo", "Heterogéneo", "Sincrónico",
+        "Catártico", "Endémico", "Anodino", "Perplejidad"
+    ).shuffled(Random(System.currentTimeMillis() % 16)).take(3)
 }

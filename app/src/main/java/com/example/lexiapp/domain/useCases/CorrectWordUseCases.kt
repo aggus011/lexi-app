@@ -1,6 +1,8 @@
 package com.example.lexiapp.domain.useCases
 
 import com.example.lexiapp.data.api.LetterRepositoryImpl
+import com.example.lexiapp.data.repository.BlackList
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import kotlin.random.Random
@@ -26,16 +28,16 @@ class CorrectWordUseCases @Inject constructor(
             }
             emit(words.toList())
         }
-
     }
 
     private val SPANISH_LANGUAGE = "es"
     private var LENGTH_WORD = getRandomInt()
-    private val ONE_WORD = 1
+    private val WORD_COUNT = 1
 
     fun getWord() = flow {
         LENGTH_WORD = getRandomInt()
-        repository.getWord(ONE_WORD, LENGTH_WORD, SPANISH_LANGUAGE).collect { emit(it) }
+        repository.getWord(WORD_COUNT, LENGTH_WORD, SPANISH_LANGUAGE)
+            .collect { emit(it) }
     }
 
     private fun getRandomInt() = Random.nextInt(4, 7)
