@@ -88,7 +88,9 @@ class SignUpActivity : AppCompatActivity() {
                     UserSignUp(
                     binding.etName.editText?.text.toString(),
                     binding.etEmail.editText?.text.toString(),
-                    binding.etPassword.editText?.text.toString()
+                    binding.etConfirmEmail.editText?.text.toString(),
+                    binding.etPassword.editText?.text.toString(),
+                    binding.etConfirmPassword.editText?.text.toString()
                     )
                 )
             }

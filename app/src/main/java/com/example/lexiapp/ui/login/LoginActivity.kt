@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.example.lexiapp.R
 import com.example.lexiapp.core.dialog.DialogFragmentLauncher
 import com.example.lexiapp.core.dialog.ErrorDialog
 import com.example.lexiapp.databinding.ActivityLoginBinding
@@ -59,7 +60,12 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initPrefs()
         initUI()
+    }
+
+    private fun initPrefs() {
+       prefs = applicationContext.getSharedPreferences(R.string.prefs_file.toString(), Context.MODE_PRIVATE)
     }
 
     private fun initUI() {
@@ -73,7 +79,7 @@ class LoginActivity : AppCompatActivity() {
                 viewModel.loginTest(
                     binding.etMail.editText?.text!!.toString(),
                     binding.etPassword.editText?.text!!.toString()
-                )
+                ){saveSesion(binding.etMail.editText?.text!!.toString())}
             }
         }
         setUpRegister()
@@ -109,7 +115,7 @@ class LoginActivity : AppCompatActivity() {
                 viewModel.loginTest(
                     userLogin.email,
                     userLogin.password
-                )
+                ) {saveSesion(userLogin.email)}
                 it.dismiss()
             }
         ).show(dialogLauncher, this)

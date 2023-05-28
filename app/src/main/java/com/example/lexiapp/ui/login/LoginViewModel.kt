@@ -44,7 +44,7 @@ class LoginViewModel @Inject constructor(private val loginUseCases: LoginUseCase
     }
          */
 
-    fun loginTest(email: String, password: String) {
+    fun loginTest(email: String, password: String, save: () -> Unit ) {
         viewModelScope.launch {
             //_viewState.value = LoginViewState(isLoading = true)
             when (val result = loginUseCases(email, password)) {
@@ -55,6 +55,7 @@ class LoginViewModel @Inject constructor(private val loginUseCases: LoginUseCase
                 }
 
                 is LoginResult.Success -> {
+                    save()
                     _navigateToHome.value = Event(true)
                 }
             }

@@ -59,6 +59,7 @@
                    android:contentDescription="@string/icon_username"/>
 
                 <TextView
+                    android:id="@+id/txtName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/name"
@@ -85,6 +86,7 @@
                     android:contentDescription="@string/icon_user_email"/>
 
                 <TextView
+                    android:id="@+id/txtEmail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/email"
@@ -111,6 +113,7 @@
                     android:contentDescription="@string/icon_user_birthday"/>
 
                 <TextView
+                    android:id="@+id/txtBirthDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/user_birthday"
