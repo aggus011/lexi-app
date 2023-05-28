@@ -23,9 +23,9 @@ class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ProfileViewModel by viewModels()
-    private lateinit var prefs: SharedPreferences
     @Inject
     lateinit var authProv: LoginUseCases
+    private lateinit var prefs: SharedPreferences
     private lateinit var btnLogout: MaterialButton
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,6 +35,10 @@ class ProfileFragment : Fragment() {
         setPreferences()
         //setAuthProv()
         return binding.root
+    }
+
+    private fun setPreferences(){
+        prefs= context.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,8 +58,9 @@ class ProfileFragment : Fragment() {
     private fun setObserver() {
         viewModel.perfilLiveData.observe(viewLifecycleOwner){ user ->
             binding.txtEmail.text=user.email
+            Log.v("USER_NAME_FIRESTORE_FRAGMENT", "${user.userName}")
             user.userName.let { binding.txtName.text=it }
-            user.birthDate.let { binding.txtBirthDate.text=it.toString() }
+            //user.birthDate.let { binding.txtBirthDate.text=it.toString() }
         }
     }
 /*
@@ -66,10 +71,7 @@ class ProfileFragment : Fragment() {
     }
      */
 
-    private fun setPreferences() {
-        prefs = requireContext()
-            .getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
-    }
+
 
     private fun getViews() {
         btnLogout = binding.btnLogOut

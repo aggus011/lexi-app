@@ -7,7 +7,7 @@ data class UserSignUp(
     val password: String,
     val passwordConfirm: String,
     val showErrorDialog: Boolean = false
-) {
+): UserType {
     fun mapToUser(): User {
         return User(name, email, null, null)
     }

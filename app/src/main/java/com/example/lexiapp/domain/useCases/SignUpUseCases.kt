@@ -21,7 +21,7 @@ class SignUpUseCases @Inject constructor(
         fireStoreService.saveAccount(user.mapToUser())
     }
 
-    suspend fun getUser(email: String): User? {
+    suspend fun getUser(email: String): User {
         return fireStoreService.getUser(email)
     }
 

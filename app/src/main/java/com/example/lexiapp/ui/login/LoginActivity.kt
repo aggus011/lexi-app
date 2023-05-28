@@ -65,7 +65,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initPrefs() {
-       prefs = applicationContext.getSharedPreferences(R.string.prefs_file.toString(), Context.MODE_PRIVATE)
+       prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
     }
 
     private fun initUI() {
