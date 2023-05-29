@@ -25,20 +25,16 @@ class ProfileFragment : Fragment() {
     private val viewModel: ProfileViewModel by viewModels()
     @Inject
     lateinit var authProv: LoginUseCases
-    private lateinit var prefs: SharedPreferences
+    @Inject
+    lateinit var prefs: SharedPreferences
     private lateinit var btnLogout: MaterialButton
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        setPreferences()
         //setAuthProv()
         return binding.root
-    }
-
-    private fun setPreferences(){
-        prefs= context.getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

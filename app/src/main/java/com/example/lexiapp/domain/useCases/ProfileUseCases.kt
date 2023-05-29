@@ -7,12 +7,12 @@ import com.example.lexiapp.domain.model.UserSignUp
 import com.example.lexiapp.domain.model.UserType
 import javax.inject.Inject
 
-class ProfileUseCase @Inject constructor(
+class ProfileUseCases @Inject constructor(
     private val prefs: SharedPreferences
-)  {
+) {
 
-    fun saveProfile(user: UserType){
-        when(user){
+    fun saveProfile(user: UserType) {
+        when (user) {
             is User -> saveUser(user)
             is UserSignUp -> saveUserSingUp(user)
             is UserLogin -> saveUserLogin(user)
@@ -25,5 +25,5 @@ class ProfileUseCase @Inject constructor(
 
     private fun saveUser(user: User) {}
 
-    fun getEmail()=prefs.getString("email",null)
+    fun getEmail() = prefs.getString("email", null)
 }

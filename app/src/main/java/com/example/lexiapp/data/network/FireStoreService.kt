@@ -2,13 +2,15 @@ package com.example.lexiapp.data.network
 
 import android.util.Log
 import com.example.lexiapp.domain.model.User
+import com.google.firebase.auth.AuthResult
 import kotlinx.coroutines.tasks.await
+import okhttp3.internal.concurrent.Task
 import java.text.SimpleDateFormat
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FireStoreService @Inject constructor(private val firebase: FirebaseClient) {
+class FireStoreService @Inject constructor(firebase: FirebaseClient) {
 
     private val userCollection = firebase.firestore.collection("user")
 
