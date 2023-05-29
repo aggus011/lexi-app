@@ -48,7 +48,8 @@ class FireStoreService @Inject constructor(firebase: FirebaseClient) {
                     val documentSnapshot = task.result
                     if (documentSnapshot.exists()) {
                         user.userName = documentSnapshot.data?.get("user_name").toString()
-                        Log.v("USER_NAME_FIRESTORE", "${user.userName}")
+                        Log.v("USER_NAME_FIRESTORE_SERVICE", "${user.userName} // ${user.email}")
+                        user.uri = documentSnapshot.data?.get("uri_image").toString()
                     } else {
                         // El usuario no fue encontrado
                     }

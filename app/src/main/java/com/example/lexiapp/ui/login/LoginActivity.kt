@@ -79,7 +79,7 @@ class LoginActivity : AppCompatActivity() {
                 viewModel.loginTest(
                     binding.etMail.editText?.text!!.toString(),
                     binding.etPassword.editText?.text!!.toString()
-                ){saveSesion(binding.etMail.editText?.text!!.toString())}
+                )
             }
         }
         setUpRegister()
@@ -115,7 +115,7 @@ class LoginActivity : AppCompatActivity() {
                 viewModel.loginTest(
                     userLogin.email,
                     userLogin.password
-                ) {saveSesion(userLogin.email)}
+                )
                 it.dismiss()
             }
         ).show(dialogLauncher, this)
@@ -125,17 +125,6 @@ class LoginActivity : AppCompatActivity() {
         binding.tvRegister.setOnClickListener {
             startActivity(SignUpActivity.create(this))
         }
-    }
-
-    private fun validateSesion() {
-        if ((prefs.getString("email", null)) != null) {
-            //showHomeActivity(prefs.getString("email",null))
-            startActivity(Intent(this, MainActivity::class.java))
-        }
-    }
-
-    private fun saveSesion(email: String) {
-        prefs.edit().putString("email", email).apply()
     }
 
     private fun goToHome() {

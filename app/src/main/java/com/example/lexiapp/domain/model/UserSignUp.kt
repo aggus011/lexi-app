@@ -8,7 +8,5 @@ data class UserSignUp(
     val passwordConfirm: String,
     val showErrorDialog: Boolean = false
 ): UserType {
-    fun mapToUser(): User {
-        return User(name, email, null, null)
-    }
+    fun mapToUser() = User(name, email, null, null)
 }

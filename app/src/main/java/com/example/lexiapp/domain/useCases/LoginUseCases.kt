@@ -2,7 +2,9 @@ package com.example.lexiapp.domain.useCases
 
 import androidx.core.util.PatternsCompat
 import com.example.lexiapp.data.network.AuthenticationService
+import com.example.lexiapp.data.network.FireStoreService
 import com.example.lexiapp.data.response.LoginResult
+import com.example.lexiapp.domain.model.User
 import javax.inject.Inject
 
 class LoginUseCases @Inject constructor(
@@ -18,7 +20,7 @@ class LoginUseCases @Inject constructor(
         return authenticationService.login(email, password)
     }
 
-    fun signOut() {
+    fun logOut() {
         authenticationService.signOut()
     }
 

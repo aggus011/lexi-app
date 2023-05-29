@@ -8,13 +8,18 @@ import com.example.lexiapp.core.Event
 import com.example.lexiapp.data.response.LoginResult
 import com.example.lexiapp.domain.useCases.LoginUseCases
 import com.example.lexiapp.domain.model.UserLogin
+import com.example.lexiapp.domain.useCases.ProfileUseCases
 import com.example.lexiapp.utils.FirebaseResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import okhttp3.internal.wait
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val loginUseCases: LoginUseCases) : ViewModel() {
+class LoginViewModel @Inject constructor(
+    private val loginUseCases: LoginUseCases,
+    private val profileUseCases: ProfileUseCases
+) : ViewModel() {
 
     val authResult = MutableLiveData<FirebaseResult>()
 
@@ -44,7 +49,7 @@ class LoginViewModel @Inject constructor(private val loginUseCases: LoginUseCase
     }
          */
 
-    fun loginTest(email: String, password: String, save: () -> Unit ) {
+    fun loginTest(email: String, password: String) {
         viewModelScope.launch {
             //_viewState.value = LoginViewState(isLoading = true)
             when (val result = loginUseCases(email, password)) {
@@ -55,7 +60,7 @@ class LoginViewModel @Inject constructor(private val loginUseCases: LoginUseCase
                 }
 
                 is LoginResult.Success -> {
-                    save()
+                    profileUseCases.saveProfile(UserLogin(email=email))
                     _navigateToHome.value = Event(true)
                 }
             }

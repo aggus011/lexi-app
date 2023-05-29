@@ -29,11 +29,8 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun verifyCurrentSession() {
-        if (profileUseCases.getEmail() != null) {
-            startActivity(Intent(this, MainActivity::class.java))
-        } else {
-            startActivity(Intent(this, LoginActivity::class.java))
-        }
+        if (profileUseCases.haveAccount()) startActivity(Intent(this, MainActivity::class.java))
+            else startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }
 }
