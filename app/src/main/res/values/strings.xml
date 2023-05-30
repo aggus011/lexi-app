@@ -48,4 +48,5 @@
     <string name="try_again">VOLVER A\nINTENTAR</string>
     <string name="words_to_exercise">VER PALABRAS A EJERCITAR</string>
     <string name="home">INICIO</string>
+    <string name="phrase_positive_result">¡LO HICISTE MUY BIEN!</string>
 </resources>
