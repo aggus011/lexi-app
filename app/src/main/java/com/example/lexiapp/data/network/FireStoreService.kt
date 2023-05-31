@@ -1,6 +1,7 @@
 package com.example.lexiapp.data.network
 
 import android.util.Log
+import com.example.lexiapp.data.model.GameResult
 import com.example.lexiapp.domain.model.User
 import com.google.firebase.auth.AuthResult
 import kotlinx.coroutines.tasks.await
@@ -13,9 +14,10 @@ import javax.inject.Singleton
 class FireStoreService @Inject constructor(firebase: FirebaseClient) {
 
     private val userCollection = firebase.firestore.collection("user")
+    private val whereIsTheLetterCollection = firebase.firestore.collection("where_is_the_letter")
 
     suspend fun saveAccount(user: User) {
-        val data=hashMapOf(
+        val data = hashMapOf(
             "user_name" to user.userName,
             "birth_date" to user.birthDate,
             "uri_image" to user.uri
@@ -26,22 +28,8 @@ class FireStoreService @Inject constructor(firebase: FirebaseClient) {
         userCollection.document(user.email).set(data).await()
     }
 
-    /*fun getUserInfo(email: String) {
-        //var user: User? = null
-        firebase.firestore.collection("user").document(email).get().addOnSuccessListener {
-            val userName= it.get("user_name") as String
-            /*val birthDate = LocalDate.of(
-                it.get("birth_day") as Int,
-                it.get("birth_mounth") as Int,
-                it.get("birth_year") as Int
-            )*/
-            //user= User(email, userName, null)
-        }
-        //return user
-    }*/
-
     suspend fun getUser(email: String): User {
-        val user =User(null, email, null, null)
+        val user = User(null, email, null, null)
         userCollection.document(email).get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -58,5 +46,13 @@ class FireStoreService @Inject constructor(firebase: FirebaseClient) {
                 }
             }.await()
         return user
+    }
+
+    suspend fun saveWhereIsTheLetterResult(result: GameResult){
+        val data = hashMapOf(
+            "user" to result.user_mail,
+            "result" to result.result
+        )
+        whereIsTheLetterCollection.document(result.game.toString()).set(data).await()
     }
 }
