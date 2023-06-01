@@ -1,5 +1,6 @@
 package com.example.lexiapp.data.api.word_asociation_api
 
+import android.util.Log
 import com.example.lexiapp.data.api.word_asociation_api.model.Texts
 import com.example.lexiapp.data.api.word_asociation_api.model.TranscriptionInformation
 import okhttp3.MediaType

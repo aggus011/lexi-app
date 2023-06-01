@@ -13,6 +13,7 @@ import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.PartMap
 
 interface SpeechToTextClient {
 
@@ -22,7 +23,7 @@ interface SpeechToTextClient {
     @Multipart
     @POST("transcriptions")
     suspend fun transcription(
-        @Part("file") file: MultipartBody.Part,
+        @Part file: MultipartBody.Part,
         @Part("model") model: RequestBody,
         @Part("language") language: RequestBody
     ): Response<Texts>

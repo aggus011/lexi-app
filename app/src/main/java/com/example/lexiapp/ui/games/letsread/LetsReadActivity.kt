@@ -405,13 +405,18 @@ class LetsReadActivity : AppCompatActivity() {
             val revisedText =  //TEMPORAL
                 "Fabulas fabulosas ven en fabulosos fabularios fabulador y fabulistas hacen fabulas pero el fabulosidad de las fabulas del fabulista son fabulosas si si hacen una fabulario de fabulas"
 
+            val recordingFile = File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC),
+                "Voz 001.mp3"
+            )
+
             val requestBody = audioFile.asRequestBody("audio/mp3".toMediaTypeOrNull())
             val audioPart = MultipartBody.Part.createFormData("audio", audioFile.name, requestBody)
 
 
             vM.transcription(audioPart)
-            vM.getDifference(tvTextToRead.text.toString(), revisedText)
-            startActivity(Intent(this, ResultActivity::class.java))
+            //vM.getDifference(tvTextToRead.text.toString(), revisedText)
+            //startActivity(Intent(this, ResultActivity::class.java))
         }
     }
 
@@ -421,6 +426,7 @@ class LetsReadActivity : AppCompatActivity() {
 
     private companion object {
         private const val RECORD_AUDIO_REQUEST_CODE = 300
+        private const val TAG = "LetsReadActivity"
     }
 
     private val onBackPressedCallback: OnBackPressedCallback =
