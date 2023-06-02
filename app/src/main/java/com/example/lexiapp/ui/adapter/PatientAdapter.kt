@@ -12,7 +12,7 @@ import com.example.lexiapp.domain.model.TextToRead
 class PatientAdapter(
     private val patientList: List<Patient>,
     private val onClick: (Patient) -> Unit
-): RecyclerView.Adapter<PatientAdapterViewHolder>() {
+): RecyclerView.Adapter<PatientAdapter.PatientAdapterViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PatientAdapterViewHolder {
         val patientBinding =
@@ -21,15 +21,17 @@ class PatientAdapter(
     }
 
     override fun onBindViewHolder(holder: PatientAdapterViewHolder, position: Int) {
-        val patient = patientList[position]
-        //Set data with holder.binding
-
+        holder.bind(patientList[position])
     }
 
     override fun getItemCount(): Int {
         return patientList.size
     }
 
+    inner class PatientAdapterViewHolder(val binding: ItemPatientBinding): RecyclerView.ViewHolder(binding.root){
+        fun bind(patient: Patient) {
+            ////Set data
+        }
+    }
 }
 
-class PatientAdapterViewHolder(val binding: ItemPatientBinding): RecyclerView.ViewHolder(binding.root)
