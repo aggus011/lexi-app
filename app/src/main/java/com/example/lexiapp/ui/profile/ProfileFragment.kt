@@ -12,8 +12,8 @@ import com.example.lexiapp.R
 import com.example.lexiapp.databinding.FragmentProfileBinding
 import com.example.lexiapp.domain.useCases.LoginUseCases
 import com.example.lexiapp.ui.login.LoginActivity
+import com.example.lexiapp.ui.profile.vinculate.LinkPatientActivity
 import com.google.android.material.button.MaterialButton
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -59,6 +59,16 @@ class ProfileFragment : Fragment() {
 
     private fun setListeners() {
         btnLogoutClick()
+        btnVinculate()
+    }
+
+    private fun btnVinculate() {
+        binding.btnLinkAccount.setOnClickListener {
+            val validation=true //Should be myQR!=null
+            if (validation){
+                startActivity(Intent(activity, LinkPatientActivity::class.java))
+            }
+        }
     }
 
     private fun btnLogoutClick() {

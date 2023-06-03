@@ -106,6 +106,10 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
     //implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_version"
+
+    //ZXing and library impl
+    implementation 'com.google.zxing:core:3.3.0'
+    implementation('com.journeyapps:zxing-android-embedded:4.3.0') { transitive = false }
 }
 kapt {
     correctErrorTypes true
