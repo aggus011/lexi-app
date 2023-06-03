@@ -4,10 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lexiapp.databinding.ItemPatientBinding
-import com.example.lexiapp.databinding.ObjectiveItemBinding
-import com.example.lexiapp.domain.model.Objective
 import com.example.lexiapp.domain.model.Patient
-import com.example.lexiapp.domain.model.TextToRead
 
 class PatientAdapter(
     private val patientList: List<Patient>,
@@ -30,7 +27,9 @@ class PatientAdapter(
 
     inner class PatientAdapterViewHolder(val binding: ItemPatientBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(patient: Patient) {
-            ////Set data
+            //Set data
+            binding.txtName.text=patient.name
+            binding.txtEmail.text=patient.email
         }
     }
 }
