@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.profile.vinculate.LinkPatientActivity"
+    android:background="@color/purple">
+
+    <ImageView
+        android:id="@+id/ivMiniLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/mini_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/app_name"/>
+
+    <TextView
+        android:id="@+id/txtShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Mostrá o compartí el QR con tu profesional"
+        android:textSize="25sp"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/ivMiniLogo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvQr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/txtShare"
+        android:background="@color/white"
+        app:layout_constraintStart_toStartOf="@id/txtShare"
+        app:layout_constraintEnd_toEndOf="@id/txtShare"
+        android:layout_marginTop="60dp"
+        app:contentPadding="-10dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp">
+
+        <ImageView
+            android:id="@+id/ivQr"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnShareQr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/cvQr"
+        app:layout_constraintTop_toBottomOf="@id/cvQr"
+        app:layout_constraintEnd_toEndOf="@id/cvQr"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:backgroundTint="@color/white"
+        android:text="Compartí tu perfil"
+        android:textSize="22dp"
+        android:padding="10dp"
+        android:layout_marginEnd="10dp"
+        android:textColor="@color/purple"
+        app:iconTint="@color/purple"
+        android:layout_marginTop="20dp"
+        app:cornerRadius="10dp"
+        android:textAppearance="@style/textMaterialButton"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
