@@ -1,7 +1,9 @@
 package com.example.lexiapp.data.network
 
 import android.util.Log
+import com.example.lexiapp.data.model.Game
 import com.example.lexiapp.data.model.GameResult
+import com.example.lexiapp.data.model.WhereIsGameResult
 import com.example.lexiapp.domain.model.User
 import com.google.firebase.auth.AuthResult
 import kotlinx.coroutines.tasks.await
@@ -48,11 +50,35 @@ class FireStoreService @Inject constructor(firebase: FirebaseClient) {
         return user
     }
 
-    suspend fun saveWhereIsTheLetterResult(result: GameResult){
+    suspend fun saveWhereIsTheLetterResult(result: GameResult) {
         val data = hashMapOf(
-            "user" to result.user_mail,
+            "game" to result.game.toString(),
             "result" to result.result
         )
-        whereIsTheLetterCollection.document(result.game.toString()).set(data).await()
+        whereIsTheLetterCollection.document(result.user_mail).set(data).await()
+    }
+
+    suspend fun obtainLastResults(userMail: String): List<WhereIsGameResult> {
+        var result = mutableListOf<WhereIsGameResult>()
+        whereIsTheLetterCollection.document(userMail).get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val documentSnapshot = task.result
+                    documentSnapshot.let {
+                        if (it.data?.get("game")
+                                .toString() == Game.WHERE_IS_THE_LETTER_GAME.toString()
+                        ) {
+                            result.add(
+                                WhereIsGameResult(
+                                    game = Game.valueOf(it.data?.get("game") as String),
+                                    user_mail = userMail,
+                                    result = it.data?.get("result") as Pair<String, String>
+                                )
+                            )
+                        }
+                    }
+                }
+            }.await()
+        return result
     }
 }

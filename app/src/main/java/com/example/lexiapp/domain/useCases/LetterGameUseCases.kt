@@ -19,7 +19,7 @@ class LetterGameUseCases @Inject constructor(
         repository.getWord(ONE_WORD, LENGTH_WORD, SPANISH_LANGUAGE).collect { emit(it) }
     }
 
-    fun saveWordInFirebase(result: WhereIsTheLetterResult) {
+    suspend fun saveWordInFirebase(result: WhereIsTheLetterResult) {
         repository.saveResult(result)
     }
 
