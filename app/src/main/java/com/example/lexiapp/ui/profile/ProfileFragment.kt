@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.lexiapp.databinding.FragmentProfileBinding
 import com.example.lexiapp.ui.login.LoginActivity
+import com.example.lexiapp.ui.profesionalhome.ProfesionalHomeActivity
 import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 
