@@ -1,12 +1,9 @@
 package com.example.lexiapp.domain.useCases
 
 import com.example.lexiapp.data.network.AuthenticationService
-import com.example.lexiapp.data.response.LoginResult
 import com.example.lexiapp.domain.model.UserSignUp
-import com.google.firebase.auth.AuthResult
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
@@ -20,10 +17,12 @@ class SignUpUseCasesTest {
 
     lateinit var signUpUseCases: SignUpUseCases
 
+    private lateinit var profileUseCases: ProfileUseCases
+
     @Before
     fun onBefore() {
         MockKAnnotations.init(this)
-        signUpUseCases = SignUpUseCases(mAuth)
+        signUpUseCases = SignUpUseCases(mAuth, profileUseCases)
     }
 
     @Test
@@ -34,7 +33,7 @@ class SignUpUseCasesTest {
         val password = ""
         coEvery { mAuth.createAccount(email, password) } returns null
         //When
-        val result = signUpUseCases(UserSignUp(name, email, password))
+        val result = signUpUseCases(UserSignUp(name, email, email, password, password))
         //Then
         assertFalse(result)
     }
@@ -47,7 +46,7 @@ class SignUpUseCasesTest {
         val password = "sdfasdsfsad"
         coEvery { mAuth.createAccount(email, password) } returns null
         //When
-        val result = signUpUseCases(UserSignUp(name, email, password))
+        val result = signUpUseCases(UserSignUp(name, email, email, password, password))
         //Then
         assertFalse(result)
     }
