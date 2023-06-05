@@ -106,6 +106,9 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
     //implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_version"
+
+    //Firestore
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.6.1'
 }
 kapt {
     correctErrorTypes true

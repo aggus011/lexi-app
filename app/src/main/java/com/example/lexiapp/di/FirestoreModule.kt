@@ -1,6 +1,6 @@
 package com.example.lexiapp.di
 
-import com.google.firebase.auth.FirebaseAuth
+import com.example.lexiapp.data.network.FirestoreClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -9,9 +9,12 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object FirebaseModule {
+object FirestoreModule {
 
     @Singleton
     @Provides
-    fun provideLoginUseCases() = FirebaseAuth.getInstance()
+    fun provideFirestoreClient(): FirestoreClient {
+        return FirestoreClient
+    }
+
 }
