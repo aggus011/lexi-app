@@ -26,6 +26,6 @@ class OpenAICompletionsService @Inject constructor(
     }
 
     companion object{
-        const val TAG = "ChatGPTChatService Exception"
+        const val TAG = "OpenAICompletionsService Exception"
     }
 }

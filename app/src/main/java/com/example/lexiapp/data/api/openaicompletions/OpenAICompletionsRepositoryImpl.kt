@@ -16,6 +16,6 @@ class OpenAICompletionsRepositoryImpl @Inject constructor(
     }
 
     companion object{
-        const val TAG = "ChatGPTChatRepository"
+        const val TAG = "OpenAICompletionsRepository"
     }
 }
