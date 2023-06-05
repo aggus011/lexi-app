@@ -76,7 +76,7 @@ class LoginActivity : AppCompatActivity() {
     private fun initListeners() {
         binding.btnLogin.setOnClickListener {
             if (binding.etMail.editText?.text!!.isNotEmpty() && binding.etPassword.editText?.text!!.isNotEmpty()) {
-                viewModel.loginTest(
+                viewModel.loginUser(
                     binding.etMail.editText?.text!!.toString(),
                     binding.etPassword.editText?.text!!.toString()
                 )
@@ -112,7 +112,7 @@ class LoginActivity : AppCompatActivity() {
                 it.dismiss()
             },
             positiveAction = ErrorDialog.Action("Reintentar") {
-                viewModel.loginTest(
+                viewModel.loginUser(
                     userLogin.email,
                     userLogin.password
                 )

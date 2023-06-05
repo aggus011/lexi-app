@@ -12,7 +12,6 @@ import com.example.lexiapp.domain.useCases.ProfileUseCases
 import com.example.lexiapp.utils.FirebaseResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import okhttp3.internal.wait
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,25 +30,7 @@ class LoginViewModel @Inject constructor(
     val showErrorDialog: LiveData<UserLogin>
         get() = _showErrorDialog
 
-    /*
-    fun loginEmail(email: String, password: String) {
-        try {
-            loginUseCases.loginEmail(email, password)
-                .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        authResult.value = FirebaseResult.TaskSuccess
-                    } else {
-                        authResult.value = FirebaseResult.TaskFaliure
-                    }
-                }
-
-        } catch (e: SignUpException) {
-            authResult.value = FirebaseResult.EmailError
-        }
-    }
-         */
-
-    fun loginTest(email: String, password: String) {
+    fun loginUser(email: String, password: String) {
         viewModelScope.launch {
             //_viewState.value = LoginViewState(isLoading = true)
             when (val result = loginUseCases(email, password)) {
