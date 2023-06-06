@@ -405,16 +405,14 @@ class LetsReadActivity : AppCompatActivity() {
             val revisedText =  //TEMPORAL
                 "Fabulas fabulosas ven en fabulosos fabularios fabulador y fabulistas hacen fabulas pero el fabulosidad de las fabulas del fabulista son fabulosas si si hacen una fabulario de fabulas"
 
-            val recordingFile = File(
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC),
-                "Voz 001.mp3"
-            )
 
-            val requestBody = audioFile.asRequestBody("audio/mp3".toMediaTypeOrNull())
-            val audioPart = MultipartBody.Part.createFormData("audio", audioFile.name, requestBody)
+            val requestBody = RequestBody.create("audio/mp3".toMediaTypeOrNull(), audioFile)
+            Log.d(TAG, "requestBody $requestBody")
+            val audioPart = MultipartBody.Part.createFormData("file1", audioFile.name, requestBody)
+            Log.d(TAG, "audioPart $audioPart")
 
 
-            vM.transcription(audioPart)
+            vM.transcription(requestBody)
             //vM.getDifference(tvTextToRead.text.toString(), revisedText)
             //startActivity(Intent(this, ResultActivity::class.java))
         }
@@ -422,10 +420,12 @@ class LetsReadActivity : AppCompatActivity() {
 
     private fun requestRecordAudioPermissions() {
         ActivityCompat.requestPermissions(this, recordAudioPermissions, RECORD_AUDIO_REQUEST_CODE)
+        ActivityCompat.requestPermissions(this, recordAudioPermissions, READ_EXTERNAL_STORAGE_PERMISSION_CODE)
     }
 
     private companion object {
         private const val RECORD_AUDIO_REQUEST_CODE = 300
+        private const val READ_EXTERNAL_STORAGE_PERMISSION_CODE = 300
         private const val TAG = "LetsReadActivity"
     }
 
@@ -448,11 +448,13 @@ class LetsReadActivity : AppCompatActivity() {
             if (grantResults.isNotEmpty()) {
                 val recordAudioAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED
                 val storageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED
+                val storageReadAccepted = grantResults[2] == PackageManager.PERMISSION_GRANTED
 
-                if (recordAudioAccepted){// && storageAccepted) {
+                if (recordAudioAccepted && storageAccepted && storageReadAccepted) {
                     recordAudio()
                 } else {
                     //No record audio and storage permissions granted
+
                     Toast.makeText(
                         this,
                         "Necesitas darnos permiso para poder usar el micrófono",

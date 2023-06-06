@@ -18,11 +18,11 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class SpeechToTextService @Inject constructor() {
-    suspend fun transcription(path: MultipartBody.Part): Response<Texts> {
+    suspend fun transcription(path: RequestBody): Response<Texts> {
         val information = TranscriptionInformation()
         val model = "whisper-1".toRequestBody("text/plain".toMediaTypeOrNull())
-        val language = "es".toRequestBody("text/plain".toMediaTypeOrNull())
-        return serviceGetTextFromPrompt.transcription(model = model, language = language, file = path)
+        val contentType = "multipart/form-data"
+        return serviceGetTextFromPrompt.transcription(contentType = contentType, model = model, file = path)
     }
 
 

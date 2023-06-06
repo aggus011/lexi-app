@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class SpeechToTextRepository @Inject constructor(private val apiService: SpeechToTextService) {
 
-    suspend fun transcription(file: MultipartBody.Part): Response<Texts> {
+    suspend fun transcription(file: RequestBody): Response<Texts> {
         return apiService.transcription(file)
     }
 

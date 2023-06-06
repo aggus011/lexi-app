@@ -26,7 +26,7 @@ class SpeechToTextViewModel @Inject constructor(private val speechRepository: Sp
     private lateinit var revised: String
 
 
-    fun transcription(path: MultipartBody.Part) = CoroutineScope(Dispatchers.IO).launch {
+    fun transcription(path: RequestBody) = CoroutineScope(Dispatchers.IO).launch {
         try {
             val result = speechRepository.transcription(path)
             Log.d(TAG, "result $result code ${result.code()}")
