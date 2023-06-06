@@ -19,7 +19,7 @@
         android:theme="@style/Theme.LexiApp"
         tools:targetApi="31">
         <activity
-            android:name=".ui.profesionalhome.ProfesionalHomeActivity"
+            android:name=".ui.profile.edit.EditProfileActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

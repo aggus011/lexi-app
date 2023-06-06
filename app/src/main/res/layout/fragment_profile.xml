@@ -8,6 +8,7 @@
     android:background="@color/profile_background">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/profile_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -59,9 +60,11 @@
                    android:contentDescription="@string/icon_username"/>
 
                 <TextView
+                    android:id="@+id/txtName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/name"
+                    android:textColor="@color/black"
                     app:layout_constraintTop_toTopOf="@id/ivAccountIcon"
                     app:layout_constraintStart_toEndOf="@id/ivAccountIcon"
                     app:layout_constraintBottom_toBottomOf="@id/ivAccountIcon"
@@ -85,9 +88,11 @@
                     android:contentDescription="@string/icon_user_email"/>
 
                 <TextView
+                    android:id="@+id/txtEmail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/email"
+                    android:textColor="@color/black"
                     app:layout_constraintTop_toTopOf="@id/ivEmailIcon"
                     app:layout_constraintStart_toEndOf="@id/ivEmailIcon"
                     app:layout_constraintBottom_toBottomOf="@id/ivEmailIcon"
@@ -111,9 +116,11 @@
                     android:contentDescription="@string/icon_user_birthday"/>
 
                 <TextView
+                    android:id="@+id/txtBirthDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/user_birthday"
+                    android:textColor="@color/black"
                     app:layout_constraintTop_toTopOf="@id/ivCalendarIcon"
                     app:layout_constraintStart_toEndOf="@id/ivCalendarIcon"
                     app:layout_constraintBottom_toBottomOf="@id/ivCalendarIcon"

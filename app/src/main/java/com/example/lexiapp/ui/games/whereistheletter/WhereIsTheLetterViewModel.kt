@@ -2,6 +2,7 @@ package com.example.lexiapp.ui.games.whereistheletter
 
 import android.util.Log
 import androidx.lifecycle.*
+import com.example.lexiapp.domain.model.WhereIsTheLetterResult
 import com.example.lexiapp.domain.useCases.LetterGameUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,9 +19,6 @@ class WhereIsTheLetterViewModel @Inject constructor(
     private var _selectedPosition = MutableStateFlow<Int?>(null)
     var selectedPosition: LiveData<Int?> = _selectedPosition.asLiveData()
 
-    //private var _basicWord = MutableStateFlow("TEXTOS")
-    //val basicWord = _basicWord.asStateFlow()
-
     private var _basicWord = MutableStateFlow<String?>(null)
     var basicWord: LiveData<String?> = _basicWord.asLiveData()
 
@@ -34,6 +32,8 @@ class WhereIsTheLetterViewModel @Inject constructor(
     private var _letter = MutableStateFlow('*')
     var letter: LiveData<Char> = _letter.asLiveData()
 
+    private var counter = 0
+
     fun onPositionSelected(position: Int) {
         _selectedPosition.value = position
     }
@@ -42,20 +42,28 @@ class WhereIsTheLetterViewModel @Inject constructor(
         _selectedPosition.value = null
     }
 
-    fun isItSelected(position: Int)= _selectedPosition.value==position
+    fun isItSelected(position: Int) = _selectedPosition.value == position
 
-    fun isAnyLetterSelected()= _selectedPosition.value!=null
+    fun isAnyLetterSelected() = _selectedPosition.value != null
 
     fun onOmitWord() {
         resetSubmit()
         generateWord()
-        Log.v("HAVE_A_WORD","WORD: ${basicWord.value}, LETTER: ${letter.value}")
+        Log.v("HAVE_A_WORD", "WORD: ${basicWord.value}, LETTER: ${letter.value}")
     }
 
     fun onSubmitAnswer() {
-        if(_selectedPosition.value == _correctPosition.value) {
+        if (_selectedPosition.value == _correctPosition.value) {
             _correctAnswerSubmitted.value = true
         } else {
+            counter ++
+            viewModelScope.launch(Dispatchers.IO) {
+                getLetterWithPosition()?.let { WhereIsTheLetterResult(letter.value!!, it) }?.let {
+                    letterGameUseCases.saveWordInFirebase(
+                        it
+                    )
+                }
+            }
             _incorrectAnswerSubmitted.value = true
         }
     }
@@ -70,16 +78,6 @@ class WhereIsTheLetterViewModel @Inject constructor(
     }
 
     private fun generateWord() {
-       /*viewModelScope.launch(Dispatchers.IO) {
-            letterGameUseCases.getWord()
-                .collect {
-                    Log.v("data_in_view_model", "response word: $it")
-                    _basicWord.value =it
-                    Log.v("asignate_data_to_variable",
-                        "response _basicWord: ${_basicWord.value} and basicWord: ${basicWord.value}")
-                }
-            selectLetter()
-        }*/
         viewModelScope.launch(Dispatchers.IO) {
             letterGameUseCases.getWord()
                 .collect {
