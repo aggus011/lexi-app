@@ -251,11 +251,18 @@ class LetsReadActivity : AppCompatActivity() {
     }
 
     private fun initArrayPermissions() {
+        //Verify if api version is higher than api 32
         recordAudioPermissions =
+            if(verifyApiVersionIsHigherThat32())
             arrayOf(
                 android.Manifest.permission.RECORD_AUDIO,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
+                android.Manifest.permission.READ_MEDIA_AUDIO
+            )else{
+                arrayOf(
+                    android.Manifest.permission.RECORD_AUDIO,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+            }
     }
 
     private fun checkRecordAudioPermissions(): Boolean {
@@ -269,8 +276,14 @@ class LetsReadActivity : AppCompatActivity() {
                 this,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE
             ) == PackageManager.PERMISSION_GRANTED
+        val audioReadResult =
+            ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.READ_MEDIA_AUDIO
+            ) == PackageManager.PERMISSION_GRANTED
 
-        return recordAudioResult && storageResult
+        return recordAudioResult &&
+                (if(verifyApiVersionIsHigherThat32()) audioReadResult else storageResult)
     }
 
     private fun recordAudio() {
@@ -448,9 +461,8 @@ class LetsReadActivity : AppCompatActivity() {
             if (grantResults.isNotEmpty()) {
                 val recordAudioAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED
                 val storageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED
-                val storageReadAccepted = grantResults[2] == PackageManager.PERMISSION_GRANTED
 
-                if (recordAudioAccepted && storageAccepted && storageReadAccepted) {
+                if (recordAudioAccepted && storageAccepted) {
                     recordAudio()
                 } else {
                     //No record audio and storage permissions granted
@@ -491,6 +503,11 @@ class LetsReadActivity : AppCompatActivity() {
         }
 
         mediaRecorder = null
+    }
+
+    private fun verifyApiVersionIsHigherThat32(): Boolean{
+        return android.os.Build.VERSION.SDK_INT >
+                android.os.Build.VERSION_CODES.S_V2
     }
 
     override fun onPause() {
