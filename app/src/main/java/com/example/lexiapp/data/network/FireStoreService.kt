@@ -5,6 +5,7 @@ import com.example.lexiapp.data.model.Game
 import com.example.lexiapp.data.model.GameResult
 import com.example.lexiapp.data.model.WhereIsGameResult
 import com.example.lexiapp.domain.model.User
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.AuthResult
 import kotlinx.coroutines.tasks.await
 import okhttp3.internal.concurrent.Task
@@ -23,9 +24,6 @@ class FireStoreService @Inject constructor(firebase: FirebaseClient) {
             "user_name" to user.userName,
             "birth_date" to user.birthDate,
             "uri_image" to user.uri
-            /*"birth_day" to birthDate.dayOfMonth,
-            "birth_mounth" to birthDate.monthValue,
-            "birth_year" to birthDate.year*/
         )
         userCollection.document(user.email).set(data).await()
     }

@@ -9,8 +9,8 @@ import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.useCases.LoginUseCases
 import com.example.lexiapp.domain.useCases.ProfileUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,14 +19,32 @@ class ProfileViewModel @Inject constructor(
     private val profileUseCases: ProfileUseCases
 ): ViewModel() {
 
-    private val _profileLiveData = MutableLiveData<User>()
-    val profileLiveData: LiveData<User> = _profileLiveData
+    private var _profileLiveData = MutableLiveData<User?>()
+    val profileLiveData: LiveData<User?> = _profileLiveData
 
-    fun getProfile(){
+    private val _calendarBirthDate = MutableLiveData<Calendar?>()
+
+    init {
+        getProfile()
+        _calendarBirthDate.value=null
+    }
+
+    private fun getProfile(){
         viewModelScope.launch {
-            delay(3000)
-            profileUseCases.getProfile().let{_profileLiveData.value = it }
-            Log.v("USER_NAME_FIRESTORE_FRAGMENT", "${profileLiveData.value?.userName}")
+            _profileLiveData.value=profileUseCases.getProfile()
+            Log.v("USER_NAME_FIRESTORE_VIEW_MODEL", "${profileLiveData.value?.userName}")
+        }
+    }
+
+    fun setBirthDate (calendar: Calendar){
+        _calendarBirthDate.value = calendar
+    }
+
+    fun modifiedProfile(userName: String?,uri: String?){
+        viewModelScope.launch{
+            _profileLiveData.value=null
+            _profileLiveData.value = profileUseCases.editProfile(userName,uri,_calendarBirthDate.value)
+            _calendarBirthDate.value=null
         }
     }
 

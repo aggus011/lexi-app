@@ -1,6 +1,5 @@
 package com.example.lexiapp.di
 
-import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.lexiapp.R

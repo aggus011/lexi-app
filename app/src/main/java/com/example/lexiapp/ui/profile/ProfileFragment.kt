@@ -9,8 +9,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.lexiapp.databinding.FragmentProfileBinding
+import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.ui.login.LoginActivity
-import com.example.lexiapp.ui.profesionalhome.ProfesionalHomeActivity
+import com.example.lexiapp.ui.profile.edit.EditProfileActivity
 import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,7 +25,6 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel.getProfile()
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -38,11 +38,15 @@ class ProfileFragment : Fragment() {
 
     private fun setObserver() {
         viewModel.profileLiveData.observe(viewLifecycleOwner) { user ->
-            binding.txtEmail.text = user.email
-            Log.v("USER_NAME_FIRESTORE_FRAGMENT", "${user.userName}")
-            user.userName.let { binding.txtName.text = it }
-            //user.birthDate.let { binding.txtBirthDate.text=it.toString() }
+                setProfile(user!!)
         }
+    }
+
+    private fun setProfile(user: User) {
+        binding.txtEmail.text = user!!.email
+        Log.v("USER_NAME_FIRESTORE_FRAGMENT", "${user.userName}")
+        user.userName.let { binding.txtName.text = it }
+        user.birthDate.let { binding.txtBirthDate.text = it }
     }
 
     private fun getViews() {
@@ -51,6 +55,13 @@ class ProfileFragment : Fragment() {
 
     private fun setListeners() {
         btnLogoutClick()
+        btnEditProfile()
+    }
+
+    private fun btnEditProfile() {
+        binding.btnEditProfile.setOnClickListener {
+            startActivity(Intent(activity, EditProfileActivity::class.java))
+        }
     }
 
     private fun btnLogoutClick() {
