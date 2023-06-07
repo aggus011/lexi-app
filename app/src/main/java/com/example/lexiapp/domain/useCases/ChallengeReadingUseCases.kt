@@ -16,6 +16,7 @@ class ChallengeReadingUseCases @Inject constructor(
 ) {
     private val promptChallengeReading =
         "Necesito un texto de 200 caracteres para ser leído por niños que incluya las siguientes palabras:"
+    private val openAICompletionsDocumentReference = "completions"
 
     suspend fun getChallengeReading() = flow {
         repositoryImpl.getChallengeReading(promptChallengeReading, listOf("entrenamiento", "desafio", "juego", "travesura"))
@@ -27,7 +28,8 @@ class ChallengeReadingUseCases @Inject constructor(
     }
 
     suspend fun getLastUseOpenAICompletionDate() = callbackFlow {
-        pendingReadingsRepositoryImpl.getFirestoreOpenAiCompletionDocumentReference()
+        pendingReadingsRepositoryImpl
+            .getFirestoreOpenAICollectionDocumentReference(openAICompletionsDocumentReference)
             .collect{ docReference ->
                 docReference.get()
                     .addOnSuccessListener { documentSnapshot ->
@@ -46,7 +48,8 @@ class ChallengeReadingUseCases @Inject constructor(
     }
 
     suspend fun updateOpenAiCompletionsLastUse() {
-        pendingReadingsRepositoryImpl.getFirestoreOpenAiCompletionDocumentReference()
+        pendingReadingsRepositoryImpl
+            .getFirestoreOpenAICollectionDocumentReference(openAICompletionsDocumentReference)
             .collect{ documentReference ->
                 documentReference.update("last_use", Date())
             }

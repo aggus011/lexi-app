@@ -3,10 +3,8 @@ package com.example.lexiapp.domain.useCases
 import com.example.lexiapp.data.network.AuthenticationService
 import com.example.lexiapp.data.response.LoginResult
 import com.example.lexiapp.domain.model.UserSignUp
-import com.google.firebase.auth.AuthResult
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
@@ -20,6 +18,8 @@ class SignUpUseCasesTest {
 
     lateinit var signUpUseCases: SignUpUseCases
 
+    private lateinit var profileUseCases: ProfileUseCases
+
     @Before
     fun onBefore() {
         MockKAnnotations.init(this)
@@ -32,11 +32,11 @@ class SignUpUseCasesTest {
         val name = ""
         val email = ""
         val password = ""
-        coEvery { mAuth.createAccount(email, password) } returns null
+        coEvery { mAuth.createAccount(email, password) } returns LoginResult.Success
         //When
-        val result = signUpUseCases(UserSignUp(name, email, password))
+        val result = signUpUseCases(UserSignUp(name, email, email, password, password))
         //Then
-        assertFalse(result)
+        assert(result == LoginResult.Error)
     }
 
     @Test
@@ -45,11 +45,11 @@ class SignUpUseCasesTest {
         val name = "asdfasdfasd"
         val email = "asdjkfhadsj"
         val password = "sdfasdsfsad"
-        coEvery { mAuth.createAccount(email, password) } returns null
+        coEvery { mAuth.createAccount(email, password) } returns LoginResult.Success
         //When
-        val result = signUpUseCases(UserSignUp(name, email, password))
+        val result = signUpUseCases(UserSignUp(name, email, email, password, password))
         //Then
-        assertFalse(result)
+        assert(LoginResult.Error == result)
     }
 
 }

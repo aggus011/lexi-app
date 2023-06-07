@@ -5,10 +5,10 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class OpenAICompletionsRepositoryImpl @Inject constructor(
-    private val chatGptChatService: OpenAICompletionsService
+    private val openAICompletionsService: OpenAICompletionsService
 ) {
     suspend fun getChallengeReading(prompt: String, challengeWords: List<String>) = flow {
-        chatGptChatService.getChallengeReading(prompt, challengeWords)
+        openAICompletionsService.getChallengeReading(prompt, challengeWords)
             .collect{ challengeReading ->
                 emit(challengeReading)
                 Log.v(TAG, challengeReading)

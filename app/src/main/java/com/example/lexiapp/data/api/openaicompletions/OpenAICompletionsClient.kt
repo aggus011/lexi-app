@@ -11,7 +11,7 @@ interface OpenAICompletionsClient {
 
     @Headers(
         "Content-Type: application/json",
-        "Authorization: Bearer no subir api"
+        "Authorization: Bearer no subir api key"
     )
     @POST("completions")
     suspend fun createChallengeReading(@Body chatGptChatRequest: OpenAICompletionsRequest): Response<OpenAICompletionsResponse>
