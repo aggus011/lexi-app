@@ -8,16 +8,13 @@ plugins {
 
 android {
     namespace 'com.example.lexiapp'
-    compileSdk 33
-    compileSdkPreview 'android-UpsideDownCake'
+    compileSdkPreview 'UpsideDownCake'
 
     defaultConfig {
         applicationId "com.example.lexiapp"
-        minSdk 24
-        targetSdk 33
         versionCode 1
         versionName "1.0"
-        targetSdkPreview "android-UpsideDownCake"
+        targetSdkPreview "UpsideDownCake"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
