@@ -1,8 +1,7 @@
-package com.example.lexiapp.ui.profile.vinculate
+package com.example.lexiapp.ui.profile.link
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.view.LayoutInflater
 import androidx.activity.viewModels
 import com.example.lexiapp.databinding.ActivityLinkPatientBinding

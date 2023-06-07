@@ -58,4 +58,12 @@
         <item name="android:padding">10dp</item>
         <item name="android:layout_margin">6dp</item>
     </style>
+    <style name="DatePickerTheme" parent="@style/ThemeOverlay.MaterialComponents.Dialog">
+        <item name="android:datePickerMode">spinner</item>
+        <item name="android:headerBackground">@color/light_purple</item>
+        <item name="colorControlNormal">@color/light_purple</item> <!-- Cambia el color de los controles normales -->
+        <item name="colorControlActivated">@color/purple</item> <!-- Cambia el color de los controles activados -->
+        <item name="android:textColorPrimary">@color/black</item> <!-- Cambia el color del texto principal -->
+        <!-- Otros atributos personalizables -->
+    </style>
 </resources>

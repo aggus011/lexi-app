@@ -5,5 +5,131 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.games.isitsocalled.IsItSoCalledActivity">
+    <ImageView
+        android:id="@+id/lexiLogo"
+        android:layout_width="wrap_content"
+        android:background="@drawable/mini_logo"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+    <ImageView
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/lexiLogo"
+        android:layout_margin="8dp"
+        app:layout_constraintEnd_toStartOf="@id/btnHelp"
+        app:layout_constraintBottom_toBottomOf="@id/lexiLogo"
+        android:background="@drawable/arrow_back"/>
+    <ImageView
+        android:id="@+id/btnHelp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@drawable/help_circle"
+        android:backgroundTint="@color/black"
+        app:layout_constraintTop_toTopOf="@id/btnBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/btnBack" />
 
+    <TextView
+        android:id="@+id/txtMessage"
+        android:text="GRÁBATE DICIENDO:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:layout_marginTop="40dp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/lexiLogo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/txtVariablePhrase"/>
+
+    <TextView
+        tools:text="PhraseToSay"
+        android:id="@+id/txtVariablePhrase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="38sp"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@id/txtMessage"
+        app:layout_constraintTop_toBottomOf="@id/txtMessage"
+        app:layout_constraintEnd_toEndOf="@id/txtMessage"/>
+
+    <ImageView
+        android:id="@+id/iconVolume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/volume_high"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintStart_toEndOf="@id/txtVariablePhrase"
+        app:layout_constraintTop_toTopOf="@id/txtVariablePhrase"
+        app:layout_constraintBottom_toBottomOf="@id/txtVariablePhrase"/>
+
+    <ImageButton
+        android:id="@+id/btnRec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/txtVariablePhrase"
+        app:layout_constraintEnd_toEndOf="@id/txtVariablePhrase"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtMessage"
+        android:background="@drawable/rec_text_off"
+        android:layout_marginBottom="30dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnListenRecording"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        app:cornerRadius="10dp"
+        android:text="@string/record_audio_again"
+        app:layout_constraintStart_toStartOf="@id/txtVariablePhrase"
+        app:layout_constraintTop_toBottomOf="@id/txtVariablePhrase"
+        app:layout_constraintEnd_toEndOf="@id/txtVariablePhrase"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="@color/purple"
+        app:icon="@drawable/volume_high"
+        app:iconTint="@color/white"
+        app:iconPadding="2dp"
+        android:textAppearance="@style/textMaterialButton"
+        android:textSize="19sp"
+        app:iconSize="30dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnReRecordAudio"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        app:cornerRadius="10dp"
+        android:text="@string/record_audio_again"
+        app:layout_constraintStart_toStartOf="@id/btnListenRecording"
+        app:layout_constraintTop_toBottomOf="@id/btnListenRecording"
+        app:layout_constraintEnd_toEndOf="@id/btnListenRecording"
+        android:layout_margin="10dp"
+        android:backgroundTint="@color/purple"
+        app:icon="@drawable/ic_mic"
+        app:iconPadding="2dp"
+        android:textAppearance="@style/textMaterialButton"
+        android:textSize="19sp"
+        app:iconSize="30dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnShowResults"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        app:layout_constraintEnd_toEndOf="@id/btnReRecordAudio"
+        app:layout_constraintTop_toBottomOf="@id/btnReRecordAudio"
+        app:cornerRadius="10dp"
+        app:layout_constraintStart_toStartOf="@id/btnReRecordAudio"
+        android:text="@string/audio_record_results"
+        android:layout_margin="10dp"
+        android:backgroundTint="@color/green"
+        android:textColor="@color/black"
+        app:icon="@drawable/ic_result"
+        app:iconTint="@color/black"
+        app:iconSize="24dp"
+        app:iconPadding="5dp"
+        android:textAppearance="@style/textMaterialButton"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

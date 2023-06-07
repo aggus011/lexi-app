@@ -1,12 +1,11 @@
 package com.example.lexiapp.ui.signup
 
-import android.content.ContentValues
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lexiapp.core.Event
+import com.example.lexiapp.data.response.LoginResult
 import com.example.lexiapp.domain.model.UserSignUp
 import com.example.lexiapp.domain.useCases.LoginUseCases
 import com.example.lexiapp.domain.useCases.SignUpUseCases
@@ -33,11 +32,13 @@ class SignUpViewModel @Inject constructor(private val signUpUseCases: SignUpUseC
     fun singUpWithEmail(user: UserSignUp) {
         viewModelScope.launch(Dispatchers.IO) {
             //_viewState.value = SignInViewState(isLoading = true)
-            val accountCreated = signUpUseCases(user)
-            if (accountCreated) {
-                _navigateToLogin.value = Event(true)
-            } else {
-                _showErrorDialog.value = true
+            when(signUpUseCases(user)) {
+                LoginResult.Error -> {
+                    _showErrorDialog.value = true
+                }
+                LoginResult.Success -> {
+                    _navigateToLogin.value = Event(true)
+                }
             }
             //_viewState.value = SignInViewState(isLoading = false)
         }

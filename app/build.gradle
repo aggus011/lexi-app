@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.lexiapp"
-        minSdk 24
+        minSdk 26
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -73,6 +73,9 @@ dependencies {
     //Analytics
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
+    //Firestore
+    implementation 'com.google.firebase:firebase-firestore-ktx'
+
     //Auth
     implementation 'com.google.firebase:firebase-auth-ktx'
 
@@ -104,8 +107,8 @@ dependencies {
 
     //Dagger
     implementation "com.google.dagger:hilt-android:$hilt_version"
+    implementation "androidx.fragment:fragment-ktx:1.5.7"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
-    //implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_version"
 
     //ZXing and library impl
     implementation 'com.google.zxing:core:3.3.0'

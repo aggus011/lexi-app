@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.example.lexiapp.R
 import com.example.lexiapp.core.dialog.DialogFragmentLauncher
 import com.example.lexiapp.core.dialog.ErrorDialog
 import com.example.lexiapp.databinding.ActivityLoginBinding
@@ -59,7 +60,12 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initPrefs()
         initUI()
+    }
+
+    private fun initPrefs() {
+       prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
     }
 
     private fun initUI() {
@@ -70,7 +76,7 @@ class LoginActivity : AppCompatActivity() {
     private fun initListeners() {
         binding.btnLogin.setOnClickListener {
             if (binding.etMail.editText?.text!!.isNotEmpty() && binding.etPassword.editText?.text!!.isNotEmpty()) {
-                viewModel.loginTest(
+                viewModel.loginUser(
                     binding.etMail.editText?.text!!.toString(),
                     binding.etPassword.editText?.text!!.toString()
                 )
@@ -106,7 +112,7 @@ class LoginActivity : AppCompatActivity() {
                 it.dismiss()
             },
             positiveAction = ErrorDialog.Action("Reintentar") {
-                viewModel.loginTest(
+                viewModel.loginUser(
                     userLogin.email,
                     userLogin.password
                 )
@@ -119,17 +125,6 @@ class LoginActivity : AppCompatActivity() {
         binding.tvRegister.setOnClickListener {
             startActivity(SignUpActivity.create(this))
         }
-    }
-
-    private fun validateSesion() {
-        if ((prefs.getString("email", null)) != null) {
-            //showHomeActivity(prefs.getString("email",null))
-            startActivity(Intent(this, MainActivity::class.java))
-        }
-    }
-
-    private fun saveSesion(email: String) {
-        prefs.edit().putString("email", email).apply()
     }
 
     private fun goToHome() {
