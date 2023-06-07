@@ -5,11 +5,8 @@ import com.example.lexiapp.data.model.Game
 import com.example.lexiapp.data.model.GameResult
 import com.example.lexiapp.data.model.WhereIsGameResult
 import com.example.lexiapp.domain.model.User
-import com.google.firebase.Timestamp
-import com.google.firebase.auth.AuthResult
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
-import okhttp3.internal.concurrent.Task
-import java.text.SimpleDateFormat
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,6 +15,7 @@ class FireStoreService @Inject constructor(firebase: FirebaseClient) {
 
     private val userCollection = firebase.firestore.collection("user")
     private val whereIsTheLetterCollection = firebase.firestore.collection("where_is_the_letter")
+    private val openaiCollection = firebase.firestore.collection("openai_api_use")
 
     suspend fun saveAccount(user: User) {
         val data = hashMapOf(
@@ -78,5 +76,9 @@ class FireStoreService @Inject constructor(firebase: FirebaseClient) {
                 }
             }.await()
         return result
+    }
+
+    suspend fun getOpenAICollectionDocumentReference(document: String) = flow{
+            emit(openaiCollection.document(document))
     }
 }

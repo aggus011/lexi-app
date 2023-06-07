@@ -108,6 +108,7 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     implementation "androidx.fragment:fragment-ktx:1.5.7"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+
 }
 kapt {
     correctErrorTypes true
