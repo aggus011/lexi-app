@@ -28,8 +28,8 @@ class PatientAdapter(
     inner class PatientAdapterViewHolder(val binding: ItemPatientBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(patient: Patient) {
             //Set data
-            binding.txtName.text=patient.name
-            binding.txtEmail.text=patient.email
+            binding.txtName.text=patient.user?.userName
+            binding.txtEmail.text=patient.user?.email
         }
     }
 }

@@ -17,19 +17,16 @@ class ProfesionalHomeActivity : AppCompatActivity() {
         binding = ActivityProfesionalHomeBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
         setRecyclerView()
-        setSeach()
+        setSearch()
     }
 
-    private fun setSeach() {
+    private fun setSearch() {
         binding.search.setOnQueryTextListener (object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                // Realiza la búsqueda cuando se presiona "Enter" en el teclado
                 return true
             }
 
             override fun onQueryTextChange(patientSearch: String?): Boolean {
-                // Realiza la búsqueda mientras se va ingresando texto
-                // Actualiza el RecyclerView con los resultados filtrados
                 vM.filter(patientSearch)
                 return true
             }

@@ -1,15 +1,21 @@
 package com.example.lexiapp.domain.model
 
+import android.opengl.Visibility
+
 class Patient (
-    val email: String?,
-    val name: String?
+    val user: User?,
+    val visibility: Boolean = false,
+    val results: String = ""
     ){
     data class Builder(
-        var email: String? = null,
-        var name: String? = null){
+        var user: User? = null,
+        var visibility: Boolean = false,
+        //Change for results from firestore
+        var results: String = ""){
 
-        fun email(email: String?) = apply { this.email = email }
-        fun name(name: String?) = apply { this.name = name }
-        fun build() = Patient(email, name)
+        fun user(email: String, userName: String) = apply { this.user = User(userName = userName, email = email) }
+        fun visibility(visibility: Boolean) = apply { this.visibility = visibility }
+        fun result(results: String) = apply { this.results= results }
+        fun build() = Patient(user, visibility, results)
     }
 }
