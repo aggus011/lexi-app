@@ -20,10 +20,6 @@ class LoginUseCases @Inject constructor(
         return authenticationService.login(email, password)
     }
 
-    fun logOut() {
-        authenticationService.signOut()
-    }
-
     private fun verifyEmail(email: String): Boolean =
         PatternsCompat.EMAIL_ADDRESS.matcher(email).matches()
 

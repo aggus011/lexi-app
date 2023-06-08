@@ -7,13 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.lexiapp.ui.profile.edit.EditProfileActivity
+import com.example.lexiapp.ui.profile.link.LinkPatientActivity
+import com.example.lexiapp.domain.model.User
 import androidx.fragment.app.viewModels
 import com.example.lexiapp.databinding.FragmentProfileBinding
-import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.ui.login.LoginActivity
-import com.example.lexiapp.ui.profile.edit.EditProfileActivity
 import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -61,6 +63,16 @@ class ProfileFragment : Fragment() {
     private fun btnEditProfile() {
         binding.btnEditProfile.setOnClickListener {
             startActivity(Intent(activity, EditProfileActivity::class.java))
+        }
+        btnVinculate()
+    }
+
+    private fun btnVinculate() {
+        binding.btnLinkAccount.setOnClickListener {
+            val validation=true //Should be myQR!=null
+            if (validation){
+                startActivity(Intent(activity, LinkPatientActivity::class.java))
+            }
         }
     }
 
