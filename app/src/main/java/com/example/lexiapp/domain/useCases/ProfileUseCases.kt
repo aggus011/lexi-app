@@ -84,7 +84,7 @@ class ProfileUseCases @Inject constructor(
         )
     }
 
-    private fun getEmail()= prefs.getString("email", null)
+    fun getEmail()= prefs.getString("email", null)
 
     fun haveAccount()= getEmail()!=null
 

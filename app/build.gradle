@@ -9,7 +9,6 @@ plugins {
 android {
     namespace 'com.example.lexiapp'
     compileSdk 33
-    compileSdkPreview 'UpsideDownCake'
 
     defaultConfig {
         applicationId "com.example.lexiapp"
@@ -65,7 +64,7 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
 
     //Material
-    implementation 'com.google.android.material:material:1.10.0-alpha01'
+    implementation 'com.google.android.material:material:1.9.0'
 
     //Firebase
     implementation platform('com.google.firebase:firebase-bom:31.5.0')
@@ -73,8 +72,9 @@ dependencies {
     //Analytics
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
-    //Auth
+    //Firestore
     implementation 'com.google.firebase:firebase-firestore-ktx'
+
     //Auth
     implementation 'com.google.firebase:firebase-auth-ktx'
 
@@ -108,6 +108,10 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     implementation "androidx.fragment:fragment-ktx:1.5.7"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+
+    //ZXing and library impl
+    implementation 'com.google.zxing:core:3.3.0'
+    implementation('com.journeyapps:zxing-android-embedded:4.3.0') { transitive = false }
 }
 kapt {
     correctErrorTypes true

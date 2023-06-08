@@ -1,8 +1,7 @@
 package com.example.lexiapp.di
 
-import com.example.lexiapp.data.api.LetterRepositoryImpl
+import com.example.lexiapp.data.api.openaicompletions.OpenAICompletionsClient
 import com.example.lexiapp.data.api.word_asociation_api.WordAssociationClient
-import com.example.lexiapp.data.api.word_asociation_api.WordAssociationService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,6 +16,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
     private const val BASE_WORD_URL="https://random-word-api.herokuapp.com/"
+    private const val BASE_CHATGPT_CHAT_URL="https://api.openai.com/v1/"
 
     @Singleton
     @Provides
@@ -34,6 +34,21 @@ object NetworkModule {
         return retrofit.create(WordAssociationClient::class.java)
     }
 
+    @Singleton
+    @Provides
+    @Named("challenge_reading_retrofit")
+    fun provideChatGptChatRetrofit(): Retrofit{
+        return Retrofit.Builder()
+            .baseUrl(BASE_CHATGPT_CHAT_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideChatGptChatClient(@Named("challenge_reading_retrofit")retrofit: Retrofit): OpenAICompletionsClient {
+        return retrofit.create(OpenAICompletionsClient::class.java)
+    }
 }
 
 
