@@ -105,8 +105,18 @@ class TextScannerActivity : AppCompatActivity() {
     }
 
     private fun initArraysPermissions(){
-        cameraPermissions = arrayOf(android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        storagePermissions = arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        cameraPermissions = arrayOf(android.Manifest.permission.CAMERA,
+            if(verifyApiVersionIsHigherThat32()){
+                android.Manifest.permission.READ_MEDIA_IMAGES
+            }else{
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            })
+
+        storagePermissions = if(verifyApiVersionIsHigherThat32()){
+            arrayOf(android.Manifest.permission.READ_MEDIA_IMAGES)
+        }else{
+            arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
     }
 
     private fun checkImageInput(extras: Bundle?) {
@@ -297,6 +307,11 @@ class TextScannerActivity : AppCompatActivity() {
         )
     }
 
+    private fun verifyApiVersionIsHigherThat32(): Boolean{
+        return android.os.Build.VERSION.SDK_INT >
+                android.os.Build.VERSION_CODES.S_V2
+    }
+
     private val onBackPressedCallback: OnBackPressedCallback = object: OnBackPressedCallback(true){
         override fun handleOnBackPressed() {
             finish()
@@ -346,10 +361,6 @@ class TextScannerActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    override fun onRestart() {
-        super.onRestart()
     }
 
     override fun onPause() {
