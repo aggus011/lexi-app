@@ -13,6 +13,7 @@ import com.example.lexiapp.domain.model.User
 import androidx.fragment.app.viewModels
 import com.example.lexiapp.databinding.FragmentProfileBinding
 import com.example.lexiapp.ui.login.LoginActivity
+import com.example.lexiapp.ui.profesionalhome.ProfesionalHomeActivity
 import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -58,13 +59,15 @@ class ProfileFragment : Fragment() {
     private fun setListeners() {
         btnLogoutClick()
         btnEditProfile()
+        btnVinculate()
+
+        binding.ivMiniLogo.setOnClickListener { startActivity(Intent(activity, ProfesionalHomeActivity::class.java)) }
     }
 
     private fun btnEditProfile() {
         binding.btnEditProfile.setOnClickListener {
             startActivity(Intent(activity, EditProfileActivity::class.java))
         }
-        btnVinculate()
     }
 
     private fun btnVinculate() {

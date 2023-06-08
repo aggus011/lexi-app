@@ -1,6 +1,7 @@
 package com.example.lexiapp.ui.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lexiapp.databinding.ItemPatientBinding
@@ -18,7 +19,13 @@ class PatientAdapter(
     }
 
     override fun onBindViewHolder(holder: PatientAdapterViewHolder, position: Int) {
-        holder.bind(patientList[position])
+        val patient = patientList[position]
+        holder.bind(patient)
+        holder.setListener{
+            val expanded = patient.expanded
+            patient.expanded=!expanded
+            notifyItemChanged(position)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -27,9 +34,22 @@ class PatientAdapter(
 
     inner class PatientAdapterViewHolder(val binding: ItemPatientBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(patient: Patient) {
+            //Set item View
+            binding.clExpanded.visibility = if (patient.expanded) View.VISIBLE else View.GONE
+            binding.txtSeeMore.visibility = if (patient.expanded) View.GONE else View.VISIBLE
+            binding.icSeeMore.visibility = if (patient.expanded) View.GONE else View.VISIBLE
             //Set data
             binding.txtName.text=patient.user?.userName
             binding.txtEmail.text=patient.user?.email
+            binding.txtResultExample.text=patient.results
+        }
+        fun setListener(setExpandedView: () -> Unit) {
+            binding.icSeeMore.setOnClickListener {
+                setExpandedView()
+            }
+            binding.icClose.setOnClickListener {
+                setExpandedView()
+            }
         }
     }
 }
