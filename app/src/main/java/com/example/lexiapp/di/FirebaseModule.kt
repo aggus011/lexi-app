@@ -1,6 +1,5 @@
 package com.example.lexiapp.di
 
-import com.example.lexiapp.domain.useCases.LoginUseCases
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
