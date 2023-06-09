@@ -1,8 +1,10 @@
 package com.example.lexiapp.ui.profile.link
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.WindowManager
 import androidx.activity.viewModels
 import com.example.lexiapp.databinding.ActivityLinkPatientBinding
 import com.example.lexiapp.ui.profile.ProfileViewModel
@@ -17,9 +19,17 @@ class LinkPatientActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLinkPatientBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
+        blockActivityCapture()
         setQr()
         setObservers()
         vM.startTimer()
+    }
+
+    private fun blockActivityCapture() {
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_SECURE,
+            WindowManager.LayoutParams.FLAG_SECURE
+        )
     }
 
     private fun setQr(){

@@ -5,11 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.lexiapp.data.repository.patient.PatientMocks
 import com.example.lexiapp.domain.model.Patient
+import com.example.lexiapp.domain.useCases.CodeQRUseCases
+import com.journeyapps.barcodescanner.ScanOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfesionalHomeViewModel @Inject constructor(): ViewModel() {
+class ProfesionalHomeViewModel @Inject constructor(
+    private val codeQRUseCases: CodeQRUseCases
+): ViewModel() {
+
     private val _listPatient = MutableLiveData<List<Patient>>()
     val listPatient: LiveData<List<Patient>> = _listPatient
     private var _listFilterPatient= MutableLiveData<List<Patient>>()
@@ -19,21 +24,26 @@ class ProfesionalHomeViewModel @Inject constructor(): ViewModel() {
 
     init {
         _listPatient.value = emptyList()
-        _listPatient.value = getText()
+        _listPatient.value = getPatient()
         _listFilterPatient.value = _listPatient.value
     }
 
-    private fun getText() = PatientMocks.getPatientMocks()
+    private fun getPatient() = PatientMocks.getPatientMocks()
 
     fun filter(patientSearch: String?){
         val filteredList = mutableListOf<Patient>()
         if(patientSearch!=null){
             _listPatient.value?.forEach {
-                val info = it.name!=null && it.email!=null
-                if (info && (it.name!!.contains(patientSearch) || it.email!!.contains(patientSearch)))
+                val info = it.user?.userName!=null && it.user?.email!=null
+                if (info && (it.user?.userName!!.contains(patientSearch) || it.user?.email!!.contains(patientSearch)))
                     filteredList.add(it)
             }
         }
         _listFilterPatient.value = filteredList
+    }
+
+    fun getPatientEmail(contents: String?): String?{
+        if (contents==null) return null
+        return codeQRUseCases.getEmailFromQR(contents)
     }
 }
