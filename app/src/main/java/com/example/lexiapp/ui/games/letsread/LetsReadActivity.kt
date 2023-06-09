@@ -23,6 +23,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityLetsReadBinding
 import com.example.lexiapp.domain.model.TextToRead
@@ -31,11 +32,15 @@ import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 import java.util.*
 
@@ -253,11 +258,11 @@ class LetsReadActivity : AppCompatActivity() {
     private fun initArrayPermissions() {
         //Verify if api version is higher than api 32
         recordAudioPermissions =
-            if(verifyApiVersionIsHigherThat32())
-            arrayOf(
-                android.Manifest.permission.RECORD_AUDIO,
-                android.Manifest.permission.READ_MEDIA_AUDIO
-            )else{
+            if (verifyApiVersionIsHigherThat32())
+                arrayOf(
+                    android.Manifest.permission.RECORD_AUDIO,
+                    android.Manifest.permission.READ_MEDIA_AUDIO
+                ) else {
                 arrayOf(
                     android.Manifest.permission.RECORD_AUDIO,
                     android.Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -283,12 +288,12 @@ class LetsReadActivity : AppCompatActivity() {
             ) == PackageManager.PERMISSION_GRANTED
 
         return recordAudioResult &&
-                (if(verifyApiVersionIsHigherThat32()) audioReadResult else storageResult)
+                (if (verifyApiVersionIsHigherThat32()) audioReadResult else storageResult)
     }
 
     private fun recordAudio() {
         val recordingFile = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC),
+            this.filesDir,
             "Lexi ${tvTextTitle.text} record.mp3"
         )
         if (!isRecording) {
@@ -415,25 +420,29 @@ class LetsReadActivity : AppCompatActivity() {
         // languageViewModel.getDifference(document1, document2)
         btnShowResultsRecordAudio.setOnClickListener {
             // SEND AUDIO FILE TO ANALYSIS
-            val revisedText =  //TEMPORAL
-                "Fabulas fabulosas ven en fabulosos fabularios fabulador y fabulistas hacen fabulas pero el fabulosidad de las fabulas del fabulista son fabulosas si si hacen una fabulario de fabulas"
+            val requestBody = audioFile.asRequestBody("audio/mp3".toMediaTypeOrNull())
+            val audioPart = MultipartBody.Part.createFormData("file", audioFile.name, requestBody)
 
-
-            val requestBody = RequestBody.create("audio/mp3".toMediaTypeOrNull(), audioFile)
-            Log.d(TAG, "requestBody $requestBody")
-            val audioPart = MultipartBody.Part.createFormData("file1", audioFile.name, requestBody)
-            Log.d(TAG, "audioPart $audioPart")
-
-
-            vM.transcription(requestBody)
-            //vM.getDifference(tvTextToRead.text.toString(), revisedText)
-            //startActivity(Intent(this, ResultActivity::class.java))
+            val textWithLineBreak = tvTextToRead.text.toString()
+            val textWithoutLineBreak =
+                textWithLineBreak.replace(System.getProperty("line.separator"), " ")
+            vM.transcription(audioPart, textWithoutLineBreak)
+            vM.transcription.observe(this) {
+                val intent = Intent(this, ResultActivity::class.java)
+                intent.putExtra("originalText", textWithoutLineBreak)
+                intent.putExtra("results", it)
+                startActivity(intent)
+            }
         }
     }
 
     private fun requestRecordAudioPermissions() {
         ActivityCompat.requestPermissions(this, recordAudioPermissions, RECORD_AUDIO_REQUEST_CODE)
-        ActivityCompat.requestPermissions(this, recordAudioPermissions, READ_EXTERNAL_STORAGE_PERMISSION_CODE)
+        ActivityCompat.requestPermissions(
+            this,
+            recordAudioPermissions,
+            READ_EXTERNAL_STORAGE_PERMISSION_CODE
+        )
     }
 
     private companion object {
@@ -505,7 +514,7 @@ class LetsReadActivity : AppCompatActivity() {
         mediaRecorder = null
     }
 
-    private fun verifyApiVersionIsHigherThat32(): Boolean{
+    private fun verifyApiVersionIsHigherThat32(): Boolean {
         return android.os.Build.VERSION.SDK_INT >
                 android.os.Build.VERSION_CODES.S_V2
     }

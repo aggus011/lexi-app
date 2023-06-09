@@ -26,13 +26,11 @@ class SpeechToTextViewModel @Inject constructor(private val speechRepository: Sp
     private lateinit var revised: String
 
 
-    fun transcription(path: RequestBody) = CoroutineScope(Dispatchers.IO).launch {
+    fun transcription(path: MultipartBody.Part, originalText: String) = CoroutineScope(Dispatchers.IO).launch {
         try {
             val result = speechRepository.transcription(path)
-            Log.d(TAG, "result $result code ${result.code()}")
             if (result.body() != null) {
                 transcription.postValue(result.body()!!.text)
-                Log.d(TAG, "result body ${result.body()}")
             }
         } catch (e: NullPointerException) {
             Log.e(TAG, "Null error! $e")
@@ -41,12 +39,11 @@ class SpeechToTextViewModel @Inject constructor(private val speechRepository: Sp
         }
     }
 
-    fun getDifference(originalText: String, revisedText: String) =
+    fun getDifference(originalText: String, results: String) =
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 original = originalText
-                revised = revisedText
-                val result = speechRepository.getDifference(originalText, revisedText)
+                val result = speechRepository.getDifference(originalText, results)
                 if (result.body() != null)
                     difference.postValue(result.body()!!)
             } catch (e: NullPointerException) {
@@ -87,7 +84,7 @@ class SpeechToTextViewModel @Inject constructor(private val speechRepository: Sp
         return words.size
     }
 
-    companion object{
+    companion object {
         const val TAG = "SpeechToTextViewModel"
     }
 }

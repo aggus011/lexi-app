@@ -6,6 +6,7 @@ import com.example.lexiapp.data.api.word_asociation_api.model.Texts
 import com.example.lexiapp.utils.OPEN_AI_API_KEY
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Header
@@ -13,6 +14,7 @@ import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Query
 
 interface SpeechToTextClient {
 
@@ -22,12 +24,12 @@ interface SpeechToTextClient {
     @Multipart
     @POST("transcriptions")
     suspend fun transcription(
-        @Header("Content-Type") contentType: String,
-        @Part("file=") file: RequestBody,
-        @Part("model") model: RequestBody
+        @Part file: MultipartBody.Part,
+        @Part("model") model: RequestBody,
+        @Part("language") language: RequestBody
     ): Response<Texts>
 
-    @Headers("Content-Type: application/json")
-    @POST("text?output_type=json&email=abmaldonadoarce@gmail.com")
-    suspend fun getDifference(@Body SendInformation: SendInformation): Response<Rows>
+    @POST("text?output_type=json&email=lexiapp.2023@gmail.com")
+    suspend fun getDifference(@Header("Content-Type") contentType: String = "application/json",
+                              @Body SendInformation: SendInformation): Response<Rows>
 }

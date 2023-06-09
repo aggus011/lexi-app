@@ -1,14 +1,17 @@
 package com.example.lexiapp.data.api.word_asociation_api.model
 
+import com.google.gson.annotations.SerializedName
 import java.io.File
 
-data class TranscriptionInformation (
-    val model: String = "whisper-1",
-    val language: String = "es"
+data class Texts (
+    @SerializedName("text")
+    val text: String
 )
 
-data class Texts (
-    val text: String
+data class SendInformation(
+    val left: String,
+    val right: String,
+    val diff_level: String = "words"
 )
 
 data class Rows(
@@ -32,10 +35,4 @@ data class Chunks(
 data class Results(
     val value: String,
     val type: String
-)
-
-data class SendInformation(
-    val left: String,
-    val right: String,
-    val diff_level: String = "words"
 )

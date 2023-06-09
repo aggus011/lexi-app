@@ -43,6 +43,7 @@
     <string name="audio_record_results">Chequear</string>
     <string name="your_recording">Tu grabación</string>
     <string name="do_not_give_up">¡NO TE RINDAS!</string>
+    <string name="loading_results">Cargando resultados…</string>
     <string name="phrase_negative_result">AUNQUE NO ESTÉ DEL TODO CORRECTO, \n ¡NO TE DESANIMES! ¡YA CASI LO LOGRAS!</string>
     <string name="next_text">SIGUIENTE\nTEXTO</string>
     <string name="try_again">VOLVER A\nINTENTAR</string>

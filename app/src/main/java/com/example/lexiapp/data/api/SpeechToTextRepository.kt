@@ -12,12 +12,12 @@ import javax.inject.Inject
 
 class SpeechToTextRepository @Inject constructor(private val apiService: SpeechToTextService) {
 
-    suspend fun transcription(file: RequestBody): Response<Texts> {
-        return apiService.transcription(file)
-    }
+    suspend fun transcription(file: MultipartBody.Part): Response<Texts> =
+        apiService.transcription(file)
+
 
     suspend fun getDifference(originalText: String, revisedText: String) : Response<Rows>{
         val sendInformation = SendInformation(originalText, revisedText)
-        return apiService.getInstance().getDifference(sendInformation)
+        return apiService.getDifference(sendInformation)
     }
 }
