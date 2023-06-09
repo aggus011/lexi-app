@@ -6,21 +6,25 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
+import com.journeyapps.barcodescanner.ScanOptions
 import javax.inject.Inject
 
 class CodeQRUseCases @Inject constructor(){
-    fun isVerified(contents: String?) = (CODE_VERIFY == TextUtils.substring(
+    private fun isVerified(contents: String) = (CODE_VERIFY == TextUtils.substring(
         contents,
         0,
         CODE_VERIFY.length
     ))
 
-    fun deserializeEmail(emailJson: String): String {
+    private fun deserialize(emailJson: String): String {
         return Gson().fromJson(
             TextUtils.substring(emailJson, CODE_VERIFY.length, emailJson.length),
             EMAIL_STRING
         )
     }
+
+    fun getEmailFromQR(contents: String) = if (isVerified(contents)) deserialize(contents) else null
+
 
     fun generateQR(email: String): Bitmap? {
         return BarcodeEncoder().encodeBitmap(

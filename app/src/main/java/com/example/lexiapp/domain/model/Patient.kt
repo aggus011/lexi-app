@@ -1,15 +1,19 @@
 package com.example.lexiapp.domain.model
 
 class Patient (
-    val email: String?,
-    val name: String?
+    val user: User?,
+    var expanded: Boolean = false,
+    val results: String = ""
     ){
     data class Builder(
-        var email: String? = null,
-        var name: String? = null){
+        var user: User? = null,
+        var expanded: Boolean = false,
+        //Change for results from firestore
+        var results: String = "ESTAS SON LAS ESTADISTICAS"){
 
-        fun email(email: String?) = apply { this.email = email }
-        fun name(name: String?) = apply { this.name = name }
-        fun build() = Patient(email, name)
+        fun user(email: String, userName: String) = apply { this.user = User(userName = userName, email = email) }
+        fun expanded(expanded: Boolean) = apply { this.expanded = expanded }
+        fun result(results: String) = apply { this.results= results }
+        fun build() = Patient(user, expanded, results)
     }
 }
