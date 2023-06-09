@@ -60,7 +60,7 @@ class ProfileFragment : Fragment() {
         btnLogoutClick()
         btnEditProfile()
         btnVinculate()
-
+        //once the linking functionality is implemented this listener must be removed
         binding.ivMiniLogo.setOnClickListener { startActivity(Intent(activity, ProfesionalHomeActivity::class.java)) }
     }
 
