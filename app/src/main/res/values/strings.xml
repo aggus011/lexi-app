@@ -44,4 +44,5 @@
     <string name="your_recording">Tu grabación</string>
     <string name="pending_readings">MIS LECTURAS PENDIENTES</string>
     <string name="challenge_reading">Lectura desafío</string>
+    <string name="choose_what_scan">Elegí qué escanear</string>
 </resources>

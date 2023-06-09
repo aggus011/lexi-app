@@ -114,6 +114,18 @@
         android:textAppearance="@style/textMaterialButton"
         app:iconSize="30dp"/>
 
+        <ProgressBar
+            android:id="@+id/pbLoadingRecognizedText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            style="?android:attr/progressBarStyleLarge"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvScannedTextTitle"
+            app:layout_constraintBottom_toTopOf="@id/btnReScan"
+            android:visibility="gone"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clNoTextImage"
         android:layout_width="match_parent"
