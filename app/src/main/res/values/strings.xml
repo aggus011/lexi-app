@@ -42,6 +42,8 @@
     <string name="record_audio_again">Volver a grabar</string>
     <string name="audio_record_results">Chequear</string>
     <string name="your_recording">Tu grabación</string>
+    <string name="pending_readings">MIS LECTURAS PENDIENTES</string>
+    <string name="challenge_reading">Lectura desafío</string>
     <string name="do_not_give_up">¡NO TE RINDAS!</string>
     <string name="loading_results">Cargando resultados…</string>
     <string name="phrase_negative_result">AUNQUE NO ESTÉ DEL TODO CORRECTO, \n ¡NO TE DESANIMES! ¡YA CASI LO LOGRAS!</string>

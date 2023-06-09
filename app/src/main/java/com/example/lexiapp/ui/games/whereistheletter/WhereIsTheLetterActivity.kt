@@ -1,5 +1,6 @@
 package com.example.lexiapp.ui.games.whereistheletter
 
+import android.content.Context
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,21 +12,19 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityWhereIsTheLetterBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class WhereIsTheLetterActivity : AppCompatActivity() {
 
     private val vM: WhereIsTheLetterViewModel by viewModels()
-
+    //private lateinit var observerWord:
     private lateinit var binding: ActivityWhereIsTheLetterBinding
 
     //Should be inject
@@ -36,29 +35,24 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityWhereIsTheLetterBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
-        //setVM()
+        vM.onOmitWord()
+        setWordObserver()
         progressBarOn()
         setListeners()
-        waitForValues()
     }
 
-    private fun waitForValues() {
-        lifecycleScope.launch {
-            delay(3000)
-            withContext(Dispatchers.Main) {
-                try {
-                    setValues()
-                }catch (e: Exception){
-                    binding.progressBar.visibility=View.GONE
-                    binding.txtWord.visibility= View.GONE
-                    binding.txtVariableWord.visibility= View.GONE
-                    binding.iconVolume.visibility= View.GONE
-                    binding.txtFindLetter.visibility= View.GONE
-                    Toast.makeText(applicationContext ,"NO SE PUDO CARGAR LA PALABRA", Toast.LENGTH_SHORT).show()
-
-                }
+    private fun setWordObserver() {
+        vM.basicWord.observe(this){
+            if(it.isNullOrEmpty()){
+                progressBarOn()
+            }else{
+                setValues()
+                progressBarOff()
+                binding.btnOtherWord.isClickable=true
             }
-            progressBarOff()
+        }
+        vM.letter.observe(this){
+            binding.txtVariableLetter.text = it.uppercase()
         }
     }
 
@@ -73,22 +67,23 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
     }
 
     private fun progressBarOff(){
-        binding.progressBar.visibility= View.GONE
-        binding.txtWord.visibility= View.VISIBLE
-        binding.txtVariableWord.visibility= View.VISIBLE
-        binding.iconVolume.visibility= View.VISIBLE
-        binding.txtFindLetter.visibility= View.VISIBLE
+        lifecycleScope.launch {
+            binding.progressBar.visibility= View.GONE
+            binding.txtWord.visibility= View.VISIBLE
+            binding.txtVariableWord.visibility= View.VISIBLE
+            binding.iconVolume.visibility= View.VISIBLE
+            binding.txtFindLetter.visibility= View.VISIBLE
+        }
     }
-
-
 
     private fun listenerOtherWord() {
         binding.btnOtherWord.setOnClickListener {
+            if(!vM.basicWord.hasObservers()) setWordObserver()
+            binding.btnOtherWord.isClickable=false
             vM.onPositionDeselected()
             progressBarOn()
             deleteBtnLetter()
             vM.onOmitWord()
-            waitForValues()
         }
     }
 
@@ -99,32 +94,81 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
 
     private fun listenerResult() {
         binding.btnResult.setOnClickListener {
-            vM.onSubmitAnswer()
-            if(vM.isAnyLetterSelected()){
-                validateLetterSelected()
+            if(!vM.basicWord.hasObservers()){
+                Toast.makeText(this, "Debe clickear el boton 'Otra palabra' ", Toast.LENGTH_SHORT).show()
             }else{
-                Toast.makeText(this, "Debe elegir una letra", Toast.LENGTH_SHORT).show()
+                vM.onSubmitAnswer()
+                isAnyLetterSelected()
             }
         }
     }
 
+    private fun isAnyLetterSelected(){
+        if(vM.isAnyLetterSelected()){
+            validateLetterSelected()
+        }else{
+            Toast.makeText(this, "Debe elegir una letra", Toast.LENGTH_SHORT).show()
+        }
+    }
     private fun validateLetterSelected() {
-        if(vM.correctAnswerSubmitted.value) {
+        //Provisional, lack result activities
+        vM.basicWord.removeObservers(this)
+        vM.letter.removeObservers(this)
+        callAfterResult()
+        showAlert()
+        /*if(vM.correctAnswerSubmitted.value) {
             //Go to ActivityGoodResult
-            Toast.makeText(this, "Felicidades, elegiste la letra ${vM.basicWord.value[vM.selectedPosition.value!!]}", Toast.LENGTH_SHORT).show()
             vM.resetSubmit()
         } else {
             //Go to ActivityBadResult
-            Toast.makeText(this, "No es la letra correcta, elegiste la letra ${vM.basicWord.value[vM.selectedPosition.value!!]}", Toast.LENGTH_SHORT).show()
             vM.resetSubmit()
+        }*/
+        vM.resetSubmit()
+    }
+
+    fun showAlert() {
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        if(vM.correctAnswerSubmitted.value) {
+            alertDialogBuilder.setTitle("FELICIDADES")
+            alertDialogBuilder.setMessage("La letra que elegiste era la correcta (${vM.getLetterWithPosition()})!!!")
+        } else {
+            alertDialogBuilder.setTitle("¡NO TE RINDAS!")
+            alertDialogBuilder.setMessage("Esa no era la letra, pero sigue intentandolo!")
+        }
+            alertDialogBuilder.setPositiveButton("Aceptar") { dialog, _ ->
+                // Acción al hacer clic en el botón Aceptar
+                setWordObserver()
+                binding.btnOtherWord.isClickable=false
+                vM.onPositionDeselected()
+                progressBarOn()
+                deleteBtnLetter()
+                vM.onOmitWord()
+                dialog.cancel()
+            }
+        alertDialogBuilder.setNegativeButton("Cancelar") { dialog, _ ->
+            // Acción al hacer clic en el botón Cancelar
+            dialog.cancel()
+        }
+
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
+    }
+
+
+    private fun callAfterResult(){
+        deleteBtnLetter()
+        lifecycleScope.launch {
+            binding.progressBar.visibility = View.GONE
+            binding.txtWord.visibility = View.GONE
+            binding.txtVariableWord.visibility = View.GONE
+            binding.iconVolume.visibility = View.GONE
+            binding.txtFindLetter.visibility = View.GONE
         }
     }
 
     private fun deleteBtnLetter() {
         if(positions.isNotEmpty()){
-            positions.forEach {
-                binding.containerWord.removeView(it.value)
-            }
+            binding.containerWord.removeAllViews()
         }
         positions.clear()
     }
@@ -141,27 +185,32 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
 
     private fun onLetterSelected(pos: Int) {
         resetAllBtns()
+        Log.v("select_position_in_activity_before", "position: $pos")
         if(vM.isItSelected(pos)){
             vM.onPositionDeselected()
+            Log.v("select_position_in_activity_after_true", "position: ${vM.selectedPosition.value}")
             return
         }
         vM.onPositionSelected(pos)
+        Log.v("select_position_in_activity_after_false", "position: ${vM.selectedPosition.value}")
         setStyle(pos, SetStyleButton.SELECTED)
     }
 
     private fun setValues() {
-        val word = vM.basicWord.value
+        val word=vM.basicWord.value!!
         Log.v("init_word_in_activity", "response word: $word")
+        Log.v("init_word_in_activity", "response word: ${vM.basicWord.value!!}")
         binding.txtVariableWord.text = word
-        binding.txtVariableLetter.text = word[vM.correctPosition.value].toString()
         for (letter in word.withIndex()){
-            createWordButton(letter.value.uppercase(), { onLetterSelected(letter.index) }) { btn ->
+            Log.v("position_btn_in_activity", "position: ${letter.index} ${letter.value.uppercase()}")
+            createWordButton(letter.value.uppercase(), { this.onLetterSelected(letter.index) }) { btn ->
                 saveBtnPosition(
                     pos = letter.index,
                     btn = btn
                 )
             }
         }
+        positions.keys.forEach{ Log.v("position_in_activity", "position: $it ${positions[it]}") }
     }
 
     private fun createWordButton(

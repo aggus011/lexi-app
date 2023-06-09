@@ -9,5 +9,5 @@
 
     <stroke
         android:width="1.5dp"
-        android:color="@color/bottom_navigation_bg" />
+        android:color="@color/purple" />
 </shape>

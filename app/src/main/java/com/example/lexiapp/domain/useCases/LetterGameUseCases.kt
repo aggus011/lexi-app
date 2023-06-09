@@ -1,6 +1,7 @@
 package com.example.lexiapp.domain.useCases
 
 import com.example.lexiapp.data.api.LetterRepositoryImpl
+import com.example.lexiapp.domain.model.WhereIsTheLetterResult
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -14,9 +15,13 @@ class LetterGameUseCases @Inject constructor(
     private val ONE_WORD = 1
 
     fun getWord() = flow {
-        LENGTH_WORD=getRandomInt()
+        LENGTH_WORD = getRandomInt()
         repository.getWord(ONE_WORD, LENGTH_WORD, SPANISH_LANGUAGE).collect { emit(it) }
     }
 
-    private fun getRandomInt()=Random.nextInt(2,8)
+    suspend fun saveWordInFirebase(result: WhereIsTheLetterResult) {
+        repository.saveResult(result)
+    }
+
+    private fun getRandomInt() = Random.nextInt(4, 7)
 }

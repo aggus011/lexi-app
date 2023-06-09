@@ -28,13 +28,12 @@
         android:id="@+id/txtNameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TEXTO 1"
-        android:textSize="30sp"
-        android:textColor="@color/black"
+        tools:text="TEXTO 1"
         app:layout_constraintTop_toBottomOf="@id/ivMiniLogo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="30dp"
+        android:textAppearance="@style/title"/>
 
     <View
         android:id="@+id/vTextToReadBackground"
@@ -68,8 +67,8 @@
         app:layout_constraintBottom_toBottomOf="@id/ibPlayAudioText"
         android:progress="0"
         tools:progress="70"
-        android:thumbTint="@color/bottom_navigation_bg"
-        android:progressTint="@color/bottom_navigation_bg"
+        android:thumbTint="@color/purple"
+        android:progressTint="@color/purple"
         app:layout_constraintStart_toEndOf="@id/ibPlayAudioText"/>
 
     <TextView
@@ -80,19 +79,20 @@
         app:layout_constraintTop_toTopOf="@id/ibPlayAudioText"
         tools:text="1:25"
         app:layout_constraintBottom_toBottomOf="@id/ibPlayAudioText"
-        android:layout_marginEnd="4dp"/>
+        android:layout_marginEnd="4dp"
+        android:textAppearance="@style/audioDuration"/>
 
     <TextView
         android:id="@+id/tvText"
         android:layout_margin="8dp"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="@id/vTextToReadBackground"
         app:layout_constraintEnd_toEndOf="@id/vTextToReadBackground"
         app:layout_constraintBottom_toBottomOf="@id/vTextToReadBackground"
         app:layout_constraintTop_toBottomOf="@id/ibPlayAudioText"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical"
+        android:textAppearance="@style/textToRead"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clAudioRecord"
@@ -112,8 +112,7 @@
             android:text="@string/your_recording"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:textColor="@color/black"
-            android:textSize="20sp"/>
+            android:textAppearance="@style/subtitle"/>
 
         <ImageButton
             android:id="@+id/ibPlayAudioRecord"
@@ -133,8 +132,8 @@
             app:layout_constraintBottom_toBottomOf="@id/ibPlayAudioRecord"
             android:progress="0"
             tools:progress="60"
-            android:thumbTint="@color/bottom_navigation_bg"
-            android:progressTint="@color/bottom_navigation_bg"
+            android:thumbTint="@color/purple"
+            android:progressTint="@color/purple"
             app:layout_constraintStart_toEndOf="@id/ibPlayAudioRecord"
             app:layout_constraintTop_toTopOf="@id/ibPlayAudioRecord"/>
 
@@ -145,12 +144,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/ibPlayAudioRecord"
             app:layout_constraintTop_toTopOf="@id/ibPlayAudioRecord"
-            tools:text="0:45" />
+            tools:text="0:45"
+            android:textAppearance="@style/audioDuration"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnReRecordAudio"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="70dp"
             app:cornerRadius="10dp"
             android:text="@string/record_audio_again"
             app:layout_constraintStart_toStartOf="parent"
@@ -158,14 +158,17 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btnShowResults"
             android:layout_margin="10dp"
-            android:backgroundTint="@color/bottom_navigation_bg"
+            android:backgroundTint="@color/purple"
             app:icon="@drawable/ic_mic"
-            app:iconPadding="-10dp"/>
+            app:iconPadding="-10dp"
+            android:textAppearance="@style/textMaterialButton"
+            android:textSize="19sp"
+            app:iconSize="30dp"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnShowResults"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="70dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ibPlayAudioRecord"
             app:cornerRadius="10dp"
@@ -177,8 +180,9 @@
             android:textColor="@color/black"
             app:icon="@drawable/ic_games"
             app:iconTint="@color/black"
-            app:iconSize="20dp"
-            app:iconPadding="5dp"/>
+            app:iconSize="24dp"
+            app:iconPadding="5dp"
+            android:textAppearance="@style/textMaterialButton"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
