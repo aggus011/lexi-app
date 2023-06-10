@@ -1,6 +1,7 @@
 package com.example.lexiapp.data.api.openai_audio
 
 import com.example.lexiapp.data.api.openai_audio.model.Texts
+import com.example.lexiapp.domain.model.Secrets
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -12,7 +13,7 @@ import retrofit2.http.Part
 interface SpeechToTextClient {
 
     @Headers(
-        "Authorization: Bearer OPEN_AI_API_KEY",
+        "Authorization: Bearer ${Secrets.OPEN_AI_API_KEY}",
     )
     @Multipart
     @POST("audio/transcriptions")
