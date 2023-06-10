@@ -52,4 +52,5 @@
     <string name="words_to_exercise">VER PALABRAS A EJERCITAR</string>
     <string name="home">INICIO</string>
     <string name="phrase_positive_result">¡LO HICISTE MUY BIEN!</string>
+    <string name="choose_what_scan">Elegí qué escanear</string>
 </resources>

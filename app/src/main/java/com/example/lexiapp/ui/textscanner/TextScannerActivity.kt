@@ -9,17 +9,19 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.speech.tts.TextToSpeech
 import android.text.method.ScrollingMovementMethod
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
+import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityTextScannerBinding
 import com.google.android.material.button.MaterialButton
 import com.google.mlkit.vision.common.InputImage
@@ -37,6 +39,7 @@ class TextScannerActivity : AppCompatActivity() {
     private lateinit var textRecognized: TextView
     private lateinit var btnReScan: MaterialButton
     private lateinit var btnReadText: MaterialButton
+    private lateinit var progressBar: ProgressBar
 
     private var imageUri: Uri? = null
 
@@ -46,12 +49,24 @@ class TextScannerActivity : AppCompatActivity() {
     private lateinit var textRecognizer: TextRecognizer
     private lateinit var textToSpeech: TextToSpeech
 
+    private val cropImage =
+        registerForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            photoToScan.setImageURI(result.uriContent)
+            recognizeTextFromImage(result.uriContent)
+        } else {
+            // An error occurred
+            Log.v(TAG, "${result.error!!.message}")
+            binding.clNoTextImage.visibility = View.VISIBLE
+        }
+    }
+
+
     private val cameraActivityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
             if(result.resultCode == Activity.RESULT_OK){
                 hideBlackScreen()
-                photoToScan.setImageURI(imageUri)
-                recognizeTextFromImage()
+                cropImage()
             }else{
                 //When i close de camera, finish the activity
                 finish()
@@ -64,8 +79,7 @@ class TextScannerActivity : AppCompatActivity() {
                 hideBlackScreen()
                 val data = result.data
                 imageUri = data!!.data
-                photoToScan.setImageURI(imageUri)
-                recognizeTextFromImage()
+                cropImage()
             }else{
                 //No one image picked from gallery
                 finish()
@@ -91,8 +105,18 @@ class TextScannerActivity : AppCompatActivity() {
     }
 
     private fun initArraysPermissions(){
-        cameraPermissions = arrayOf(android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        storagePermissions = arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        cameraPermissions = arrayOf(android.Manifest.permission.CAMERA,
+            if(verifyApiVersionIsHigherThat32()){
+                android.Manifest.permission.READ_MEDIA_IMAGES
+            }else{
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            })
+
+        storagePermissions = if(verifyApiVersionIsHigherThat32()){
+            arrayOf(android.Manifest.permission.READ_MEDIA_IMAGES)
+        }else{
+            arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
     }
 
     private fun checkImageInput(extras: Bundle?) {
@@ -111,6 +135,7 @@ class TextScannerActivity : AppCompatActivity() {
         btnReScan = binding.btnReScan
         btnReadText = binding.btnReadText
         btnBack = binding.btnArrowBack
+        progressBar = binding.pbLoadingRecognizedText
     }
 
     private fun btnBackListener(){
@@ -188,12 +213,13 @@ class TextScannerActivity : AppCompatActivity() {
         galleryActivityResultLauncher.launch(intent)
     }
 
-    private fun recognizeTextFromImage(){
+    private fun recognizeTextFromImage(imageUri: Uri?) {
         if(imageUri != null){
+            progressBar.visibility = View.VISIBLE
             try {
-                val inputImage = InputImage.fromFilePath(this, imageUri!!)
+                val inputImage = InputImage.fromFilePath(this, imageUri)
 
-                val textTaskResult = textRecognizer.process(inputImage)
+                textRecognizer.process(inputImage)
                     .addOnSuccessListener { text ->
                         val recognizedText = text.text
                         if(recognizedText.isNotEmpty()){
@@ -203,12 +229,19 @@ class TextScannerActivity : AppCompatActivity() {
                         }else{
                             binding.clNoTextImage.visibility = View.VISIBLE
                         }
+                        progressBar.visibility = View.GONE
                     }
                     .addOnFailureListener{
                         //A failure had occurred
+                        binding.clNoTextImage.visibility = View.VISIBLE
+                        progressBar.visibility = View.GONE
+                        Log.v(TAG, "failure text recognition ${it.message}")
                     }
             }catch (e: Exception){
                 //Handle exception
+                binding.clNoTextImage.visibility = View.VISIBLE
+                progressBar.visibility = View.GONE
+                Log.v(TAG, "exception ${e.message}")
             }
         }
     }
@@ -258,6 +291,27 @@ class TextScannerActivity : AppCompatActivity() {
         binding.vBlackScreen.visibility = View.GONE
     }
 
+    private fun cropImage(){
+        cropImage.launch(
+            CropImageContractOptions(
+                uri = imageUri,
+                cropImageOptions = CropImageOptions(
+                    imageSourceIncludeGallery = true,
+                    imageSourceIncludeCamera = true,
+                    allowFlipping = false,
+                    toolbarColor = ContextCompat.getColor(this, R.color.blue),
+                    progressBarColor = ContextCompat.getColor(this, R.color.blue),
+                    activityTitle = getString(R.string.choose_what_scan)
+                )
+            )
+        )
+    }
+
+    private fun verifyApiVersionIsHigherThat32(): Boolean{
+        return android.os.Build.VERSION.SDK_INT >
+                android.os.Build.VERSION_CODES.S_V2
+    }
+
     private val onBackPressedCallback: OnBackPressedCallback = object: OnBackPressedCallback(true){
         override fun handleOnBackPressed() {
             finish()
@@ -267,6 +321,7 @@ class TextScannerActivity : AppCompatActivity() {
     private companion object {
         private const val CAMERA_REQUEST_CODE = 100
         private const val STORAGE_REQUEST_CODE = 200
+        private const val TAG = "TextScannerActivity"
     }
 
     override fun onRequestPermissionsResult(
