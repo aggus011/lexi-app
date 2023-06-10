@@ -26,11 +26,11 @@ jobs:
         DATA: ${{ secrets.GOOGLE_SERVICES }}
       run: echo $DATA | base64 -d > /home/runner/work/lexi-app/lexi-app/app/google-services.json
     - name: Create file Secrets.kt
-      run: touch app/src/main/java/com/example/lexiapp/domain/model/Secrets.kt
+      run: touch ./app/src/main/java/com/example/lexiapp/domain/model/Secrets.kt
     - name: Putting data secrets
       env:
         DATA: ${{ secrets.SECRETS_KT }}
-      run: echo $DATA > app/src/main/java/com/example/lexiapp/domain/model/Secrets.kt
+      run: echo $DATA > ./app/src/main/java/com/example/lexiapp/domain/model/Secrets.kt
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
