@@ -2,11 +2,11 @@ package com.example.lexiapp.domain.useCases
 
 import android.content.SharedPreferences
 import android.util.Log
-import com.example.lexiapp.data.network.FireStoreService
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.model.UserLogin
 import com.example.lexiapp.domain.model.UserSignUp
 import com.example.lexiapp.domain.model.UserType
+import com.example.lexiapp.domain.service.FireStoreService
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject

@@ -1,13 +1,13 @@
 package com.example.lexiapp.domain.useCases
 
 import androidx.core.util.PatternsCompat
-import com.example.lexiapp.data.network.AuthenticationServiceImpl
 import com.example.lexiapp.domain.model.LoginResult
 import com.example.lexiapp.domain.model.UserSignUp
+import com.example.lexiapp.domain.service.AuthenticationService
 import javax.inject.Inject
 
 class SignUpUseCases @Inject constructor(
-    private val authenticationServiceImpl: AuthenticationServiceImpl,
+    private val authenticationServiceImpl: AuthenticationService,
     //private val profileUseCases: ProfileUseCases
 ) {
 

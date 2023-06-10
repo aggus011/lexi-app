@@ -4,13 +4,11 @@ import android.content.SharedPreferences
 import android.util.Log
 import com.example.lexiapp.data.api.word_asociation_api.WordAssociationService
 import com.example.lexiapp.data.model.Game
-import com.example.lexiapp.data.model.GameResult
 import com.example.lexiapp.data.model.WhereIsGameResult
-import com.example.lexiapp.data.network.FireStoreService
+import com.example.lexiapp.data.network.FireStoreServiceImpl
 import com.example.lexiapp.data.repository.BlackList
 import com.example.lexiapp.domain.model.WhereIsTheLetterResult
 import com.example.lexiapp.domain.service.LetterRepository
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -18,7 +16,7 @@ import javax.inject.Inject
 
 class LetterRepositoryImpl @Inject constructor(
     private val apiWordService: WordAssociationService,
-    private val db: FireStoreService,
+    private val db: FireStoreServiceImpl,
     private val prefs: SharedPreferences
 ): LetterRepository {
 
