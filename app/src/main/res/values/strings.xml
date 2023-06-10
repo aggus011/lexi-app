@@ -44,5 +44,13 @@
     <string name="your_recording">Tu grabación</string>
     <string name="pending_readings">MIS LECTURAS PENDIENTES</string>
     <string name="challenge_reading">Lectura desafío</string>
+    <string name="do_not_give_up">¡NO TE RINDAS!</string>
+    <string name="loading_results">Cargando resultados…</string>
+    <string name="phrase_negative_result">AUNQUE NO ESTÉ DEL TODO CORRECTO, \n ¡NO TE DESANIMES! ¡YA CASI LO LOGRAS!</string>
+    <string name="next_text">SIGUIENTE\nTEXTO</string>
+    <string name="try_again">VOLVER A\nINTENTAR</string>
+    <string name="words_to_exercise">VER PALABRAS A EJERCITAR</string>
+    <string name="home">INICIO</string>
+    <string name="phrase_positive_result">¡LO HICISTE MUY BIEN!</string>
     <string name="choose_what_scan">Elegí qué escanear</string>
 </resources>
