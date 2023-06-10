@@ -8,13 +8,13 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lexiapp.R
-import com.example.lexiapp.core.dialog.DialogFragmentLauncher
-import com.example.lexiapp.core.dialog.ErrorDialog
+import com.example.lexiapp.ui.customDialog.DialogFragmentLauncher
+import com.example.lexiapp.ui.customDialog.ErrorDialog
 import com.example.lexiapp.databinding.ActivityLoginBinding
 import com.example.lexiapp.ui.MainActivity
 import com.example.lexiapp.domain.model.UserLogin
 import com.example.lexiapp.ui.signup.SignUpActivity
-import com.example.lexiapp.core.ex.show
+import com.example.lexiapp.ui.customDialog.show
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

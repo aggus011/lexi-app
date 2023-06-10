@@ -9,6 +9,7 @@ import com.example.lexiapp.data.model.WhereIsGameResult
 import com.example.lexiapp.data.network.FireStoreService
 import com.example.lexiapp.data.repository.BlackList
 import com.example.lexiapp.domain.model.WhereIsTheLetterResult
+import com.example.lexiapp.domain.service.LetterRepository
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -19,12 +20,12 @@ class LetterRepositoryImpl @Inject constructor(
     private val apiWordService: WordAssociationService,
     private val db: FireStoreService,
     private val prefs: SharedPreferences
-) {
+): LetterRepository {
 
     private val userMail = prefs.getString("email", null)!!
     private val currentGame = Game.WHERE_IS_THE_LETTER_GAME
 
-    suspend fun getWord(count: Int, length: Int, language: String) = flow {
+    override suspend fun getWord(count: Int, length: Int, language: String) = flow {
         apiWordService.getWordToWhereIsTheLetterGame(count, length, language)
             .map { inputList -> inputList.filter { !BlackList.words.contains(it.uppercase()) } }
             .collect {
@@ -33,7 +34,7 @@ class LetterRepositoryImpl @Inject constructor(
             }
     }
 
-    suspend fun saveResult(result: WhereIsTheLetterResult) {
+    override suspend fun saveResult(result: WhereIsTheLetterResult) {
         db.saveWhereIsTheLetterResult(
             WhereIsGameResult(
                 game = currentGame,
@@ -43,7 +44,7 @@ class LetterRepositoryImpl @Inject constructor(
         )
     }
 
-    fun obtainResults() {
+    override fun obtainResults() {
 
     }
 

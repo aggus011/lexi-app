@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.lexiapp.core.Event
+import com.example.lexiapp.ui.customDialog.Event
 import com.example.lexiapp.data.response.LoginResult
 import com.example.lexiapp.domain.useCases.LoginUseCases
 import com.example.lexiapp.domain.model.UserLogin
