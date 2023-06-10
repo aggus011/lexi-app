@@ -5,8 +5,11 @@ import com.example.lexiapp.data.api.LetterRepositoryImpl
 import com.example.lexiapp.data.api.openaicompletions.OpenAICompletionsRepositoryImpl
 import com.example.lexiapp.data.api.openaicompletions.OpenAICompletionsService
 import com.example.lexiapp.data.api.word_asociation_api.WordAssociationService
+import com.example.lexiapp.data.network.AuthenticationServiceImpl
 import com.example.lexiapp.data.network.FireStoreService
+import com.example.lexiapp.data.network.FirebaseClient
 import com.example.lexiapp.data.repository.challengereading.ChallengeReadingRepositoryImpl
+import com.example.lexiapp.domain.service.AuthenticationService
 import com.example.lexiapp.domain.service.ChallengeReadingRepository
 import com.example.lexiapp.domain.service.LetterRepository
 import com.example.lexiapp.domain.service.OpenAICompletionsRepository
@@ -41,5 +44,12 @@ object InterfaceModule {
         firestoreService: FireStoreService
     ): ChallengeReadingRepository {
         return ChallengeReadingRepositoryImpl(firestoreService)
+    }
+
+    @Provides
+    fun getAuthenticationService(
+        firebase: FirebaseClient
+    ): AuthenticationService {
+        return AuthenticationServiceImpl(firebase)
     }
 }

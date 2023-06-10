@@ -1,13 +1,13 @@
 package com.example.lexiapp.domain.useCases
 
 import androidx.core.util.PatternsCompat
-import com.example.lexiapp.data.network.AuthenticationService
-import com.example.lexiapp.data.response.LoginResult
+import com.example.lexiapp.data.network.AuthenticationServiceImpl
+import com.example.lexiapp.domain.model.LoginResult
 import com.example.lexiapp.domain.model.UserSignUp
 import javax.inject.Inject
 
 class SignUpUseCases @Inject constructor(
-    private val authenticationService: AuthenticationService,
+    private val authenticationServiceImpl: AuthenticationServiceImpl,
     //private val profileUseCases: ProfileUseCases
 ) {
 
@@ -18,7 +18,7 @@ class SignUpUseCases @Inject constructor(
         if (!verifyPassword(user.password) || user.password != user.passwordConfirm) {
             return LoginResult.Error
         }
-        return authenticationService.createAccount(user.email, user.password)
+        return authenticationServiceImpl.createAccount(user.email, user.password)
     }
 
     private fun verifyEmail(email: String): Boolean {
