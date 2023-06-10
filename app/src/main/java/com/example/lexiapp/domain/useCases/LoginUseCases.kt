@@ -1,14 +1,12 @@
 package com.example.lexiapp.domain.useCases
 
 import androidx.core.util.PatternsCompat
-import com.example.lexiapp.data.network.AuthenticationService
-import com.example.lexiapp.data.network.FireStoreService
-import com.example.lexiapp.data.response.LoginResult
-import com.example.lexiapp.domain.model.User
+import com.example.lexiapp.domain.model.LoginResult
+import com.example.lexiapp.domain.service.AuthenticationService
 import javax.inject.Inject
 
 class LoginUseCases @Inject constructor(
-    private val authenticationService: AuthenticationService
+    private val authenticationServiceImpl: AuthenticationService
 ) {
     suspend operator fun invoke(email: String, password: String): LoginResult {
         if (!verifyEmail(email)) {
@@ -17,7 +15,7 @@ class LoginUseCases @Inject constructor(
         if(!verifyPassword(password)) {
             return LoginResult.Error
         }
-        return authenticationService.login(email, password)
+        return authenticationServiceImpl.login(email, password)
     }
 
     private fun verifyEmail(email: String): Boolean =

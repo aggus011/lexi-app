@@ -1,4 +1,4 @@
-package com.example.lexiapp.core.delegate
+package com.example.lexiapp.ui.customDialog
 
 import java.lang.ref.WeakReference
 import kotlin.reflect.KProperty

@@ -1,14 +1,12 @@
 package com.example.lexiapp.domain.useCases
 
-import com.example.lexiapp.data.api.LetterRepositoryImpl
-import com.example.lexiapp.data.repository.BlackList
-import kotlinx.coroutines.flow.filter
+import com.example.lexiapp.domain.service.LetterRepository
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import kotlin.random.Random
 
 class CorrectWordUseCases @Inject constructor(
-    private val repository: LetterRepositoryImpl
+    private val repository: LetterRepository
 ) {
     companion object {
         const val NUM_OF_CHARS_SHUFFLE = 2

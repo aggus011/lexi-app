@@ -6,12 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.viewModels
-import com.example.lexiapp.core.dialog.DialogFragmentLauncher
-import com.example.lexiapp.core.dialog.ErrorDialog
+import com.example.lexiapp.ui.customDialog.DialogFragmentLauncher
+import com.example.lexiapp.ui.customDialog.ErrorDialog
 import com.example.lexiapp.databinding.ActivitySignUpBinding
 import com.example.lexiapp.ui.login.LoginActivity
-import com.example.lexiapp.core.ex.*
 import com.example.lexiapp.domain.model.UserSignUp
+import com.example.lexiapp.ui.customDialog.show
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

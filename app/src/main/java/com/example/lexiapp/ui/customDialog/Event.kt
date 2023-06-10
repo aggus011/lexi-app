@@ -1,4 +1,4 @@
-package com.example.lexiapp.core
+package com.example.lexiapp.ui.customDialog
 
 open class Event<out T>(private val content: T) {
 

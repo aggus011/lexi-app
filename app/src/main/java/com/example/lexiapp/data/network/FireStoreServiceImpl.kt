@@ -5,19 +5,20 @@ import com.example.lexiapp.data.model.Game
 import com.example.lexiapp.data.model.GameResult
 import com.example.lexiapp.data.model.WhereIsGameResult
 import com.example.lexiapp.domain.model.User
+import com.example.lexiapp.domain.service.FireStoreService
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FireStoreService @Inject constructor(firebase: FirebaseClient) {
+class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireStoreService {
 
     private val userCollection = firebase.firestore.collection("user")
     private val whereIsTheLetterCollection = firebase.firestore.collection("where_is_the_letter")
     private val openaiCollection = firebase.firestore.collection("openai_api_use")
 
-    suspend fun saveAccount(user: User) {
+    override suspend fun saveAccount(user: User) {
         val data = hashMapOf(
             "user_name" to user.userName,
             "birth_date" to user.birthDate,
@@ -26,7 +27,7 @@ class FireStoreService @Inject constructor(firebase: FirebaseClient) {
         userCollection.document(user.email).set(data).await()
     }
 
-    suspend fun getUser(email: String): User {
+    override suspend fun getUser(email: String): User {
         val user = User(null, email, null, null)
         userCollection.document(email).get()
             .addOnCompleteListener { task ->
@@ -46,7 +47,7 @@ class FireStoreService @Inject constructor(firebase: FirebaseClient) {
         return user
     }
 
-    suspend fun saveWhereIsTheLetterResult(result: GameResult) {
+    override suspend fun saveWhereIsTheLetterResult(result: GameResult) {
         val data = hashMapOf(
             "game" to result.game.toString(),
             "result" to result.result
@@ -54,7 +55,7 @@ class FireStoreService @Inject constructor(firebase: FirebaseClient) {
         whereIsTheLetterCollection.document(result.user_mail).set(data).await()
     }
 
-    suspend fun obtainLastResults(userMail: String): List<WhereIsGameResult> {
+    override suspend fun obtainLastResults(userMail: String): List<WhereIsGameResult> {
         var result = mutableListOf<WhereIsGameResult>()
         whereIsTheLetterCollection.document(userMail).get()
             .addOnCompleteListener { task ->
@@ -78,7 +79,7 @@ class FireStoreService @Inject constructor(firebase: FirebaseClient) {
         return result
     }
 
-    suspend fun getOpenAICollectionDocumentReference(document: String) = flow{
-            emit(openaiCollection.document(document))
+    override suspend fun getOpenAICollectionDocumentReference(document: String) = flow {
+        emit(openaiCollection.document(document))
     }
 }
