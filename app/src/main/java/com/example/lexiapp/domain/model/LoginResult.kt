@@ -1,4 +1,4 @@
-package com.example.lexiapp.data.response
+package com.example.lexiapp.domain.model
 
 sealed class LoginResult {
     object Error : LoginResult()

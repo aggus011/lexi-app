@@ -1,5 +1,6 @@
 package com.example.lexiapp.ui.games.letsread
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.media.MediaRecorder
@@ -18,17 +19,32 @@ import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityLetsReadBinding
 import com.example.lexiapp.domain.model.TextToRead
+import com.example.lexiapp.ui.games.whereistheletter.WhereIsTheLetterViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 import java.util.*
 
+@AndroidEntryPoint
 class LetsReadActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLetsReadBinding
     private lateinit var textToSpeech: TextToSpeech
@@ -52,6 +68,8 @@ class LetsReadActivity : AppCompatActivity() {
     private var handlerAudioRecord = Handler()
     private lateinit var btnReRecordAudio: MaterialButton
     private lateinit var btnShowResultsRecordAudio: MaterialButton
+    private val vM: SpeechToTextViewModel by viewModels()
+
 
     private lateinit var recordAudioPermissions: Array<String>
 
@@ -71,7 +89,7 @@ class LetsReadActivity : AppCompatActivity() {
         btnRecordAudioListener()
     }
 
-    private fun getViews(){
+    private fun getViews() {
         tvTextTitle = binding.txtNameText
         tvTextToRead = binding.tvText
         btnPlayAudioText = binding.ibPlayAudioText
@@ -86,13 +104,13 @@ class LetsReadActivity : AppCompatActivity() {
         btnShowResultsRecordAudio = binding.btnShowResults
     }
 
-    private fun btnBackListener(){
+    private fun btnBackListener() {
         btnBack.setOnClickListener {
             finish()
         }
     }
 
-    private fun setTextToReadData(){
+    private fun setTextToReadData() {
         val gson = Gson()
         val textToRead = gson.fromJson(intent.getStringExtra("TextToRead"), TextToRead::class.java)
 
@@ -132,7 +150,12 @@ class LetsReadActivity : AppCompatActivity() {
             override fun onDone(p0: String?) {
                 Log.v("Game Lets Read", "Texto convertido a audio")
                 runOnUiThread {
-                    setMediaPlayerText(audioTextFile, btnPlayAudioText, seekBarAudioText, tvAudioTextDuration)
+                    setMediaPlayerText(
+                        audioTextFile,
+                        btnPlayAudioText,
+                        seekBarAudioText,
+                        tvAudioTextDuration
+                    )
                 }
             }
 
@@ -152,7 +175,7 @@ class LetsReadActivity : AppCompatActivity() {
         mediaPlayerText =
             MediaPlayer.create(this, Uri.fromFile(audioTextFile))
 
-        if(mediaPlayerText != null) {
+        if (mediaPlayerText != null) {
             setSeekBar(mediaPlayerText!!, seekBarAudioText, tvAudioTextDuration)
             setPlayButtonAudioTextListener(mediaPlayerText!!, btnPlayAudioText)
             setRunnableMediaPlayerText(mediaPlayerText!!, seekBarAudioText)
@@ -173,9 +196,9 @@ class LetsReadActivity : AppCompatActivity() {
         seekBarAudioText.max = mediaPlayer.duration
         tvAudioTextDuration.text = setAudioTextDuration(mediaPlayer.duration)
 
-        seekBarAudioText.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
+        seekBarAudioText.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, position: Int, changed: Boolean) {
-                if(changed){
+                if (changed) {
                     mediaPlayer.seekTo(position)
                 }
             }
@@ -188,13 +211,16 @@ class LetsReadActivity : AppCompatActivity() {
         })
     }
 
-    private fun setPlayButtonAudioTextListener(mediaPlayer: MediaPlayer, btnPlayAudio: ImageButton) {
+    private fun setPlayButtonAudioTextListener(
+        mediaPlayer: MediaPlayer,
+        btnPlayAudio: ImageButton
+    ) {
         btnPlayAudio.setOnClickListener {
-            if(!mediaPlayer.isPlaying){
+            if (!mediaPlayer.isPlaying) {
                 pauseMediaPlayerAudioRecord()
                 mediaPlayer.start()
                 btnPlayAudio.setImageResource(R.drawable.ic_pause)
-            }else{
+            } else {
                 pauseMediaPlayerAudioText()
             }
         }
@@ -211,51 +237,80 @@ class LetsReadActivity : AppCompatActivity() {
         handlerAudioText.postDelayed(this.runnableAudioText, 500)
     }
 
-    private fun setAudioTextDuration(duration: Int) : String {
+    private fun setAudioTextDuration(duration: Int): String {
         val seconds = (duration / 1000) % 60
         val minutes = (duration / (1000 * 60)) % 60
 
         return String.format(Locale.getDefault(), "%d:%02d", minutes, seconds)
     }
 
-    private fun btnRecordAudioListener(){
+    private fun btnRecordAudioListener() {
         initArrayPermissions()
         btnRecordAudio.setOnClickListener {
-            if(checkRecordAudioPermissions()){
+            if (checkRecordAudioPermissions()) {
                 recordAudio()
-            }else{
+            } else {
                 requestRecordAudioPermissions()
             }
         }
     }
 
-    private fun initArrayPermissions(){
+    private fun initArrayPermissions() {
+        //Verify if api version is higher than api 32
         recordAudioPermissions =
-            arrayOf(android.Manifest.permission.RECORD_AUDIO,
-            android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            if (verifyApiVersionIsHigherThat32())
+                arrayOf(
+                    android.Manifest.permission.RECORD_AUDIO,
+                    android.Manifest.permission.READ_MEDIA_AUDIO
+                ) else {
+                arrayOf(
+                    android.Manifest.permission.RECORD_AUDIO,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+            }
     }
 
-    private fun checkRecordAudioPermissions(): Boolean{
+    private fun checkRecordAudioPermissions(): Boolean {
         val recordAudioResult =
-            ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+            ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.RECORD_AUDIO
+            ) == PackageManager.PERMISSION_GRANTED
         val storageResult =
-            ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+            ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+        val audioReadResult =
+            ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.READ_MEDIA_AUDIO
+            ) == PackageManager.PERMISSION_GRANTED
 
-        return recordAudioResult && storageResult
+        return recordAudioResult &&
+                (if (verifyApiVersionIsHigherThat32()) audioReadResult else storageResult)
     }
 
-    private fun recordAudio(){
-        val recordingFile = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC), "Lexi ${tvTextTitle.text} record.mp3")
-        if(!isRecording){
+    private fun recordAudio() {
+        val recordingFile = File(
+            this.filesDir,
+            "Lexi ${tvTextTitle.text} record.mp3"
+        )
+        if (!isRecording) {
             setMediaRecorder(recordingFile)
             pauseMediaPlayerAudioText()
-            enableButtonPlayAudioText(btnPlayAudioText= false)
+            enableButtonPlayAudioText(btnPlayAudioText = false)
             isRecording = !isRecording
             Log.v("Game Lets Read", "Grabando audio...")
-        }else{
+        } else {
             releaseMediaAudioRecorder()
-            enableButtonPlayAudioText(btnPlayAudioText= true)
-            setMediaPlayerAudioRecord(recordingFile, btnPlayAudioRecord, seekBarAudioRecord, tvAudioRecordDuration)
+            enableButtonPlayAudioText(btnPlayAudioText = true)
+            setMediaPlayerAudioRecord(
+                recordingFile,
+                btnPlayAudioRecord,
+                seekBarAudioRecord,
+                tvAudioRecordDuration
+            )
             isRecording = !isRecording
             Log.v("Game Lets Read", "Guardando audio...")
         }
@@ -276,7 +331,8 @@ class LetsReadActivity : AppCompatActivity() {
         audioFile: File,
         btnPlayAudioRecord: ImageButton,
         seekBarAudioRecord: SeekBar,
-        tvAudioRecordDuration: TextView) {
+        tvAudioRecordDuration: TextView
+    ) {
 
         mediaPlayerAudioRecord = MediaPlayer.create(this, Uri.fromFile(audioFile))
 
@@ -301,11 +357,11 @@ class LetsReadActivity : AppCompatActivity() {
         btnPlayAudioRecord: ImageButton
     ) {
         btnPlayAudioRecord.setOnClickListener {
-            if(!mediaPlayerAudioRecord.isPlaying){
+            if (!mediaPlayerAudioRecord.isPlaying) {
                 pauseMediaPlayerAudioText()
                 mediaPlayerAudioRecord.start()
                 btnPlayAudioRecord.setImageResource(R.drawable.ic_pause)
-            }else{
+            } else {
                 pauseMediaPlayerAudioRecord()
             }
         }
@@ -322,12 +378,12 @@ class LetsReadActivity : AppCompatActivity() {
         this.handlerAudioRecord.postDelayed(this.runnableAudioRecord, 500)
     }
 
-    private fun showMediaPlayerAudioRecord(){
+    private fun showMediaPlayerAudioRecord() {
         btnRecordAudio.visibility = View.GONE
         binding.clAudioRecord.visibility = View.VISIBLE
     }
 
-    private fun hideMediaPlayerAudioRecord(){
+    private fun hideMediaPlayerAudioRecord() {
         btnRecordAudio.visibility = View.VISIBLE
         binding.clAudioRecord.visibility = View.GONE
     }
@@ -337,7 +393,7 @@ class LetsReadActivity : AppCompatActivity() {
     }
 
     private fun pauseMediaPlayerAudioText() {
-        if (mediaPlayerText != null  && mediaPlayerText!!.isPlaying) {
+        if (mediaPlayerText != null && mediaPlayerText!!.isPlaying) {
             mediaPlayerText!!.pause()
             btnPlayAudioText.setImageResource(R.drawable.ic_play)
         }
@@ -350,7 +406,7 @@ class LetsReadActivity : AppCompatActivity() {
         }
     }
 
-    private fun setReRecordAudioListener(){
+    private fun setReRecordAudioListener() {
         btnReRecordAudio.setOnClickListener {
             pauseMediaPlayerAudioText()
             pauseMediaPlayerAudioRecord()
@@ -362,23 +418,54 @@ class LetsReadActivity : AppCompatActivity() {
 
     private fun setShowResultsRecordAudio(audioFile: File) {
         btnShowResultsRecordAudio.setOnClickListener {
+            val audioPart = createAudioPart(audioFile)
+            val textWithoutLineBreak = convertText()
             // SEND AUDIO FILE TO ANALYSIS
+            vM.transcription(audioPart)
+            vM.transcription.observe(this) {
+                startResultActivity(originalText = textWithoutLineBreak, revisedText = it)
+            }
         }
     }
 
-    private fun requestRecordAudioPermissions(){
+    private fun createAudioPart(audioFile: File): MultipartBody.Part {
+        val requestBody = audioFile.asRequestBody("audio/mp3".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData("file", audioFile.name, requestBody)
+    }
+
+    private fun convertText(): String {
+        val textWithLineBreak = tvTextToRead.text.toString()
+       return textWithLineBreak.replace(System.getProperty("line.separator"), " ")
+    }
+
+    private fun startResultActivity(originalText: String, revisedText: String) {
+        val intent = Intent(this, ResultActivity::class.java)
+        intent.putExtra("originalText", originalText)
+        intent.putExtra("results", revisedText)
+        startActivity(intent)
+    }
+
+    private fun requestRecordAudioPermissions() {
         ActivityCompat.requestPermissions(this, recordAudioPermissions, RECORD_AUDIO_REQUEST_CODE)
+        ActivityCompat.requestPermissions(
+            this,
+            recordAudioPermissions,
+            READ_EXTERNAL_STORAGE_PERMISSION_CODE
+        )
     }
 
-    private companion object{
-         private const val RECORD_AUDIO_REQUEST_CODE = 300
+    private companion object {
+        private const val RECORD_AUDIO_REQUEST_CODE = 300
+        private const val READ_EXTERNAL_STORAGE_PERMISSION_CODE = 300
+        private const val TAG = "LetsReadActivity"
     }
 
-    private val onBackPressedCallback: OnBackPressedCallback = object: OnBackPressedCallback(true){
-        override fun handleOnBackPressed() {
-            finish()
+    private val onBackPressedCallback: OnBackPressedCallback =
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finish()
+            }
         }
-    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -388,47 +475,57 @@ class LetsReadActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         //handle permission(s) results
-        if(requestCode == RECORD_AUDIO_REQUEST_CODE){
-            if(grantResults.isNotEmpty()){
+        if (requestCode == RECORD_AUDIO_REQUEST_CODE) {
+            if (grantResults.isNotEmpty()) {
                 val recordAudioAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED
                 val storageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED
 
-                if(recordAudioAccepted && storageAccepted){
+                if (recordAudioAccepted && storageAccepted) {
                     recordAudio()
-                }else{
+                } else {
                     //No record audio and storage permissions granted
-                    Toast.makeText(this, "Necesitas darnos permiso para poder usar el micrófono", Toast.LENGTH_SHORT).show()
+
+                    Toast.makeText(
+                        this,
+                        "Necesitas darnos permiso para poder usar el micrófono",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
     }
 
-    private fun releaseMediaAudioRecorder(){
+    private fun releaseMediaAudioRecorder() {
         mediaRecorder?.stop()
         mediaRecorder?.release()
         mediaRecorder = null
     }
 
-    private fun releaseMediaPlayerAudioText(){
+    private fun releaseMediaPlayerAudioText() {
         mediaPlayerText?.stop()
         mediaPlayerText?.release()
 
-        if(mediaPlayerText != null) {
+        if (mediaPlayerText != null) {
             handlerAudioText.removeCallbacks(runnableAudioText)
         }
 
         mediaPlayerText = null
     }
 
-    private fun releaseMediaPlayerAudioRecorder(){
+    private fun releaseMediaPlayerAudioRecorder() {
         mediaRecorder?.stop()
         mediaRecorder?.release()
 
-        if(mediaPlayerAudioRecord != null){
+        if (mediaPlayerAudioRecord != null) {
             handlerAudioRecord.removeCallbacks(runnableAudioRecord)
         }
 
         mediaRecorder = null
+    }
+
+    private fun verifyApiVersionIsHigherThat32(): Boolean {
+        return android.os.Build.VERSION.SDK_INT >
+                android.os.Build.VERSION_CODES.S_V2
     }
 
     override fun onPause() {

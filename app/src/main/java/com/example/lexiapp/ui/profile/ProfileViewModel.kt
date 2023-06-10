@@ -47,13 +47,10 @@ class ProfileViewModel @Inject constructor(
     }
 
     private fun setQR() {
-        myQR = qrUseCases.generateQR(getEmail())
+        myQR = qrUseCases.generateQR(profileUseCases.getEmail()!!)
     }
 
     fun getQR()=myQR
-
-    //Should be from SharedPreferences (or UseCases)
-    private fun getEmail()="aaaa@gmail.com"
 
     fun startTimer() {
         if (countdownTimer != null) {

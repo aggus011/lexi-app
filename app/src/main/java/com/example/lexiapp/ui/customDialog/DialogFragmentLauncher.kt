@@ -1,4 +1,4 @@
-package com.example.lexiapp.core.dialog
+package com.example.lexiapp.ui.customDialog
 
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
@@ -6,7 +6,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Lifecycle.State.RESUMED
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import com.example.lexiapp.core.delegate.weak
 import javax.inject.Inject
 
 class DialogFragmentLauncher @Inject constructor() : LifecycleObserver {

@@ -1,4 +1,4 @@
-package com.example.lexiapp.core.dialog
+package com.example.lexiapp.ui.customDialog
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
