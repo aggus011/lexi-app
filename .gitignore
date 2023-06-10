@@ -34,3 +34,4 @@ google-services.json
 
 # Secret
 /app/src/main/java/com/example/lexiapp/utils/Secrets.kt
+/app/src/main/java/com/example/lexiapp/domain/model/Secrets.kt
