@@ -5,5 +5,74 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.games.whereistheletter.result.PositiveResultWhereIsTheLetterActivity">
+    <ImageView
+        android:id="@+id/ivMiniLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/mini_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
+    <TextView
+        android:id="@+id/txtWellDone"
+        android:text="¡LO HICISTE MUY BIEN!"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_margin="15dp"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/ivClaps"
+        app:layout_constraintEnd_toEndOf="@id/ivClaps"
+        app:layout_constraintBottom_toTopOf="@id/ivClaps"/>
+
+    <ImageView
+        android:id="@+id/ivClaps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/ic_claps"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnGoInit"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnNextText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        app:layout_constraintStart_toStartOf="@id/ivClaps"
+        app:layout_constraintEnd_toEndOf="@id/ivClaps"
+        app:layout_constraintBottom_toTopOf="@id/btnGoInit"
+        android:text="Siguiente palabra"
+        android:textSize="30dp"
+        android:layout_margin="20dp"
+        android:backgroundTint="@color/purple"
+        android:textColor="@color/white"
+        app:iconTint="@color/white"
+        app:icon="@drawable/ic_end_arrow"
+        app:iconGravity="end"
+        app:cornerRadius="10dp"
+        android:textAppearance="@style/textMaterialButton"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnGoInit"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/btnNextText"
+        app:layout_constraintEnd_toEndOf="@id/btnNextText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:backgroundTint="@color/white"
+        android:text="INICIO"
+        android:textSize="18sp"
+        android:layout_margin="20dp"
+        android:textColor="@color/purple"
+        app:icon="@drawable/ic_home"
+        app:strokeColor="@color/purple"
+        app:strokeWidth="2dp"
+        app:iconPadding="-15dp"
+        app:iconTint="@color/purple"
+        app:cornerRadius="10dp"
+        android:textAppearance="@style/textMaterialButton"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

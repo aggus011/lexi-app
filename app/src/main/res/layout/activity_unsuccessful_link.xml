@@ -4,18 +4,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/purple"
     tools:context=".ui.profesionalhome.resultlink.UnsuccessfulLinkActivity">
 
-    <androidx.cardview.widget.CardView
+    <ImageView
+        android:id="@+id/ivMiniLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/mini_logo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-        <ImageView
-            android:id="@+id/ivSuccessful"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_close"
-            app:layout_constraintStart_toStartOf="parent"/>
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/ivSuccessful"
+        android:layout_margin="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_unsuccessful"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivMiniLogo"/>
+
+    <TextView
+        android:id="@+id/txtLinkSuccessful"
+        android:text="VINCULACIÓN NO EXITOSA"
+        app:layout_constraintStart_toStartOf="@id/ivSuccessful"
+        app:layout_constraintEnd_toEndOf="@id/ivSuccessful"
+        app:layout_constraintTop_toBottomOf="@id/ivMiniLogo"
+        app:layout_constraintBottom_toTopOf="@id/btnGoInit"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnGoInit"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="@color/white"
+        android:text="INICIO"
+        android:textSize="18sp"
+        android:layout_marginBottom="60dp"
+        android:textColor="@color/purple"
+        app:icon="@drawable/ic_home"
+        app:iconPadding="-15dp"
+        app:iconTint="@color/purple"
+        android:layout_marginTop="20dp"
+        app:cornerRadius="10dp"
+        android:textAppearance="@style/textMaterialButton"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

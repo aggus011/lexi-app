@@ -1,6 +1,7 @@
 package com.example.lexiapp.ui.games.whereistheletter
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,6 +18,9 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityWhereIsTheLetterBinding
+import com.example.lexiapp.ui.games.correctword.CorrectWordActivity
+import com.example.lexiapp.ui.games.whereistheletter.result.NegativeResultWhereIsTheLetterActivity
+import com.example.lexiapp.ui.games.whereistheletter.result.PositiveResultWhereIsTheLetterActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -111,59 +115,14 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
         }
     }
     private fun validateLetterSelected() {
-        //Provisional, lack result activities
-        vM.basicWord.removeObservers(this)
-        vM.letter.removeObservers(this)
-        callAfterResult()
-        showAlert()
-        /*if(vM.correctAnswerSubmitted.value) {
-            //Go to ActivityGoodResult
-            vM.resetSubmit()
-        } else {
-            //Go to ActivityBadResult
-            vM.resetSubmit()
-        }*/
-        vM.resetSubmit()
-    }
-
-    fun showAlert() {
-        val alertDialogBuilder = AlertDialog.Builder(this)
         if(vM.correctAnswerSubmitted.value) {
-            alertDialogBuilder.setTitle("FELICIDADES")
-            alertDialogBuilder.setMessage("La letra que elegiste era la correcta (${vM.getLetterWithPosition()})!!!")
+            Log.v("WORD_LETTER_ACT", "${vM.basicWord.value}")
+            startActivity(Intent(this, PositiveResultWhereIsTheLetterActivity::class.java))
         } else {
-            alertDialogBuilder.setTitle("¡NO TE RINDAS!")
-            alertDialogBuilder.setMessage("Esa no era la letra, pero sigue intentandolo!")
+            Log.v("WORD_LETTER_ACT", "${vM.basicWord.value}")
+            startActivity(Intent(this, NegativeResultWhereIsTheLetterActivity::class.java))
         }
-            alertDialogBuilder.setPositiveButton("Aceptar") { dialog, _ ->
-                // Acción al hacer clic en el botón Aceptar
-                setWordObserver()
-                binding.btnOtherWord.isClickable=false
-                vM.onPositionDeselected()
-                progressBarOn()
-                deleteBtnLetter()
-                vM.onOmitWord()
-                dialog.cancel()
-            }
-        alertDialogBuilder.setNegativeButton("Cancelar") { dialog, _ ->
-            // Acción al hacer clic en el botón Cancelar
-            dialog.cancel()
-        }
-
-        val alertDialog = alertDialogBuilder.create()
-        alertDialog.show()
-    }
-
-
-    private fun callAfterResult(){
-        deleteBtnLetter()
-        lifecycleScope.launch {
-            binding.progressBar.visibility = View.GONE
-            binding.txtWord.visibility = View.GONE
-            binding.txtVariableWord.visibility = View.GONE
-            binding.iconVolume.visibility = View.GONE
-            binding.txtFindLetter.visibility = View.GONE
-        }
+        finish()
     }
 
     private fun deleteBtnLetter() {

@@ -53,7 +53,7 @@ class WhereIsTheLetterViewModel @Inject constructor(
     }
 
     fun onSubmitAnswer() {
-        if (_selectedPosition.value == _correctPosition.value) {
+        if (_selectedPosition.value == _correctPosition.value || checkChar()) {
             _correctAnswerSubmitted.value = true
         } else {
             counter ++
@@ -67,6 +67,10 @@ class WhereIsTheLetterViewModel @Inject constructor(
             _incorrectAnswerSubmitted.value = true
         }
     }
+
+    private fun checkChar() = if (_selectedPosition.value!=null)
+            _basicWord.value!![_selectedPosition.value!!] == _basicWord.value!![_correctPosition.value] else false
+
 
     private fun selectLetter() {
         var position: Int
@@ -97,14 +101,17 @@ class WhereIsTheLetterViewModel @Inject constructor(
         }
     }
 
-    fun resetSubmit() {
+    private fun resetSubmit() {
         _basicWord.value = null
         _selectedPosition.value = null
         _correctAnswerSubmitted.value = false
         _incorrectAnswerSubmitted.value = false
     }
 
+    private fun getLetterWithPosition() = _selectedPosition.value?.let { _basicWord.value?.get(it) }
 
-    fun getLetterWithPosition() = _selectedPosition.value?.let { _basicWord.value?.get(it) }
+    fun getCorrectPosition()=_correctPosition.value
+
+    fun getWord() = _basicWord.value
 
 }
