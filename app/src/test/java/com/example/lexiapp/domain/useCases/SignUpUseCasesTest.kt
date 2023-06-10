@@ -18,8 +18,6 @@ class SignUpUseCasesTest {
 
     lateinit var signUpUseCases: SignUpUseCases
 
-    private lateinit var profileUseCases: ProfileUseCases
-
     @Before
     fun onBefore() {
         MockKAnnotations.init(this)
