@@ -417,23 +417,32 @@ class LetsReadActivity : AppCompatActivity() {
     }
 
     private fun setShowResultsRecordAudio(audioFile: File) {
-        // languageViewModel.getDifference(document1, document2)
         btnShowResultsRecordAudio.setOnClickListener {
+            val audioPart = createAudioPart(audioFile)
+            val textWithoutLineBreak = convertText()
             // SEND AUDIO FILE TO ANALYSIS
-            val requestBody = audioFile.asRequestBody("audio/mp3".toMediaTypeOrNull())
-            val audioPart = MultipartBody.Part.createFormData("file", audioFile.name, requestBody)
-
-            val textWithLineBreak = tvTextToRead.text.toString()
-            val textWithoutLineBreak =
-                textWithLineBreak.replace(System.getProperty("line.separator"), " ")
-            vM.transcription(audioPart, textWithoutLineBreak)
+            vM.transcription(audioPart)
             vM.transcription.observe(this) {
-                val intent = Intent(this, ResultActivity::class.java)
-                intent.putExtra("originalText", textWithoutLineBreak)
-                intent.putExtra("results", it)
-                startActivity(intent)
+                startResultActivity(originalText = textWithoutLineBreak, revisedText = it)
             }
         }
+    }
+
+    private fun createAudioPart(audioFile: File): MultipartBody.Part {
+        val requestBody = audioFile.asRequestBody("audio/mp3".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData("file", audioFile.name, requestBody)
+    }
+
+    private fun convertText(): String {
+        val textWithLineBreak = tvTextToRead.text.toString()
+       return textWithLineBreak.replace(System.getProperty("line.separator"), " ")
+    }
+
+    private fun startResultActivity(originalText: String, revisedText: String) {
+        val intent = Intent(this, ResultActivity::class.java)
+        intent.putExtra("originalText", originalText)
+        intent.putExtra("results", revisedText)
+        startActivity(intent)
     }
 
     private fun requestRecordAudioPermissions() {
