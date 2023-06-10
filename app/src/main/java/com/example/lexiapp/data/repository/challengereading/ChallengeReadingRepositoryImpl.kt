@@ -1,10 +1,12 @@
 package com.example.lexiapp.data.repository.challengereading
 
 import com.example.lexiapp.data.network.FireStoreService
+import com.example.lexiapp.domain.service.ChallengeReadingRepository
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class ChallengeReadingRepositoryImpl @Inject constructor(private val firestoreService: FireStoreService) {
+class ChallengeReadingRepositoryImpl @Inject constructor(private val firestoreService: FireStoreService) :
+    ChallengeReadingRepository {
 
     /*private suspend fun getFirestoreInstance() = flow {
         firestoreService.getFirestoreInstance().collect{
@@ -12,8 +14,8 @@ class ChallengeReadingRepositoryImpl @Inject constructor(private val firestoreSe
         }
     }*/
 
-    suspend fun getFirestoreOpenAICollectionDocumentReference(document: String) = flow {
-        firestoreService.getOpenAICollectionDocumentReference(document).collect{
+    override suspend fun getFirestoreOpenAICollectionDocumentReference(document: String) = flow {
+        firestoreService.getOpenAICollectionDocumentReference(document).collect {
             emit(it)
         }
     }
