@@ -116,11 +116,13 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
     }
     private fun validateLetterSelected() {
         if(vM.correctAnswerSubmitted.value) {
-            Log.v("WORD_LETTER_ACT", "${vM.basicWord.value}")
             startActivity(Intent(this, PositiveResultWhereIsTheLetterActivity::class.java))
         } else {
-            Log.v("WORD_LETTER_ACT", "${vM.basicWord.value}")
-            startActivity(Intent(this, NegativeResultWhereIsTheLetterActivity::class.java))
+            val intent = Intent(this, NegativeResultWhereIsTheLetterActivity::class.java)
+            intent.putExtra("word", vM.getWord())
+            intent.putExtra("answerPosition", vM.getSelectedPosition())
+            intent.putExtra("correctPosition", vM.getCorrectPosition())
+            startActivity(intent)
         }
         finish()
     }

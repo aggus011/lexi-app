@@ -114,4 +114,6 @@ class WhereIsTheLetterViewModel @Inject constructor(
 
     fun getWord() = _basicWord.value
 
+    fun getSelectedPosition()= _selectedPosition.value
+
 }
