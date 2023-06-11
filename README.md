@@ -17,17 +17,17 @@ Se implemento una arquitectura MVVM con inyeccion de dependencias con [Dagger-Hi
 ![ArchitectureImg](./docs/Arquitectura.drawio.png)
 #### Packages
 - configuration 
-Configuración de la base de datos local
+    * Configuración de la base de datos local
 - data
-Modelo de datos de la capa de datos, implementacion de los servicios que interactuan con los gateways o repositories y gateways o repositories
+    * Modelo de datos de la capa de datos, implementacion de los servicios que interactuan con los gateways o repositories y gateways o repositories
 - di (Dependency Injection)
-Modulos de Dagger-Hilt para la inyeccion de dependencias
+    * Modulos de Dagger-Hilt para la inyeccion de dependencias
 - domain
     - model
-    Modelos de datos de la capa de dominio
+        - Modelos de datos de la capa de dominio
     - service
-    Interfaces de servicios
+        - Interfaces de servicios
     - useCases
-    Casos de uso de las distintas actividades (Lógica de negocio)
+        - Casos de uso de las distintas actividades (Lógica de negocio)
 - ui
-Capa de vistas (Fragments, Activities y ViewModels)
+    - Capa de vistas (Fragments, Activities y ViewModels)
