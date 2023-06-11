@@ -1,4 +1,4 @@
-# Lexi App
+# Lexi App - [Landing Page](https://thelastcolor.github.io/Lexi-Web/)
 [![Android CI](https://github.com/TheLastColor/lexi-app/actions/workflows/android.yml/badge.svg)](https://github.com/TheLastColor/lexi-app/actions/workflows/android.yml)
 
 ## Manual técnico
