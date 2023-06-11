@@ -29,11 +29,11 @@
             android:name=".ui.profesionalhome.ProfesionalHomeActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.profesionalhome.resultlink.UnsuccesLinkActivity"
+            android:name=".ui.profesionalhome.resultlink.UnsuccessfulLinkActivity"
             android:exported="false">
         </activity>
         <activity
-            android:name=".ui.profesionalhome.resultlink.SuccesLinkActivity"
+            android:name=".ui.profesionalhome.resultlink.SuccessfulLinkActivity"
             android:exported="false">
         </activity>
         <activity
