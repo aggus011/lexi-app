@@ -8,17 +8,17 @@ import com.example.lexiapp.data.model.WhereIsGameResult
 import com.example.lexiapp.data.network.FireStoreServiceImpl
 import com.example.lexiapp.data.repository.BlackList
 import com.example.lexiapp.domain.model.WhereIsTheLetterResult
-import com.example.lexiapp.domain.service.LetterRepository
+import com.example.lexiapp.domain.service.LetterService
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 
-class LetterRepositoryImpl @Inject constructor(
+class LetterServiceImpl @Inject constructor(
     private val apiWordService: WordAssociationService,
     private val db: FireStoreServiceImpl,
     private val prefs: SharedPreferences
-): LetterRepository {
+): LetterService {
 
     private val userMail = prefs.getString("email", null)!!
     private val currentGame = Game.WHERE_IS_THE_LETTER_GAME

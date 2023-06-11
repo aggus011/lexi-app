@@ -5,7 +5,7 @@ import com.example.lexiapp.data.api.openaicompletions.model.OpenAICompletionsReq
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class OpenAICompletionsService @Inject constructor(
+class OpenAICompletionsGateway @Inject constructor(
     private val client: OpenAICompletionsClient
 ) {
     suspend fun getChallengeReading(prompt: String, challengeWords: List<String>) = flow {
