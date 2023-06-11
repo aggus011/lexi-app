@@ -1,19 +1,25 @@
 package com.example.lexiapp.di
 
 import android.content.SharedPreferences
-import com.example.lexiapp.data.api.LetterRepositoryImpl
-import com.example.lexiapp.data.api.openaicompletions.OpenAICompletionsRepositoryImpl
-import com.example.lexiapp.data.api.openaicompletions.OpenAICompletionsService
+import com.example.lexiapp.data.api.DifferenceServiceImpl
+import com.example.lexiapp.data.api.LetterServiceImpl
+import com.example.lexiapp.data.api.SpeechToTextServiceImpl
+import com.example.lexiapp.data.api.difference_text.DifferenceGateway
+import com.example.lexiapp.data.api.openai_audio.SpeechToTextGateway
+import com.example.lexiapp.data.api.openaicompletions.OpenAICompletionsGateway
+import com.example.lexiapp.data.api.openaicompletions.OpenAICompletionsServiceImpl
 import com.example.lexiapp.data.api.word_asociation_api.WordAssociationService
 import com.example.lexiapp.data.network.AuthenticationServiceImpl
 import com.example.lexiapp.data.network.FireStoreServiceImpl
 import com.example.lexiapp.data.network.FirebaseClient
-import com.example.lexiapp.data.repository.challengereading.ChallengeReadingRepositoryImpl
+import com.example.lexiapp.data.repository.challengereading.ChallengeReadingServiceImpl
 import com.example.lexiapp.domain.service.AuthenticationService
-import com.example.lexiapp.domain.service.ChallengeReadingRepository
+import com.example.lexiapp.domain.service.ChallengeReadingService
+import com.example.lexiapp.domain.service.DifferenceService
 import com.example.lexiapp.domain.service.FireStoreService
-import com.example.lexiapp.domain.service.LetterRepository
-import com.example.lexiapp.domain.service.OpenAICompletionsRepository
+import com.example.lexiapp.domain.service.LetterService
+import com.example.lexiapp.domain.service.OpenAICompletionsService
+import com.example.lexiapp.domain.service.SpeechToTextService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,22 +34,22 @@ object InterfaceModule {
         apiWordService: WordAssociationService,
         db: FireStoreServiceImpl,
         prefs: SharedPreferences
-    ): LetterRepository {
-        return LetterRepositoryImpl(apiWordService, db, prefs)
+    ): LetterService {
+        return LetterServiceImpl(apiWordService, db, prefs)
     }
 
     @Provides
     fun getOpenAICompletionsRepository(
-        openAICompletionsService: OpenAICompletionsService
-    ): OpenAICompletionsRepository {
-        return OpenAICompletionsRepositoryImpl(openAICompletionsService)
+        openAICompletionsService: OpenAICompletionsGateway
+    ): OpenAICompletionsService {
+        return OpenAICompletionsServiceImpl(openAICompletionsService)
     }
 
     @Provides
     fun getChallengeReadingRepository(
         firestoreService: FireStoreServiceImpl
-    ): ChallengeReadingRepository {
-        return ChallengeReadingRepositoryImpl(firestoreService)
+    ): ChallengeReadingService {
+        return ChallengeReadingServiceImpl(firestoreService)
     }
 
     @Provides
@@ -58,5 +64,19 @@ object InterfaceModule {
         firebase: FirebaseClient
     ): FireStoreService {
         return FireStoreServiceImpl(firebase)
+    }
+
+    @Provides
+    fun getSpeechToTextService(
+        apiService: SpeechToTextGateway
+    ): SpeechToTextService {
+        return SpeechToTextServiceImpl(apiService)
+    }
+
+    @Provides
+    fun getDifferenceService(
+        apiDifferenceGateway: DifferenceGateway
+    ): DifferenceService {
+        return DifferenceServiceImpl(apiDifferenceGateway)
     }
 }
