@@ -29,18 +29,12 @@
             android:name=".ui.profesionalhome.ProfesionalHomeActivity"
             android:exported="false" />
         <activity
-            android:name=".UnsuccesLinkActivity"
+            android:name=".ui.profesionalhome.resultlink.UnsuccesLinkActivity"
             android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
         </activity>
         <activity
-            android:name=".SuccesLinkActivity"
+            android:name=".ui.profesionalhome.resultlink.SuccesLinkActivity"
             android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
         </activity>
         <activity
             android:name=".ui.games.whereistheletter.result.NegativeResultWhereIsTheLetterActivity"
