@@ -30,6 +30,8 @@ class ProfesionalHomeViewModel @Inject constructor(
 
     private fun getPatient() = PatientMocks.getPatientMocks()
 
+    fun getScanOptions() = codeQRUseCases.getScanOptions()
+
     fun filter(patientSearch: String?){
         val filteredList = mutableListOf<Patient>()
         if(patientSearch!=null){

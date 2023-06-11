@@ -9,7 +9,7 @@ import com.example.lexiapp.domain.model.LoginResult
 import com.example.lexiapp.domain.useCases.LoginUseCases
 import com.example.lexiapp.domain.model.UserLogin
 import com.example.lexiapp.domain.useCases.ProfileUseCases
-import com.example.lexiapp.utils.FirebaseResult
+import com.example.lexiapp.domain.model.FirebaseResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
