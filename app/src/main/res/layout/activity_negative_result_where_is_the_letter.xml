@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.games.whereistheletter.result.NegativeResultWhereIsTheLetterActivity">
+
+    <ImageView
+        android:id="@+id/ivMiniLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/mini_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/txtDontGiveUp"
+        android:text="¡NO TE RINDAS!"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_margin="15dp"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivMiniLogo"/>
+
+    <ImageView
+        android:id="@+id/ivArm"
+        android:layout_margin="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_arm_flex"
+        app:layout_constraintStart_toStartOf="@id/txtDontGiveUp"
+        app:layout_constraintEnd_toEndOf="@id/txtDontGiveUp"
+        app:layout_constraintTop_toBottomOf="@id/txtDontGiveUp"/>
+
+    <TextView
+        android:id="@+id/txtPositiveMessage"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_margin="15dp"
+        android:text="AUNQUE NO ESTÉ DEL TODO CORRECTO,¡ANIMO! ¡YA CASI LO LOGRAS!"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@id/ivArm"
+        app:layout_constraintEnd_toEndOf="@id/ivArm"
+        app:layout_constraintTop_toBottomOf="@id/ivArm"/>
+
+    <LinearLayout
+        android:id="@+id/lyWords"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:layout_marginVertical="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtPositiveMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/lyAnswer"
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/txtAnswer"
+                android:text="TU RESPUESTA"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:gravity="end"
+                android:layout_marginEnd="15dp"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lyResultCorrect"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:text="OPCION CORRECTA"
+                android:gravity="end"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:id="@+id/txtResultCorrect"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnTryAgain"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lyWords"
+        app:layout_constraintEnd_toStartOf="@id/btnNextWord"
+        android:text="Intenta de nuevo"
+        android:layout_marginVertical="16dp"
+        app:icon="@drawable/ic_reload"
+        android:backgroundTint="@color/purple"
+        android:textColor="@color/white"
+        app:iconTint="@color/white"
+        app:iconGravity="end"
+        app:cornerRadius="10dp"
+        android:textAppearance="@style/textMaterialButton"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnNextWord"
+        android:layout_width="140dp"
+        android:layout_marginVertical="16dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/btnTryAgain"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lyWords"
+        android:text="Siguiente palabra"
+        app:icon="@drawable/ic_end_arrow"
+        app:iconGravity="end"
+        android:backgroundTint="@color/purple"
+        android:textColor="@color/white"
+        app:iconTint="@color/white"
+        app:cornerRadius="10dp"
+        android:textAppearance="@style/textMaterialButton"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnGoInit"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/btnTryAgain"
+        app:layout_constraintTop_toBottomOf="@id/btnNextWord"
+        app:layout_constraintEnd_toEndOf="@id/btnNextWord"
+        android:backgroundTint="@color/white"
+        android:text="INICIO"
+        android:textSize="18sp"
+        android:layout_marginEnd="10dp"
+        android:textColor="@color/purple"
+        app:icon="@drawable/ic_home"
+        app:strokeColor="@color/purple"
+        app:strokeWidth="2dp"
+        app:iconPadding="-15dp"
+        app:iconTint="@color/purple"
+        android:layout_marginTop="20dp"
+        app:cornerRadius="10dp"
+        android:textAppearance="@style/textMaterialButton"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.lexiapp.core.Event
-import com.example.lexiapp.data.response.LoginResult
+import com.example.lexiapp.ui.customDialog.Event
+import com.example.lexiapp.domain.model.LoginResult
 import com.example.lexiapp.domain.useCases.LoginUseCases
 import com.example.lexiapp.domain.model.UserLogin
 import com.example.lexiapp.domain.useCases.ProfileUseCases
-import com.example.lexiapp.utils.FirebaseResult
+import com.example.lexiapp.domain.model.FirebaseResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

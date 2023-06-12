@@ -1,11 +1,9 @@
 package com.example.lexiapp.domain.useCases
 
-import com.example.lexiapp.data.network.AuthenticationService
-import com.example.lexiapp.data.response.LoginResult
-import com.google.firebase.auth.FirebaseAuth
+import com.example.lexiapp.data.network.AuthenticationServiceImpl
+import com.example.lexiapp.domain.model.LoginResult
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -14,7 +12,7 @@ import org.junit.Test
 class LoginUseCasesTest {
 
     @RelaxedMockK
-    private lateinit var mAuth: AuthenticationService
+    private lateinit var mAuth: AuthenticationServiceImpl
 
     lateinit var loginUseCases: LoginUseCases
 

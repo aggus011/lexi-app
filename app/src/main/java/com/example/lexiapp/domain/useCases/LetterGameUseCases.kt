@@ -1,14 +1,13 @@
 package com.example.lexiapp.domain.useCases
 
-import com.example.lexiapp.data.api.LetterRepositoryImpl
 import com.example.lexiapp.domain.model.WhereIsTheLetterResult
-import kotlinx.coroutines.flow.collect
+import com.example.lexiapp.domain.service.LetterService
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import kotlin.random.Random
 
 class LetterGameUseCases @Inject constructor(
-    private val repository: LetterRepositoryImpl
+    private val repository: LetterService
 ) {
     private val SPANISH_LANGUAGE = "es"
     private var LENGTH_WORD = getRandomInt()
