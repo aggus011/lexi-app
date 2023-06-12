@@ -18,7 +18,7 @@ Se implemento una arquitectura MVVM con inyeccion de dependencias con [Dagger-Hi
     <img width="33%" src="./docs/Arquitectura.drawio.png"> 
 </p>
 
-### Packages
+#### Packages
 - configuration 
     * Configuración de la base de datos local
 - data
