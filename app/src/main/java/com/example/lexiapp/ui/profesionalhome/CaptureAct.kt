@@ -1,4 +1,4 @@
-package com.example.lexiapp.utils
+package com.example.lexiapp.ui.profesionalhome
 
 import com.journeyapps.barcodescanner.CaptureActivity
 

@@ -1,4 +1,4 @@
-package com.example.lexiapp.utils
+package com.example.lexiapp.domain.model
 
 sealed class FirebaseResult {
     object TaskSuccess : FirebaseResult()

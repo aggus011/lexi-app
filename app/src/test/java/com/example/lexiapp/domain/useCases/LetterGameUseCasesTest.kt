@@ -1,6 +1,6 @@
 package com.example.lexiapp.domain.useCases
 
-import com.example.lexiapp.data.api.LetterRepositoryImpl
+import com.example.lexiapp.data.api.LetterServiceImpl
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
@@ -12,7 +12,7 @@ import org.junit.Test
 class LetterGameUseCasesTest {
 
     @RelaxedMockK
-    private lateinit var repository: LetterRepositoryImpl
+    private lateinit var repository: LetterServiceImpl
 
     lateinit var letterGameUseCases: LetterGameUseCases
 
