@@ -1,13 +1,13 @@
 package com.example.lexiapp.data.api.openaicompletions
 
 import android.util.Log
-import com.example.lexiapp.domain.service.OpenAICompletionsRepository
+import com.example.lexiapp.domain.service.OpenAICompletionsService
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class OpenAICompletionsRepositoryImpl @Inject constructor(
-    private val openAICompletionsService: OpenAICompletionsService
-): OpenAICompletionsRepository {
+class OpenAICompletionsServiceImpl @Inject constructor(
+    private val openAICompletionsService: OpenAICompletionsGateway
+): OpenAICompletionsService {
     override suspend fun getChallengeReading(prompt: String, challengeWords: List<String>) = flow {
         openAICompletionsService.getChallengeReading(prompt, challengeWords)
             .collect{ challengeReading ->

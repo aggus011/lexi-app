@@ -1,69 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="lexiLogo">
         <item name="android:textSize">40sp</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textStyle">bold</item>
     </style>
+
     <style name="signUpText">
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
+
     <style name="title">
         <item name="android:textSize">30sp</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:fontFamily">@font/chau_philomene_one_regular</item>
     </style>
+
     <style name="audioDuration">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:fontFamily">@font/chau_philomene_one_regular</item>
     </style>
+
     <style name="textToRead">
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/black</item>
         <item name="fontFamily">@font/chau_philomene_one_regular</item>
     </style>
+
     <style name="subtitle">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:fontFamily">@font/chau_philomene_one_regular</item>
     </style>
+
     <style name="textMaterialButton">
         <item name="android:textSize">20sp</item>
         <item name="android:fontFamily">@font/chau_philomene_one_regular</item>
     </style>
+
     <style name="textItemsBottomNavigation">
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/chau_philomene_one_regular</item>
     </style>
+
     <style name="objectives">
         <item name="android:textSize">24sp</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:fontFamily">@font/chau_philomene_one_regular</item>
     </style>
-    <style name="circleImageViewStyle" >
+
+    <style name="circleImageViewStyle">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+
     <style name="Widget.AppCompat.BtnCorrectWord" parent="Widget.AppCompat.Button">
-        <item name="android:backgroundTint">@color/btn_word</item>
+        <item name="android:background">@drawable/btn_objectives_shape</item>
         <item name="alpha">30</item>
         <item name="android:textSize">22sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
+
     <style name="buttonWord" parent="@style/Widget.AppCompat.Button.Borderless">
-        <item name="android:textColor">@color/black</item>
-        <item name="android:background">@drawable/btn_letter_not_select</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/btn_objectives_shape</item>
+        <item name="android:backgroundTint">@color/light_purple</item>
         <item name="android:padding">10dp</item>
         <item name="android:layout_margin">6dp</item>
     </style>
+
     <style name="DatePickerTheme" parent="@style/ThemeOverlay.MaterialComponents.Dialog">
         <item name="android:datePickerMode">spinner</item>
         <item name="android:headerBackground">@color/light_purple</item>
-        <item name="colorControlNormal">@color/light_purple</item> <!-- Cambia el color de los controles normales -->
-        <item name="colorControlActivated">@color/purple</item> <!-- Cambia el color de los controles activados -->
-        <item name="android:textColorPrimary">@color/black</item> <!-- Cambia el color del texto principal -->
+        <item name="colorControlNormal">@color/light_purple
+        </item> <!-- Cambia el color de los controles normales -->
+        <item name="colorControlActivated">@color/purple
+        </item> <!-- Cambia el color de los controles activados -->
+        <item name="android:textColorPrimary">@color/black
+        </item> <!-- Cambia el color del texto principal -->
         <!-- Otros atributos personalizables -->
     </style>
 </resources>
