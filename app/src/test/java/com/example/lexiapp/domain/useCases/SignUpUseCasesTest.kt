@@ -1,8 +1,10 @@
 package com.example.lexiapp.domain.useCases
 
+import android.content.SharedPreferences
 import com.example.lexiapp.data.network.AuthenticationServiceImpl
 import com.example.lexiapp.domain.model.LoginResult
 import com.example.lexiapp.domain.model.UserSignUp
+import com.example.lexiapp.domain.service.FireStoreService
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
@@ -14,13 +16,15 @@ class SignUpUseCasesTest {
 
     @RelaxedMockK
     private lateinit var mAuth: AuthenticationServiceImpl
+    private lateinit var firestore: FireStoreService
+    private lateinit var sharedPreferences: SharedPreferences
 
     lateinit var signUpUseCases: SignUpUseCases
 
     @Before
     fun onBefore() {
         MockKAnnotations.init(this)
-        signUpUseCases = SignUpUseCases(mAuth)
+        signUpUseCases = SignUpUseCases(mAuth, firestore, sharedPreferences)
     }
 
     @Test
