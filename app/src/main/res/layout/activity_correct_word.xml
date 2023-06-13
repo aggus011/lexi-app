@@ -82,46 +82,64 @@
             android:background="@drawable/volume_high" />
     </LinearLayout>
 
-    <LinearLayout
+
+
+    <androidx.cardview.widget.CardView
         android:id="@+id/option_word"
-        android:layout_width="wrap_content"
+        android:layout_width="310dp"
         android:layout_height="wrap_content"
         android:gravity="center"
+        style="@style/buttonWord"
+        app:cardCornerRadius="10dp"
+        android:backgroundTint="@color/light_purple"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@id/btnOtherWord"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtWordToPlay">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/word_one"
             style="@style/buttonWord"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:backgroundTint="@color/purple"
             tools:text="WordOne" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/word_two"
             style="@style/buttonWord"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:backgroundTint="@color/purple"
             tools:text="WordTwo" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/word_three"
             style="@style/buttonWord"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:backgroundTint="@color/purple"
             tools:text="WordThree" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/word_four"
             style="@style/buttonWord"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:backgroundTint="@color/purple"
             tools:text="WordFour" />
 
-    </LinearLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnOtherWord"

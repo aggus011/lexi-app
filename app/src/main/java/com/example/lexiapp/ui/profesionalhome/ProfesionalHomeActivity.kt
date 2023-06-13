@@ -15,8 +15,8 @@ import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityProfesionalHomeBinding
 import com.example.lexiapp.domain.useCases.ProfileUseCases
 import com.example.lexiapp.ui.adapter.PatientAdapter
+
 import com.example.lexiapp.ui.profile.professional.ProfessionalProfileFragment
-import com.example.lexiapp.utils.CaptureAct
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import dagger.hilt.android.AndroidEntryPoint
@@ -84,14 +84,7 @@ class ProfesionalHomeActivity : AppCompatActivity() {
 
     private fun setListener() {
         binding.btnAddPatient.setOnClickListener{
-            val options = ScanOptions()
-            options
-                .setDesiredBarcodeFormats(ScanOptions.QR_CODE)
-                .setPrompt("Escaneá el QR del paciente a vincular")
-                .setBeepEnabled(true)
-                .setOrientationLocked(true)
-                .captureActivity = CaptureAct::class.java
-            barcodeLauncher.launch(options)
+            barcodeLauncher.launch(vM.getScanOptions())
         }
         binding.clIconAccount.setOnClickListener{
             val accountFragment = ProfessionalProfileFragment()

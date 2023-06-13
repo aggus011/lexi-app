@@ -44,11 +44,14 @@ class DifferenceViewModel @Inject constructor(
             when (f.type) {
                 "equal" -> diffBuilder.append(f.value)
                 "insert" -> {
-                    diffBuilder.append("<font color='#FF0000'>${f.value}</font> ")
-                    errors++
+                    diffBuilder.append("<font color='#FF0000'>${f.value}</font>")
+                    errors += countErrors(f.value)
                 }
 
-                "removed" -> diffBuilder.append("<font color='#FF0000'>---</font>")
+                "removed" -> {
+                    diffBuilder.append("<font color='#FF0000'>${f.value}</font>")
+                    errors += countErrors(f.value)
+                }
                 else -> break
             }
         }
@@ -59,8 +62,13 @@ class DifferenceViewModel @Inject constructor(
         else "Correct"
     }
 
-    private fun wordCounter(texto: String): Int {
-        val words = texto.trim().split("\\s+".toRegex())
+    private fun countErrors(errors: String): Int {
+        val amount = errors.split(" ")
+        return amount.size
+    }
+
+    private fun wordCounter(text: String): Int {
+        val words = text.trim().split("\\s+".toRegex())
         return words.size
     }
 

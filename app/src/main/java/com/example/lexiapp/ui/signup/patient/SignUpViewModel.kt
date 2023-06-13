@@ -8,7 +8,7 @@ import com.example.lexiapp.ui.customDialog.Event
 import com.example.lexiapp.domain.model.LoginResult
 import com.example.lexiapp.domain.model.UserSignUp
 import com.example.lexiapp.domain.useCases.SignUpUseCases
-import com.example.lexiapp.utils.FirebaseResult
+import com.example.lexiapp.domain.model.FirebaseResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
