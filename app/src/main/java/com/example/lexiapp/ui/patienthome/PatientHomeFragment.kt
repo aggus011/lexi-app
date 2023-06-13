@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
+import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieProperty
 import com.airbnb.lottie.model.KeyPath
 import com.example.lexiapp.R
@@ -25,11 +26,11 @@ import com.google.android.material.button.MaterialButton
 class PatientHomeFragment : Fragment() {
     private var _binding: FragmentPatientHomeBinding? = null
     private val binding get() = _binding!!
-    private lateinit var ibGameCorrectWord: ImageButton
-    private lateinit var ibGameLetsRead: ImageButton
-    private lateinit var ibGameWhereIsTheLetter: ImageButton
-    private lateinit var ibGameIsItSoCalled: ImageButton
-    private lateinit var btnTextScanner: MaterialButton
+    private lateinit var ibGameCorrectWord: LottieAnimationView
+    private lateinit var ibGameLetsRead: LottieAnimationView
+    private lateinit var ibGameWhereIsTheLetter: LottieAnimationView
+    private lateinit var ibGameIsItSoCalled: LottieAnimationView
+    private lateinit var btnTextScanner: LottieAnimationView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,18 +43,18 @@ class PatientHomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-       /* getViews()
+        getViews()
         setInputImageDialog()
-        setGamesListeners()*/
+        setGamesListeners()
     }
 
-    /*private fun getViews() {
-        ibGameCorrectWord = binding.gameCorrectWord
-        ibGameLetsRead = binding.gameLetsRead
-        ibGameWhereIsTheLetter = binding.gameWhereIsTheLetter
-        ibGameIsItSoCalled = binding.gameIsItSoCalled
-        btnTextScanner = binding.btnTextScanner
-    }*/
+    private fun getViews() {
+        ibGameCorrectWord = binding.animationCorrectWord
+        ibGameLetsRead = binding.animationLetsRead
+        ibGameWhereIsTheLetter = binding.animationWhereIsTheLetter
+        ibGameIsItSoCalled = binding.animationIsItSoCalled
+        btnTextScanner = binding.animationTextScanner
+    }
 
     private fun setInputImageDialog() {
         val popUpMenu = PopupMenu(requireContext(), btnTextScanner)
@@ -62,7 +63,7 @@ class PatientHomeFragment : Fragment() {
 
         setBtnScanListener(popUpMenu)
 
-        popUpMenu.setOnMenuItemClickListener {menuItem ->
+        popUpMenu.setOnMenuItemClickListener { menuItem ->
             goToScannerActivity(menuItem.itemId)
             true
         }
@@ -71,7 +72,7 @@ class PatientHomeFragment : Fragment() {
     @SuppressLint("DiscouragedPrivateApi")
     private fun setBtnScanListener(popUpMenu: PopupMenu) {
         btnTextScanner.setOnClickListener {
-            try{
+            try {
                 val popup = PopupMenu::class.java.getDeclaredField("mPopup")
                 popup.isAccessible = true
                 val menu = popup.get(popUpMenu)
@@ -79,9 +80,9 @@ class PatientHomeFragment : Fragment() {
                     .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
                     .invoke(menu, true)
 
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 Log.e("MainError", e.toString())
-            }finally {
+            } finally {
                 popUpMenu.show()
             }
         }
@@ -90,7 +91,7 @@ class PatientHomeFragment : Fragment() {
     private fun goToScannerActivity(itemId: Int) {
         val intent = Intent(activity, TextScannerActivity::class.java)
 
-        when(itemId) {
+        when (itemId) {
             R.id.camera -> intent.putExtra("InputImage", 1)
             R.id.gallery -> intent.putExtra("InputImage", 2)
         }

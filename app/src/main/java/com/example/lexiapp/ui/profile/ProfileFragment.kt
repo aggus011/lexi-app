@@ -61,7 +61,7 @@ class ProfileFragment : Fragment() {
         btnEditProfile()
         btnVinculate()
         //once the linking functionality is implemented this listener must be removed
-        binding.ivMiniLogo.setOnClickListener { startActivity(Intent(activity, ProfesionalHomeActivity::class.java)) }
+        binding.animationLogo.setOnClickListener { startActivity(Intent(activity, ProfesionalHomeActivity::class.java)) }
     }
 
     private fun btnEditProfile() {

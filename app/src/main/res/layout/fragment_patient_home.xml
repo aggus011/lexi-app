@@ -1,182 +1,286 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.patienthome.PatientHomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/ivMiniLogo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/mini_logo"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationLogo"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/app_name"/>
+            app:lottie_autoPlay="true"
+            app:lottie_colorFilter="@color/purple"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/amoeba" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/logo"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.motion.widget.MotionLayout
             android:id="@+id/clGames"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/ivMiniLogo"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layoutDescription="@xml/fragment_patient_home_xml_clgames_scene"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/animationLogo">
 
             <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/animationGreen"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:id="@+id/animationCorrectWord"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                app:layout_constraintEnd_toStartOf="@id/animationLetsRead"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_colorFilter="@color/persian_pink"
+                app:lottie_loop="true"
                 app:lottie_rawRes="@raw/amoeba"
+                app:lottie_speed="1.5" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:alpha="0.85"
+                android:contentDescription="@string/game_correct_word"
+                android:src="@drawable/correct_word1"
+                app:layout_constraintBottom_toBottomOf="@id/animationCorrectWord"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/animationCorrectWord" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationLetsRead"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/animationCorrectWord"
+                app:layout_constraintTop_toTopOf="parent"
                 app:lottie_autoPlay="true"
                 app:lottie_colorFilter="@color/green"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/animationPink"
-                app:lottie_loop="true"/>
-
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/animationPink"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                app:lottie_loop="true"
                 app:lottie_rawRes="@raw/amoeba"
-                app:lottie_autoPlay="true"
-                android:layout_marginTop="30dp"
-                app:lottie_colorFilter="@color/persian_pink"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/animationGreen"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:lottie_loop="true"/>
-
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/animationYellow"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:lottie_rawRes="@raw/amoeba"
-                app:lottie_autoPlay="true"
-                android:layout_marginTop="30dp"
-                app:lottie_colorFilter="@color/yellow"
-                app:layout_constraintTop_toBottomOf="@+id/animationGreen"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/animationPink"
-                app:lottie_loop="true"/>
-            <!--
-            <ImageButton
-                android:id="@+id/gameCorrectWord"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/puzzle_top_left"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/gameWhereIsTheLetter"
-                android:backgroundTint="@color/transparent"
-                android:contentDescription="@string/game_correct_word" />
+                app:lottie_speed="1.2" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/correct_word"
-                app:layout_constraintEnd_toEndOf="@id/gameCorrectWord"
-                app:layout_constraintStart_toStartOf="@id/gameCorrectWord"
-                app:layout_constraintTop_toTopOf="@id/gameCorrectWord"
-                app:layout_constraintBottom_toBottomOf="@id/gameCorrectWord"
-                android:layout_marginBottom="50dp"
+                android:id="@+id/imageView2"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:alpha="0.85"
                 android:contentDescription="@string/game_correct_word"
-                />
-
-            <ImageButton
-                android:id="@+id/gameLetsRead"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/puzzle_top_right"
-                app:layout_constraintStart_toEndOf="@id/gameCorrectWord"
+                android:src="@drawable/lets_read1"
+                app:layout_constraintBottom_toBottomOf="@id/animationLetsRead"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/gameIsItSoCalled"
-                android:backgroundTint="@color/transparent"
-                android:contentDescription="@string/game_lets_read"/>
+                app:layout_constraintTop_toTopOf="@id/animationLetsRead" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/lets_read"
-                app:layout_constraintEnd_toEndOf="@id/gameLetsRead"
-                app:layout_constraintStart_toStartOf="@id/gameLetsRead"
-                app:layout_constraintTop_toTopOf="@id/gameLetsRead"
-                app:layout_constraintBottom_toBottomOf="@id/gameLetsRead"
-                android:layout_marginStart="30dp"
-                android:layout_marginBottom="20dp"
-                android:contentDescription="@string/game_lets_read"/>
-
-            <ImageButton
-                android:id="@+id/gameWhereIsTheLetter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/puzzle_bottom_left"
-                app:layout_constraintTop_toBottomOf="@id/gameCorrectWord"
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationWhereIsTheLetter"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/animationIsItSoCalled"
                 app:layout_constraintStart_toStartOf="parent"
-                android:backgroundTint="@color/transparent"
-                android:contentDescription="@string/game_where_is_the_letter"/>
+                app:layout_constraintTop_toBottomOf="@id/animationCorrectWord"
+                app:lottie_autoPlay="true"
+                app:lottie_colorFilter="@color/yellow"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/amoeba"
+                app:lottie_speed="1.7" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/where_is_the_letter"
-                app:layout_constraintStart_toStartOf="@id/gameWhereIsTheLetter"
-                app:layout_constraintBottom_toBottomOf="@id/gameWhereIsTheLetter"
-                app:layout_constraintTop_toTopOf="@+id/gameWhereIsTheLetter"
-                android:layout_marginTop="50dp"
-                android:contentDescription="@string/game_where_is_the_letter"/>
+                android:id="@+id/imageView3"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:alpha="0.85"
+                android:contentDescription="@string/game_correct_word"
+                android:src="@drawable/where_is_the_letter1"
+                app:layout_constraintBottom_toBottomOf="@id/animationWhereIsTheLetter"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/animationWhereIsTheLetter" />
 
-            <ImageButton
-                android:id="@+id/gameIsItSoCalled"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/puzzle_bottom_right"
-                app:layout_constraintTop_toBottomOf="@id/gameLetsRead"
-                app:layout_constraintStart_toEndOf="@id/gameWhereIsTheLetter"
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationIsItSoCalled"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:backgroundTint="@color/transparent"
-                android:contentDescription="@string/game_is_it_so_called"/>
+                app:layout_constraintStart_toEndOf="@+id/animationWhereIsTheLetter"
+                app:layout_constraintTop_toBottomOf="@id/animationLetsRead"
+                app:lottie_autoPlay="true"
+                app:lottie_colorFilter="@color/tomato"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/amoeba" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/is_it_so_called"
-                app:layout_constraintEnd_toEndOf="@id/gameIsItSoCalled"
-                app:layout_constraintStart_toStartOf="@id/gameIsItSoCalled"
-                app:layout_constraintTop_toTopOf="@id/gameIsItSoCalled"
-                app:layout_constraintBottom_toBottomOf="@id/gameIsItSoCalled"
-                android:layout_marginTop="40dp"
-                android:contentDescription="@string/game_is_it_so_called"/>
--->
+                android:id="@+id/imageView4"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:alpha="0.85"
+                android:contentDescription="@string/game_correct_word"
+                android:src="@drawable/is_it_so_called1"
+                app:layout_constraintBottom_toBottomOf="@id/animationIsItSoCalled"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/animationIsItSoCalled" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationTextScanner"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_colorFilter="@color/turquoise"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/amoeba" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnTextScanner"
-            android:layout_width="340dp"
-            android:layout_height="70dp"
-            android:text="@string/read_my_text"
-            app:cornerRadius="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/clGames"
-            android:backgroundTint="@color/light_purple"
-            android:textColor="@color/black"
-            app:icon="@drawable/ic_text_scanner"
-            app:iconTint="@color/black"
-            app:iconSize="35dp"
-            app:iconPadding="-20dp"
-            app:iconGravity="end"
-            android:textAppearance="@style/title"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="10dp"/>
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:alpha="0.85"
+                android:src="@drawable/ic_text_scanner"
+                app:layout_constraintBottom_toBottomOf="@id/animationTextScanner"
+                app:layout_constraintEnd_toEndOf="@id/animationTextScanner"
+                app:layout_constraintStart_toStartOf="@id/animationTextScanner"
+                app:layout_constraintTop_toTopOf="@id/animationTextScanner" />
+
+        </androidx.constraintlayout.motion.widget.MotionLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </FrameLayout>
+
+
+    <!--
+    <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnTextScanner"
+            android:layout_width="340dp"
+            android:layout_height="70dp"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="@color/light_purple"
+            android:text="@string/read_my_text"
+            android:textAppearance="@style/title"
+            android:textColor="@color/black"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/ic_text_scanner"
+            app:iconGravity="end"
+            app:iconPadding="-20dp"
+            app:iconSize="35dp"
+            app:iconTint="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/clGames" />
+
+
+
+                <ImageButton
+                    android:id="@+id/gameCorrectWord"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/puzzle_top_left"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/gameWhereIsTheLetter"
+                    android:backgroundTint="@color/transparent"
+                    android:contentDescription="@string/game_correct_word" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/correct_word"
+                    app:layout_constraintEnd_toEndOf="@id/gameCorrectWord"
+                    app:layout_constraintStart_toStartOf="@id/gameCorrectWord"
+                    app:layout_constraintTop_toTopOf="@id/gameCorrectWord"
+                    app:layout_constraintBottom_toBottomOf="@id/gameCorrectWord"
+                    android:layout_marginBottom="50dp"
+                    android:contentDescription="@string/game_correct_word"
+                    />
+
+                <ImageButton
+                    android:id="@+id/gameLetsRead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/puzzle_top_right"
+                    app:layout_constraintStart_toEndOf="@id/gameCorrectWord"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/gameIsItSoCalled"
+                    android:backgroundTint="@color/transparent"
+                    android:contentDescription="@string/game_lets_read"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/lets_read"
+                    app:layout_constraintEnd_toEndOf="@id/gameLetsRead"
+                    app:layout_constraintStart_toStartOf="@id/gameLetsRead"
+                    app:layout_constraintTop_toTopOf="@id/gameLetsRead"
+                    app:layout_constraintBottom_toBottomOf="@id/gameLetsRead"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginBottom="20dp"
+                    android:contentDescription="@string/game_lets_read"/>
+
+                <ImageButton
+                    android:id="@+id/gameWhereIsTheLetter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/puzzle_bottom_left"
+                    app:layout_constraintTop_toBottomOf="@id/gameCorrectWord"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:backgroundTint="@color/transparent"
+                    android:contentDescription="@string/game_where_is_the_letter"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/where_is_the_letter"
+                    app:layout_constraintStart_toStartOf="@id/gameWhereIsTheLetter"
+                    app:layout_constraintBottom_toBottomOf="@id/gameWhereIsTheLetter"
+                    app:layout_constraintTop_toTopOf="@+id/gameWhereIsTheLetter"
+                    android:layout_marginTop="50dp"
+                    android:contentDescription="@string/game_where_is_the_letter"/>
+
+                <ImageButton
+                    android:id="@+id/gameIsItSoCalled"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/puzzle_bottom_right"
+                    app:layout_constraintTop_toBottomOf="@id/gameLetsRead"
+                    app:layout_constraintStart_toEndOf="@id/gameWhereIsTheLetter"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:backgroundTint="@color/transparent"
+                    android:contentDescription="@string/game_is_it_so_called"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/is_it_so_called"
+                    app:layout_constraintEnd_toEndOf="@id/gameIsItSoCalled"
+                    app:layout_constraintStart_toStartOf="@id/gameIsItSoCalled"
+                    app:layout_constraintTop_toTopOf="@id/gameIsItSoCalled"
+                    app:layout_constraintBottom_toBottomOf="@id/gameIsItSoCalled"
+                    android:layout_marginTop="40dp"
+                    android:contentDescription="@string/game_is_it_so_called"/>
+    -->

@@ -51,14 +51,15 @@ class ResultActivity() : AppCompatActivity() {
 
     private fun setButtonHome() {
         homeBtn.setOnClickListener {
-            goToFragment(PatientHomeFragment())
+            //goToFragment(PatientHomeFragment())
+            finish()
         }
     }
 
     private fun goToFragment(destinationFragment: Fragment) {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.flMainActivity, destinationFragment)
+            .add(R.id.flMainActivity, destinationFragment)
             .commit()
     }
 
