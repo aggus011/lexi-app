@@ -16,7 +16,9 @@ class SignUpUseCasesTest {
 
     @RelaxedMockK
     private lateinit var mAuth: AuthenticationServiceImpl
+    @RelaxedMockK
     private lateinit var firestore: FireStoreService
+    @RelaxedMockK
     private lateinit var sharedPreferences: SharedPreferences
 
     lateinit var signUpUseCases: SignUpUseCases
