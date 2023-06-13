@@ -1,4 +1,4 @@
-package com.example.lexiapp.ui.signup
+package com.example.lexiapp.ui.signup.patient
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,6 +12,7 @@ import com.example.lexiapp.domain.model.FirebaseResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,10 +33,15 @@ class SignUpViewModel @Inject constructor(private val signUpUseCases: SignUpUseC
             //_viewState.value = SignInViewState(isLoading = true)
             when(signUpUseCases(user)) {
                 LoginResult.Error -> {
-                    _showErrorDialog.value = true
+                    withContext(Dispatchers.Main){
+                        _showErrorDialog.value = true
+                    }
                 }
                 LoginResult.Success -> {
-                    _navigateToLogin.value = Event(true)
+                    withContext(Dispatchers.Main){
+                        signUpUseCases.savePatientAccount(user)
+                        _navigateToLogin.value = Event(true)
+                    }
                 }
             }
             //_viewState.value = SignInViewState(isLoading = false)
