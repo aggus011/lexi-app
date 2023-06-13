@@ -1,4 +1,4 @@
-package com.example.lexiapp.ui.signup
+package com.example.lexiapp.ui.signup.patient
 
 import android.content.Context
 import android.content.Intent

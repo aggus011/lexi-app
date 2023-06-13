@@ -13,4 +13,15 @@
     <color name="profile_background">#C4C4C4</color>
     <color name="primary">#035AA6</color>
     <color name="green">#17FF20</color>
+
+    <color name="icon_profile1">#DECDEE</color>
+    <color name="icon_profile2">#B983EB</color>
+    <color name="icon_profile3">#EBCB9B</color>
+    <color name="icon_profile4">#6CEB98</color>
+    <color name="icon_profile5">#E6EB6C</color>
+    <color name="icon_profile6">#78EBE1</color>
+    <color name="icon_profile7">#851578</color>
+    <color name="icon_profile8">#B854AC</color>
+    <color name="icon_profile9">#645C6B</color>
+    <color name="icon_profile10">#9167B8</color>
 </resources>

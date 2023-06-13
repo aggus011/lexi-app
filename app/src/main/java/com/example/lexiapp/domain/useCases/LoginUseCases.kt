@@ -21,10 +21,10 @@ class LoginUseCases @Inject constructor(
     private fun verifyEmail(email: String): Boolean =
         PatternsCompat.EMAIL_ADDRESS.matcher(email).matches()
 
-    private fun verifyPassword(pass: String): Boolean = pass.length >= PASSWORD_MIN_LENGHT
+    private fun verifyPassword(pass: String): Boolean = pass.length >= PASSWORD_MIN_LENGTH
 
     companion object {
-        private const val PASSWORD_MIN_LENGHT = 6
+        private const val PASSWORD_MIN_LENGTH = 6
     }
 }
 
