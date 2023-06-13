@@ -1,5 +1,6 @@
 package com.example.lexiapp.ui.login
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +12,10 @@ import com.example.lexiapp.domain.model.UserLogin
 import com.example.lexiapp.domain.useCases.ProfileUseCases
 import com.example.lexiapp.domain.model.FirebaseResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,7 +24,8 @@ class LoginViewModel @Inject constructor(
     private val profileUseCases: ProfileUseCases
 ) : ViewModel() {
 
-    val authResult = MutableLiveData<FirebaseResult>()
+    private val _recoverResult = MutableLiveData<Boolean>()
+    val recoverResult: LiveData<Boolean> = _recoverResult
 
     private val _navigateToHome = MutableLiveData<Event<Boolean>>()
     val navigateToHome: LiveData<Event<Boolean>>
@@ -47,6 +52,19 @@ class LoginViewModel @Inject constructor(
             }
             //_viewState.value = LoginViewState(isLoading = false)
         }
+    }
+
+    fun sendRecoverEmail(email: String){
+        viewModelScope.launch {
+            /*loginUseCases.sendRecoverEmail(email).onEach {
+                _recoverResult.value = it
+            }.launchIn(viewModelScope)*/
+            /*loginUseCases.sendRecoverEmail(email).collect{
+                _recoverResult.value = it
+            }*/
+            _recoverResult.value=loginUseCases.sendRecoverEmail(email)
+        }
+
     }
 }
 

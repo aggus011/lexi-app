@@ -15,6 +15,7 @@ import com.example.lexiapp.ui.MainActivity
 import com.example.lexiapp.domain.model.UserLogin
 import com.example.lexiapp.ui.signup.SignUpActivity
 import com.example.lexiapp.ui.customDialog.show
+import com.example.lexiapp.ui.login.changepassword.ChangePasswordDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -77,10 +78,14 @@ class LoginActivity : AppCompatActivity() {
         binding.btnLogin.setOnClickListener {
             if (binding.etMail.editText?.text!!.isNotEmpty() && binding.etPassword.editText?.text!!.isNotEmpty()) {
                 viewModel.loginUser(
-                    binding.etMail.editText?.text!!.toString(),
+                    binding.etMail.editText?.text!!.toString().trim(),
                     binding.etPassword.editText?.text!!.toString()
                 )
             }
+        }
+        binding.tvForgetPassword.setOnClickListener {
+            ChangePasswordDialogFragment()
+                .show(supportFragmentManager, "change_password_dialog")
         }
         setUpRegister()
     }
