@@ -1,15 +1,19 @@
 package com.example.lexiapp.domain.useCases
 
+import android.content.SharedPreferences
 import androidx.core.util.PatternsCompat
 import com.example.lexiapp.domain.model.LoginResult
 import com.example.lexiapp.domain.model.UserSignUp
 import com.example.lexiapp.domain.service.AuthenticationService
+import com.example.lexiapp.domain.service.FireStoreService
 import javax.inject.Inject
 
 class SignUpUseCases @Inject constructor(
     private val authenticationServiceImpl: AuthenticationService,
-    //private val profileUseCases: ProfileUseCases
+    private val fireStoreServiceImpl: FireStoreService,
+    private val sharedPrefs: SharedPreferences
 ) {
+    private val editor=sharedPrefs.edit()
 
     suspend operator fun invoke(user: UserSignUp): LoginResult {
         if (!verifyEmail(user.email) || user.email != user.emailConfirm) {
@@ -29,7 +33,7 @@ class SignUpUseCases @Inject constructor(
     }
 
     private fun verifyPassword(pass: String): Boolean =
-        pass.length >= PASSWORD_MIN_LENGHT
+        pass.length >= PASSWORD_MIN_LENGTH
 
     fun validateInputs(
         name: String,
@@ -44,7 +48,14 @@ class SignUpUseCases @Inject constructor(
         return true
     }
 
+    suspend fun savePatientAccount(user: UserSignUp){
+        fireStoreServiceImpl.saveAccount(user.mapToUser())
+        editor.putString("email", user.email).apply()
+        editor.putString("user_type", "patient").apply()
+        editor.putString("user_name", user.name).apply()
+    }
+
     companion object {
-        private const val PASSWORD_MIN_LENGHT = 6
+        private const val PASSWORD_MIN_LENGTH = 6
     }
 }

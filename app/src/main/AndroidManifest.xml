@@ -3,19 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
 
     <application
-        android:allowBackup="false"
         android:name=".LexiApp"
+        android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:hardwareAccelerated="true"
@@ -26,16 +28,27 @@
         android:theme="@style/Theme.LexiApp"
         tools:targetApi="31">
         <activity
+            android:name=".ui.patienthome.HomePatientActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ui.role.RoleActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ui.verifymedicalregistration.VerifyMedicalRegistrationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.signup.professional.ProfessionalSignUpActivity"
+            android:exported="false">
+        </activity>
+        <activity
             android:name=".ui.profesionalhome.ProfesionalHomeActivity"
             android:exported="false" />
         <activity
             android:name=".ui.profile.edit.EditProfileActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".ui.profile.link.LinkPatientActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".ui.textscanner.TextScannerActivity"
             android:exported="false" />
@@ -58,28 +71,28 @@
             android:name=".ui.login.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.signup.SignUpActivity"
+            android:name=".ui.signup.patient.SignUpActivity"
             android:exported="false" />
-        <activity android:name=".ui.games.letsread.ResultActivity"
-            android:exported="false"/>
         <activity
-            android:name=".ui.splash.SplashActivity"
-                  android:exported="true">
+            android:name=".ui.games.letsread.ResultActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-         </activity>
-        <activity
-            android:name=".ui.MainActivity"
-            android:exported="false" />
+
+        </activity>
         <activity
             android:name=".utils.CaptureAct"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
-            android:theme="@style/zxing_CaptureTheme"
-            android:exported="false" />
+            android:theme="@style/zxing_CaptureTheme" />
         <activity
             android:name="com.canhub.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />

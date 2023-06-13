@@ -53,4 +53,13 @@
     <string name="home">INICIO</string>
     <string name="phrase_positive_result">¡LO HICISTE MUY BIEN!</string>
     <string name="choose_what_scan">Elegí qué escanear</string>
+    <string name="medical_registration">Matrícula</string>
+    <string name="surname">Apellido</string>
+    <string name="checking_your_account">Verificando tu cuenta. Este proceso de validacion puede demorar hasta 48 horas</string>
+    <string name="update">Actualizar</string>
+    <string name="account_verified">Cuenta verificada con exito, bienvenido a LEXI</string>
+    <string name="continue_to_home">Continuar</string>
+    <string name="signup_professional">Registro Profesional</string>
+    <string name="check_your_register">No pudimos verificar tus datos, por favor revisalos</string>
+    <string name="check">Revisar</string>
 </resources>

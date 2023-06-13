@@ -2,6 +2,8 @@ package com.example.lexiapp.domain.useCases
 
 import android.content.SharedPreferences
 import android.util.Log
+import com.example.lexiapp.R
+import com.example.lexiapp.domain.exceptions.UserNotFoundException
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.model.UserLogin
 import com.example.lexiapp.domain.model.UserSignUp
@@ -25,13 +27,32 @@ class ProfileUseCases @Inject constructor(
     }
 
     private suspend fun saveLoginUser(user: User) {
-        val netUser = fireStoreService.getUser(user.email)
-        Log.v("USER_NAME_SAVE_PROFILE_USE_CASES", "${netUser.userName} // ${user.email}")
-        Log.v("name_profileUC", "${netUser.userName}")
-        editor.putString("email", user.email).apply()
-        editor.putString("user_name", netUser.userName).apply()
-        editor.putString("uri_image", netUser.uri).apply()
+        try{
+            val patient = fireStoreService.getUser(user.email)
+            val professional = fireStoreService.getProfessional(user.email)
+            if(patient.userName != null){
+                Log.v("USER_NAME_SAVE_PROFILE_USE_CASES", "${patient.userName} // ${user.email}")
+                Log.v("name_profileUC", "${patient.userName}")
+                editor.putString("email", user.email).apply()
+                editor.putString("user_name", patient.userName).apply()
+                editor.putString("uri_image", patient.uri).apply()
+                editor.putString("user_type", "patient").apply()
+            }
+            if(professional.user?.userName != null){
+                editor.putString("email", professional.user.email).apply()
+                editor.putString("user_name", professional.user.userName).apply()
+                editor.putString("user_type", "professional").apply()
+                editor.putInt("professional_account_state", if(professional.isVerifiedAccount) 2 else 1)
+            }
+        }catch (e: UserNotFoundException){
+            Log.v(TAG, "User not found in collections")
+        }
     }
+
+    fun getUserType() = prefs.getString("user_type", null)
+
+    fun getProfessionalVerificationState() = prefs.getInt("professional_account_state", 0)
+
 
     private suspend fun saveSignUpUser(user: User) {
         fireStoreService.saveAccount(user)
@@ -84,10 +105,48 @@ class ProfileUseCases @Inject constructor(
         )
     }
 
+    fun getColorRandomForIconProfile(): Int {
+        val colors = listOf(
+            R.color.icon_profile1,
+            R.color.icon_profile2,
+            R.color.icon_profile3,
+            R.color.icon_profile4,
+            R.color.icon_profile5,
+            R.color.icon_profile6,
+            R.color.icon_profile7,
+            R.color.icon_profile8,
+            R.color.icon_profile9,
+            R.color.icon_profile10
+        )
+
+        return colors.random()
+    }
+
+
+    fun userInitials(name: String? = prefs.getString("user_name", null)): String{
+        val words = name?.split(" ")
+        val initials = StringBuilder()
+
+        words?.let {
+            for(word in it){
+                val initial = word.firstOrNull()
+                if(initial != null){
+                    initials.append(initial)
+                }
+            }
+        }
+
+        return initials.toString()
+    }
+
     fun getEmail()= prefs.getString("email", null)
 
     fun haveAccount()= getEmail()!=null
 
     fun closeSesion()=editor.clear().apply()
+
+    companion object{
+        private const val TAG = "ProfileUseCases"
+    }
 
 }
