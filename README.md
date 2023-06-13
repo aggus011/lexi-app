@@ -15,7 +15,7 @@
 Se implemento una arquitectura MVVM con inyeccion de dependencias con [Dagger-Hilt](https://dagger.dev/hilt/)
 
 <p align="center" width="100%">
-    <img width="33%" src="./docs/Arquitectura.drawio.png"> 
+    <img src="./docs/Arquitectura.drawio.png"> 
 </p>
 
 #### Packages
