@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.FragmentObjectivesBinding
 import com.example.lexiapp.ui.adapter.ObjectivesAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ObjectivesFragment : Fragment() {
     private var _binding: FragmentObjectivesBinding? = null
     private val binding get() = _binding!!
@@ -52,7 +54,7 @@ class ObjectivesFragment : Fragment() {
             binding.txtDaysLeft.text = resources.getQuantityString(R.plurals.days_left, daysLeft, daysLeft)
         }
 
-        objectivesViewModel.loadObjectives()
+        //objectivesViewModel.loadObjectives()
     }
 
     override fun onDestroyView() {

@@ -12,12 +12,14 @@ import com.example.lexiapp.data.api.word_asociation_api.WordAssociationService
 import com.example.lexiapp.data.network.AuthenticationServiceImpl
 import com.example.lexiapp.data.network.FireStoreServiceImpl
 import com.example.lexiapp.data.network.FirebaseClient
+import com.example.lexiapp.data.network.ObjectivesServiceImpl
 import com.example.lexiapp.data.repository.challengereading.ChallengeReadingServiceImpl
 import com.example.lexiapp.domain.service.AuthenticationService
 import com.example.lexiapp.domain.service.ChallengeReadingService
 import com.example.lexiapp.domain.service.DifferenceService
 import com.example.lexiapp.domain.service.FireStoreService
 import com.example.lexiapp.domain.service.LetterService
+import com.example.lexiapp.domain.service.ObjectivesService
 import com.example.lexiapp.domain.service.OpenAICompletionsService
 import com.example.lexiapp.domain.service.SpeechToTextService
 import dagger.Module
@@ -78,5 +80,10 @@ object InterfaceModule {
         apiDifferenceGateway: DifferenceGateway
     ): DifferenceService {
         return DifferenceServiceImpl(apiDifferenceGateway)
+    }
+
+    @Provides
+    fun getObjectiveService(): ObjectivesService {
+        return ObjectivesServiceImpl()
     }
 }
