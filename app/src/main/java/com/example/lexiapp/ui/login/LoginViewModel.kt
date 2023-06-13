@@ -56,13 +56,13 @@ class LoginViewModel @Inject constructor(
 
     fun sendRecoverEmail(email: String){
         viewModelScope.launch {
-            /*loginUseCases.sendRecoverEmail(email).onEach {
+            loginUseCases.sendRecoverEmail(email).onEach {
                 _recoverResult.value = it
-            }.launchIn(viewModelScope)*/
+            }.launchIn(viewModelScope)
             /*loginUseCases.sendRecoverEmail(email).collect{
                 _recoverResult.value = it
             }*/
-            _recoverResult.value=loginUseCases.sendRecoverEmail(email)
+            /*_recoverResult.value=loginUseCases.sendRecoverEmail(email)*/
         }
 
     }

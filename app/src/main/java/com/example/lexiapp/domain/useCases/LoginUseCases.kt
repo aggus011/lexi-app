@@ -30,20 +30,16 @@ class LoginUseCases @Inject constructor(
 
     private fun verifyPassword(pass: String): Boolean = pass.length >= PASSWORD_MIN_LENGHT
 
-    suspend fun sendRecoverEmail(email: String): Boolean {
-        return try {
+    suspend fun sendRecoverEmail(email: String)=flow {
+        try {
             var isSuccess = false
             authenticationServiceImpl.sendRecoverEmail(email)
-                .addOnCompleteListener{
-                    if (it.isSuccessful){
-                        Log.v("TASK_SUCCESS", "$it")
-                        isSuccess=true
-                    }
-                }.await()
-            isSuccess
+                .addOnCompleteListener{ isSuccess=it.isSuccessful }
+                .await()
+            emit(isSuccess)
         } catch (e: Exception) {
             Log.v("MY EXCEPTION", "CAUSA: ${e.cause} //// MESSAGE: ${e.message} //// TRACE: ${e.stackTrace}")
-            false
+            emit(false)
         }
     }
 
