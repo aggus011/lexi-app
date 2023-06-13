@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/profile_background"
+    tools:context=".ui.profesionalhome.detailpatient.DetailPatientFragment">
+
+    <ImageView
+        android:id="@+id/ivMiniLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/mini_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnTrash"
+        app:backgroundTint="@color/light_purple"
+        app:srcCompat="@drawable/trash_icon"
+        app:tint="@color/white"
+        android:layout_margin="6dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabSize="mini"/>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivPatient"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_margin="10dp"
+        android:elevation="6dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_user_photo"
+        app:layout_constraintStart_toStartOf="@id/txtName"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/txtName"
+        app:shapeAppearanceOverlay="@style/circleImageViewStyle" />
+
+    <TextView
+        android:id="@+id/txtName"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/name"
+        android:textSize="30sp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/ivPatient"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="10dp"/>
+
+    <TextView
+        android:id="@+id/txtEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/email"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/txtName"
+        app:layout_constraintStart_toStartOf="@id/txtName"
+        app:layout_constraintEnd_toEndOf="@id/txtName"
+        android:layout_marginStart="4dp"/>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="6dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginTop="20dp"
+        app:cardCornerRadius="5dp"
+        app:layout_constraintTop_toBottomOf="@id/txtEmail"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/txtNameGame"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="28dp"
+                android:text="DÓNDE ESTÁ LA LETRA"/>
+
+            <TextView
+                android:layout_marginTop="5dp"
+                android:id="@+id/txtCountWords"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtNameGame"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="Candidad de palabras jugadas: "/>
+            <TextView
+                android:id="@+id/txtValueCountWords"
+                app:layout_constraintStart_toEndOf="@id/txtCountWords"
+                app:layout_constraintTop_toTopOf="@id/txtCountWords"
+                app:layout_constraintBottom_toBottomOf="@id/txtCountWords"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/txtLettersDificults"
+                android:layout_marginTop="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtValueCountWords"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="Letras con mas equivocación: "/>
+            <TextView
+                android:id="@+id/txtValueLettersDificults"
+                app:layout_constraintStart_toEndOf="@id/txtLettersDificults"
+                app:layout_constraintTop_toTopOf="@id/txtLettersDificults"
+                app:layout_constraintBottom_toBottomOf="@id/txtLettersDificults"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/txtPercentError"
+                android:layout_marginTop="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtValueLettersDificults"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="Porcentaje de error: "/>
+            <TextView
+                android:id="@+id/txtValuePercentError"
+                app:layout_constraintStart_toEndOf="@id/txtPercentError"
+                app:layout_constraintTop_toTopOf="@id/txtPercentError"
+                app:layout_constraintBottom_toBottomOf="@id/txtPercentError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/txtLastGame"
+                android:layout_marginTop="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtValuePercentError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="Ultimo juego (Resultados y fecha/hora): "/>
+            <TextView
+                android:id="@+id/txtValueLastGame"
+                app:layout_constraintStart_toEndOf="@id/txtLastGame"
+                app:layout_constraintTop_toTopOf="@id/txtLastGame"
+                app:layout_constraintBottom_toBottomOf="@id/txtLastGame"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

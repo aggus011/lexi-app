@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import com.example.lexiapp.data.repository.patient.PatientMocks
 import com.example.lexiapp.domain.model.Patient
 import com.example.lexiapp.domain.useCases.CodeQRUseCases
-import com.journeyapps.barcodescanner.ScanOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -19,8 +18,10 @@ class ProfesionalHomeViewModel @Inject constructor(
     val listPatient: LiveData<List<Patient>> = _listPatient
     private var _listFilterPatient= MutableLiveData<List<Patient>>()
     val listFilterPatient: LiveData<List<Patient>> = _listFilterPatient
-    private val _patientSelected = MutableLiveData<Patient>()
-    val patientSelected: LiveData<Patient> = _patientSelected
+    private val _patientSelected = MutableLiveData<Patient?>()
+    val patientSelected: LiveData<Patient?> = _patientSelected
+
+    var validater = false
 
     init {
         _listPatient.value = emptyList()
@@ -36,8 +37,8 @@ class ProfesionalHomeViewModel @Inject constructor(
         val filteredList = mutableListOf<Patient>()
         if(patientSearch!=null){
             _listPatient.value?.forEach {
-                val info = it.user?.userName!=null && it.user?.email!=null
-                if (info && (it.user?.userName!!.contains(patientSearch) || it.user?.email!!.contains(patientSearch)))
+                if (it.user.userName!=null &&
+                    (it.user.userName!!.contains(patientSearch) || it.user.email.contains(patientSearch)))
                     filteredList.add(it)
             }
         }
@@ -48,4 +49,45 @@ class ProfesionalHomeViewModel @Inject constructor(
         if (contents==null) return null
         return codeQRUseCases.getEmailFromQR(contents)
     }
+
+    fun setPatientSelected(patient: Patient){
+        _patientSelected.value=patient
+    }
+
+    fun cleanPatient(){
+        _patientSelected.value=null
+    }
+
+    fun unbindPatient(email: String): Boolean {
+        /*val isUnbindSuccess = linkUseCase.unbindPatient(email)
+        if (isUnbinndSuccess) {
+            updateListRecycler(email)
+            return FirebaseResult.TaskSuccess
+        }else{
+            return FirebaseResult.TaskFailure
+        }*/
+        validater = !validater
+        updateListRecycler(email)
+        return validater
+    }
+
+    private fun updateListRecycler(email: String) {
+        cleanFilerList(email)
+        cleanCompleteList(email)
+    }
+
+    private fun cleanCompleteList(email: String) {
+        val helpList = mutableListOf<Patient>()
+        _listPatient.value?.forEach { patient->
+            if(patient.user.email!=email) helpList.add(patient)
+        }
+        _listPatient.value= helpList
+    }
+
+    private fun cleanFilerList(email: String) {
+        val helpList = mutableListOf<Patient>()
+        _listFilterPatient.value?.forEach { patient->
+            if(patient.user.email!=email) helpList.add(patient)
+        }
+        _listFilterPatient.value= helpList    }
 }

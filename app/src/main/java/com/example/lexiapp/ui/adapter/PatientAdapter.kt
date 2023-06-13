@@ -1,7 +1,6 @@
 package com.example.lexiapp.ui.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lexiapp.databinding.ItemPatientBinding
@@ -9,7 +8,8 @@ import com.example.lexiapp.domain.model.Patient
 
 class PatientAdapter(
     private val patientList: List<Patient>,
-    private val onClick: (Patient) -> Unit
+    private val onClickPatient: (Patient) -> Unit,
+    private val onClickDelete: (String) -> Unit
 ): RecyclerView.Adapter<PatientAdapter.PatientAdapterViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PatientAdapterViewHolder {
@@ -21,11 +21,11 @@ class PatientAdapter(
     override fun onBindViewHolder(holder: PatientAdapterViewHolder, position: Int) {
         val patient = patientList[position]
         holder.bind(patient)
-        holder.setListener{
+        holder.setListener (patient)/*{
             val expanded = patient.expanded
             patient.expanded=!expanded
             notifyItemChanged(position)
-        }
+        }*/
     }
 
     override fun getItemCount(): Int {
@@ -35,20 +35,26 @@ class PatientAdapter(
     inner class PatientAdapterViewHolder(val binding: ItemPatientBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(patient: Patient) {
             //Set item View
-            binding.clExpanded.visibility = if (patient.expanded) View.VISIBLE else View.GONE
+            /*binding.clExpanded.visibility = if (patient.expanded) View.VISIBLE else View.GONE
             binding.txtSeeMore.visibility = if (patient.expanded) View.GONE else View.VISIBLE
-            binding.icSeeMore.visibility = if (patient.expanded) View.GONE else View.VISIBLE
+            binding.icSeeMore.visibility = if (patient.expanded) View.GONE else View.VISIBLE*/
             //Set data
-            binding.txtName.text=patient.user?.userName
-            binding.txtEmail.text=patient.user?.email
-            binding.txtResultExample.text=patient.results
+            binding.txtName.text=patient.user.userName
+            binding.txtEmail.text=patient.user.email
+            //binding.txtResultExample.text=patient.results
         }
-        fun setListener(setExpandedView: () -> Unit) {
-            binding.icSeeMore.setOnClickListener {
+        fun setListener(patient: Patient) {
+            /*binding.icSeeMore.setOnClickListener {
                 setExpandedView()
             }
             binding.icClose.setOnClickListener {
                 setExpandedView()
+            }*/
+            binding.btnTrash.setOnClickListener{
+                onClickDelete(patient.user.email)
+            }
+            binding.clDetailPatient.setOnClickListener{
+                onClickPatient(patient)
             }
         }
     }
