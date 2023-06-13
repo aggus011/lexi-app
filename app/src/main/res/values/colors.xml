@@ -13,4 +13,6 @@
     <color name="profile_background">#C4C4C4</color>
     <color name="primary">#035AA6</color>
     <color name="green">#17FF20</color>
+    <color name="persian_pink">#F991CC</color>
+    <color name="yellow">#FFC759</color>
 </resources>

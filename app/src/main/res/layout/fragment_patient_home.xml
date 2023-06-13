@@ -28,6 +28,44 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
 
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationGreen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:lottie_rawRes="@raw/amoeba"
+                app:lottie_autoPlay="true"
+                app:lottie_colorFilter="@color/green"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/animationPink"
+                app:lottie_loop="true"/>
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationPink"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:lottie_rawRes="@raw/amoeba"
+                app:lottie_autoPlay="true"
+                android:layout_marginTop="30dp"
+                app:lottie_colorFilter="@color/persian_pink"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/animationGreen"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:lottie_loop="true"/>
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationYellow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:lottie_rawRes="@raw/amoeba"
+                app:lottie_autoPlay="true"
+                android:layout_marginTop="30dp"
+                app:lottie_colorFilter="@color/yellow"
+                app:layout_constraintTop_toBottomOf="@+id/animationGreen"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/animationPink"
+                app:lottie_loop="true"/>
+            <!--
             <ImageButton
                 android:id="@+id/gameCorrectWord"
                 android:layout_width="wrap_content"
@@ -114,7 +152,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/gameIsItSoCalled"
                 android:layout_marginTop="40dp"
                 android:contentDescription="@string/game_is_it_so_called"/>
-
+-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

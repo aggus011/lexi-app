@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
+import com.airbnb.lottie.LottieProperty
+import com.airbnb.lottie.model.KeyPath
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.FragmentPatientHomeBinding
 import com.example.lexiapp.ui.games.correctword.CorrectWordActivity
@@ -40,18 +42,18 @@ class PatientHomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        getViews()
+       /* getViews()
         setInputImageDialog()
-        setGamesListeners()
+        setGamesListeners()*/
     }
 
-    private fun getViews() {
+    /*private fun getViews() {
         ibGameCorrectWord = binding.gameCorrectWord
         ibGameLetsRead = binding.gameLetsRead
         ibGameWhereIsTheLetter = binding.gameWhereIsTheLetter
         ibGameIsItSoCalled = binding.gameIsItSoCalled
         btnTextScanner = binding.btnTextScanner
-    }
+    }*/
 
     private fun setInputImageDialog() {
         val popUpMenu = PopupMenu(requireContext(), btnTextScanner)
