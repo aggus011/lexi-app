@@ -50,7 +50,7 @@
             android:id="@+id/cvUserInfo"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/ivMiniLogo"
+            app:layout_constraintTop_toBottomOf="@id/animationLogo"
             android:background="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
