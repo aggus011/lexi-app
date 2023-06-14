@@ -21,4 +21,6 @@ class Objective(
         fun goal(goal: Int?) = apply { this.goal = goal }
         fun build() = Objective(id, title, description, progress, goal)
     }
+
+
 }
