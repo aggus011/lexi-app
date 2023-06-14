@@ -3,6 +3,7 @@ package com.example.lexiapp.data.network
 import android.util.Log
 import com.example.lexiapp.data.model.WhereIsGameResult
 import com.example.lexiapp.domain.exceptions.FirestoreException
+import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.Professional
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.model.WhereIsTheLetterResult
@@ -10,6 +11,8 @@ import com.example.lexiapp.domain.service.FireStoreService
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.Source
+import com.google.firebase.firestore.ListenerRegistration
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import java.util.*
@@ -25,12 +28,14 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     private val professionalCollection = firebase.firestore.collection("professional")
     private val resultGameCollection: (String) -> CollectionReference =
         { email: String -> firebase.firestore.collection("where_is_the_letter/${email}/results") }
+    private val db = firebase.firestore
+    private lateinit var registration: ListenerRegistration
 
     override suspend fun saveAccount(user: User) {
         val data = hashMapOf(
             "user_name" to user.userName,
             "birth_date" to user.birthDate,
-            "uri_image" to user.uri
+            "professional_link" to user.profesional
         )
         userCollection.document(user.email).set(data).await()
     }
@@ -42,9 +47,10 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                 if (task.isSuccessful) {
                     val documentSnapshot = task.result
                     if (documentSnapshot.exists()) {
-                        user.userName = documentSnapshot.data?.get("user_name").toString()
-                        Log.v("USER_NAME_FIRESTORE_SERVICE", "${user.userName} // ${user.email}")
-                        user.uri = documentSnapshot.data?.get("uri_image").toString()
+                        user.userName = documentSnapshot.data?.get("user_name") as String?
+                        user.birthDate = documentSnapshot.data?.get("birth_date") as String?
+                        user.profesional =
+                            documentSnapshot.data?.get("professional_link") as String?
                     } else {
                         // El usuario no fue encontrado
                     }
@@ -138,10 +144,133 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
         return professional
     }
 
+    override suspend fun getIsLinked(email: String): Boolean? {
+        var linkProfessional: Boolean? = null
+        userCollection.document(email).get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val documentSnapshot = task.result
+                    if (documentSnapshot.exists()) {
+                        linkProfessional =
+                            documentSnapshot.data?.get("professional_link") as String? != null
+                        Log.v("FSSImpl_PRE_LINK_PROF", "$linkProfessional")
+                    }
+                } else {
+                    throw FirestoreException("Problema en firestore para obtener datos")
+                }
+            }.await()
+        Log.v("FSSImpl_POST_LINK_PROF", "$linkProfessional")
+        return linkProfessional
+    }
+
+    override suspend fun bindProfessionalToPatient(
+        emailPatient: String,
+        emailProfessional: String
+    ): FirebaseResult {
+        var result: FirebaseResult = FirebaseResult.TaskFaliure
+        val data = hashMapOf(
+            "professional_link" to emailProfessional
+        )
+        userCollection.document(emailPatient).set(data)
+            .addOnSuccessListener {
+                result = FirebaseResult.TaskSuccess
+            }
+            .addOnFailureListener {
+                throw FirestoreException("Failure to save a new professional")
+            }.await()
+        return result
+    }
+
+    override suspend fun addPatientToProfessional(
+        emailPatient: String,
+        emailProfessional: String
+    ): CompletableDeferred<FirebaseResult> {
+        val completableDeferred = CompletableDeferred<FirebaseResult>()
+        db.runTransaction { transaction ->
+            val documentSnapshot =
+                transaction.get(professionalCollection.document(emailProfessional))
+            val list = documentSnapshot.get("patients") as List<String>?
+            val newList = list?.toMutableList() ?: mutableListOf()
+            newList.add(emailPatient)
+            transaction.update(
+                professionalCollection.document(emailProfessional),
+                "patients", newList
+            )
+        }.addOnSuccessListener {
+            completableDeferred.complete(FirebaseResult.TaskSuccess)
+        }.addOnFailureListener {
+            completableDeferred.completeExceptionally(FirestoreException("Failure to save a new patient"))
+        }
+        return completableDeferred
+    }
+
+    override suspend fun getListLinkPatientOfProfessional(
+        emailProfessional: String,
+        listener: (List<String>?) -> Unit
+    ) {
+        val docRef = professionalCollection.document(emailProfessional)
+        val registration = docRef.addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                Log.w(TAG, "Listen failed.", e)
+                listener(null)
+                return@addSnapshotListener
+            }
+            if (snapshot != null && snapshot.exists()) {
+                val list = snapshot.get("patients") as List<String>?
+                listener(list)
+            } else {
+                listener(null)
+            }
+        }
+        this.registration = registration
+    }
+
+    override suspend fun unBindProfessionalFromPatient(
+        emailPatient: String
+    ): FirebaseResult {
+        var result: FirebaseResult = FirebaseResult.TaskFaliure
+        val data = hashMapOf(
+            "professional_link" to null
+        )
+        userCollection.document(emailPatient).set(data)
+            .addOnSuccessListener {
+                result = FirebaseResult.TaskSuccess
+            }
+            .addOnFailureListener {
+                throw FirestoreException("Failure to save a new professional")
+            }.await()
+        return result
+    }
+
+    override suspend fun deletePatientFromProfessional(
+        emailPatient: String,
+        emailProfessional: String
+    ): CompletableDeferred<FirebaseResult> {
+        val completableDeferred = CompletableDeferred<FirebaseResult>()
+        db.runTransaction { transaction ->
+            val documentSnapshot =
+                transaction.get(professionalCollection.document(emailProfessional))
+            val list = documentSnapshot.get("patients") as List<String>?
+            val newList = list?.toMutableList() ?: mutableListOf()
+            newList.remove(emailPatient)
+            transaction.update(
+                professionalCollection.document(emailProfessional),
+                "patients", newList
+            )
+            newList
+        }.addOnSuccessListener {
+            completableDeferred.complete(FirebaseResult.TaskSuccess)
+        }.addOnFailureListener {
+            completableDeferred.completeExceptionally(FirestoreException("Failure to save a new patient"))
+        }
+        return completableDeferred
+    }
+
     companion object {
         private const val TAG = "FireStoreServiceImpl"
     }
 }
+
 
 private fun WhereIsGameResult.toWhereIsTheLetterResult(): WhereIsTheLetterResult {
     return WhereIsTheLetterResult(

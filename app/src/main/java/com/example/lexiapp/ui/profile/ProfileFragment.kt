@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.lexiapp.ui.profile.edit.EditProfileActivity
 import com.example.lexiapp.ui.profile.link.LinkPatientActivity
@@ -13,10 +14,8 @@ import com.example.lexiapp.domain.model.User
 import androidx.fragment.app.viewModels
 import com.example.lexiapp.databinding.FragmentProfileBinding
 import com.example.lexiapp.ui.login.LoginActivity
-import com.example.lexiapp.ui.profesionalhome.ProfesionalHomeActivity
 import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -59,9 +58,7 @@ class ProfileFragment : Fragment() {
     private fun setListeners() {
         btnLogoutClick()
         btnEditProfile()
-        btnVinculate()
-        //once the linking functionality is implemented this listener must be removed
-        binding.ivMiniLogo.setOnClickListener { startActivity(Intent(activity, ProfesionalHomeActivity::class.java)) }
+        btnLink()
     }
 
     private fun btnEditProfile() {
@@ -70,11 +67,27 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun btnVinculate() {
+    private fun btnLink() {
         binding.btnLinkAccount.setOnClickListener {
-            val validation=true //Should be myQR!=null
-            if (validation){
-                startActivity(Intent(activity, LinkPatientActivity::class.java))
+            viewModel.cleanIsLinked()
+            viewModel.isLinked()
+            viewModel.isLinked.observe(viewLifecycleOwner) { isLink ->
+                if (isLink == null) {
+                    Toast.makeText(
+                        activity,
+                        "Estamos validando que no se encuentre asociado",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else if (!isLink) {
+                    startActivity(Intent(activity, LinkPatientActivity::class.java))
+                    viewModel.isLinked.removeObservers(viewLifecycleOwner)
+                } else {
+                    Toast.makeText(
+                        activity,
+                        "Ya se encuentra vinculado a un profesional",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }
