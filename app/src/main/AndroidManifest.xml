@@ -28,21 +28,32 @@
         android:theme="@style/Theme.LexiApp"
         tools:targetApi="31">
         <activity
-            android:name=".DetailPatientActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+            android:name=".ui.patienthome.HomePatientActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ui.role.RoleActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ui.verifymedicalregistration.VerifyMedicalRegistrationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.signup.professional.ProfessionalSignUpActivity"
+            android:exported="false"/>
         <activity
             android:name=".ui.profesionalhome.ProfesionalHomeActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.profile.edit.EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.profile.link.LinkPatientActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.profesionalhome.resultlink.UnsuccessfulLinkActivity"
-            android:exported="false"></activity>
+            android:exported="false"/>
         <activity
             android:name=".ui.profesionalhome.resultlink.SuccessfulLinkActivity"
-            android:exported="false"></activity>
+            android:exported="false"/>
         <activity
             android:name=".ui.games.whereistheletter.result.NegativeResultWhereIsTheLetterActivity"
             android:exported="false" />
@@ -60,12 +71,6 @@
             android:exported="false" />
         <activity
             android:name=".ui.games.correctword.result.PositiveResultCorrectWordActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.profile.edit.EditProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.profile.link.LinkPatientActivity"
             android:exported="false" />
         <activity
             android:name=".ui.textscanner.TextScannerActivity"
@@ -89,13 +94,12 @@
             android:name=".ui.login.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.signup.SignUpActivity"
+            android:name=".ui.signup.patient.SignUpActivity"
             android:exported="false" />
+        <activity android:name=".ui.games.letsread.ResultActivity"
+            android:exported="false"/>
         <activity
-            android:name=".ui.games.letsread.ResultActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.splash.SplashActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -104,14 +108,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.MainActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.profesionalhome.CaptureAct"
-            android:exported="false"
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
-            android:theme="@style/zxing_CaptureTheme" />
+            android:theme="@style/zxing_CaptureTheme"
+            android:exported="false" />
         <activity
             android:name="com.canhub.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
