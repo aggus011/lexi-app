@@ -38,7 +38,7 @@
     <string name="icon_user_email">Ícono del campo de correo electrónico del usuario</string>
     <string name="icon_user_birthday">Ícono de fecha de nacimiento del usuario</string>
     <string name="user_birthday">Fecha de nacimiento</string>
-    <string name="my_objectives">Mis Objetivos</string>
+    <string name="my_objectives">Mis Objetivos Semanales</string>
     <string name="record_audio_again">Volver a grabar</string>
     <string name="audio_record_results">Chequear</string>
     <string name="your_recording">Tu grabación</string>
@@ -62,4 +62,10 @@
     <string name="signup_professional">Registro Profesional</string>
     <string name="check_your_register">No pudimos verificar tus datos, por favor revisalos</string>
     <string name="check">Revisar</string>
+    <string name="days_left">Días restantes: %1$d</string>
+
+    <plurals name="days_left">
+        <item quantity="one">Día Restante: %d </item>
+        <item quantity="other">Días Restantes: %d </item>
+    </plurals>
 </resources>
