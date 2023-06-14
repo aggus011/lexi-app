@@ -21,25 +21,44 @@
         app:srcCompat="@drawable/trash_icon"
         app:tint="@color/white"
         android:layout_margin="6dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/cvMetrics"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:fabSize="mini"/>
 
-    <com.google.android.material.imageview.ShapeableImageView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ivPatient"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_margin="10dp"
-        android:elevation="6dp"
         android:layout_marginTop="10dp"
         android:src="@drawable/ic_user_photo"
         app:layout_constraintStart_toStartOf="@id/txtName"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/txtName"
-        app:shapeAppearanceOverlay="@style/circleImageViewStyle" />
+        app:layout_constraintEnd_toEndOf="@id/txtName">
 
+        <View
+            android:id="@+id/vBackgroundUserIcon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/round_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:backgroundTint="@color/icon_profile8"
+            android:alpha="0.5"/>
+
+        <TextView
+            android:id="@+id/tvUserInitials"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/vBackgroundUserIcon"
+            app:layout_constraintEnd_toEndOf="@id/vBackgroundUserIcon"
+            app:layout_constraintBottom_toBottomOf="@id/vBackgroundUserIcon"
+            app:layout_constraintStart_toStartOf="@id/vBackgroundUserIcon"
+            android:textAppearance="@style/title"
+            android:textSize="28dp"
+            android:textColor="@color/white"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <TextView
         android:id="@+id/txtName"
         android:gravity="center"
@@ -68,6 +87,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginHorizontal="6dp"
+        android:id="@+id/cvMetrics"
         android:layout_marginBottom="6dp"
         android:layout_marginTop="20dp"
         app:cardCornerRadius="5dp"

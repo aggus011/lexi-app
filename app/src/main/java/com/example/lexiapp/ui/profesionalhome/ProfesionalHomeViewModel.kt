@@ -33,17 +33,29 @@ class ProfesionalHomeViewModel @Inject constructor(
     val resultDeletePatient: LiveData<FirebaseResult> = _resultDeletePatient
 
     init {
-        _listPatient.value = emptyList()
-        getPatient()
+       getPatient()
     }
 
-    private fun getPatient(){
+    fun getPatient(){
         viewModelScope.launch {
-            linkUseCase.getListLinkPatientOfProfessional().collect{ list->
-                _listPatient.value=list
+            linkUseCase.getListLinkPatientOfProfessional { list->
+                val helpList= users(list)
+                _listPatient.value = helpList
                 _listFilterPatient.value = _listPatient.value
             }
         }
+    }
+
+    private fun users(list: List<String>?): List<User> {
+        val helpList= mutableListOf<User>()
+        viewModelScope.launch {
+            list?.forEach {
+                val patient = linkUseCase.getUser(it)
+                Log.v("VALIDATE_FILTER_USERS", "${patient.userName}//${patient.email}")
+                helpList.add(patient)
+            }
+        }
+        return helpList
     }
 
     fun getScanOptions() = codeQRUseCases.getScanOptions()
@@ -77,8 +89,7 @@ class ProfesionalHomeViewModel @Inject constructor(
     fun unbindPatient(emailPatient: String){
         viewModelScope.launch {
             linkUseCase.deletePatientFromProfessional(emailPatient).collect{
-                _listPatient.value=it
-                //_listFilterPatient.value = _listPatient.value
+                _resultDeletePatient.value=it
                 linkUseCase.unBindProfessionalFromPatient(emailPatient).collect{}
             }
         }
@@ -87,39 +98,12 @@ class ProfesionalHomeViewModel @Inject constructor(
     fun addPatientToProfessional(emailPatient: String) {
         viewModelScope.launch {
             try {
-                val result = linkUseCase.addPatientToProfessional(emailPatient)
-                _listPatient.value=result
-                //_listFilterPatient.value = _listPatient.value
-                linkUseCase.bindProfessionalToPatient(emailPatient).collect{}
+                linkUseCase.addPatientToProfessional(emailPatient).collect{
+                    _resultAddPatient.value=it
+                    linkUseCase.bindProfessionalToPatient(emailPatient).collect{}
+                }
             } catch (e: Exception) {}
         }
     }
 
-    private fun updateListRecycler(email: String) {
-        cleanFilerList(email)
-        cleanCompleteList(email)
-    }
-
-    private suspend fun addToCompleteList(email: String) {
-        val helpList = mutableListOf<User>()
-        helpList.addAll(_listPatient.value!!)
-        helpList.add(linkUseCase.getUser(email))
-        _listPatient.value= helpList
-    }
-
-    private fun cleanCompleteList(email: String) {
-        val helpList = mutableListOf<User>()
-        _listPatient.value?.forEach { user->
-            if(user.email!=email) helpList.add(user)
-        }
-        _listPatient.value= helpList
-    }
-
-    private fun cleanFilerList(email: String) {
-        val helpList = mutableListOf<User>()
-        _listFilterPatient.value?.forEach { user->
-            if(user.email!=email) helpList.add(user)
-        }
-        _listFilterPatient.value= helpList
-    }
 }

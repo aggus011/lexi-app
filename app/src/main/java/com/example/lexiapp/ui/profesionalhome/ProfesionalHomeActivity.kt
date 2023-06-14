@@ -1,5 +1,7 @@
 package com.example.lexiapp.ui.profesionalhome
 
+import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
 import android.os.Bundle
@@ -18,11 +20,15 @@ import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.useCases.ProfileUseCases
 import com.example.lexiapp.ui.adapter.UserAdapter
+import com.example.lexiapp.ui.login.LoginActivity
 import com.example.lexiapp.ui.profesionalhome.detailpatient.DetailPatientFragment
+import com.example.lexiapp.ui.profesionalhome.resultlink.SuccessfulLinkActivity
+import com.example.lexiapp.ui.profesionalhome.resultlink.UnsuccessfulLinkActivity
 import com.example.lexiapp.ui.profile.professional.ProfessionalProfileFragment
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.internal.notify
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -36,9 +42,15 @@ class ProfesionalHomeActivity : AppCompatActivity() {
     lateinit var profileUseCases: ProfileUseCases
 
     private val barcodeLauncher: ActivityResultLauncher<ScanOptions> = registerForActivityResult(ScanContract()){ result->
-        val email = vM.getPatientEmail(result.contents)
-        vM.addPatientToProfessional(email!!)
-        Toast.makeText(this, "$email", Toast.LENGTH_SHORT).show()
+        if(result.contents != null) {
+            try {
+                val email = vM.getPatientEmail(result.contents)
+                vM.addPatientToProfessional(email!!)
+                startActivity(Intent(this, SuccessfulLinkActivity::class.java))
+            } catch (e: Exception) {
+                startActivity(Intent(this, UnsuccessfulLinkActivity::class.java))
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +60,7 @@ class ProfesionalHomeActivity : AppCompatActivity() {
 
         getViews()
         setListener()
+        //vM.getPatient()
         setRecyclerView()
         setSearch()
         addFragment()
@@ -62,11 +75,13 @@ class ProfesionalHomeActivity : AppCompatActivity() {
                 binding.btnAddPatient.visibility = View.VISIBLE
                 binding.svFilter.visibility = View.VISIBLE
                 binding.ivMiniLogo.visibility = View.VISIBLE
+                binding.clIconAccount.visibility = View.VISIBLE
             } else {
                 binding.rvPatient.visibility = View.GONE
                 binding.btnAddPatient.visibility = View.GONE
                 binding.svFilter.visibility = View.GONE
                 binding.ivMiniLogo.visibility = View.GONE
+                binding.clIconAccount.visibility = View.GONE
             }
         }
     }
@@ -107,11 +122,9 @@ class ProfesionalHomeActivity : AppCompatActivity() {
         val sizeInDp = 50
         val density = resources.displayMetrics.density
         val sizeInPx = (sizeInDp * density).toInt()
-
         val shapeDrawable = ShapeDrawable(OvalShape())
         shapeDrawable.paint.color = icColor
         shapeDrawable.setBounds(0,0,sizeInPx, sizeInPx)
-
         binding.vBackgroundUserIcon.background = shapeDrawable
     }
 

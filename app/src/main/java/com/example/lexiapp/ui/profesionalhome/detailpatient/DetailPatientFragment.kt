@@ -35,6 +35,9 @@ class DetailPatientFragment : Fragment() {
     private fun bind(patient: User) {
         binding.txtName.text = patient.userName
         binding.txtEmail.text = patient.email
+        binding.tvUserInitials.text = if (patient.userName!=null && patient.userName!!.isNotEmpty())
+            patient.userName!![0].uppercase()
+        else patient.email[0].uppercase()
         binding.btnTrash.setOnClickListener {
             vM.unbindPatient(patient.email)
             vM.resultDeletePatient.observe(viewLifecycleOwner){

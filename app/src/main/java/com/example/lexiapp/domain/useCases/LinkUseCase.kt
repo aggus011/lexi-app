@@ -22,26 +22,13 @@ class LinkUseCase @Inject constructor(
 
     suspend fun addPatientToProfessional(
         emailPatient: String,
-    ): List<User> {
-        val deferredList = firestoreService.addPatientToProfessional(emailPatient, getEmail()!!)
-        val emailList = deferredList.await()
-        val userList = mutableListOf<User>()
-        emailList.forEach {
-            val user = firestoreService.getUser(it)
-            userList.add(user)
-        }
-        return userList
+    )= flow {
+        val result = firestoreService.addPatientToProfessional(emailPatient, getEmail()!!).await()
+        emit(result)
     }
 
-    suspend fun getListLinkPatientOfProfessional() = flow {
-        val helpList = mutableListOf<User>()
-        val list = firestoreService.getListLinkPatientOfProfessional(getEmail()!!)
-        list.forEach {
-            val patient =firestoreService.getUser(it)
-            Log.v("VALIDATE_FILTER_USERS", "${patient.userName}//${patient.email}")
-            helpList.add(patient)
-        }
-        emit(helpList)
+    suspend fun getListLinkPatientOfProfessional(listener: (List<String>?)->Unit) {
+        firestoreService.getListLinkPatientOfProfessional(getEmail()!!, listener)
     }
 
     suspend fun unBindProfessionalFromPatient(
@@ -53,14 +40,8 @@ class LinkUseCase @Inject constructor(
     suspend fun deletePatientFromProfessional(
         emailPatient: String,
     ) = flow {
-        val helpList = mutableListOf<User>()
-        val list = firestoreService.deletePatientFromProfessional(emailPatient, getEmail()!!)
-        list.forEach {
-            val patient =firestoreService.getUser(it)
-            Log.v("VALIDATE_FILTER_USERS", "${patient.userName}//${patient.email}")
-            helpList.add(patient)
-        }
-        emit(helpList)
+        val result = firestoreService.deletePatientFromProfessional(emailPatient, getEmail()!!).await()
+        emit(result)
     }
 
     suspend fun getUser (emailPatient: String) = firestoreService.getUser(emailPatient)

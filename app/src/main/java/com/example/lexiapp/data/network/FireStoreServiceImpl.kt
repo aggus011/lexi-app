@@ -5,12 +5,12 @@ import com.example.lexiapp.data.model.Game
 import com.example.lexiapp.data.model.GameResult
 import com.example.lexiapp.data.model.WhereIsGameResult
 import com.example.lexiapp.domain.exceptions.FirestoreException
-import com.example.lexiapp.domain.exceptions.UserNotFoundException
 import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.Professional
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.service.FireStoreService
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
@@ -26,6 +26,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     private val whereIsTheLetterCollection = db.collection("where_is_the_letter")
     private val openaiCollection = db.collection("openai_api_use")
     private val professionalCollection = db.collection("professional")
+    private lateinit var registration: ListenerRegistration
 
     override suspend fun saveAccount(user: User) {
         val data = hashMapOf(
@@ -174,8 +175,8 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     override suspend fun addPatientToProfessional(
         emailPatient: String,
         emailProfessional: String
-    ): CompletableDeferred<List<String>> {
-        val completableDeferred = CompletableDeferred<List<String>>()
+    ): CompletableDeferred<FirebaseResult> {
+        val completableDeferred = CompletableDeferred<FirebaseResult>()
         db.runTransaction { transaction ->
             val documentSnapshot = transaction.get(professionalCollection.document(emailProfessional))
             val list = documentSnapshot.get("patients") as List<String>?
@@ -183,31 +184,32 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
             newList.add(emailPatient)
             transaction.update(
                 professionalCollection.document(emailProfessional),
-                "patients", newList)
-            newList
+                "patients", newList
+            )
         }.addOnSuccessListener {
-            completableDeferred.complete(it)
+            completableDeferred.complete(FirebaseResult.TaskSuccess)
         }.addOnFailureListener {
             completableDeferred.completeExceptionally(FirestoreException("Failure to save a new patient"))
         }
         return completableDeferred
     }
 
-    override suspend fun getListLinkPatientOfProfessional(emailProfessional: String): List<String> {
-        var patients = listOf<String>()
-        professionalCollection.document(emailProfessional).get().addOnSuccessListener { documentSnapshot ->
-            if (documentSnapshot.exists()) {
-                val list = documentSnapshot.get("patients") as List<String>?
-                if (list != null) {
-                    patients = list
-                } else {
-                    //User not found
-                }
+    override suspend fun getListLinkPatientOfProfessional(emailProfessional: String, listener: (List<String>?) -> Unit){
+        val docRef = professionalCollection.document(emailProfessional)
+        val registration = docRef.addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                Log.w(TAG, "Listen failed.", e)
+                listener(null)
+                return@addSnapshotListener
             }
-        }.addOnFailureListener {
-            throw FirestoreException("Problema en firestore para obtener datos")
-        }.await()
-        return patients
+            if (snapshot != null && snapshot.exists()) {
+                val list = snapshot.get("patients") as List<String>?
+                listener(list)
+            } else {
+                listener(null)
+            }
+        }
+        this.registration=registration
     }
 
     override suspend fun unBindProfessionalFromPatient(
@@ -230,8 +232,8 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     override suspend fun deletePatientFromProfessional(
         emailPatient: String,
         emailProfessional: String
-    ): List<String> {
-        var result = listOf<String>()
+    ): CompletableDeferred<FirebaseResult> {
+        val completableDeferred = CompletableDeferred<FirebaseResult>()
         db.runTransaction { transaction ->
             val documentSnapshot = transaction.get(professionalCollection.document(emailProfessional))
             val list = documentSnapshot.get("patients") as List<String>?
@@ -242,11 +244,11 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                 "patients", newList)
             newList
         }.addOnSuccessListener {
-            result = it
+            completableDeferred.complete(FirebaseResult.TaskSuccess)
         }.addOnFailureListener {
-            throw FirestoreException("Failure to save a new patient")
+            completableDeferred.completeExceptionally(FirestoreException("Failure to save a new patient"))
         }
-        return result
+        return completableDeferred
     }
 
     companion object{

@@ -63,6 +63,7 @@
     <string name="check_your_register">No pudimos verificar tus datos, por favor revisalos</string>
     <string name="check">Revisar</string>
     <string name="days_left">Días restantes: %1$d</string>
+    <string name="confirm_password">Confirmar contraseña</string>
 
     <plurals name="days_left">
         <item quantity="one">Día Restante: %d </item>

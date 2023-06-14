@@ -1,7 +1,10 @@
 package com.example.lexiapp.ui.adapter
 
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.OvalShape
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lexiapp.databinding.ItemPatientBinding
 import com.example.lexiapp.domain.model.User
@@ -32,7 +35,11 @@ class UserAdapter(
         fun bind(patient: User) {
             binding.txtName.text=patient.userName
             binding.txtEmail.text=patient.email
+            binding.tvUserInitials.text = if (patient.userName!=null && patient.userName!!.isNotEmpty())
+                patient.userName!![0].uppercase()
+            else patient.email[0].uppercase()
         }
+
         fun setListener(patient: User) {
             binding.btnTrash.setOnClickListener{
                 onClickDelete(patient.email)

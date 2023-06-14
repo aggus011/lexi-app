@@ -23,17 +23,35 @@
             android:layout_height="wrap_content"
             app:fabSize="mini"/>
 
-        <com.google.android.material.imageview.ShapeableImageView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ivPatient"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_margin="10dp"
-            android:elevation="6dp"
-            android:src="@drawable/ic_user_photo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/txtName"
-            app:layout_constraintBottom_toBottomOf="@id/ivEmailIcon"
-            app:shapeAppearanceOverlay="@style/circleImageViewStyle" />
+            app:layout_constraintBottom_toBottomOf="@id/ivEmailIcon">
+
+                <View
+                    android:id="@+id/vBackgroundUserIcon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/round_background"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:backgroundTint="@color/icon_profile9"
+                    android:alpha="0.5"/>
+
+                <TextView
+                    android:id="@+id/tvUserInitials"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="@id/vBackgroundUserIcon"
+                    app:layout_constraintEnd_toEndOf="@id/vBackgroundUserIcon"
+                    app:layout_constraintBottom_toBottomOf="@id/vBackgroundUserIcon"
+                    app:layout_constraintStart_toStartOf="@id/vBackgroundUserIcon"
+                    android:textAppearance="@style/title"
+                    android:textColor="@color/white"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/txtName"

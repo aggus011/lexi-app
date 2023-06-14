@@ -30,13 +30,13 @@ interface FireStoreService {
 
     suspend fun bindProfessionalToPatient (emailPatient: String, emailProfessional: String): FirebaseResult
 
-    suspend fun addPatientToProfessional (emailPatient: String, emailProfessional: String): CompletableDeferred<List<String>>
+    suspend fun addPatientToProfessional (emailPatient: String, emailProfessional: String): CompletableDeferred<FirebaseResult>
 
-    suspend fun getListLinkPatientOfProfessional (emailProfessional: String): List<String>
+    suspend fun getListLinkPatientOfProfessional (emailProfessional: String, listener: (List<String>?) -> Unit )
 
     suspend fun unBindProfessionalFromPatient (emailPatient: String): FirebaseResult
 
-    suspend fun deletePatientFromProfessional (emailPatient: String, emailProfessional: String): List<String>
+    suspend fun deletePatientFromProfessional (emailPatient: String, emailProfessional: String): CompletableDeferred<FirebaseResult>
 
     //suspend fun getWhereIsLetterResultOfPatient (emailPatient: String)
 }
