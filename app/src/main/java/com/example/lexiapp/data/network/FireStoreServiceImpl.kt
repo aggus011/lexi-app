@@ -159,10 +159,10 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
         emailProfessional: String
     ): FirebaseResult {
         var result: FirebaseResult = FirebaseResult.TaskFaliure
-        val data = hashMapOf(
+        val data = mapOf(
             "professional_link" to emailProfessional
         )
-        userCollection.document(emailPatient).set(data)
+        userCollection.document(emailPatient).update(data)
             .addOnSuccessListener {
                 result = FirebaseResult.TaskSuccess
             }
@@ -216,10 +216,10 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
         emailPatient: String
     ): FirebaseResult {
         var result: FirebaseResult = FirebaseResult.TaskFaliure
-        val data = hashMapOf(
+        val data = mapOf(
             "professional_link" to null
         )
-        userCollection.document(emailPatient).set(data)
+        userCollection.document(emailPatient).update(data)
             .addOnSuccessListener {
                 result = FirebaseResult.TaskSuccess
             }
