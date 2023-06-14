@@ -2,6 +2,7 @@ package com.example.lexiapp.domain.service
 
 import com.example.lexiapp.data.model.GameResult
 import com.example.lexiapp.data.model.WhereIsGameResult
+import com.example.lexiapp.domain.model.Objective
 import com.example.lexiapp.domain.model.Professional
 import com.example.lexiapp.domain.model.User
 import com.google.firebase.firestore.DocumentReference
@@ -23,4 +24,12 @@ interface FireStoreService {
     suspend fun saveProfessionalAccount(professional: Professional, registrationDate: Date)
 
     suspend fun getProfessional(email: String): Professional
+
+    suspend fun saveObjectives(email: String, objectives: List<Objective>)
+
+    suspend fun checkObjectivesExist(email: String): Boolean
+
+    suspend fun getObjectives(email: String): List<Objective>
+
+
 }

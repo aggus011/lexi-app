@@ -5,11 +5,12 @@ import com.example.lexiapp.data.model.Game
 import com.example.lexiapp.data.model.GameResult
 import com.example.lexiapp.data.model.WhereIsGameResult
 import com.example.lexiapp.domain.exceptions.FirestoreException
-import com.example.lexiapp.domain.exceptions.UserNotFoundException
+import com.example.lexiapp.domain.model.Objective
 import com.example.lexiapp.domain.model.Professional
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.service.FireStoreService
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import java.util.*
@@ -131,6 +132,80 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
             }.await()
         return professional
     }
+
+
+
+
+    override suspend fun saveObjectives(email: String, objectives: List<Objective>) {
+        val firestore = FirebaseFirestore.getInstance()
+        val collection = firestore.collection("objectives")
+        val document = collection.document(email)
+        val objectiveMap = hashMapOf<String, Any?>()
+
+        objectives.forEachIndexed { index, objective ->
+            val objectiveFields = hashMapOf<String, Any?>(
+                "id" to objective.id,
+                "title" to objective.title,
+                "description" to objective.description,
+                "progress" to objective.progress,
+                "goal" to objective.goal
+            )
+            objectiveMap["objective$index"] = objectiveFields
+        }
+
+        document.set(objectiveMap)
+            .addOnSuccessListener {
+            }
+            .addOnFailureListener { e ->
+            }
+            .await()
+    }
+
+
+    override suspend fun checkObjectivesExist(email: String): Boolean {
+        val firestore = FirebaseFirestore.getInstance()
+        val collection = firestore.collection("objectives")
+        val document = collection.document(email)
+
+        return try {
+            val snapshot = document.get().await()
+            snapshot.exists()
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    override suspend fun getObjectives(email: String): List<Objective> {
+        val firestore = FirebaseFirestore.getInstance()
+        val collection = firestore.collection("objectives")
+        val document = collection.document(email)
+        return try {
+            val snapshot = document.get().await()
+            if (snapshot.exists()) {
+                val objectives = mutableListOf<Objective>()
+                val objectiveMap = snapshot.data
+                objectiveMap?.forEach { (_, objectiveFields) ->
+                    if (objectiveFields is Map<*, *>) {
+                        val id = objectiveFields["id"] as Long?
+                        val title = objectiveFields["title"] as String?
+                        val description = objectiveFields["description"] as String?
+                        val progress = (objectiveFields["progress"] as Long?)?.toInt() ?: 0
+                        val goal = (objectiveFields["goal"] as Long?)?.toInt()
+                        Log.d(TAG, title.toString())
+                        objectives.add(Objective(id, title, description, 0, goal))
+                    }
+                }
+                objectives
+            } else {
+                emptyList()
+            }
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+
+
 
     companion object{
         private const val TAG = "FireStoreServiceImpl"
