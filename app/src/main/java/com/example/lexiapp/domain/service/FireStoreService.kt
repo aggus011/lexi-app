@@ -2,9 +2,11 @@ package com.example.lexiapp.domain.service
 
 import com.example.lexiapp.data.model.GameResult
 import com.example.lexiapp.data.model.WhereIsGameResult
+import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.Professional
 import com.example.lexiapp.domain.model.User
 import com.google.firebase.firestore.DocumentReference
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import java.util.*
 
@@ -25,4 +27,16 @@ interface FireStoreService {
     suspend fun getProfessional(email: String): Professional
 
     suspend fun getIsLinked(email: String): Boolean?
+
+    suspend fun bindProfessionalToPatient (emailPatient: String, emailProfessional: String): FirebaseResult
+
+    suspend fun addPatientToProfessional (emailPatient: String, emailProfessional: String): CompletableDeferred<List<String>>
+
+    suspend fun getListLinkPatientOfProfessional (emailProfessional: String): List<String>
+
+    suspend fun unBindProfessionalFromPatient (emailPatient: String): FirebaseResult
+
+    suspend fun deletePatientFromProfessional (emailPatient: String, emailProfessional: String): List<String>
+
+    //suspend fun getWhereIsLetterResultOfPatient (emailPatient: String)
 }

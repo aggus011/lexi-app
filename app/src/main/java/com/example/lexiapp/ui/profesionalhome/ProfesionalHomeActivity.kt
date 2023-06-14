@@ -14,9 +14,10 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityProfesionalHomeBinding
-import com.example.lexiapp.domain.model.Patient
+import com.example.lexiapp.domain.model.FirebaseResult
+import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.useCases.ProfileUseCases
-import com.example.lexiapp.ui.adapter.PatientAdapter
+import com.example.lexiapp.ui.adapter.UserAdapter
 import com.example.lexiapp.ui.profesionalhome.detailpatient.DetailPatientFragment
 import com.example.lexiapp.ui.profile.professional.ProfessionalProfileFragment
 import com.journeyapps.barcodescanner.ScanContract
@@ -36,6 +37,7 @@ class ProfesionalHomeActivity : AppCompatActivity() {
 
     private val barcodeLauncher: ActivityResultLauncher<ScanOptions> = registerForActivityResult(ScanContract()){ result->
         val email = vM.getPatientEmail(result.contents)
+        vM.addPatientToProfessional(email!!)
         Toast.makeText(this, "$email", Toast.LENGTH_SHORT).show()
     }
 
@@ -56,13 +58,11 @@ class ProfesionalHomeActivity : AppCompatActivity() {
         supportFragmentManager.addOnBackStackChangedListener {
             val fragment = supportFragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL)
             if (fragment == null || !fragment.isVisible) {
-                // El fragmento no está visible, así que podemos mostrar el RecyclerView nuevamente
                 binding.rvPatient.visibility = View.VISIBLE
                 binding.btnAddPatient.visibility = View.VISIBLE
                 binding.svFilter.visibility = View.VISIBLE
                 binding.ivMiniLogo.visibility = View.VISIBLE
             } else {
-                // El fragmento está visible, ocultamos el RecyclerView
                 binding.rvPatient.visibility = View.GONE
                 binding.btnAddPatient.visibility = View.GONE
                 binding.svFilter.visibility = View.GONE
@@ -150,7 +150,21 @@ class ProfesionalHomeActivity : AppCompatActivity() {
 
     private fun suscribeToVM() {
         vM.listFilterPatient.observe(this) { list ->
-            binding.rvPatient.adapter = PatientAdapter(list, ::viewDetails, ::unbindPatient)
+            binding.rvPatient.adapter = UserAdapter(list, ::viewDetails, ::unbindPatient)
+        }
+        vM.resultAddPatient.observe(this) { result ->
+            if (result == FirebaseResult.TaskSuccess) {
+                Toast.makeText(this,"Se agregó con éxito", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this,"No se pudo agregar", Toast.LENGTH_SHORT).show()
+            }
+        }
+        vM.resultDeletePatient.observe(this) { result ->
+            if (result == FirebaseResult.TaskSuccess) {
+                Toast.makeText(this,"Se eliminó con éxito", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this,"No se pudo eliminar", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -158,7 +172,7 @@ class ProfesionalHomeActivity : AppCompatActivity() {
         vM.unbindPatient(email)
     }
 
-    private fun viewDetails(patient: Patient){
+    private fun viewDetails(patient: User){
         vM.setPatientSelected(patient)
         supportFragmentManager.beginTransaction()
             .show(detailFragment!!)

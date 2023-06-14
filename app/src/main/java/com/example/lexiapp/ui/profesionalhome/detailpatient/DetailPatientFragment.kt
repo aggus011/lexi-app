@@ -6,7 +6,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.lexiapp.databinding.FragmentDetailPatientBinding
+import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.Patient
+import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.ui.profesionalhome.ProfesionalHomeViewModel
 
 class DetailPatientFragment : Fragment() {
@@ -30,16 +32,19 @@ class DetailPatientFragment : Fragment() {
         }
     }
 
-    private fun bind(patient: Patient) {
-        binding.txtName.text = patient.user.userName
-        binding.txtEmail.text = patient.user.email
+    private fun bind(patient: User) {
+        binding.txtName.text = patient.userName
+        binding.txtEmail.text = patient.email
         binding.btnTrash.setOnClickListener {
-            if (vM.unbindPatient(patient.user.email))
-                requireActivity().supportFragmentManager.popBackStack()
-            else Toast.makeText(activity,
-                "No se pudo desvincular al paciente, intentelo mas tarde",
-                Toast.LENGTH_SHORT)
-                .show()
+            vM.unbindPatient(patient.email)
+            vM.resultDeletePatient.observe(viewLifecycleOwner){
+                if (it==FirebaseResult.TaskSuccess)
+                    requireActivity().supportFragmentManager.popBackStack()
+                else Toast.makeText(activity,
+                    "No se pudo desvincular al paciente, intentelo mas tarde",
+                    Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
     }
 

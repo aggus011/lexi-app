@@ -32,9 +32,6 @@ class ProfileUseCases @Inject constructor(
             val patient = fireStoreService.getUser(user.email)
             val professional = fireStoreService.getProfessional(user.email)
             if(patient.userName != null){
-                Log.v("USER_NAME_SAVE_PROFILE_USE_CASES", "${patient.userName} // ${user.email}")
-                Log.v("UC_saveUser_LINK_PROF", "${patient.profesional}")
-                Log.v("name_profileUC", "${patient.userName}")
                 editor.putString("email", user.email).apply()
                 editor.putString("user_name", patient.userName).apply()
                 editor.putString("professional_link", patient.profesional).apply()
@@ -58,12 +55,6 @@ class ProfileUseCases @Inject constructor(
 
     private suspend fun saveSignUpUser(user: User) {
         fireStoreService.saveAccount(user)
-        //Uncomment in case the session has already been accessed from the log
-        /*
-            editor.putString("email", user.email).apply()
-            editor.putString("user_name", netUser.userName).apply()
-            editor.putString("uri_image", netUser.uri).apply()
-        }*/
     }
 
     suspend fun editProfile(userName: String?, professional: String?, birthDate: Calendar?): User{
