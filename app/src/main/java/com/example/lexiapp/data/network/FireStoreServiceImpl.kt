@@ -32,7 +32,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
         val data = hashMapOf(
             "user_name" to user.userName,
             "birth_date" to user.birthDate,
-            "professional_link" to user.profesional
+            "professional_link" to user.profesional as String?
         )
         userCollection.document(user.email).set(data).await()
     }
