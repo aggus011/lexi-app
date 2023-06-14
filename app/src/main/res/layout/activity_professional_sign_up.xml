@@ -6,16 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".ui.signup.professional.ProfessionalSignUpActivity">
 
-    <TextView
-        android:id="@+id/tvLogoApp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/logo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textAppearance="@style/lexiLogo"
-        android:layout_marginTop="100dp"/>
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationLogo"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_colorFilter="@color/purple"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/amoeba" />
+
+        <TextView
+            android:id="@+id/tvLogoApp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/logo"
+            app:layout_constraintStart_toStartOf="@id/animationLogo"
+            app:layout_constraintEnd_toEndOf="@id/animationLogo"
+            app:layout_constraintTop_toTopOf="@id/animationLogo"
+            app:layout_constraintBottom_toBottomOf="@id/animationLogo"
+            android:textAppearance="@style/title"
+            android:textColor="@color/white"
+            tools:textColor="@color/black"
+            android:textSize="40sp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/tvProfessionalSignUp"
@@ -23,7 +47,7 @@
         android:layout_height="wrap_content"
         android:text="@string/signup_professional"
         app:layout_constraintStart_toStartOf="@id/scrollSignUpProfessional"
-        app:layout_constraintTop_toBottomOf="@id/tvLogoApp"
+        app:layout_constraintTop_toBottomOf="@id/clLogo"
         android:layout_marginTop="30dp"
         android:textAppearance="@style/subtitle"/>
 
