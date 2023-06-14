@@ -5,21 +5,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.games.isitsocalled.IsItSoCalledActivity">
-    <ImageView
-        android:id="@+id/lexiLogo"
-        android:layout_width="wrap_content"
-        android:background="@drawable/mini_logo"
-        android:layout_height="wrap_content"
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationLogo"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:lottie_autoPlay="true"
+        app:lottie_colorFilter="@color/purple"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/amoeba" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/logo"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/lexiLogo"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_margin="8dp"
         app:layout_constraintEnd_toStartOf="@id/btnHelp"
-        app:layout_constraintBottom_toBottomOf="@id/lexiLogo"
+        app:layout_constraintBottom_toBottomOf="@id/animationLogo"
         android:background="@drawable/arrow_back"/>
     <ImageView
         android:id="@+id/btnHelp"
@@ -40,7 +57,7 @@
         android:textSize="25sp"
         android:layout_marginTop="40dp"
         android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/lexiLogo"
+        app:layout_constraintTop_toBottomOf="@id/animationLogo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/txtVariablePhrase"/>

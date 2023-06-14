@@ -13,6 +13,12 @@
     <color name="profile_background">#C4C4C4</color>
     <color name="primary">#035AA6</color>
     <color name="green">#17FF20</color>
+    <color name="persian_pink">#F991CC</color>
+    <color name="yellow">#FFC759</color>
+    <color name="delft_blue">#23395B</color>
+    <color name="turquoise">#63E2C6</color>
+    <color name="pear_green">#D1D646</color>
+    <color name="tomato">#FE6847</color>
 
     <color name="icon_profile1">#DECDEE</color>
     <color name="icon_profile2">#B983EB</color>
