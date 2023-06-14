@@ -1,35 +1,33 @@
-package com.example.lexiapp.ui
+package com.example.lexiapp.ui.patienthome
 
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.lexiapp.R
-import com.example.lexiapp.databinding.ActivityMainBinding
+import com.example.lexiapp.databinding.ActivityHomePatientBinding
 import com.example.lexiapp.ui.objectives.ObjectivesFragment
-import com.example.lexiapp.ui.patienthome.PatientHomeFragment
 import com.example.lexiapp.ui.profile.ProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+class HomePatientActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityHomePatientBinding
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var frameLayout: FrameLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
 
+        binding = ActivityHomePatientBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
         //To handle when user do back gesture
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
-        
         getViews()
         setDefaultFragment()
         setBottomNavigationListener()
