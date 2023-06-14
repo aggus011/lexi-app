@@ -1,10 +1,20 @@
 package com.example.lexiapp.data.model
 
+import com.example.lexiapp.data.api.word_asociation_api.WordAssociationClient
+import com.example.lexiapp.domain.model.WhereIsTheLetterResult
+
 data class WhereIsGameResult(
-    override val game: Game,
-    override val user_mail: String,
-    override val result: Pair<String, String>
-) : GameResult(
-    game, user_mail,
-    result
+    val result: Boolean,
+    val mainLetter: String,
+    val selectedLetter: String,
+    val word: String
 )
+
+fun WhereIsGameResult.toWhereIsTheLetterResult(): WhereIsTheLetterResult {
+    return WhereIsTheLetterResult(
+        mainLetter = this.mainLetter.toCharArray()[0],
+        selectedLetter = this.selectedLetter.toCharArray()[0],
+        success = this.result,
+        word = this.word
+    )
+}

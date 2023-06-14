@@ -18,7 +18,7 @@ class LetterServiceImpl @Inject constructor(
     private val apiWordService: WordAssociationService,
     private val db: FireStoreServiceImpl,
     private val prefs: SharedPreferences
-): LetterService {
+) : LetterService {
 
     private val userMail = prefs.getString("email", null)!!
     private val currentGame = Game.WHERE_IS_THE_LETTER_GAME
@@ -33,17 +33,20 @@ class LetterServiceImpl @Inject constructor(
     }
 
     override suspend fun saveResult(result: WhereIsTheLetterResult) {
-        db.saveWhereIsTheLetterResult(
-            WhereIsGameResult(
-                game = currentGame,
-                user_mail = userMail,
-                result = Pair(result.word.toString(), result.intents.toString())
-            )
-        )
+        db.saveWhereIsTheLetterResult(result.toWhereIsGameResult(), userMail)
     }
 
     override fun obtainResults() {
 
     }
 
+}
+
+private fun WhereIsTheLetterResult.toWhereIsGameResult(): WhereIsGameResult {
+    return WhereIsGameResult(
+        result = this.success,
+        mainLetter = this.mainLetter.toString(),
+        selectedLetter = this.selectedLetter.toString(),
+        word = this.word
+    )
 }
