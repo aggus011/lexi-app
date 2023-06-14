@@ -29,7 +29,6 @@ class PatientHomeFragment : Fragment() {
     private lateinit var ibGameCorrectWord: LottieAnimationView
     private lateinit var ibGameLetsRead: LottieAnimationView
     private lateinit var ibGameWhereIsTheLetter: LottieAnimationView
-    private lateinit var ibGameIsItSoCalled: LottieAnimationView
     private lateinit var btnTextScanner: LottieAnimationView
 
     override fun onCreateView(
@@ -52,7 +51,6 @@ class PatientHomeFragment : Fragment() {
         ibGameCorrectWord = binding.animationCorrectWord
         ibGameLetsRead = binding.animationLetsRead
         ibGameWhereIsTheLetter = binding.animationWhereIsTheLetter
-        ibGameIsItSoCalled = binding.animationIsItSoCalled
         btnTextScanner = binding.animationTextScanner
     }
 
@@ -103,7 +101,6 @@ class PatientHomeFragment : Fragment() {
         gameCorrectWordClick()
         gameLetsReadClick()
         gameWhereIsTheLetterClick()
-        gameIsItSoCalledClick()
     }
 
     private fun gameCorrectWordClick() {
@@ -121,12 +118,6 @@ class PatientHomeFragment : Fragment() {
     private fun gameWhereIsTheLetterClick() {
         ibGameWhereIsTheLetter.setOnClickListener {
             startActivity(Intent(activity, WhereIsTheLetterActivity::class.java))
-        }
-    }
-
-    private fun gameIsItSoCalledClick() {
-        ibGameIsItSoCalled.setOnClickListener {
-            startActivity(Intent(activity, IsItSoCalledActivity::class.java))
         }
     }
 
