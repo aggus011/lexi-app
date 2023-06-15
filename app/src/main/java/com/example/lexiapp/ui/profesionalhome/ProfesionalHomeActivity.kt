@@ -71,17 +71,21 @@ class ProfesionalHomeActivity : AppCompatActivity() {
         supportFragmentManager.addOnBackStackChangedListener {
             val fragment = supportFragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL)
             if (fragment == null || !fragment.isVisible) {
-                binding.rvPatient.visibility = View.VISIBLE
-                binding.btnAddPatient.visibility = View.VISIBLE
-                binding.svFilter.visibility = View.VISIBLE
-                binding.ivMiniLogo.visibility = View.VISIBLE
-                binding.clIconAccount.visibility = View.VISIBLE
+                binding.apply {
+                    rvPatient.visibility = View.VISIBLE
+                    btnAddPatient.visibility = View.VISIBLE
+                    svFilter.visibility = View.VISIBLE
+                    ivMiniLogo.visibility = View.VISIBLE
+                    clIconAccount.visibility = View.VISIBLE
+                }
             } else {
-                binding.rvPatient.visibility = View.GONE
-                binding.btnAddPatient.visibility = View.GONE
-                binding.svFilter.visibility = View.GONE
-                binding.ivMiniLogo.visibility = View.GONE
-                binding.clIconAccount.visibility = View.GONE
+                binding.apply {
+                    rvPatient.visibility = View.GONE
+                    btnAddPatient.visibility = View.GONE
+                    svFilter.visibility = View.GONE
+                    ivMiniLogo.visibility = View.GONE
+                    clIconAccount.visibility = View.GONE
+                }
             }
         }
     }

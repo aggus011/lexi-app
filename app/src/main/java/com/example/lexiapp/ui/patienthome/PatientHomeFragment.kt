@@ -27,7 +27,7 @@ class PatientHomeFragment : Fragment() {
     private lateinit var ibGameLetsRead: ImageButton
     private lateinit var ibGameWhereIsTheLetter: ImageButton
     private lateinit var ibGameIsItSoCalled: ImageButton
-    private lateinit var btnTextScanner: MaterialButton
+    private lateinit var ibBtnTextScanner: MaterialButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,15 +46,17 @@ class PatientHomeFragment : Fragment() {
     }
 
     private fun getViews() {
-        ibGameCorrectWord = binding.gameCorrectWord
-        ibGameLetsRead = binding.gameLetsRead
-        ibGameWhereIsTheLetter = binding.gameWhereIsTheLetter
-        ibGameIsItSoCalled = binding.gameIsItSoCalled
-        btnTextScanner = binding.btnTextScanner
+        binding.apply {
+            ibGameCorrectWord = gameCorrectWord
+            ibGameLetsRead = gameLetsRead
+            ibGameWhereIsTheLetter = gameWhereIsTheLetter
+            ibGameIsItSoCalled = gameIsItSoCalled
+            ibBtnTextScanner = btnTextScanner
+        }
     }
 
     private fun setInputImageDialog() {
-        val popUpMenu = PopupMenu(requireContext(), btnTextScanner)
+        val popUpMenu = PopupMenu(requireContext(), ibBtnTextScanner)
 
         popUpMenu.inflate(R.menu.input_image)
 
@@ -68,7 +70,7 @@ class PatientHomeFragment : Fragment() {
 
     @SuppressLint("DiscouragedPrivateApi")
     private fun setBtnScanListener(popUpMenu: PopupMenu) {
-        btnTextScanner.setOnClickListener {
+        ibBtnTextScanner.setOnClickListener {
             try{
                 val popup = PopupMenu::class.java.getDeclaredField("mPopup")
                 popup.isAccessible = true

@@ -10,7 +10,6 @@ import com.example.lexiapp.domain.model.WhereIsTheLetterResult
 import com.example.lexiapp.domain.service.FireStoreService
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.flow
@@ -72,7 +71,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
             .document(System.currentTimeMillis().toString()).set(data).await()
     }
 
-    override suspend fun obtainLastResults(userMail: String): List<WhereIsTheLetterResult> {
+    override suspend fun getLastResultsWhereIsTheLetterGame(userMail: String): List<WhereIsTheLetterResult> {
         val result = mutableListOf<WhereIsGameResult>()
         resultGameCollection(userMail).get()
             .addOnSuccessListener { querySnapshot ->

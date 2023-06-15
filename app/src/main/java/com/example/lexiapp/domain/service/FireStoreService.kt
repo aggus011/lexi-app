@@ -18,7 +18,7 @@ interface FireStoreService {
 
     suspend fun saveWhereIsTheLetterResult(result: WhereIsGameResult, email: String)
 
-    suspend fun obtainLastResults(userMail: String): List<WhereIsTheLetterResult>
+    suspend fun getLastResultsWhereIsTheLetterGame(userMail: String): List<WhereIsTheLetterResult>
 
     suspend fun getOpenAICollectionDocumentReference(document: String): Flow<DocumentReference>
 
@@ -38,5 +38,4 @@ interface FireStoreService {
 
     suspend fun deletePatientFromProfessional (emailPatient: String, emailProfessional: String): CompletableDeferred<FirebaseResult>
 
-    //suspend fun getWhereIsLetterResultOfPatient (emailPatient: String)
 }
