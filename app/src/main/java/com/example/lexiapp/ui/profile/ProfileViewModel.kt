@@ -1,17 +1,19 @@
 package com.example.lexiapp.ui.profile
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import android.graphics.Bitmap
 import android.os.CountDownTimer
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.useCases.CodeQRUseCases
 import com.example.lexiapp.domain.useCases.ProfileUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import okhttp3.internal.wait
 import java.util.*
 import javax.inject.Inject
 
@@ -35,22 +37,27 @@ class ProfileViewModel @Inject constructor(
     private val _isTimerRunning = MutableLiveData<Boolean>()
     val isTimerRunning: LiveData<Boolean> = _isTimerRunning
 
-    private var myQR:Bitmap?=null
+    private val _isLinked = MutableLiveData<Boolean?>(null)
+    val isLinked: LiveData<Boolean?> = _isLinked
 
     init{
         _timeLeftInMillis.value = initialTimeInMillis
         _isTimerRunning.value = true
-        //Set in ProfileFragment
-        setQR()
         getProfile()
         _calendarBirthDate.value=null
     }
 
-    private fun setQR() {
-        myQR = qrUseCases.generateQR(profileUseCases.getEmail()!!)
-    }
+    fun getQR()=qrUseCases.generateQR(profileUseCases.getEmail()!!)
 
-    fun getQR()=myQR
+    fun cleanIsLinked() { _isLinked.value=null }
+
+    fun isLinked(){
+        viewModelScope.launch {
+            profileUseCases.isPatientLinked().collect{
+                _isLinked.value=it
+            }
+        }
+    }
 
     fun startTimer() {
         if (countdownTimer != null) {
@@ -84,7 +91,6 @@ class ProfileViewModel @Inject constructor(
     private fun getProfile(){
         viewModelScope.launch {
             _profileLiveData.value=profileUseCases.getProfile()
-            Log.v("USER_NAME_FIRESTORE_VIEW_MODEL", "${profileLiveData.value?.userName}")
         }
     }
 

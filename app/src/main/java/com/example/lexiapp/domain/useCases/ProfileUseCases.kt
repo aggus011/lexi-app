@@ -9,6 +9,7 @@ import com.example.lexiapp.domain.model.UserLogin
 import com.example.lexiapp.domain.model.UserSignUp
 import com.example.lexiapp.domain.model.UserType
 import com.example.lexiapp.domain.service.FireStoreService
+import kotlinx.coroutines.flow.flow
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -31,11 +32,9 @@ class ProfileUseCases @Inject constructor(
             val patient = fireStoreService.getUser(user.email)
             val professional = fireStoreService.getProfessional(user.email)
             if(patient.userName != null){
-                Log.v("USER_NAME_SAVE_PROFILE_USE_CASES", "${patient.userName} // ${user.email}")
-                Log.v("name_profileUC", "${patient.userName}")
                 editor.putString("email", user.email).apply()
                 editor.putString("user_name", patient.userName).apply()
-                editor.putString("uri_image", patient.uri).apply()
+                editor.putString("professional_link", patient.profesional).apply()
                 editor.putString("user_type", "patient").apply()
             }
             if(professional.user?.userName != null){
@@ -56,18 +55,12 @@ class ProfileUseCases @Inject constructor(
 
     private suspend fun saveSignUpUser(user: User) {
         fireStoreService.saveAccount(user)
-        //Uncomment in case the session has already been accessed from the log
-        /*
-            editor.putString("email", user.email).apply()
-            editor.putString("user_name", netUser.userName).apply()
-            editor.putString("uri_image", netUser.uri).apply()
-        }*/
     }
 
-    suspend fun editProfile(userName: String?, uriImage: String?, birthDate: Calendar?): User{
+    suspend fun editProfile(userName: String?, professional: String?, birthDate: Calendar?): User{
         setUserName(userName)
         setBirthDate(birthDate)
-        setUriImage(uriImage)
+        setProfessional(professional)
         val modifyUser=getProfile()
         saveInFirestore(modifyUser)
         return modifyUser
@@ -77,9 +70,9 @@ class ProfileUseCases @Inject constructor(
         profile.let{fireStoreService.saveAccount(it!!)}
     }
 
-    private fun setUriImage(uriImage: String?) {
-        if (uriImage!=null && uriImage.isNotBlank() && uriImage.isNotEmpty())
-            editor.putString("user_name", uriImage).apply()
+    private fun setProfessional(professional: String?) {
+        //if (professional!=null && professional.isNotBlank() && professional.isNotEmpty())
+            editor.putString("professional_link", professional).apply()
     }
 
     private fun setBirthDate(birthDate: Calendar?) {
@@ -101,7 +94,7 @@ class ProfileUseCases @Inject constructor(
             userName = prefs.getString("user_name", null),
             email = getEmail()!!,
             birthDate = prefs.getString("birth_date", null),
-            uri = prefs.getString("uri", null)
+            profesional = prefs.getString("professional_link", null)
         )
     }
 
@@ -143,7 +136,10 @@ class ProfileUseCases @Inject constructor(
 
     fun haveAccount()= getEmail()!=null
 
+    suspend fun isPatientLinked() = flow<Boolean?> { emit(fireStoreService.getIsLinked(getEmail()!!))}
+
     fun closeSesion()=editor.clear().apply()
+
 
     companion object{
         private const val TAG = "ProfileUseCases"

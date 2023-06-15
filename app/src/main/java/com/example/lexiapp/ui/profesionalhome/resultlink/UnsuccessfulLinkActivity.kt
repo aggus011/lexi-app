@@ -11,11 +11,13 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class UnsuccessfulLinkActivity : AppCompatActivity() {
     lateinit var binding: ActivityUnsuccessfulLinkBinding
-    private val vM: ProfesionalHomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityUnsuccessfulLinkBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
+        binding.btnGoInit.setOnClickListener{
+            finish()
+        }
     }
 }

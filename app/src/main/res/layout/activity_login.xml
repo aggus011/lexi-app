@@ -54,7 +54,8 @@
         android:textAlignment="center"
         app:icon="@drawable/logo_google"
         app:iconTint="@android:color/transparent"
-        app:iconTintMode="src_atop" />
+        app:iconTintMode="src_atop"
+        android:visibility="gone"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_facebook"
@@ -67,13 +68,15 @@
         android:textAlignment="center"
         app:icon="@drawable/logo_facebook"
         app:iconTint="@android:color/transparent"
-        app:iconTintMode="src_atop" />
+        app:iconTintMode="src_atop"
+        android:visibility="gone"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/left_divider"

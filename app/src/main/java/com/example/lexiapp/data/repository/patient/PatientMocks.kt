@@ -1,6 +1,5 @@
 package com.example.lexiapp.data.repository.patient
 
-import com.example.lexiapp.domain.model.Objective
 import com.example.lexiapp.domain.model.Patient
 
 object PatientMocks {

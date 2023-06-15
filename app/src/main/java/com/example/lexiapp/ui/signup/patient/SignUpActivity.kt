@@ -31,24 +31,6 @@ class SignUpActivity : AppCompatActivity() {
         binding = ActivitySignUpBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
         initUI()
-        /*
-        val validationObserver = Observer<FirebaseResult> { authResult ->
-            when (authResult::class) {
-                FirebaseResult.TaskSuccess::class -> {
-                    Toast.makeText(this, "Se registró correctamente", Toast.LENGTH_SHORT).show()
-                }
-                FirebaseResult.TaskFaliure::class -> Toast.makeText(
-                    this,
-                    "Hubo un error",
-                    Toast.LENGTH_SHORT
-                ).show()
-                else -> {}
-            }
-        }
-        viewModel.registerResult.observe(this, validationObserver)
-        setUp()
-
-         */
     }
 
     private fun initUI() {
@@ -64,6 +46,9 @@ class SignUpActivity : AppCompatActivity() {
         }
         viewModel.showErrorDialog.observe(this) { showError ->
             if (showError) showErrorDialog()
+        }
+        binding.tvLogin.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
         }
     }
 
@@ -104,28 +89,3 @@ class SignUpActivity : AppCompatActivity() {
     private fun fieldsNotNull(): Boolean =
         binding.etEmail.editText?.text != null && binding.etPassword.editText?.text != null
 }
-//RegisterActivity
-/*lateinit var authProv: AuthProvider
-    lateinit var binding: ActivityMainBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding= ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        authProv= AuthProvider()
-        binding.h.setOnClickListener{ startActivity(Intent(this,LoginActivity::class.java)) }
-        setUp()
-    }
-    private fun setUp(){
-        binding.register.setOnClickListener{
-            if (binding.emailRegister.text!!.isNotEmpty() && binding.passRegister.text!!.isNotEmpty()){
-                //For create a New User use .createUserWhitEmailAndPassword(e,p)
-                authProv.singUpWithEmail(binding.emailRegister.text.toString(),binding.passRegister.text.toString()).addOnCompleteListener(this) {
-                    if (it.isSuccessful) {
-                        Toast.makeText(this, "Se registró correctamente",Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(this, "Hubo un error",Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
-    }*/
