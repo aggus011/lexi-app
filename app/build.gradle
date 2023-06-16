@@ -115,6 +115,10 @@ dependencies {
 
     //Photo Cropper
     implementation("com.vanniktech:android-image-cropper:4.5.0")
+
+    //LottieFile
+    def lottieVersion = "3.4.0"
+    implementation "com.airbnb.android:lottie:$lottieVersion"
 }
 kapt {
     correctErrorTypes true
