@@ -10,8 +10,9 @@ data class WhereIsGameResult(
     val word: String
 )
 
-fun WhereIsGameResult.toWhereIsTheLetterResult(): WhereIsTheLetterResult {
+fun WhereIsGameResult.toWhereIsTheLetterResult(email: String): WhereIsTheLetterResult {
     return WhereIsTheLetterResult(
+        email = email,
         mainLetter = this.mainLetter.toCharArray()[0],
         selectedLetter = this.selectedLetter.toCharArray()[0],
         success = this.result,

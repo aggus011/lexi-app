@@ -42,10 +42,6 @@ class LinkUseCases @Inject constructor(
         emit(result)
     }
 
-    suspend fun getUserGameResults(emailPatient: String): List<WhereIsTheLetterResult> {
-        return firestoreService.getLastResultsWhereIsTheLetterGame(emailPatient)
-    }
-
     suspend fun getUser(emailPatient: String) = firestoreService.getUser(emailPatient)
 
     private fun getEmail() = sharedPrefs.getString("email", null)

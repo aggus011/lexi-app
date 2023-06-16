@@ -9,6 +9,7 @@ import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.useCases.CodeQRUseCases
 import com.example.lexiapp.domain.useCases.LinkUseCases
+import com.example.lexiapp.domain.useCases.ResultGamesUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,18 +17,19 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfesionalHomeViewModel @Inject constructor(
     private val codeQRUseCases: CodeQRUseCases,
-    private val linkUseCases: LinkUseCases
+    private val linkUseCases: LinkUseCases,
+    private val resultGamesUseCases: ResultGamesUseCases
 ) : ViewModel() {
 
-    private val _listPatient = MutableLiveData<List<User>>()
+    private var _listPatient = MutableLiveData<List<User>>()
     val listPatient: LiveData<List<User>> = _listPatient
     private var _listFilterPatient = MutableLiveData<List<User>>()
     val listFilterPatient: LiveData<List<User>> = _listFilterPatient
-    private val _patientSelected = MutableLiveData<User?>()
+    private var _patientSelected = MutableLiveData<User?>()
     val patientSelected: LiveData<User?> = _patientSelected
-    private val _resultAddPatient = MutableLiveData<FirebaseResult>()
+    private var _resultAddPatient = MutableLiveData<FirebaseResult>()
     val resultAddPatient: LiveData<FirebaseResult> = _resultAddPatient
-    private val _resultDeletePatient = MutableLiveData<FirebaseResult>()
+    private var _resultDeletePatient = MutableLiveData<FirebaseResult>()
     val resultDeletePatient: LiveData<FirebaseResult> = _resultDeletePatient
 
     init {

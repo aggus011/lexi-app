@@ -33,7 +33,7 @@ class LetterServiceImpl @Inject constructor(
     }
 
     override suspend fun saveResult(result: WhereIsTheLetterResult) {
-        db.saveWhereIsTheLetterResult(result.toWhereIsGameResult(), userMail)
+        db.saveWhereIsTheLetterResult(result.toWhereIsGameResult(), result.email)
     }
 
     override fun obtainResults() {

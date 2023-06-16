@@ -1,5 +1,6 @@
 package com.example.lexiapp.ui.games.whereistheletter
 
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.lexiapp.domain.model.WhereIsTheLetterResult
@@ -61,10 +62,11 @@ class WhereIsTheLetterViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             getLetterWithPosition()?.let {
                 WhereIsTheLetterResult(
-                    letter.value!!,
-                    it,
-                    basicWord.value!!,
-                    success
+                    email= "",
+                    mainLetter = letter.value!!,
+                    selectedLetter = it,
+                    word = basicWord.value!!,
+                    success = success
                 )
             }?.let {
                 letterGameUseCases.saveWordInFirebase(

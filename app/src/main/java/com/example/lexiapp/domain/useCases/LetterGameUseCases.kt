@@ -1,5 +1,6 @@
 package com.example.lexiapp.domain.useCases
 
+import android.content.SharedPreferences
 import com.example.lexiapp.domain.model.WhereIsTheLetterResult
 import com.example.lexiapp.domain.service.FireStoreService
 import com.example.lexiapp.domain.service.LetterService
@@ -9,7 +10,8 @@ import kotlin.random.Random
 
 class LetterGameUseCases @Inject constructor(
     private val service: LetterService,
-    private val db: FireStoreService
+    private val db: FireStoreService,
+    private val prefs: SharedPreferences
 ) {
     private val SPANISH_LANGUAGE = "es"
     private var LENGTH_WORD = getRandomInt()
@@ -21,6 +23,7 @@ class LetterGameUseCases @Inject constructor(
     }
 
     suspend fun saveWordInFirebase(result: WhereIsTheLetterResult) {
+        result.email = prefs.getString("email", null).toString()
         service.saveResult(result)
     }
 

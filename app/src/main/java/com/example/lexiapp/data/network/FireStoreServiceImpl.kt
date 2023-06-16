@@ -2,6 +2,7 @@ package com.example.lexiapp.data.network
 
 import android.util.Log
 import com.example.lexiapp.data.model.WhereIsGameResult
+import com.example.lexiapp.data.model.toWhereIsTheLetterResult
 import com.example.lexiapp.domain.exceptions.FirestoreException
 import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.Professional
@@ -88,7 +89,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                     )
                 }
             }.await()
-        return result.map { it.toWhereIsTheLetterResult() }
+        return result.map { it.toWhereIsTheLetterResult(userMail) }
     }
 
     override suspend fun getOpenAICollectionDocumentReference(document: String) = flow {
@@ -268,14 +269,4 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     companion object {
         private const val TAG = "FireStoreServiceImpl"
     }
-}
-
-
-private fun WhereIsGameResult.toWhereIsTheLetterResult(): WhereIsTheLetterResult {
-    return WhereIsTheLetterResult(
-        mainLetter = this.mainLetter.toCharArray()[0],
-        selectedLetter = this.selectedLetter[0],
-        word = this.word,
-        success = this.result
-    )
 }
