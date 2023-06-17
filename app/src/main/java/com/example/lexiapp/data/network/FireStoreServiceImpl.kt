@@ -72,7 +72,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
             .document(System.currentTimeMillis().toString()).set(data).await()
     }
 
-    override suspend fun getLastResultsWhereIsTheLetterGame(userMail: String): List<WhereIsTheLetterResult> {
+    override suspend fun getLastResultsWhereIsTheLetterGame(userMail: String) = flow {
         val result = mutableListOf<WhereIsGameResult>()
         resultGameCollection(userMail).get()
             .addOnSuccessListener { querySnapshot ->
@@ -89,7 +89,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                     )
                 }
             }.await()
-        return result.map { it.toWhereIsTheLetterResult(userMail) }
+        emit(result.map { it.toWhereIsTheLetterResult(userMail) })
     }
 
     override suspend fun getOpenAICollectionDocumentReference(document: String) = flow {

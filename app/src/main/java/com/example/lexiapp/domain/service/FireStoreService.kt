@@ -18,7 +18,7 @@ interface FireStoreService {
 
     suspend fun saveWhereIsTheLetterResult(result: WhereIsGameResult, email: String)
 
-    suspend fun getLastResultsWhereIsTheLetterGame(userMail: String): List<WhereIsTheLetterResult>
+    suspend fun getLastResultsWhereIsTheLetterGame(userMail: String): Flow<List<WhereIsTheLetterResult>>
 
     suspend fun getOpenAICollectionDocumentReference(document: String): Flow<DocumentReference>
 

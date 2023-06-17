@@ -4,16 +4,22 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.User
+import com.example.lexiapp.domain.model.WhereIsTheLetterResult
 import com.example.lexiapp.domain.useCases.CodeQRUseCases
 import com.example.lexiapp.domain.useCases.LinkUseCases
 import com.example.lexiapp.domain.useCases.ResultGamesUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @HiltViewModel
 class ProfesionalHomeViewModel @Inject constructor(
@@ -22,6 +28,12 @@ class ProfesionalHomeViewModel @Inject constructor(
     private val resultGamesUseCases: ResultGamesUseCases
 ) : ViewModel() {
 
+    private var _avg = MutableLiveData<String>()
+    val avg = _avg as LiveData<String>
+    private var _hardLetters = MutableLiveData<List<Char>>()
+    val hardLetters = _hardLetters as LiveData<List<Char>>
+    private var _countWordsPlay = MutableLiveData<Int>()
+    val countWordsPlay = _countWordsPlay as LiveData<Int>
     private var _listPatient = MutableLiveData<List<User>>()
     val listPatient: LiveData<List<User>> = _listPatient
     private var _listFilterPatient = MutableLiveData<List<User>>()
@@ -82,9 +94,39 @@ class ProfesionalHomeViewModel @Inject constructor(
 
     fun setPatientSelected(patient: User) {
         _patientSelected.value = patient               //aca llamar para ver los resultados.
-        viewModelScope.launch(Dispatchers.IO) {
-            resultGamesUseCases.getWhereIsTheLetterResults(patient.email)
+        viewModelScope.launch {
+            resultGamesUseCases.getWhereIsTheLetterResults(patient.email).collect {
+                _countWordsPlay.value = it.size
+                setHardLetters(it)
+                setErrorAvg(it)
+            }
+
         }
+    }
+
+    private fun setErrorAvg(results: List<WhereIsTheLetterResult>) {
+        val subList = results.filter { !it.success }
+        _avg.value =
+            ((subList.size.toDouble() / results.size * 10000.0).roundToInt() / 100.0).toString()
+    }
+
+    private fun setHardLetters(results: List<WhereIsTheLetterResult>) {
+        val list = mutableMapOf<Char, Int>()
+        for (result in results) {
+            if (!list.contains(result.mainLetter)) {
+                list[result.mainLetter] = 1
+            } else {
+                list[result.mainLetter]!!.plus(1)
+            }
+        }
+        val maxCount = list.values.toSet().max()
+        val letterList = mutableListOf<Char>()
+        for (letter in list.keys) {
+            if (list[letter] == maxCount) {
+                letterList.add(letter)
+            }
+        }
+        _hardLetters.value = letterList
     }
 
     fun cleanPatient() {

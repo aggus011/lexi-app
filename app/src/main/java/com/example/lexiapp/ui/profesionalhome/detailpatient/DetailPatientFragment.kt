@@ -5,6 +5,7 @@ import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.example.lexiapp.R
 import com.example.lexiapp.databinding.FragmentDetailPatientBinding
 import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.User
@@ -32,15 +33,26 @@ class DetailPatientFragment : Fragment() {
         viewModel.patientSelected.observe(viewLifecycleOwner) { patient ->
             if (patient != null) bind(patient)
         }
+        viewModel.countWordsPlay.observe(viewLifecycleOwner) { wordsCount ->
+            binding.txtValueCountWords.text = wordsCount.toString()
+        }
+        viewModel.hardLetters.observe(viewLifecycleOwner) { letter ->
+            binding.txtValueLettersDificults.text = letter.toString()
+        }
+        viewModel.avg.observe(viewLifecycleOwner) {average ->
+            binding.txtValuePercentError.text = average
+        }
     }
 
     private fun bind(patient: User) {
-        binding.txtName.text = patient.userName
-        binding.txtEmail.text = patient.email
-        binding.tvUserInitials.text =
-            if (patient.userName != null && patient.userName!!.isNotEmpty())
-                patient.userName!![0].uppercase()
-            else patient.email[0].uppercase()
+        binding.apply {
+            txtName.text = patient.userName
+            txtEmail.text = patient.email
+            tvUserInitials.text =
+                if (patient.userName != null && patient.userName!!.isNotEmpty())
+                    patient.userName!![0].uppercase()
+                else patient.email[0].uppercase()
+        }
         binding.btnTrash.setOnClickListener {
             viewModel.unbindPatient(patient.email)
             viewModel.resultDeletePatient.observe(viewLifecycleOwner) {
