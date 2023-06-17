@@ -90,7 +90,7 @@ object InterfaceModule {
     }
 
     @Provides
-    fun getResultGameService(): ResultGamesService {
-        return ResultGamesServiceImpl()
+    fun getResultGameService(db: FireStoreService): ResultGamesService {
+        return ResultGamesServiceImpl(db)
     }
 }

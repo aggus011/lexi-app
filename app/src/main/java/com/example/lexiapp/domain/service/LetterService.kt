@@ -9,5 +9,4 @@ interface LetterService {
 
     suspend fun saveResult(result: WhereIsTheLetterResult)
 
-    fun obtainResults()
 }

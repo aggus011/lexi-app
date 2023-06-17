@@ -36,10 +36,6 @@ class LetterServiceImpl @Inject constructor(
         db.saveWhereIsTheLetterResult(result.toWhereIsGameResult(), result.email)
     }
 
-    override fun obtainResults() {
-
-    }
-
 }
 
 private fun WhereIsTheLetterResult.toWhereIsGameResult(): WhereIsGameResult {

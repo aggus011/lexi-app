@@ -8,7 +8,7 @@ class ResultGamesUseCases @Inject constructor(
     private val service: ResultGamesService
 ) {
 
-    fun getWhereIsTheLetterResults(emails: List<String>): List<WhereIsTheLetterResult> {
-        return service.getWhereIsTheLetterResults(emails)
+    suspend fun getWhereIsTheLetterResults(email: String): List<WhereIsTheLetterResult> {
+        return service.getWhereIsTheLetterResults(email)
     }
 }

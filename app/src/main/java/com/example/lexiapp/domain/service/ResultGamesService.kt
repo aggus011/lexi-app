@@ -4,6 +4,6 @@ import com.example.lexiapp.domain.model.WhereIsTheLetterResult
 
 interface ResultGamesService {
 
-    fun getWhereIsTheLetterResults(emails: List<String>): List<WhereIsTheLetterResult>
+    suspend fun getWhereIsTheLetterResults(email: String): List<WhereIsTheLetterResult>
 
 }

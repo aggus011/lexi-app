@@ -11,6 +11,7 @@ import com.example.lexiapp.domain.useCases.CodeQRUseCases
 import com.example.lexiapp.domain.useCases.LinkUseCases
 import com.example.lexiapp.domain.useCases.ResultGamesUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -80,7 +81,10 @@ class ProfesionalHomeViewModel @Inject constructor(
     }
 
     fun setPatientSelected(patient: User) {
-        _patientSelected.value = patient
+        _patientSelected.value = patient               //aca llamar para ver los resultados.
+        viewModelScope.launch(Dispatchers.IO) {
+            resultGamesUseCases.getWhereIsTheLetterResults(patient.email)
+        }
     }
 
     fun cleanPatient() {
