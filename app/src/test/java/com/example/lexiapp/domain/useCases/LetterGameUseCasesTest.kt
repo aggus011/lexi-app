@@ -1,6 +1,9 @@
 package com.example.lexiapp.domain.useCases
 
+import android.content.SharedPreferences
 import com.example.lexiapp.data.api.LetterServiceImpl
+import com.example.lexiapp.data.network.FireStoreServiceImpl
+import com.example.lexiapp.domain.service.FireStoreService
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
@@ -20,12 +23,18 @@ class LetterGameUseCasesTest {
     @RelaxedMockK
     private lateinit var repository: LetterServiceImpl
 
+    @RelaxedMockK
+    private lateinit var db: FireStoreServiceImpl
+
+    @RelaxedMockK
+    private lateinit var prefs: SharedPreferences
+
     lateinit var letterGameUseCases: LetterGameUseCases
 
     @Before
     fun onBefore() {
         MockKAnnotations.init(this)
-        letterGameUseCases = LetterGameUseCases(repository)
+        letterGameUseCases = LetterGameUseCases(repository, db, prefs)
     }
 
     @Test
