@@ -1,10 +1,11 @@
 package com.example.lexiapp.domain.service
 
-import com.example.lexiapp.data.model.WhereIsGameResult
+import com.example.lexiapp.data.model.CorrectWordDataResult
+import com.example.lexiapp.data.model.WhereIsTheLetterDataResult
 import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.Professional
 import com.example.lexiapp.domain.model.User
-import com.example.lexiapp.domain.model.WhereIsTheLetterResult
+import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.google.firebase.firestore.DocumentReference
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +17,7 @@ interface FireStoreService {
 
     suspend fun getUser(email: String): User
 
-    suspend fun saveWhereIsTheLetterResult(result: WhereIsGameResult, email: String)
+    suspend fun saveWhereIsTheLetterResult(result: WhereIsTheLetterDataResult, email: String)
 
     suspend fun getLastResultsWhereIsTheLetterGame(userMail: String): Flow<List<WhereIsTheLetterResult>>
 
@@ -37,5 +38,6 @@ interface FireStoreService {
     suspend fun unBindProfessionalFromPatient (emailPatient: String): FirebaseResult
 
     suspend fun deletePatientFromProfessional (emailPatient: String, emailProfessional: String): CompletableDeferred<FirebaseResult>
+    suspend fun saveCorrectWordResult(result: CorrectWordDataResult, email: String)
 
 }

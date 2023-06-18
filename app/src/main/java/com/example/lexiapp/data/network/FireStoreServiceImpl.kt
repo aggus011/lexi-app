@@ -1,13 +1,13 @@
 package com.example.lexiapp.data.network
 
 import android.util.Log
-import com.example.lexiapp.data.model.WhereIsGameResult
+import com.example.lexiapp.data.model.CorrectWordDataResult
+import com.example.lexiapp.data.model.WhereIsTheLetterDataResult
 import com.example.lexiapp.data.model.toWhereIsTheLetterResult
 import com.example.lexiapp.domain.exceptions.FirestoreException
 import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.Professional
 import com.example.lexiapp.domain.model.User
-import com.example.lexiapp.domain.model.WhereIsTheLetterResult
 import com.example.lexiapp.domain.service.FireStoreService
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
@@ -24,6 +24,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
 
     private val userCollection = firebase.firestore.collection("user")
     private val whereIsTheLetterCollection = firebase.firestore.collection("where_is_the_letter")
+    private val correctWordCollection = firebase.firestore.collection("correct_word")
     private val openaiCollection = firebase.firestore.collection("openai_api_use")
     private val professionalCollection = firebase.firestore.collection("professional")
     private val resultGameCollection: (String) -> CollectionReference =
@@ -61,7 +62,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
         return user
     }
 
-    override suspend fun saveWhereIsTheLetterResult(result: WhereIsGameResult, email: String) {
+    override suspend fun saveWhereIsTheLetterResult(result: WhereIsTheLetterDataResult, email: String) {
         val data = hashMapOf(
             "result" to result.result,
             "mainLetter" to result.mainLetter,
@@ -73,14 +74,14 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     }
 
     override suspend fun getLastResultsWhereIsTheLetterGame(userMail: String) = flow {
-        val result = mutableListOf<WhereIsGameResult>()
+        val result = mutableListOf<WhereIsTheLetterDataResult>()
         resultGameCollection(userMail).get()
             .addOnSuccessListener { querySnapshot ->
                 for (document in querySnapshot) {
                     val documentId = document.id
                     val data = document.data
                     result.add(
-                        WhereIsGameResult(
+                        WhereIsTheLetterDataResult(
                             mainLetter = data["mainLetter"] as String,
                             result = data["result"] as Boolean,
                             selectedLetter = data["selectedLetter"] as String,
@@ -264,6 +265,18 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
             completableDeferred.completeExceptionally(FirestoreException("Failure to save a new patient"))
         }
         return completableDeferred
+    }
+
+    override suspend fun saveCorrectWordResult(result: CorrectWordDataResult, email: String) {
+
+
+        val data = hashMapOf(
+            "result" to result.result,
+            "mainWord" to result.mainWord,
+            "selectedWord" to result.selectedWord
+        )
+        correctWordCollection.document(email).collection("results")
+            .document(System.currentTimeMillis().toString()).set(data).await()
     }
 
     companion object {

@@ -4,20 +4,15 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.User
-import com.example.lexiapp.domain.model.WhereIsTheLetterResult
+import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.example.lexiapp.domain.useCases.CodeQRUseCases
 import com.example.lexiapp.domain.useCases.LinkUseCases
 import com.example.lexiapp.domain.useCases.ResultGamesUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -112,7 +107,8 @@ class ProfesionalHomeViewModel @Inject constructor(
 
     private fun setHardLetters(results: List<WhereIsTheLetterResult>) {
         val list = mutableMapOf<Char, Int>()
-        for (result in results) {
+        val filteredList = results.filter { !it.success }
+        for (result in filteredList) {
             if (!list.contains(result.mainLetter)) {
                 list[result.mainLetter] = 1
             } else {

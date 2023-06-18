@@ -1,9 +1,8 @@
 package com.example.lexiapp.ui.games.whereistheletter
 
-import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.*
-import com.example.lexiapp.domain.model.WhereIsTheLetterResult
+import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.example.lexiapp.domain.useCases.LetterGameUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

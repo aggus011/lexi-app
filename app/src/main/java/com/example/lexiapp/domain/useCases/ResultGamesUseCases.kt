@@ -1,6 +1,6 @@
 package com.example.lexiapp.domain.useCases
 
-import com.example.lexiapp.domain.model.WhereIsTheLetterResult
+import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.example.lexiapp.domain.service.ResultGamesService
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
