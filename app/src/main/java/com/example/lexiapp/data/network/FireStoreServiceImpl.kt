@@ -1,15 +1,16 @@
 package com.example.lexiapp.data.network
 
 import android.util.Log
-import com.example.lexiapp.data.model.Game
-import com.example.lexiapp.data.model.GameResult
 import com.example.lexiapp.data.model.WhereIsGameResult
+import com.example.lexiapp.data.model.toWhereIsTheLetterResult
 import com.example.lexiapp.domain.exceptions.FirestoreException
 import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.Professional
 import com.example.lexiapp.domain.model.User
+import com.example.lexiapp.domain.model.WhereIsTheLetterResult
 import com.example.lexiapp.domain.service.FireStoreService
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.flow
@@ -21,11 +22,13 @@ import javax.inject.Singleton
 @Singleton
 class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireStoreService {
 
+    private val userCollection = firebase.firestore.collection("user")
+    private val whereIsTheLetterCollection = firebase.firestore.collection("where_is_the_letter")
+    private val openaiCollection = firebase.firestore.collection("openai_api_use")
+    private val professionalCollection = firebase.firestore.collection("professional")
+    private val resultGameCollection: (String) -> CollectionReference =
+        { email: String -> firebase.firestore.collection("where_is_the_letter/${email}/results") }
     private val db = firebase.firestore
-    private val userCollection = db.collection("user")
-    private val whereIsTheLetterCollection = db.collection("where_is_the_letter")
-    private val openaiCollection = db.collection("openai_api_use")
-    private val professionalCollection = db.collection("professional")
     private lateinit var registration: ListenerRegistration
 
     override suspend fun saveAccount(user: User) {
@@ -46,7 +49,8 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                     if (documentSnapshot.exists()) {
                         user.userName = documentSnapshot.data?.get("user_name") as String?
                         user.birthDate = documentSnapshot.data?.get("birth_date") as String?
-                        user.profesional = documentSnapshot.data?.get("professional_link") as String?
+                        user.profesional =
+                            documentSnapshot.data?.get("professional_link") as String?
                     } else {
                         // El usuario no fue encontrado
                     }
@@ -57,43 +61,45 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
         return user
     }
 
-    override suspend fun saveWhereIsTheLetterResult(result: GameResult) {
+    override suspend fun saveWhereIsTheLetterResult(result: WhereIsGameResult, email: String) {
         val data = hashMapOf(
-            "game" to result.game.toString(),
-            "result" to result.result
+            "result" to result.result,
+            "mainLetter" to result.mainLetter,
+            "selectedLetter" to result.selectedLetter,
+            "word" to result.word
         )
-        whereIsTheLetterCollection.document(result.user_mail).set(data).await()
+        whereIsTheLetterCollection.document(email).collection("results")
+            .document(System.currentTimeMillis().toString()).set(data).await()
     }
 
-    override suspend fun obtainLastResults(userMail: String): List<WhereIsGameResult> {
-        var result = mutableListOf<WhereIsGameResult>()
-        whereIsTheLetterCollection.document(userMail).get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val documentSnapshot = task.result
-                    documentSnapshot.let {
-                        if (it.data?.get("game")
-                                .toString() == Game.WHERE_IS_THE_LETTER_GAME.toString()
-                        ) {
-                            result.add(
-                                WhereIsGameResult(
-                                    game = Game.valueOf(it.data?.get("game") as String),
-                                    user_mail = userMail,
-                                    result = it.data?.get("result") as Pair<String, String>
-                                )
-                            )
-                        }
-                    }
+    override suspend fun getLastResultsWhereIsTheLetterGame(userMail: String) = flow {
+        val result = mutableListOf<WhereIsGameResult>()
+        resultGameCollection(userMail).get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot) {
+                    val documentId = document.id
+                    val data = document.data
+                    result.add(
+                        WhereIsGameResult(
+                            mainLetter = data["mainLetter"] as String,
+                            result = data["result"] as Boolean,
+                            selectedLetter = data["selectedLetter"] as String,
+                            word = data["word"] as String
+                        )
+                    )
                 }
             }.await()
-        return result
+        emit(result.map { it.toWhereIsTheLetterResult(userMail) })
     }
 
     override suspend fun getOpenAICollectionDocumentReference(document: String) = flow {
         emit(openaiCollection.document(document))
     }
 
-    override suspend fun saveProfessionalAccount(professional: Professional, registrationDate: Date) {
+    override suspend fun saveProfessionalAccount(
+        professional: Professional,
+        registrationDate: Date
+    ) {
         val data = hashMapOf(
             "user_name" to professional.user!!.userName,
             "medical_registration" to professional.medicalRegistration,
@@ -121,7 +127,9 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                     if (documentSnapshot.exists()) {
                         professional = Professional.Builder()
                             .user(documentSnapshot.data?.get("user_name").toString(), email)
-                            .medicalRegistration(documentSnapshot.data?.get("medical_registration").toString())
+                            .medicalRegistration(
+                                documentSnapshot.data?.get("medical_registration").toString()
+                            )
                             .patients(documentSnapshot.data?.get("patients") as List<String>)
                             .isVerifiedAccount(documentSnapshot.data?.get("is_verificated_account") as Boolean)
                             .registrationDate((documentSnapshot.data?.get("registration_date") as Timestamp).toDate())
@@ -143,7 +151,8 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                 if (task.isSuccessful) {
                     val documentSnapshot = task.result
                     if (documentSnapshot.exists()) {
-                        linkProfessional=documentSnapshot.data?.get("professional_link") as String? != null
+                        linkProfessional =
+                            documentSnapshot.data?.get("professional_link") as String? != null
                         Log.v("FSSImpl_PRE_LINK_PROF", "$linkProfessional")
                     }
                 } else {
@@ -178,7 +187,8 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     ): CompletableDeferred<FirebaseResult> {
         val completableDeferred = CompletableDeferred<FirebaseResult>()
         db.runTransaction { transaction ->
-            val documentSnapshot = transaction.get(professionalCollection.document(emailProfessional))
+            val documentSnapshot =
+                transaction.get(professionalCollection.document(emailProfessional))
             val list = documentSnapshot.get("patients") as List<String>?
             val newList = list?.toMutableList() ?: mutableListOf()
             newList.add(emailPatient)
@@ -194,7 +204,10 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
         return completableDeferred
     }
 
-    override suspend fun getListLinkPatientOfProfessional(emailProfessional: String, listener: (List<String>?) -> Unit){
+    override suspend fun getListLinkPatientOfProfessional(
+        emailProfessional: String,
+        listener: (List<String>?) -> Unit
+    ) {
         val docRef = professionalCollection.document(emailProfessional)
         val registration = docRef.addSnapshotListener { snapshot, e ->
             if (e != null) {
@@ -209,7 +222,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                 listener(null)
             }
         }
-        this.registration=registration
+        this.registration = registration
     }
 
     override suspend fun unBindProfessionalFromPatient(
@@ -235,13 +248,15 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     ): CompletableDeferred<FirebaseResult> {
         val completableDeferred = CompletableDeferred<FirebaseResult>()
         db.runTransaction { transaction ->
-            val documentSnapshot = transaction.get(professionalCollection.document(emailProfessional))
+            val documentSnapshot =
+                transaction.get(professionalCollection.document(emailProfessional))
             val list = documentSnapshot.get("patients") as List<String>?
             val newList = list?.toMutableList() ?: mutableListOf()
             newList.remove(emailPatient)
             transaction.update(
                 professionalCollection.document(emailProfessional),
-                "patients", newList)
+                "patients", newList
+            )
             newList
         }.addOnSuccessListener {
             completableDeferred.complete(FirebaseResult.TaskSuccess)
@@ -251,7 +266,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
         return completableDeferred
     }
 
-    companion object{
+    companion object {
         private const val TAG = "FireStoreServiceImpl"
     }
 }

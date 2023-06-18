@@ -1,15 +1,12 @@
 package com.example.lexiapp.domain.useCases
 
 import android.content.SharedPreferences
-import android.util.Log
-import com.example.lexiapp.domain.model.FirebaseResult
-import com.example.lexiapp.domain.model.User
-import com.example.lexiapp.domain.service.AuthenticationService
+import com.example.lexiapp.domain.model.WhereIsTheLetterResult
 import com.example.lexiapp.domain.service.FireStoreService
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class LinkUseCase @Inject constructor(
+class LinkUseCases @Inject constructor(
     private val firestoreService: FireStoreService,
     private val sharedPrefs: SharedPreferences
 ) {
@@ -22,12 +19,12 @@ class LinkUseCase @Inject constructor(
 
     suspend fun addPatientToProfessional(
         emailPatient: String,
-    )= flow {
+    ) = flow {
         val result = firestoreService.addPatientToProfessional(emailPatient, getEmail()!!).await()
         emit(result)
     }
 
-    suspend fun getListLinkPatientOfProfessional(listener: (List<String>?)->Unit) {
+    suspend fun getListLinkPatientOfProfessional(listener: (List<String>?) -> Unit) {
         firestoreService.getListLinkPatientOfProfessional(getEmail()!!, listener)
     }
 
@@ -40,11 +37,12 @@ class LinkUseCase @Inject constructor(
     suspend fun deletePatientFromProfessional(
         emailPatient: String,
     ) = flow {
-        val result = firestoreService.deletePatientFromProfessional(emailPatient, getEmail()!!).await()
+        val result =
+            firestoreService.deletePatientFromProfessional(emailPatient, getEmail()!!).await()
         emit(result)
     }
 
-    suspend fun getUser (emailPatient: String) = firestoreService.getUser(emailPatient)
+    suspend fun getUser(emailPatient: String) = firestoreService.getUser(emailPatient)
 
-    private fun getEmail()= sharedPrefs.getString("email", null)
+    private fun getEmail() = sharedPrefs.getString("email", null)
 }
