@@ -14,6 +14,7 @@ import com.example.lexiapp.databinding.FragmentObjectivesBinding
 import com.example.lexiapp.ui.adapter.ObjectivesAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import com.google.firebase.auth.FirebaseAuth
+import android.os.Looper
 
 @AndroidEntryPoint
 class ObjectivesFragment : Fragment() {
@@ -21,7 +22,7 @@ class ObjectivesFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var rvObjectives: RecyclerView
     private lateinit var objectivesAdapter: ObjectivesAdapter
-    private val handler = Handler()
+   // private val handler = Handler()
 
     private val objectivesViewModel: ObjectivesViewModel by viewModels()
 
@@ -47,10 +48,10 @@ class ObjectivesFragment : Fragment() {
     }
 
     private fun loadObjectivesWithDelay() {
-        handler.postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             saveObjectives()
             loadObjectives()
-        }, 100)
+        }, 200) // Delay de 1 segundo (1000 milisegundos)
     }
 
     private fun loadObjectives() {
