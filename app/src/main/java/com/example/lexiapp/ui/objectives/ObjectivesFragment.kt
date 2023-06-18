@@ -1,7 +1,7 @@
 package com.example.lexiapp.ui.objectives
 
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,11 +10,10 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lexiapp.R
-import com.example.lexiapp.data.api.openaicompletions.OpenAICompletionsGateway
 import com.example.lexiapp.databinding.FragmentObjectivesBinding
 import com.example.lexiapp.ui.adapter.ObjectivesAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import com.example.lexiapp.domain.model.Objective
+import com.google.firebase.auth.FirebaseAuth
 
 @AndroidEntryPoint
 class ObjectivesFragment : Fragment() {
@@ -22,10 +21,9 @@ class ObjectivesFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var rvObjectives: RecyclerView
     private lateinit var objectivesAdapter: ObjectivesAdapter
-
+    private val handler = Handler()
 
     private val objectivesViewModel: ObjectivesViewModel by viewModels()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,10 +36,8 @@ class ObjectivesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
-        saveObjectives()
-        loadObjectives()
+        loadObjectivesWithDelay()
     }
-
 
     private fun setUpRecyclerView() {
         objectivesAdapter = ObjectivesAdapter()
@@ -50,6 +46,12 @@ class ObjectivesFragment : Fragment() {
         rvObjectives.adapter = objectivesAdapter
     }
 
+    private fun loadObjectivesWithDelay() {
+        handler.postDelayed({
+            saveObjectives()
+            loadObjectives()
+        }, 100)
+    }
 
     private fun loadObjectives() {
         objectivesViewModel.objectives.observe(viewLifecycleOwner) { objectives ->
@@ -63,8 +65,11 @@ class ObjectivesFragment : Fragment() {
     }
 
     private fun saveObjectives() {
-        val email = "asd10@asd.com"
-        objectivesViewModel.saveObjectivesToFirestore(email)
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val email = currentUser?.email
+        if (email != null) {
+            objectivesViewModel.saveObjectivesToFirestore(email)
+        }
     }
 
     override fun onDestroyView() {

@@ -1,15 +1,14 @@
 package com.example.lexiapp.ui.objectives
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.lexiapp.data.api.openaicompletions.OpenAICompletionsGateway.Companion.TAG
 import com.example.lexiapp.data.network.FireStoreServiceImpl
 import com.example.lexiapp.domain.model.Objective
 import com.example.lexiapp.domain.useCases.ObjectivesUseCases
 import com.example.lexiapp.domain.service.FireStoreService
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
@@ -36,23 +35,18 @@ class ObjectivesViewModel @Inject constructor(
     fun loadObjectives() {
         val today = LocalDate.now()
         val monday = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val email = currentUser?.email
+        if (email != null) {
+            viewModelScope.launch {
+                val objectives = fireStoreService.getObjectives(email)
+                _objectives.value = objectives
 
-        viewModelScope.launch {
-            val objectives = fireStoreService.getObjectives("asd10@asd.com")
-            _objectives.value = objectives
-
-            for (objective in objectives) {
-                Log.d("Objetivo:", "$objective")
-                Log.d("TItulo:", " ${objective.title}")
-
+                val daysLeft = objectivesUseCases.calculateDaysLeft(monday)
+                _daysLeft.value = daysLeft
             }
-
-
-            val daysLeft = objectivesUseCases.calculateDaysLeft(monday)
-            _daysLeft.value = daysLeft
         }
     }
-
 
     fun saveObjectivesToFirestore(email: String) {
         viewModelScope.launch {
@@ -66,7 +60,4 @@ class ObjectivesViewModel @Inject constructor(
             }
         }
     }
-    }
-
-
-
+}
