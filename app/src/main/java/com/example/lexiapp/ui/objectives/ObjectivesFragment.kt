@@ -61,7 +61,7 @@ class ObjectivesFragment : Fragment() {
     }
 
     private fun saveObjectives() {
-        val email = "asd9@asd.com"
+        val email = "asd10@asd.com"
         objectivesViewModel.saveObjectivesToFirestore(email)
     }
 

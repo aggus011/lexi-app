@@ -37,18 +37,15 @@ class ObjectivesViewModel @Inject constructor(
         val today = LocalDate.now()
         val monday = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
 
-        /*    viewModelScope.launch {
-                val objectives = fireStoreService.getObjectives("asd9@asd.com")
-                _objectives.value = objectives
-            }*/
-        val objectives = objectivesUseCases.getObjectives(monday)
-
-        _objectives.value = objectives
+        viewModelScope.launch {
+            val objectives = fireStoreService.getObjectives("asd10@asd.com")
+            _objectives.value = objectives
 
             val daysLeft = objectivesUseCases.calculateDaysLeft(monday)
             _daysLeft.value = daysLeft
-
+        }
     }
+
 
     fun saveObjectivesToFirestore(email: String) {
         viewModelScope.launch {
