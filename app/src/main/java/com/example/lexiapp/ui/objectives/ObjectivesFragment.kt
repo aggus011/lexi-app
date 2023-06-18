@@ -44,15 +44,17 @@ class ObjectivesFragment : Fragment() {
 
 
     private fun setUpRecyclerView() {
-        rvObjectives = binding.rvObjectives
         objectivesAdapter = ObjectivesAdapter()
+        rvObjectives = binding.rvObjectives
         rvObjectives.layoutManager = LinearLayoutManager(requireContext())
         rvObjectives.adapter = objectivesAdapter
     }
 
+
     private fun loadObjectives() {
         objectivesViewModel.objectives.observe(viewLifecycleOwner) { objectives ->
             objectivesAdapter.updateObjectiveList(objectives)
+            objectivesAdapter.notifyDataSetChanged()
         }
 
         objectivesViewModel.daysLeft.observe(viewLifecycleOwner) { daysLeft ->

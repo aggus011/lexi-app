@@ -41,6 +41,13 @@ class ObjectivesViewModel @Inject constructor(
             val objectives = fireStoreService.getObjectives("asd10@asd.com")
             _objectives.value = objectives
 
+            for (objective in objectives) {
+                Log.d("Objetivo:", "$objective")
+                Log.d("TItulo:", " ${objective.title}")
+
+            }
+
+
             val daysLeft = objectivesUseCases.calculateDaysLeft(monday)
             _daysLeft.value = daysLeft
         }
