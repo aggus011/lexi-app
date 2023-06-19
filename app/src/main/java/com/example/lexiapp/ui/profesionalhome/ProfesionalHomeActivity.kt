@@ -1,10 +1,7 @@
 package com.example.lexiapp.ui.profesionalhome
 
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.OvalShape
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +18,6 @@ import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.useCases.ProfileUseCases
 import com.example.lexiapp.ui.adapter.UserAdapter
-import com.example.lexiapp.ui.login.LoginActivity
 import com.example.lexiapp.ui.profesionalhome.detailpatient.DetailPatientFragment
 import com.example.lexiapp.ui.profesionalhome.resultlink.SuccessfulLinkActivity
 import com.example.lexiapp.ui.profesionalhome.resultlink.UnsuccessfulLinkActivity
@@ -29,7 +25,6 @@ import com.example.lexiapp.ui.profile.professional.ProfessionalProfileFragment
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import dagger.hilt.android.AndroidEntryPoint
-import okhttp3.internal.notify
 import javax.inject.Inject
 
 @AndroidEntryPoint
