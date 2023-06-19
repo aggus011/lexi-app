@@ -6,7 +6,6 @@ import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
@@ -20,24 +19,16 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
+import com.airbnb.lottie.LottieAnimationView
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityLetsReadBinding
 import com.example.lexiapp.domain.model.TextToRead
-import com.example.lexiapp.ui.games.whereistheletter.WhereIsTheLetterViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.File
 import java.util.*
 
@@ -51,7 +42,7 @@ class LetsReadActivity : AppCompatActivity() {
     private lateinit var tvTextTitle: TextView
     private lateinit var tvTextToRead: TextView
     private lateinit var btnBack: ImageView
-    private lateinit var btnRecordAudio: ImageButton
+    private lateinit var btnRecordAudio: LottieAnimationView
     private var mediaPlayerText: MediaPlayer? = null
     private lateinit var runnableAudioText: Runnable
     private var handlerAudioText = Handler()
@@ -132,6 +123,8 @@ class LetsReadActivity : AppCompatActivity() {
         val textToSynthesize =
             tvTextTitle.text.toString().plus("\n").plus(tvTextToRead.text.toString())
 
+        showLoadingAudioFromText()
+
         textToSpeech.synthesizeToFile(
             textToSynthesize,
             null,
@@ -153,6 +146,7 @@ class LetsReadActivity : AppCompatActivity() {
                         seekBarAudioText,
                         tvAudioTextDuration
                     )
+                    hideLoadingAudioFromText()
                 }
             }
 
@@ -294,12 +288,14 @@ class LetsReadActivity : AppCompatActivity() {
             "Lexi ${tvTextTitle.text} record.mp3"
         )
         if (!isRecording) {
+            playRecordingAnimation()
             setMediaRecorder(recordingFile)
             pauseMediaPlayerAudioText()
             enableButtonPlayAudioText(btnPlayAudioText = false)
             isRecording = !isRecording
             Log.v("Game Lets Read", "Grabando audio...")
         } else {
+            stopRecordingAnimation()
             releaseMediaAudioRecorder()
             enableButtonPlayAudioText(btnPlayAudioText = true)
             setMediaPlayerAudioRecord(
@@ -525,11 +521,30 @@ class LetsReadActivity : AppCompatActivity() {
                 android.os.Build.VERSION_CODES.S_V2
     }
 
+    private fun playRecordingAnimation(){
+        binding.btnRec.playAnimation()
+    }
+
+    private fun stopRecordingAnimation(){
+        binding.btnRec.cancelAnimation()
+    }
+
+    private fun showLoadingAudioFromText(){
+        binding.progressBarAudioText.visibility = View.VISIBLE
+        binding.clAudioText.visibility = View.GONE
+    }
+
+    private fun hideLoadingAudioFromText(){
+        binding.progressBarAudioText.visibility = View.GONE
+        binding.clAudioText.visibility = View.VISIBLE
+    }
+
     override fun onPause() {
         super.onPause()
         releaseMediaAudioRecorder()
         pauseMediaPlayerAudioText()
         releaseMediaPlayerAudioRecorder()
+        stopRecordingAnimation()
     }
 
     override fun onDestroy() {
@@ -538,5 +553,6 @@ class LetsReadActivity : AppCompatActivity() {
         releaseMediaPlayerAudioText()
         releaseMediaPlayerAudioRecorder()
         textToSpeech.shutdown()
+        stopRecordingAnimation()
     }
 }
