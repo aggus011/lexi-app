@@ -2,10 +2,13 @@ package com.example.lexiapp.domain.useCases
 
 import com.example.lexiapp.domain.model.Objective
 import com.example.lexiapp.domain.service.ObjectivesService
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters
 import javax.inject.Inject
+
 
 class ObjectivesUseCases @Inject constructor(private val objectivesService: ObjectivesService) {
     fun getObjectives(startDate: LocalDate): List<Objective> {
@@ -24,5 +27,6 @@ class ObjectivesUseCases @Inject constructor(private val objectivesService: Obje
             daysLeft
         }
     }
+
 
 }
