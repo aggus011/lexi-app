@@ -6,42 +6,52 @@
     android:layout_height="match_parent"
     tools:context=".ui.role.RoleActivity">
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/ivMiniLogo"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            app:layout_constraintBottom_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clAppLogo"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:lottie_autoPlay="true"
-            app:lottie_colorFilter="@color/purple"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/amoeba" />
-
-        <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
-            android:text="@string/logo"
-            android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:textAppearance="@style/title"
-            tools:textColor="@color/black"/>
+            android:layout_marginTop="60dp">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/animationLogo"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:lottie_autoPlay="true"
+                    app:lottie_colorFilter="@color/purple"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/amoeba" />
+
+                <TextView
+                    android:id="@+id/tvLogoApp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/logo"
+                    app:layout_constraintStart_toStartOf="@id/animationLogo"
+                    app:layout_constraintEnd_toEndOf="@id/animationLogo"
+                    app:layout_constraintTop_toTopOf="@id/animationLogo"
+                    app:layout_constraintBottom_toBottomOf="@id/animationLogo"
+                    android:textAppearance="@style/title"
+                    android:textColor="@color/white"
+                    tools:textColor="@color/black"
+                    android:textSize="40sp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/tvRoleTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/clAppLogo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/choose_how_would_like_register"
             android:textAppearance="@style/title"
-            android:layout_marginBottom="70dp"
+            android:layout_marginTop="60dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:gravity="center"/>
