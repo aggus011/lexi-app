@@ -8,6 +8,15 @@ data class CorrectWordDataResult(
     val selectedWord: String
 )
 
+fun CorrectWordDataResult.toCorrectWordGameResult(email: String): CorrectWordGameResult {
+    return CorrectWordGameResult(
+        email = email,
+        wordSelected = this.selectedWord,
+        correctWord = this.mainWord,
+        success = this.result
+    )
+}
+
 fun CorrectWordGameResult.toCorrectWordDataResult(): CorrectWordDataResult {
     return CorrectWordDataResult(
         result = this.success,

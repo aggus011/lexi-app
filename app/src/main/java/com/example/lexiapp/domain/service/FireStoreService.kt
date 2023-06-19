@@ -5,6 +5,7 @@ import com.example.lexiapp.data.model.WhereIsTheLetterDataResult
 import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.Professional
 import com.example.lexiapp.domain.model.User
+import com.example.lexiapp.domain.model.gameResult.CorrectWordGameResult
 import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.google.firebase.firestore.DocumentReference
 import kotlinx.coroutines.CompletableDeferred
@@ -20,6 +21,8 @@ interface FireStoreService {
     suspend fun saveWhereIsTheLetterResult(result: WhereIsTheLetterDataResult, email: String)
 
     suspend fun getLastResultsWhereIsTheLetterGame(userMail: String): Flow<List<WhereIsTheLetterResult>>
+
+    suspend fun getLastResultsCorrectWordGame(userMail: String): Flow<List<CorrectWordGameResult>>
 
     suspend fun getOpenAICollectionDocumentReference(document: String): Flow<DocumentReference>
 
