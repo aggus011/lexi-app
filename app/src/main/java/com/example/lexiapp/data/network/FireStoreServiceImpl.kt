@@ -28,8 +28,8 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
 
     private val userCollection = firebase.firestore.collection("user")
     private val whereIsTheLetterCollection =
-        firebase.firestore.collection(Game.WHERE_IS_THE_LETTER.toString())
-    private val correctWordCollection = firebase.firestore.collection(Game.CORRECT_WORD.toString())
+        firebase.firestore.collection(Game.WHERE_IS_THE_LETTER.toString().lowercase())
+    private val correctWordCollection = firebase.firestore.collection(Game.CORRECT_WORD.toString().lowercase())
     private val openaiCollection = firebase.firestore.collection("openai_api_use")
     private val professionalCollection = firebase.firestore.collection("professional")
     private val resultGameCollection: (String, String) -> CollectionReference =
