@@ -51,7 +51,7 @@ class LetterGameUseCasesTest {
         //When
         letterGameUseCases.getWord().collect {
             //Then
-            assertTrue(it.length in 5..6)
+            assertTrue(it.length in 4..6)
         }
     }
 

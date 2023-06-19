@@ -22,7 +22,7 @@ class LetterGameUseCases @Inject constructor(
         LENGTH_WORD = getRandomInt()
         service.getWord(ONE_WORD, LENGTH_WORD, SPANISH_LANGUAGE).collect {
             val word = it.split(" ")[0]
-            if (word.length in 5..6) {
+            if (word.length in 4..6) {
                 emit(word)
             } else {
                 throw OversizeException("size: ${it.length}")
