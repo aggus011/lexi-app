@@ -62,7 +62,7 @@
     <string name="signup_professional">Registro Profesional</string>
     <string name="check_your_register">No pudimos verificar tus datos, por favor revisalos</string>
     <string name="check">Revisar</string>
-    <string name="days_left">Días restantes: %1$d</string>
+    <string name="days_left">Días restantes: </string>
     <string name="confirm_password">Confirmar contraseña</string>
     <string name="show_qr_to_professional">Mostrá este código QR con tu profesional</string>
     <string name="choose_how_would_like_register">Elegí cómo querés registrarte</string>
