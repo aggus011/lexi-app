@@ -12,8 +12,8 @@
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/animationLogo"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             app:layout_constraintBottom_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,13 +27,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:text="@string/logo"
             android:textColor="@color/white"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/app_name"/>
+            tools:textColor="@color/black"
+            android:textAppearance="@style/title"/>
 
         <TextView
             android:id="@+id/tvObjectivesTitle"
@@ -44,21 +44,19 @@
             app:layout_constraintTop_toBottomOf="@id/animationLogo"
             android:text="@string/my_objectives"
             android:textAppearance="@style/title"
-            android:textSize="40sp" />
+            android:textSize="40sp"
+            android:textAlignment="center"/>
 
         <TextView
             android:id="@+id/txtDaysLeft"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="92dp"
-            android:layout_marginEnd="95dp"
             android:text="@string/days_left"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.101" />
+            android:textAppearance="@style/subtitle"
+            android:layout_marginTop="60dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvObjectives"

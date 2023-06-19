@@ -64,6 +64,18 @@
     <string name="check">Revisar</string>
     <string name="days_left">Días restantes: %1$d</string>
     <string name="confirm_password">Confirmar contraseña</string>
+    <string name="show_qr_to_professional">Mostrá este código QR con tu profesional</string>
+    <string name="choose_how_would_like_register">Elegí cómo querés registrarte</string>
+    <string name="im_player">Soy jugador</string>
+    <string name="im_professional">Soy profesional</string>
+    <string name="dont_give_up_message">¡NO TE RINDAS!</string>
+    <string name="next_word">Siguiente palabra</string>
+    <string name="home_screen">INICIO</string>
+    <string name="your_answer">TU RESPUESTA</string>
+    <string name="correct_option">OPCION CORRECTA</string>
+    <string name="change_word">Otra palabra</string>
+    <string name="result">RESULTADO</string>
+    <string name="you_did_it_very_well">¡LO HICISTE MUY BIEN!</string>
 
     <plurals name="days_left">
         <item quantity="one">Día Restante: %d </item>
