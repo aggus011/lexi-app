@@ -91,12 +91,23 @@ class ProfesionalHomeViewModel @Inject constructor(
         _patientSelected.value = patient               //aca llamar para ver los resultados.
         viewModelScope.launch {
             resultGamesUseCases.getWhereIsTheLetterResults(patient.email).collect {
-                _countWordsPlay.value = it.size
-                setHardLetters(it)
-                setErrorAvg(it)
+                if(it.isNotEmpty()){
+                    _countWordsPlay.value = it.size
+                    setHardLetters(it)
+                    setErrorAvg(it)
+                } else {
+                    setBlankResults()
+                }
+
             }
 
         }
+    }
+
+    private fun setBlankResults() {
+        _avg.value = "0"
+        _countWordsPlay.value = 0
+        _hardLetters.value = emptyList()
     }
 
     private fun setErrorAvg(results: List<WhereIsTheLetterResult>) {
