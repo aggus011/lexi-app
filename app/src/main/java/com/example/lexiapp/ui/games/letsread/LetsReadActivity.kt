@@ -14,10 +14,7 @@ import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageButton
-import android.widget.SeekBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -53,7 +50,7 @@ class LetsReadActivity : AppCompatActivity() {
     private lateinit var tvAudioTextDuration: TextView
     private lateinit var tvTextTitle: TextView
     private lateinit var tvTextToRead: TextView
-    private lateinit var btnBack: ImageButton
+    private lateinit var btnBack: ImageView
     private lateinit var btnRecordAudio: ImageButton
     private var mediaPlayerText: MediaPlayer? = null
     private lateinit var runnableAudioText: Runnable
@@ -95,7 +92,7 @@ class LetsReadActivity : AppCompatActivity() {
         btnPlayAudioText = binding.ibPlayAudioText
         seekBarAudioText = binding.seekBarAudioText
         tvAudioTextDuration = binding.tvAudioTextDuration
-        btnBack = binding.btnArrowBack
+        btnBack = binding.btnBack
         btnRecordAudio = binding.btnRec
         btnPlayAudioRecord = binding.ibPlayAudioRecord
         seekBarAudioRecord = binding.seekBarAudioRecord
