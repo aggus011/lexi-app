@@ -11,12 +11,33 @@
         android:id="@+id/txtEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edita tu perfil"
+        android:text="@string/edit_your_profile"
         android:textAppearance="@style/title"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="30dp"/>
+
+    <View
+        android:id="@+id/vIcClose"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/round_background"
+        android:backgroundTint="@color/light_purple"
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="10dp"/>
+
+    <ImageView
+        android:id="@+id/btnBack"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintTop_toTopOf="@id/vIcClose"
+        app:layout_constraintStart_toStartOf="@id/vIcClose"
+        app:layout_constraintEnd_toEndOf="@id/vIcClose"
+        app:layout_constraintBottom_toBottomOf="@id/vIcClose"
+        android:background="@drawable/ic_close" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/editor"
