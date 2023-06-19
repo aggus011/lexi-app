@@ -131,13 +131,6 @@ class ProfesionalHomeActivity : AppCompatActivity() {
         newDrawable.setColor(color)
 
         binding.vBackgroundUserIcon.background = newDrawable
-        /*val sizeInDp = 50
-        val density = resources.displayMetrics.density
-        val sizeInPx = (sizeInDp * density).toInt()
-        val shapeDrawable = ShapeDrawable(OvalShape())
-        shapeDrawable.paint.color = icColor
-        shapeDrawable.setBounds(0,0,sizeInPx, sizeInPx)
-        binding.vBackgroundUserIcon.background = shapeDrawable*/
     }
 
     private fun setListener() {

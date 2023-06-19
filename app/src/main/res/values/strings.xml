@@ -87,6 +87,7 @@
     <string name="CW_title">PALABRA CORRECTA</string>
     <string name="login_with_email_and_password">Inicia Sesión con tu email y contraseña</string>
     <string name="complete_with_your_data_for_register_in_lexi">Completa con tus datos para registrarte en LEXI</string>
+    <string name="add_patient">Agregar</string>
     <plurals name="days_left">
         <item quantity="one">Día Restante: %d </item>
         <item quantity="other">Días Restantes: %d </item>
