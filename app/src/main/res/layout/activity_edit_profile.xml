@@ -42,12 +42,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_margin="10dp"
-                android:hint="Escribe tu nombre"
+                android:hint="@string/write_your_name"
                 app:boxStrokeColor="@color/blue"
                 app:hintTextColor="@color/blue"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:hintTextAppearance="@style/signUpText">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -62,7 +63,7 @@
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:theme="@style/DatePickerTheme"
+                android:theme="@style/DatePickerStyle"
                 app:layout_constraintTop_toBottomOf="@id/etName"
                 app:layout_constraintStart_toStartOf="@id/etName"
                 app:layout_constraintEnd_toEndOf="@id/etName"/>
@@ -78,26 +79,28 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnCancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="150dp"
+                    android:layout_height="70dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/btnLinkAccount"
                     android:backgroundTint="@color/red"
-                    android:text="Cancelar"
-                    android:textAppearance="@style/textMaterialButton"/>
+                    android:text="@string/cancel"
+                    android:textAppearance="@style/textMaterialButton"
+                    app:cornerRadius="10dp"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnConfirm"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="150dp"
+                    android:layout_height="70dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/ivCalendarIcon"
                     android:backgroundTint="@color/blue"
-                    android:text="Confirmar"
+                    android:text="@string/confirm"
                     android:layout_marginHorizontal="15dp"
-                    android:textAppearance="@style/textMaterialButton"/>
+                    android:textAppearance="@style/textMaterialButton"
+                    app:cornerRadius="10dp"/>
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -79,6 +79,9 @@
     <string name="fab_delete_patient">Eliminar paciente</string>
     <string name="average">%1$d %</string>
     <string name="choose_correct_option">ELIGE LA OPCIÓN CORRECTA</string>
+    <string name="confirm">Confirmar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="write_your_name">Escribe tu nombre</string>
     <plurals name="days_left">
         <item quantity="one">Día Restante: %d </item>
         <item quantity="other">Días Restantes: %d </item>
