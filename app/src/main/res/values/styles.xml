@@ -55,6 +55,7 @@
         <item name="android:textSize">24sp</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:fontFamily">@font/chau_philomene_one_regular</item>
+        <item name="android:letterSpacing">0.1</item>
     </style>
 
     <style name="textProfileData">
