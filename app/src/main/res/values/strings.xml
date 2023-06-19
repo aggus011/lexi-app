@@ -83,6 +83,8 @@
     <string name="cancel">Cancelar</string>
     <string name="write_your_name">Escribe tu nombre</string>
     <string name="edit_your_profile">Edita tu perfil</string>
+    <string name="WITL_title">DÓNDE ESTÁ LA LETRA</string>
+    <string name="CW_title">PALABRA CORRECTA</string>
     <plurals name="days_left">
         <item quantity="one">Día Restante: %d </item>
         <item quantity="other">Días Restantes: %d </item>
