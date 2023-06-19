@@ -1,12 +1,15 @@
 package com.example.lexiapp.domain.useCases
 
+import android.content.SharedPreferences
+import com.example.lexiapp.domain.model.gameResult.CorrectWordGameResult
 import com.example.lexiapp.domain.service.LetterService
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import kotlin.random.Random
 
 class CorrectWordUseCases @Inject constructor(
-    private val repository: LetterService
+    private val service: LetterService,
+    private val prefs: SharedPreferences
 ) {
     companion object {
         const val NUM_OF_CHARS_SHUFFLE = 2
@@ -34,10 +37,14 @@ class CorrectWordUseCases @Inject constructor(
 
     fun getWord() = flow {
         LENGTH_WORD = getRandomInt()
-        repository.getWord(WORD_COUNT, LENGTH_WORD, SPANISH_LANGUAGE)
+        service.getWord(WORD_COUNT, LENGTH_WORD, SPANISH_LANGUAGE)
             .collect { emit(it) }
     }
 
     private fun getRandomInt() = Random.nextInt(4, 7)
+    suspend fun saveAnswer(result: CorrectWordGameResult) {
+        result.email = prefs.getString("email", null).toString()
+        service.saveResult(result)
+    }
 
 }

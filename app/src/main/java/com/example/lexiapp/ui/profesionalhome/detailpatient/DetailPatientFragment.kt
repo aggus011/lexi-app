@@ -5,7 +5,6 @@ import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.example.lexiapp.R
 import com.example.lexiapp.databinding.FragmentDetailPatientBinding
 import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.User
@@ -25,22 +24,44 @@ class DetailPatientFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetailPatientBinding.inflate(inflater, container, false)
-        setObserver()
+        setWiew()
+        setObservers()
         return binding.root
     }
 
-    private fun setObserver() {
+    private fun setWiew() {
+        binding.cardContainer.isVerticalScrollBarEnabled = true
+    }
+
+    private fun setObservers() {
         viewModel.patientSelected.observe(viewLifecycleOwner) { patient ->
             if (patient != null) bind(patient)
         }
-        viewModel.countWordsPlay.observe(viewLifecycleOwner) { wordsCount ->
-            binding.txtValueCountWords.text = wordsCount.toString()
+        setWITLObservers()
+        setCWObservers()
+    }
+
+    private fun setCWObservers() {
+        viewModel.countWordsPlayCW.observe(viewLifecycleOwner) { wordsCount ->
+            binding.txtValueCountWordsCW.text = wordsCount.toString()
         }
-        viewModel.hardLetters.observe(viewLifecycleOwner) { letter ->
-            binding.txtValueLettersDificults.text = letter.toString()
+        viewModel.hardLettersCW.observe(viewLifecycleOwner) { letter ->
+            binding.txtValueLettersDificultsCW.text = letter.toString()
         }
-        viewModel.avg.observe(viewLifecycleOwner) {average ->
-            binding.txtValuePercentError.text = average
+        viewModel.avgCW.observe(viewLifecycleOwner) {average ->
+            binding.txtValuePercentErrorCW.text = average
+        }
+    }
+
+    private fun setWITLObservers() {
+        viewModel.countWordsPlayWITL.observe(viewLifecycleOwner) { wordsCount ->
+            binding.txtValueCountWordsWITL.text = wordsCount.toString()
+        }
+        viewModel.hardLettersWITL.observe(viewLifecycleOwner) { letter ->
+            binding.txtValueLettersDificultsWITL.text = letter.toString()
+        }
+        viewModel.avgWITL.observe(viewLifecycleOwner) { average ->
+            binding.txtValuePercentErrorWITL.text = average
         }
     }
 

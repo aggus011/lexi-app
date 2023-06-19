@@ -1,7 +1,6 @@
 package com.example.lexiapp.domain.useCases
 
 import android.content.SharedPreferences
-import com.example.lexiapp.domain.model.WhereIsTheLetterResult
 import com.example.lexiapp.domain.service.FireStoreService
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

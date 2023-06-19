@@ -15,7 +15,7 @@
         android:contentDescription="@string/fab_delete_patient"
         app:backgroundTint="@color/light_purple"
         app:fabSize="mini"
-        app:layout_constraintBottom_toTopOf="@id/cvMetrics"
+        app:layout_constraintBottom_toTopOf="@id/cardContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/trash_icon"
         app:tint="@color/white" />
@@ -77,119 +77,199 @@
         app:layout_constraintStart_toStartOf="@id/txtName"
         app:layout_constraintTop_toBottomOf="@id/txtName" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cvMetrics"
+    <LinearLayout
+        android:id="@+id/cardContainer"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginHorizontal="6dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="6dp"
-        app:cardCornerRadius="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtEmail">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvMetricsWITL"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="5dp">
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="6dp"
+            app:cardCornerRadius="5dp">
 
-            <TextView
-                android:id="@+id/txtNameGame"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="DÓNDE ESTÁ LA LETRA"
-                android:textColor="@color/black"
-                android:textSize="28dp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/txtNameGameWITL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/WITL_title"
+                    android:textColor="@color/black"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
+                <TextView
+                    android:id="@+id/txtCountWordsWITL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Candidad de palabras jugadas: "
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txtNameGameWITL" />
 
-            <TextView
-                android:id="@+id/txtCountWords"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/txtValueCountWordsWITL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="@id/txtCountWordsWITL"
+                    app:layout_constraintStart_toEndOf="@id/txtCountWordsWITL"
+                    app:layout_constraintTop_toTopOf="@id/txtCountWordsWITL" />
+
+                <TextView
+                    android:id="@+id/txtLettersDificultsWITL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Letras con mas equivocación: "
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txtValueCountWordsWITL" />
+
+                <TextView
+                    android:id="@+id/txtValueLettersDificultsWITL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="@id/txtLettersDificultsWITL"
+                    app:layout_constraintStart_toEndOf="@id/txtLettersDificultsWITL"
+                    app:layout_constraintTop_toTopOf="@id/txtLettersDificultsWITL" />
+
+                <TextView
+                    android:id="@+id/txtPercentErrorWITL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Porcentaje de error: "
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txtValueLettersDificultsWITL" />
+
+                <TextView
+                    android:id="@+id/txtValuePercentErrorWITL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/average"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="@id/txtPercentErrorWITL"
+                    app:layout_constraintStart_toEndOf="@id/txtPercentErrorWITL"
+                    app:layout_constraintTop_toTopOf="@id/txtPercentErrorWITL" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvMetricsCW"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="6dp"
+            app:cardCornerRadius="5dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="Candidad de palabras jugadas: "
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txtNameGame" />
+                android:padding="5dp">
 
-            <TextView
-                android:id="@+id/txtValueCountWords"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="@id/txtCountWords"
-                app:layout_constraintStart_toEndOf="@id/txtCountWords"
-                app:layout_constraintTop_toTopOf="@id/txtCountWords" />
+                <TextView
+                    android:id="@+id/txtNameGameCW"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/CW_title"
+                    android:textColor="@color/black"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/txtLettersDificults"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="Letras con mas equivocación: "
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txtValueCountWords" />
 
-            <TextView
-                android:id="@+id/txtValueLettersDificults"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="@id/txtLettersDificults"
-                app:layout_constraintStart_toEndOf="@id/txtLettersDificults"
-                app:layout_constraintTop_toTopOf="@id/txtLettersDificults" />
+                <TextView
+                    android:id="@+id/txtCountWordsCW"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Candidad de palabras jugadas: "
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txtNameGameCW" />
 
-            <TextView
-                android:id="@+id/txtPercentError"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="Porcentaje de error: "
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txtValueLettersDificults" />
+                <TextView
+                    android:id="@+id/txtValueCountWordsCW"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="@id/txtCountWordsCW"
+                    app:layout_constraintStart_toEndOf="@id/txtCountWordsCW"
+                    app:layout_constraintTop_toTopOf="@id/txtCountWordsCW" />
 
-            <TextView
-                android:id="@+id/txtValuePercentError"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="@string/average"
-                app:layout_constraintBottom_toBottomOf="@id/txtPercentError"
-                app:layout_constraintStart_toEndOf="@id/txtPercentError"
-                app:layout_constraintTop_toTopOf="@id/txtPercentError" />
+                <TextView
+                    android:id="@+id/txtLettersDificultsCW"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Palabras con mas equivocación: "
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txtValueCountWordsCW" />
 
-            <TextView
-                android:id="@+id/txtLastGame"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="Ultimo juego (Resultados y fecha/hora): "
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txtValuePercentError" />
+                <TextView
+                    android:id="@+id/txtValueLettersDificultsCW"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="@id/txtLettersDificultsCW"
+                    app:layout_constraintStart_toEndOf="@id/txtLettersDificultsCW"
+                    app:layout_constraintTop_toTopOf="@id/txtLettersDificultsCW" />
 
-            <TextView
-                android:id="@+id/txtValueLastGame"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="@id/txtLastGame"
-                app:layout_constraintStart_toEndOf="@id/txtLastGame"
-                app:layout_constraintTop_toTopOf="@id/txtLastGame" />
+                <TextView
+                    android:id="@+id/txtPercentErrorCW"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Porcentaje de error: "
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txtValueLettersDificultsCW" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/txtValuePercentErrorCW"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/average"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="@id/txtPercentErrorCW"
+                    app:layout_constraintStart_toEndOf="@id/txtPercentErrorCW"
+                    app:layout_constraintTop_toTopOf="@id/txtPercentErrorCW" />
 
-    </androidx.cardview.widget.CardView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
