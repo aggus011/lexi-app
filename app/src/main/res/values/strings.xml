@@ -76,7 +76,8 @@
     <string name="change_word">Otra palabra</string>
     <string name="result">RESULTADO</string>
     <string name="you_did_it_very_well">¡LO HICISTE MUY BIEN!</string>
-
+    <string name="fab_delete_patient">Eliminar paciente</string>
+    <string name="average">%1$d %</string>
     <plurals name="days_left">
         <item quantity="one">Día Restante: %d </item>
         <item quantity="other">Días Restantes: %d </item>

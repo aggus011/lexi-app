@@ -13,6 +13,7 @@ import com.example.lexiapp.data.network.AuthenticationServiceImpl
 import com.example.lexiapp.data.network.FireStoreServiceImpl
 import com.example.lexiapp.data.network.FirebaseClient
 import com.example.lexiapp.data.network.ObjectivesServiceImpl
+import com.example.lexiapp.data.network.ResultGamesServiceImpl
 import com.example.lexiapp.data.repository.challengereading.ChallengeReadingServiceImpl
 import com.example.lexiapp.domain.service.AuthenticationService
 import com.example.lexiapp.domain.service.ChallengeReadingService
@@ -21,6 +22,7 @@ import com.example.lexiapp.domain.service.FireStoreService
 import com.example.lexiapp.domain.service.LetterService
 import com.example.lexiapp.domain.service.ObjectivesService
 import com.example.lexiapp.domain.service.OpenAICompletionsService
+import com.example.lexiapp.domain.service.ResultGamesService
 import com.example.lexiapp.domain.service.SpeechToTextService
 import dagger.Module
 import dagger.Provides
@@ -85,5 +87,10 @@ object InterfaceModule {
     @Provides
     fun getObjectiveService(): ObjectivesService {
         return ObjectivesServiceImpl()
+    }
+
+    @Provides
+    fun getResultGameService(db: FireStoreService): ResultGamesService {
+        return ResultGamesServiceImpl(db)
     }
 }

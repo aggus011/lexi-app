@@ -1,5 +1,6 @@
 package com.example.lexiapp.ui.games.whereistheletter
 
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.lexiapp.domain.model.WhereIsTheLetterResult
@@ -32,8 +33,6 @@ class WhereIsTheLetterViewModel @Inject constructor(
     private var _letter = MutableStateFlow('*')
     var letter: LiveData<Char> = _letter.asLiveData()
 
-    private var counter = 0
-
     fun onPositionSelected(position: Int) {
         _selectedPosition.value = position
     }
@@ -53,23 +52,32 @@ class WhereIsTheLetterViewModel @Inject constructor(
     }
 
     fun onSubmitAnswer() {
+        var success = false
         if (_selectedPosition.value == _correctPosition.value || checkChar()) {
             _correctAnswerSubmitted.value = true
+            success = true
         } else {
-            counter ++
-            viewModelScope.launch(Dispatchers.IO) {
-                getLetterWithPosition()?.let { WhereIsTheLetterResult(letter.value!!, it) }?.let {
-                    letterGameUseCases.saveWordInFirebase(
-                        it
-                    )
-                }
-            }
             _incorrectAnswerSubmitted.value = true
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            getLetterWithPosition()?.let {
+                WhereIsTheLetterResult(
+                    email= "",
+                    mainLetter = letter.value!!,
+                    selectedLetter = it,
+                    word = basicWord.value!!,
+                    success = success
+                )
+            }?.let {
+                letterGameUseCases.saveWordInFirebase(
+                    it
+                )
+            }
         }
     }
 
-    private fun checkChar() = if (_selectedPosition.value!=null)
-            _basicWord.value!![_selectedPosition.value!!] == _basicWord.value!![_correctPosition.value] else false
+    private fun checkChar() = if (_selectedPosition.value != null)
+        _basicWord.value!![_selectedPosition.value!!] == _basicWord.value!![_correctPosition.value] else false
 
 
     private fun selectLetter() {
@@ -110,10 +118,10 @@ class WhereIsTheLetterViewModel @Inject constructor(
 
     private fun getLetterWithPosition() = _selectedPosition.value?.let { _basicWord.value?.get(it) }
 
-    fun getCorrectPosition()=_correctPosition.value
+    fun getCorrectPosition() = _correctPosition.value
 
     fun getWord() = _basicWord.value
 
-    fun getSelectedPosition()= _selectedPosition.value
+    fun getSelectedPosition() = _selectedPosition.value
 
 }

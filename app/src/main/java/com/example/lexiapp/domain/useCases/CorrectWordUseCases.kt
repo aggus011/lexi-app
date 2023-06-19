@@ -16,7 +16,7 @@ class CorrectWordUseCases @Inject constructor(
         getWord().collect { input ->
             val words = mutableListOf(input)
             val charArray = input.toCharArray()
-            for (i in 0..3) {
+            for (i in 0..2) {
                 val indicesToShuffle = charArray.indices.shuffled(Random(input.length % NUM_OF_CHARS_SHUFFLE + i))
                 var finalWord = ""
                 for (indice in indicesToShuffle) {
