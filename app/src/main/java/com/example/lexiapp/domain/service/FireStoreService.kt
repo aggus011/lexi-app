@@ -1,6 +1,12 @@
 package com.example.lexiapp.domain.service
 
-import com.example.lexiapp.data.model.WhereIsGameResult
+import com.example.lexiapp.data.model.CorrectWordDataResult
+import com.example.lexiapp.data.model.WhereIsTheLetterDataResult
+import com.example.lexiapp.domain.model.FirebaseResult
+import com.example.lexiapp.domain.model.Professional
+import com.example.lexiapp.domain.model.User
+import com.example.lexiapp.domain.model.gameResult.CorrectWordGameResult
+import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.example.lexiapp.domain.model.*
 import com.google.firebase.firestore.DocumentReference
 import kotlinx.coroutines.CompletableDeferred
@@ -13,9 +19,11 @@ interface FireStoreService {
 
     suspend fun getUser(email: String): User
 
-    suspend fun saveWhereIsTheLetterResult(result: WhereIsGameResult, email: String)
+    suspend fun saveWhereIsTheLetterResult(result: WhereIsTheLetterDataResult, email: String)
 
     suspend fun getLastResultsWhereIsTheLetterGame(userMail: String): Flow<List<WhereIsTheLetterResult>>
+
+    suspend fun getLastResultsCorrectWordGame(userMail: String): Flow<List<CorrectWordGameResult>>
 
     suspend fun getOpenAICollectionDocumentReference(document: String): Flow<DocumentReference>
 
@@ -34,6 +42,7 @@ interface FireStoreService {
     suspend fun unBindProfessionalFromPatient (emailPatient: String): FirebaseResult
 
     suspend fun deletePatientFromProfessional (emailPatient: String, emailProfessional: String): CompletableDeferred<FirebaseResult>
+    suspend fun saveCorrectWordResult(result: CorrectWordDataResult, email: String)
 
     suspend fun saveObjectives(email: String, objectives: List<Objective>)
 
