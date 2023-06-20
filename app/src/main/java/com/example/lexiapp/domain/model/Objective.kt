@@ -4,7 +4,7 @@ class Objective(
     val id: Long?,
     val title: String?,
     val description: String?,
-    val progress: Int = 0,
+    val progress: Int,
     val goal: Int?){
 
     data class Builder(
@@ -24,5 +24,10 @@ class Objective(
     override fun toString(): String {
         return "Objective(id=$id, title=$title, description=$description, progress=$progress, goal=$goal)"
     }
+
+    fun isCompleted(): Boolean {
+        return progress == goal
+    }
+
 
 }
