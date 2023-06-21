@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lexiapp.data.api.difference_text.model.Rows
+import com.example.lexiapp.domain.model.gameResult.LetsReadGameResult
 import com.example.lexiapp.domain.useCases.DifferenceUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -22,6 +23,7 @@ class DifferenceViewModel @Inject constructor(
     val difference: MutableLiveData<Rows> = MutableLiveData()
     private lateinit var original: String
     private val wrongWords = mutableListOf<String>()
+    private var textLenght = 0
 
     fun getDifference(originalText: String, results: String) =
         CoroutineScope(Dispatchers.IO).launch {
@@ -50,22 +52,34 @@ class DifferenceViewModel @Inject constructor(
                     diffBuilder.append("<font color='#FF0000'>${f.value}</font>")
                     errors += countErrors(f.value)
                 }
+
                 "removed" -> {
                     wrongWords.add(f.value)
                     diffBuilder.append("<font color='#FF0000'>${f.value}</font>")
                     errors += countErrors(f.value)
                 }
+
                 else -> break
             }
         }
-        viewModelScope.launch(Dispatchers.IO) {
-            differenceUseCases.saveWrongWords(wrongWords.toList())
-        }
         val total = wordCounter(originalText)
         val average = errors * 100 / total
-        return if (average >= 10)
+        var success = false
+        val result = if (average >= 10) {
+            success = true
             diffBuilder.toString()
-        else "Correct"
+        } else "Correct"
+        viewModelScope.launch(Dispatchers.IO) {
+            differenceUseCases.saveWrongWords(
+                LetsReadGameResult(
+                    email = "",
+                    wrongWords = wrongWords.toList(),
+                    totalWords = total,
+                    success = success
+                )
+            )
+        }
+        return result
     }
 
     private fun countErrors(errors: String): Int {

@@ -3,6 +3,7 @@ package com.example.lexiapp.data.network
 import android.util.Log
 import com.example.lexiapp.data.model.CorrectWordDataResult
 import com.example.lexiapp.data.model.Game
+import com.example.lexiapp.data.model.LetsReadGameDataResult
 import com.example.lexiapp.data.model.WhereIsTheLetterDataResult
 import com.example.lexiapp.data.model.toCorrectWordGameResult
 import com.example.lexiapp.data.model.toWhereIsTheLetterResult
@@ -11,6 +12,7 @@ import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.Professional
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.model.*
+import com.example.lexiapp.domain.model.gameResult.LetsReadGameResult
 import com.example.lexiapp.domain.model.gameResult.ResultGame
 import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.example.lexiapp.domain.service.FireStoreService
@@ -377,11 +379,13 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
         }
     }
 
-    override suspend fun saveLetsReadResult(wrongWords: List<String>, email: String) {
+    override suspend fun saveLetsReadResult(result: LetsReadGameDataResult) {
         val data = hashMapOf(
-            "wrongWords" to wrongWords
+            "wrongWords" to result.wrongWords,
+            "totalWords" to result.totalWords,
+            "success" to result.success
         )
-        letsReadCollection.document(email).collection("results")
+        letsReadCollection.document(result.email).collection("results")
             .document(System.currentTimeMillis().toString()).set(data).await()
     }
 
