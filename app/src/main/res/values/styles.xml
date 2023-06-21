@@ -10,16 +10,20 @@
     <style name="signUpText">
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/black</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:fontFamily">@font/chau_philomene_one_regular</item>
     </style>
 
     <style name="title">
         <item name="android:textSize">30sp</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:fontFamily">@font/chau_philomene_one_regular</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="audioDuration">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:fontFamily">@font/chau_philomene_one_regular</item>
     </style>
@@ -28,28 +32,40 @@
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/black</item>
         <item name="fontFamily">@font/chau_philomene_one_regular</item>
+        <item name="android:letterSpacing">0.1</item>
     </style>
 
     <style name="subtitle">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:fontFamily">@font/chau_philomene_one_regular</item>
+        <item name="android:letterSpacing">0.1</item>
     </style>
 
     <style name="textMaterialButton">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">22sp</item>
         <item name="android:fontFamily">@font/chau_philomene_one_regular</item>
+        <item name="android:letterSpacing">0.1</item>
     </style>
 
     <style name="textItemsBottomNavigation">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">@font/chau_philomene_one_regular</item>
+        <item name="android:letterSpacing">0.1</item>
     </style>
 
     <style name="objectives">
         <item name="android:textSize">24sp</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:fontFamily">@font/chau_philomene_one_regular</item>
+        <item name="android:letterSpacing">0.1</item>
+    </style>
+
+    <style name="textProfileData">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/chau_philomene_one_regular</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="circleImageViewStyle">
@@ -72,8 +88,13 @@
         <item name="android:layout_margin">6dp</item>
     </style>
 
+    <style name="DatePickerStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:datePickerStyle">@style/DatePickerTheme</item>
+        <item name="colorAccent">@color/light_purple</item>
+    </style>
+
     <style name="DatePickerTheme" parent="@style/ThemeOverlay.MaterialComponents.Dialog">
-        <item name="android:datePickerMode">spinner</item>
+        <item name="android:datePickerMode">calendar</item>
         <item name="android:headerBackground">@color/light_purple</item>
         <item name="colorControlNormal">@color/light_purple
         </item> <!-- Cambia el color de los controles normales -->
