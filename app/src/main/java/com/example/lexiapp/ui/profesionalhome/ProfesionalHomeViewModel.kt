@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.model.gameResult.CorrectWordGameResult
+import com.example.lexiapp.domain.model.gameResult.ResultGame
 import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.example.lexiapp.domain.useCases.CodeQRUseCases
 import com.example.lexiapp.domain.useCases.LinkUseCases
@@ -47,9 +48,27 @@ class ProfesionalHomeViewModel @Inject constructor(
     private var _resultDeletePatient = MutableLiveData<FirebaseResult>()
     val resultDeletePatient: LiveData<FirebaseResult> = _resultDeletePatient
 
+    private var _resultSLastWeekWITL = MutableLiveData<Map<String, Triple<Int, Float, Int>>>()
+    val resultSLastWeekWITL: LiveData<Map<String,Triple<Int, Float, Int>>> = _resultSLastWeekWITL
+    private var _resultSLastWeekCW = MutableLiveData<Map<String, Triple<Int, Float, Int>>>()
+    val resultSLastWeekCW: LiveData<Map<String,Triple<Int, Float, Int>>> = _resultSLastWeekCW
+
+    private var _totalPieCW = MutableLiveData<Pair<Float, Float>>()
+    val totalPieCW : LiveData<Pair<Float, Float>> = _totalPieCW
+    private var _totalPieWITL = MutableLiveData<Pair<Float, Float>>()
+    val totalPieWITL : LiveData<Pair<Float, Float>> = _totalPieWITL
+    private var _weekPieCW = MutableLiveData<Pair<Float, Float>>()
+    val weekPieCW : LiveData<Pair<Float, Float>> = _weekPieCW
+    private var _weekPieWITL = MutableLiveData<Pair<Float, Float>>()
+    val weekPieWITL : LiveData<Pair<Float, Float>> = _weekPieWITL
+
     init {
         getPatient()
     }
+
+    fun arePiesCWEquals()=_totalPieCW.value==_weekPieCW.value
+
+    fun arePiesWITLEquals()=_totalPieWITL.value==_weekPieWITL.value
 
     fun getPatient() {
         viewModelScope.launch {
@@ -110,16 +129,26 @@ class ProfesionalHomeViewModel @Inject constructor(
         resultGamesUseCases.getWhereIsCWResults(patient.email).collect {
             Log.d("CW Result", it.toString())
             if (it.isNotEmpty()) {
-                _countWordsPlayCW.value = it.size
                 setHardWordsCW(it)
-                setErrorAvgCW(it)
+                setResultsLastWeekCW(it)
+                setDataPiesCW(it)
             }else {
                 setBlankResultsCW()
             }
         }
     }
 
-    private fun setErrorAvgCW(results: List<CorrectWordGameResult>) {
+    private fun setDataPiesCW(results: List<CorrectWordGameResult>){
+        _totalPieCW.value = Pair(results.size.toFloat(),getCountError(results))
+        val weekList=resultGamesUseCases.filterResultsByWeek(results)
+        _weekPieCW.value = Pair(weekList.size.toFloat(), getCountError(weekList))
+    }
+
+    private fun setResultsLastWeekCW(results: List<CorrectWordGameResult>) {
+        _resultSLastWeekCW.value=resultGamesUseCases.getResultsLastWeek(results)
+    }
+
+    private fun setErrorAvgCW(results: List<CorrectWordGameResult>){
         val subList = results.filter { !it.success }
         _avgCW.value =
             ((subList.size.toDouble() / results.size * 10000.0).roundToInt() / 100.0).toString()
@@ -156,11 +185,22 @@ class ProfesionalHomeViewModel @Inject constructor(
             if(it.isNotEmpty()){
                 _countWordsPlayWITL.value = it.size
                 setHardLetters(it)
-                setErrorAvg(it)
+                setResultsLastWeekWITL(it)
+                setDataPiesWITL(it)
             } else {
                 setBlankResults()
             }
         }
+    }
+
+    private fun setDataPiesWITL(results: List<WhereIsTheLetterResult>){
+        _totalPieWITL.value = Pair(results.size.toFloat(),getCountError(results))
+        val weekList=resultGamesUseCases.filterResultsByWeek(results)
+        _weekPieWITL.value = Pair(weekList.size.toFloat(), getCountError(weekList))
+    }
+
+    private fun setResultsLastWeekWITL(results: List<WhereIsTheLetterResult>) {
+        _resultSLastWeekWITL.value=resultGamesUseCases.getResultsLastWeek(results)
     }
 
     private fun setBlankResults() {
@@ -169,7 +209,12 @@ class ProfesionalHomeViewModel @Inject constructor(
         _hardLettersWITL.value = emptyList()
     }
 
-    private fun setErrorAvg(results: List<WhereIsTheLetterResult>) {
+    private fun getCountError(results: List<ResultGame>): Float{
+        val subList = results.filter { !it.success }
+        return subList.size.toFloat()
+    }
+
+    private fun setErrorAvgWITL(results: List<WhereIsTheLetterResult>) {
         val subList = results.filter { !it.success }
         _avgWITL.value =
             ((subList.size.toDouble() / results.size * 10000.0).roundToInt() / 100.0).toString()
