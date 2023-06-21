@@ -1,6 +1,7 @@
 package com.example.lexiapp.domain.useCases
 
 import android.content.SharedPreferences
+import com.example.lexiapp.domain.exceptions.OversizeException
 import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.example.lexiapp.domain.service.FireStoreService
 import com.example.lexiapp.domain.service.LetterService
@@ -19,7 +20,14 @@ class LetterGameUseCases @Inject constructor(
 
     fun getWord() = flow {
         LENGTH_WORD = getRandomInt()
-        service.getWord(ONE_WORD, LENGTH_WORD, SPANISH_LANGUAGE).collect { emit(it) }
+        service.getWord(ONE_WORD, LENGTH_WORD, SPANISH_LANGUAGE).collect {
+            val word = it.split(" ")[0]
+            if (word.length in 4..7) {
+                emit(word)
+            } else {
+                throw OversizeException("size: ${it.length}")
+            }
+        }
     }
 
     suspend fun saveWordInFirebase(result: WhereIsTheLetterResult) {

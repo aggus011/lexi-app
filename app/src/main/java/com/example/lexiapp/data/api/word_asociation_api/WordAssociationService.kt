@@ -29,8 +29,8 @@ class WordAssociationService @Inject constructor(
     }
 
     private fun stimulus() = listOf(
-        "Esfínter", "Sintomático", "Sinestesia", "Austeridad", "Psicodélico", "Epistemología",
-        "Atemporal", "Ecléctico", "Abigarrado", "Vértigo", "Heterogéneo", "Sincrónico",
-        "Catártico", "Endémico", "Anodino", "Perplejidad"
+        "Azul", "Síntoma", "Perro", "Cosas", "Mano", "Cactus",
+        "Arbusto", "Cielo", "Cortina", "Pelota", "Carrera", "Moto",
+        "Horno", "Espejo", "Papel", "Carton"
     ).shuffled(Random(System.currentTimeMillis() % 16)).take(3)
 }
