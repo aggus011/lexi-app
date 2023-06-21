@@ -153,6 +153,8 @@
         app:layout_constraintTop_toBottomOf="@id/txtNameText"
         android:scrollbars="vertical"
         android:textAppearance="@style/textToRead"
+        android:background="@drawable/btn_home_games"
+        android:padding="15dp"
         android:layout_marginTop="100dp"
         android:layout_marginHorizontal="30dp"
         tools:text="En el país de los cuentos, el ratón Pérez recogía los dientes de los niños. Dejaban sus dientitos bajo la almohada y por la noche, él los cambiaba por monedas de oro. ¡Qué magia tan maravillosa!"/>
