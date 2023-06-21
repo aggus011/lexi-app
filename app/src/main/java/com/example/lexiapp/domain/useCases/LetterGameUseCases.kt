@@ -15,14 +15,14 @@ class LetterGameUseCases @Inject constructor(
     private val prefs: SharedPreferences
 ) {
     private val SPANISH_LANGUAGE = "es"
-    private var LENGTH_WORD = getRandomInt()
+    private var MAX_LENGHT = 7
     private val ONE_WORD = 1
 
     fun getWord() = flow {
-        LENGTH_WORD = getRandomInt()
-        service.getWord(ONE_WORD, LENGTH_WORD, SPANISH_LANGUAGE).collect {
+        //MAX_LENGHT = getRandomInt()
+        service.getWord(ONE_WORD, MAX_LENGHT, SPANISH_LANGUAGE).collect {
             val word = it.split(" ")[0]
-            if (word.length in 4..7) {
+            if (word.length in 3..7) {
                 emit(word)
             } else {
                 throw OversizeException("size: ${it.length}")
