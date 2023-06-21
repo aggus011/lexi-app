@@ -17,6 +17,7 @@ object BlackList {
         "PINGO",
         "PUTO",
         "POLLA",
-        "VIOLA"
+        "VIOLA",
+        "SEXO"
     )
 }
