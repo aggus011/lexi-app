@@ -32,8 +32,12 @@ class VerifyMedicalRegistrationViewModel @Inject constructor(
                     withContext(Dispatchers.Main) {
                         _verificationState.value = true
                     }
+                }else{
+                    withContext(Dispatchers.Main) {
+                        _verificationState.value = false
+                    }
                 }
-                state.second?.let {
+                state.second.let {
                     val daysDifference =
                         verifyMedicalRegistrationUseCases.isBeenTwoDaysSinceRegistration(it)
                     if (daysDifference) {

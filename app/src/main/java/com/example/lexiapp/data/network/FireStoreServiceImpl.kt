@@ -3,6 +3,7 @@ package com.example.lexiapp.data.network
 import android.util.Log
 import com.example.lexiapp.data.model.CorrectWordDataResult
 import com.example.lexiapp.data.model.Game
+import com.example.lexiapp.data.model.LetsReadGameDataResult
 import com.example.lexiapp.data.model.WhereIsTheLetterDataResult
 import com.example.lexiapp.data.model.toCorrectWordGameResult
 import com.example.lexiapp.data.model.toWhereIsTheLetterResult
@@ -11,6 +12,9 @@ import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.Professional
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.model.*
+import com.example.lexiapp.domain.model.gameResult.LetsReadGameResult
+import com.example.lexiapp.domain.model.gameResult.ResultGame
+import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.example.lexiapp.domain.service.FireStoreService
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
@@ -33,6 +37,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     private val whereIsTheLetterCollection =
         firebase.firestore.collection(Game.WHERE_IS_THE_LETTER.toString().lowercase())
     private val correctWordCollection = firebase.firestore.collection(Game.CORRECT_WORD.toString().lowercase())
+    private val letsReadCollection = firebase.firestore.collection(Game.LETS_READ.toString().lowercase())
     private val openaiCollection = firebase.firestore.collection("openai_api_use")
     private val professionalCollection = firebase.firestore.collection("professional")
     private val resultGameCollection: (String, String) -> CollectionReference =
@@ -378,6 +383,17 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
         }
     }
 
+    override suspend fun saveLetsReadResult(result: LetsReadGameDataResult) {
+        val data = hashMapOf(
+            "wrongWords" to result.wrongWords,
+            "totalWords" to result.totalWords,
+            "success" to result.success
+        )
+        letsReadCollection.document(result.email).collection("results")
+            .document(System.currentTimeMillis().toString()).set(data).await()
+
+    }
+
     override suspend fun saveCategoriesFromPatient(email: String, categories: List<String>) {
         val data = hashMapOf(
             "categories" to categories
@@ -404,7 +420,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                     if (documentSnapshot != null && documentSnapshot.exists()) {
                         val categories = documentSnapshot.data?.get("categories") as List<String>
                         continuation.resume(categories)
-                    }else{
+                    } else {
                         continuation.resume(emptyList())
                     }
                 }

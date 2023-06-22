@@ -13,9 +13,9 @@
     <string name="Facebook">Continuar con Facebook</string>
     <string name="mail">Correo Electrónico</string>
     <string name="login">Ingresar</string>
-    <string name="forgot_password"><a href="http://google.com/">Olvidé mi contraseña</a></string>
+    <string name="forgot_password">Olvidé mi contraseña</string>
     <string name="need_account">¿Necesitas una cuenta?</string>
-    <string name="register"><a href="http://google.com/">Registrarme</a></string>
+    <string name="register">Registrarme</string>
     <string name="games">Juegos</string>
     <string name="objectives">Objetivos</string>
     <string name="profile">Perfil</string>
@@ -55,17 +55,34 @@
     <string name="choose_what_scan">Elegí qué escanear</string>
     <string name="medical_registration">Matrícula</string>
     <string name="surname">Apellido</string>
-    <string name="checking_your_account">Verificando tu cuenta. Este proceso de validacion puede demorar hasta 48 horas</string>
+    <string name="checking_your_account">Verificando tu cuenta. Este proceso de validación puede demorar hasta 48 horas</string>
     <string name="update">Actualizar</string>
-    <string name="account_verified">Cuenta verificada con exito, bienvenido a LEXI</string>
+    <string name="account_verified">Cuenta verificada con éxito, bienvenido a LEXI</string>
     <string name="continue_to_home">Continuar</string>
     <string name="signup_professional">Registro Profesional</string>
     <string name="check_your_register">No pudimos verificar tus datos, por favor revisalos</string>
     <string name="check">Revisar</string>
-    <string name="days_left">Días restantes: %1$d</string>
+    <string name="days_left">Días restantes: </string>
     <string name="confirm_password">Confirmar contraseña</string>
+    <string name="show_qr_to_professional">Mostrá este código QR con tu profesional</string>
+    <string name="choose_how_would_like_register">Elegí cómo querés registrarte</string>
+    <string name="im_player">Soy jugador</string>
+    <string name="im_professional">Soy profesional</string>
+    <string name="dont_give_up_message">¡NO TE RINDAS!</string>
+    <string name="next_word">Siguiente palabra</string>
+    <string name="home_screen">INICIO</string>
+    <string name="your_answer">TU RESPUESTA</string>
+    <string name="correct_option">OPCION CORRECTA</string>
+    <string name="change_word">Otra palabra</string>
+    <string name="result">RESULTADO</string>
+    <string name="you_did_it_very_well">¡LO HICISTE MUY BIEN!</string>
     <string name="fab_delete_patient">Eliminar paciente</string>
     <string name="average">%1$d %</string>
+    <string name="choose_correct_option">ELIGE LA OPCIÓN CORRECTA</string>
+    <string name="confirm">Confirmar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="write_your_name">Escribe tu nombre</string>
+    <string name="edit_your_profile">Edita tu perfil</string>
     <string name="WITL_title">DÓNDE ESTÁ LA LETRA</string>
     <string name="CW_title">PALABRA CORRECTA</string>
     <string name="choose_three_favs">Elige 3 favoritos</string>
@@ -78,6 +95,9 @@
     <string name="places">Lugares</string>
     <string name="countries">Países</string>
     <string name="vehicles">Vehículos</string>
+    <string name="login_with_email_and_password">Inicia Sesión con tu email y contraseña</string>
+    <string name="complete_with_your_data_for_register_in_lexi">Completa con tus datos para registrarte en LEXI</string>
+    <string name="add_patient">Agregar</string>
 
     <plurals name="days_left">
         <item quantity="one">Día Restante: %d </item>

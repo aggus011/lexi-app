@@ -27,17 +27,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:text="@string/logo"
             android:textColor="@color/white"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:textColor="@color/black"
+            android:textAppearance="@style/title"/>
 
         <androidx.constraintlayout.motion.widget.MotionLayout
             android:id="@+id/clGames"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             app:layoutDescription="@xml/fragment_patient_home_xml_clgames_scene"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -48,15 +49,16 @@
                 android:id="@+id/animationCorrectWord"
                 android:layout_width="300dp"
                 android:layout_height="300dp"
-                android:layout_marginTop="80dp"
-                app:layout_constraintEnd_toStartOf="@id/animationLetsRead"
+                android:layout_marginTop="120dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:lottie_autoPlay="true"
                 app:lottie_colorFilter="@color/persian_pink"
                 app:lottie_loop="true"
                 app:lottie_rawRes="@raw/amoeba"
-                app:lottie_speed="1.5" />
+                app:lottie_speed="1.5"
+                android:layout_marginEnd="220dp"/>
 
             <ImageView
                 android:id="@+id/imageView"
@@ -66,22 +68,25 @@
                 android:contentDescription="@string/game_correct_word"
                 android:src="@drawable/correct_word1"
                 app:layout_constraintBottom_toBottomOf="@id/animationCorrectWord"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/animationCorrectWord" />
+                app:layout_constraintStart_toStartOf="@id/animationCorrectWord"
+                app:layout_constraintTop_toTopOf="@id/animationCorrectWord"
+                app:layout_constraintEnd_toEndOf="@id/animationCorrectWord"/>
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/animationLetsRead"
                 android:layout_width="300dp"
                 android:layout_height="300dp"
-                app:layout_constraintBottom_toTopOf="@+id/animationIsItSoCalled"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/animationCorrectWord"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:lottie_autoPlay="true"
                 app:lottie_colorFilter="@color/green"
                 app:lottie_loop="true"
                 app:lottie_rawRes="@raw/amoeba"
-                app:lottie_speed="1.2" />
+                app:lottie_speed="1.2"
+                android:layout_marginStart="220dp"
+                android:layout_marginTop="40dp"
+                app:layout_constraintBottom_toTopOf="@id/animationTextScanner"/>
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -91,23 +96,25 @@
                 android:contentDescription="@string/game_correct_word"
                 android:src="@drawable/lets_read1"
                 app:layout_constraintBottom_toBottomOf="@id/animationLetsRead"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/animationLetsRead" />
+                app:layout_constraintEnd_toEndOf="@+id/animationLetsRead"
+                app:layout_constraintTop_toTopOf="@id/animationLetsRead"
+                app:layout_constraintStart_toStartOf="@+id/animationLetsRead"/>
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/animationWhereIsTheLetter"
                 android:layout_width="300dp"
                 android:layout_height="300dp"
-                android:layout_marginTop="90dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/animationTextScanner"
+                app:layout_constraintTop_toBottomOf="@id/animationCorrectWord"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/animationTextScanner"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="220dp"
                 app:lottie_autoPlay="true"
                 app:lottie_colorFilter="@color/yellow"
                 app:lottie_loop="true"
                 app:lottie_rawRes="@raw/amoeba"
-                app:lottie_speed="1.7" />
+                app:lottie_speed="1.7"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="40dp"/>
 
             <ImageView
                 android:id="@+id/imageView3"
@@ -117,30 +124,32 @@
                 android:contentDescription="@string/game_correct_word"
                 android:src="@drawable/where_is_the_letter1"
                 app:layout_constraintBottom_toBottomOf="@id/animationWhereIsTheLetter"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/animationWhereIsTheLetter" />
+                app:layout_constraintStart_toStartOf="@+id/animationWhereIsTheLetter"
+                app:layout_constraintTop_toTopOf="@id/animationWhereIsTheLetter"
+                app:layout_constraintEnd_toEndOf="@+id/animationWhereIsTheLetter"/>
 
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/animationTextScanner"
                 android:layout_width="300dp"
                 android:layout_height="300dp"
-                android:layout_marginTop="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/animationWhereIsTheLetter"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/animationLetsRead"
                 app:lottie_autoPlay="true"
                 app:lottie_colorFilter="@color/tomato"
                 app:lottie_loop="true"
-                app:lottie_rawRes="@raw/amoeba" />
+                app:lottie_rawRes="@raw/amoeba"
+                android:layout_marginStart="220dp"
+                android:layout_marginTop="30dp"/>
 
 
             <ImageView
                 android:id="@+id/imageView5"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:alpha="0.85"
-                android:src="@drawable/ic_text_scanner"
+                android:src="@drawable/scanner"
                 app:layout_constraintBottom_toBottomOf="@id/animationTextScanner"
                 app:layout_constraintEnd_toEndOf="@id/animationTextScanner"
                 app:layout_constraintStart_toStartOf="@id/animationTextScanner"
