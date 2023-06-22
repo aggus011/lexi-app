@@ -54,7 +54,7 @@
 
     <View
         android:id="@+id/vCheckBoxCategory1"
-        android:layout_width="130dp"
+        android:layout_width="150dp"
         android:layout_height="60dp"
         android:background="@drawable/background_category_btn"
         app:layout_constraintStart_toStartOf="@id/checkboxCategory1"
@@ -76,7 +76,7 @@
 
     <View
         android:id="@+id/vCheckBoxCategory2"
-        android:layout_width="130dp"
+        android:layout_width="150dp"
         android:layout_height="60dp"
         android:background="@drawable/background_category_btn"
         app:layout_constraintStart_toStartOf="@id/checkboxCategory2"
@@ -98,7 +98,7 @@
 
     <View
         android:id="@+id/vCheckBoxCategory3"
-        android:layout_width="130dp"
+        android:layout_width="150dp"
         android:layout_height="60dp"
         android:background="@drawable/background_category_btn"
         app:layout_constraintStart_toStartOf="@id/checkboxCategory3"
@@ -120,7 +120,7 @@
 
     <View
         android:id="@+id/vCheckBoxCategory4"
-        android:layout_width="130dp"
+        android:layout_width="150dp"
         android:layout_height="60dp"
         android:background="@drawable/background_category_btn"
         app:layout_constraintStart_toStartOf="@id/checkboxCategory4"
@@ -142,7 +142,7 @@
 
     <View
         android:id="@+id/vCheckBoxCategory5"
-        android:layout_width="130dp"
+        android:layout_width="150dp"
         android:layout_height="60dp"
         android:background="@drawable/background_category_btn"
         app:layout_constraintStart_toStartOf="@id/checkboxCategory5"
@@ -164,7 +164,7 @@
 
     <View
         android:id="@+id/vCheckBoxCategory6"
-        android:layout_width="130dp"
+        android:layout_width="150dp"
         android:layout_height="60dp"
         android:background="@drawable/background_category_btn"
         app:layout_constraintStart_toStartOf="@id/checkboxCategory6"
@@ -186,7 +186,7 @@
 
     <View
         android:id="@+id/vCheckBoxCategory7"
-        android:layout_width="130dp"
+        android:layout_width="150dp"
         android:layout_height="60dp"
         android:background="@drawable/background_category_btn"
         app:layout_constraintStart_toStartOf="@id/checkboxCategory7"
@@ -208,7 +208,7 @@
 
     <View
         android:id="@+id/vCheckBoxCategory8"
-        android:layout_width="130dp"
+        android:layout_width="150dp"
         android:layout_height="60dp"
         android:background="@drawable/background_category_btn"
         app:layout_constraintStart_toStartOf="@id/checkboxCategory8"
@@ -230,7 +230,7 @@
 
     <View
         android:id="@+id/vCheckBoxCategory9"
-        android:layout_width="130dp"
+        android:layout_width="150dp"
         android:layout_height="60dp"
         android:background="@drawable/background_category_btn"
         app:layout_constraintStart_toStartOf="@id/checkboxCategory9"
