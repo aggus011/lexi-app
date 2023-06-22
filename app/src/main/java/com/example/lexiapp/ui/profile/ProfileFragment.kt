@@ -140,4 +140,10 @@ class ProfileFragment : Fragment() {
             startActivity(Intent(activity, LoginActivity::class.java))
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getProfile()
+        setIconUserInitials()
+    }
 }
