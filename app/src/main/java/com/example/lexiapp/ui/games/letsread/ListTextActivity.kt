@@ -1,14 +1,13 @@
 package com.example.lexiapp.ui.games.letsread
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageButton
-import android.widget.Toast
+import android.widget.ImageView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,12 +15,8 @@ import com.example.lexiapp.databinding.ActivityListTextBinding
 import com.example.lexiapp.ui.adapter.TextAdapter
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.SimpleDateFormat
-import java.util.*
-import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class ListTextActivity : AppCompatActivity() {
@@ -32,7 +27,7 @@ class ListTextActivity : AppCompatActivity() {
     private lateinit var progressBar: View
     private lateinit var challengeReadingBtn: MaterialButton
     private lateinit var rvReadings: RecyclerView
-    private lateinit var backBtn: ImageButton
+    private lateinit var backBtn: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +47,7 @@ class ListTextActivity : AppCompatActivity() {
     private fun getViews(){
         challengeReadingBtn = binding.btnRandomText
         rvReadings = binding.rvText
-        backBtn = binding.btnArrowBack
+        backBtn = binding.btnBack
         progressBar = binding.progressLayout
     }
 

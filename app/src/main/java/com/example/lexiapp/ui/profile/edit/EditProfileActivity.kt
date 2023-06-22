@@ -52,6 +52,10 @@ class EditProfileActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         binding.datePicker.setOnDateChangedListener { datePicker, i, i2, i3 ->
             getSelectedDate()
         }
+
+        binding.btnBack.setOnClickListener {
+            finish()
+        }
     }
 
     private fun getName(): String?{

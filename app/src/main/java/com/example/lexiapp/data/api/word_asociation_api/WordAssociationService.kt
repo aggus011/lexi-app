@@ -12,25 +12,36 @@ class WordAssociationService @Inject constructor(
     suspend fun getWordToWhereIsTheLetterGame(count: Int, length: Int, language: String) = flow {
 
         try {
+            var text = ""
+            stimulus().forEach { text += "$it " }
             val response = client.getWordToWhereIsTheLetterGame(
-                count = count,
-                length = length,
-                language = language
+                count = count + 10,
+                language = language,
+                text = text
             )
-            val word: List<String> =
-                if (response.isSuccessful && response.body() != null) response.body()!! else stimulus()
-            Log.v("rta", "${response.code()}${response.body()?.get(0)}:: $word")
-            emit(word)
+            Log.d("Api response", response.body().toString())
+            val word = mutableListOf<String>()
+            if (response.isSuccessful && response.body() != null) {
+                response.body()!!.wordsAsociate.map {
+                    it.blocks.forEach { item ->
+                        word.add(item.word)
+                    }
+                }
+            } else word.addAll(stimulus())
+            Log.v("API Response", "${response.code()}${response.raw()}:: $word")
+            emit(word.filter { it.length in 3..7 }
+                .shuffled(Random(System.currentTimeMillis() % word.size)))
         } catch (e: NullPointerException) {
             Log.v("EXCEPTION", "${e.message}, NAME: $e")
         }
     }.catch {
+        Log.d("EXCEPTION", it.cause.toString())
         emit(stimulus())
     }
 
     private fun stimulus() = listOf(
-        "Esfínter", "Sintomático", "Sinestesia", "Austeridad", "Psicodélico", "Epistemología",
-        "Atemporal", "Ecléctico", "Abigarrado", "Vértigo", "Heterogéneo", "Sincrónico",
-        "Catártico", "Endémico", "Anodino", "Perplejidad"
-    ).shuffled(Random(System.currentTimeMillis() % 16)).take(3)
+        "Azul", "Síntoma", "Perro", "Cosas", "Mano", "Cactus",
+        "Arbusto", "Cielo", "Cortina", "Pelota", "Carrera", "Moto",
+        "Horno", "Espejo", "Papel", "Carton"
+    ).shuffled(Random(System.currentTimeMillis() % 16)).take(2)
 }

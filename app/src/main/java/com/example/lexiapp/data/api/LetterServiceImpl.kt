@@ -30,7 +30,6 @@ class LetterServiceImpl @Inject constructor(
             .map { inputList -> inputList.filter { !BlackList.words.contains(it.uppercase()) } }
             .collect {
                 emit(it[0].uppercase())
-                Log.v("data_in_repository", "response word: $it")
             }
     }
 

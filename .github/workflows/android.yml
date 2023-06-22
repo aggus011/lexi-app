@@ -30,7 +30,7 @@ jobs:
     - name: Putting data secrets
       env:
         DATA: ${{ secrets.SECRETS_KT }}
-      run: echo $DATA > ./app/src/main/java/com/example/lexiapp/domain/model/Secrets.kt
+      run: echo $DATA | base64 -d > ./app/src/main/java/com/example/lexiapp/domain/model/Secrets.kt
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle

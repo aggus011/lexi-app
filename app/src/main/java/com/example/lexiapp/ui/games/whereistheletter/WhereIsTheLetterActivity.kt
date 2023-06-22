@@ -94,6 +94,7 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
     private fun setListeners() {
         listenerResult()
         listenerOtherWord()
+        btnBack()
     }
 
     private fun listenerResult() {
@@ -208,6 +209,12 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
                 positions[pos]!!.background = ContextCompat.getDrawable(applicationContext, R.drawable.btn_letter_select)
                 positions[pos]!!.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
             }
+        }
+    }
+
+    private fun btnBack(){
+        binding.btnBack.setOnClickListener {
+            finish()
         }
     }
 }

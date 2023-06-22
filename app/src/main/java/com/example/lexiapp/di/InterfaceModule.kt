@@ -79,9 +79,10 @@ object InterfaceModule {
 
     @Provides
     fun getDifferenceService(
-        apiDifferenceGateway: DifferenceGateway
+        apiDifferenceGateway: DifferenceGateway,
+        db: FireStoreService
     ): DifferenceService {
-        return DifferenceServiceImpl(apiDifferenceGateway)
+        return DifferenceServiceImpl(apiDifferenceGateway, db)
     }
 
     @Provides

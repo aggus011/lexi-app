@@ -5,7 +5,7 @@ import com.example.lexiapp.data.repository.texttoread.TextToReadMocks
 import com.example.lexiapp.domain.model.TextToRead
 import kotlinx.coroutines.launch
 
-class TextViewModel: ViewModel() {
+class TextViewModel : ViewModel() {
     private val _listText = MutableLiveData<List<TextToRead>>()
     val listText: LiveData<List<TextToRead>> = _listText
     private val _textSelected = MutableLiveData<TextToRead>()
@@ -13,7 +13,7 @@ class TextViewModel: ViewModel() {
 
     init {
         _listText.value = emptyList()
-        _listText.value= getText()
+        _listText.value = getText()
         /*viewModelScope.launch {
             _listText.value = getText()
         }*/
