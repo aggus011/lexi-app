@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.example.lexiapp.databinding.FragmentDetailPatientBinding
 import androidx.fragment.app.activityViewModels
@@ -34,16 +33,15 @@ class DetailPatientFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetailPatientBinding.inflate(inflater, container, false)
-        setObservers()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setObservers()
     }
 
     private fun setView() {
-        //binding.cardContainer.isVerticalScrollBarEnabled = true
         binding.txtDate.text= SimpleDateFormat("HH:mm:ss").format(Date())
     }
 
@@ -63,7 +61,7 @@ class DetailPatientFragment : Fragment() {
         viewModel.weekPieCW.observe(viewLifecycleOwner) { (total, percentError) ->
             setPieGraph(total, percentError, binding.pieWeekChartCW.id)
         }
-        viewModel.hardLettersCW.observe(viewLifecycleOwner) { letter ->
+        viewModel.hardWordsCW.observe(viewLifecycleOwner) { letter ->
             binding.txtValueLettersDificultsCW.text = letter.toString()
         }
         viewModel.resultSLastWeekCW.observe(viewLifecycleOwner) { resultsLastWeek->

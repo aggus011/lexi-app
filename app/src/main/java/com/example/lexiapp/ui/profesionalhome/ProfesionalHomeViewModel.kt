@@ -25,18 +25,12 @@ class ProfesionalHomeViewModel @Inject constructor(
     private val resultGamesUseCases: ResultGamesUseCases
 ) : ViewModel() {
 
-    private var _avgCW = MutableLiveData<String>()
-    val avgCW = _avgCW as LiveData<String>
-    private var _hardLettersCW = MutableLiveData<List<String>>()
-    val hardLettersCW = _hardLettersCW as LiveData<List<String>>
-    private var _countWordsPlayCW = MutableLiveData<Int>()
-    val countWordsPlayCW = _countWordsPlayCW as LiveData<Int>
-    private var _avgWITL = MutableLiveData<String>()
-    val avgWITL = _avgWITL as LiveData<String>
+
+    private var _hardWordsCW = MutableLiveData<List<String>>()
+    val hardWordsCW = _hardWordsCW as LiveData<List<String>>
     private var _hardLettersWITL = MutableLiveData<List<Char>>()
     val hardLettersWITL = _hardLettersWITL as LiveData<List<Char>>
-    private var _countWordsPlayWITL = MutableLiveData<Int>()
-    val countWordsPlayWITL = _countWordsPlayWITL as LiveData<Int>
+
     private var _listPatient = MutableLiveData<List<User>>()
     val listPatient: LiveData<List<User>> = _listPatient
     private var _listFilterPatient = MutableLiveData<List<User>>()
@@ -63,12 +57,7 @@ class ProfesionalHomeViewModel @Inject constructor(
     val weekPieWITL : LiveData<Pair<Float, Float>> = _weekPieWITL
 
     init {
-        getPatient()
     }
-
-    fun arePiesCWEquals()=_totalPieCW.value==_weekPieCW.value
-
-    fun arePiesWITLEquals()=_totalPieWITL.value==_weekPieWITL.value
 
     fun getPatient() {
         viewModelScope.launch {
@@ -98,14 +87,11 @@ class ProfesionalHomeViewModel @Inject constructor(
         val filteredList = mutableListOf<User>()
         if (patientSearch != null) {
             _listPatient.value?.forEach {
-                if (it.userName != null &&
-                    (it.userName!!.contains(patientSearch) || it.email.contains(patientSearch))
-                )
+                if (it.userName!!.contains(patientSearch) || it.email.contains(patientSearch))
                     filteredList.add(it)
             }
         }
         _listFilterPatient.value = filteredList
-        filteredList.forEach { Log.v("VALIDATE_FILTER_USERS", "${it.userName}//${it.email}") }
     }
 
     fun getPatientEmail(contents: String?): String? {
@@ -148,16 +134,9 @@ class ProfesionalHomeViewModel @Inject constructor(
         _resultSLastWeekCW.value=resultGamesUseCases.getResultsLastWeek(results)
     }
 
-    private fun setErrorAvgCW(results: List<CorrectWordGameResult>){
-        val subList = results.filter { !it.success }
-        _avgCW.value =
-            ((subList.size.toDouble() / results.size * 10000.0).roundToInt() / 100.0).toString()
-    }
-
     private fun setBlankResultsCW() {
-        _hardLettersCW.value = emptyList()
-        _countWordsPlayCW.value = 0
-        _avgCW.value = "0"
+        _hardWordsCW.value = emptyList()
+        _resultSLastWeekCW.value = emptyMap()
     }
 
     private fun setHardWordsCW(results: List<CorrectWordGameResult>) {
@@ -177,13 +156,12 @@ class ProfesionalHomeViewModel @Inject constructor(
                 wordList.add(word)
             }
         }
-        _hardLettersCW.value = wordList
+        _hardWordsCW.value = wordList
     }
 
     private suspend fun setWITLStats(patient: User) {
         resultGamesUseCases.getWhereIsTheLetterResults(patient.email).collect {
             if(it.isNotEmpty()){
-                _countWordsPlayWITL.value = it.size
                 setHardLetters(it)
                 setResultsLastWeekWITL(it)
                 setDataPiesWITL(it)
@@ -204,20 +182,13 @@ class ProfesionalHomeViewModel @Inject constructor(
     }
 
     private fun setBlankResults() {
-        _avgWITL.value = "0"
-        _countWordsPlayWITL.value = 0
         _hardLettersWITL.value = emptyList()
+        _resultSLastWeekWITL.value = emptyMap()
     }
 
     private fun getCountError(results: List<ResultGame>): Float{
         val subList = results.filter { !it.success }
         return subList.size.toFloat()
-    }
-
-    private fun setErrorAvgWITL(results: List<WhereIsTheLetterResult>) {
-        val subList = results.filter { !it.success }
-        _avgWITL.value =
-            ((subList.size.toDouble() / results.size * 10000.0).roundToInt() / 100.0).toString()
     }
 
     private fun setHardLetters(results: List<WhereIsTheLetterResult>) {
