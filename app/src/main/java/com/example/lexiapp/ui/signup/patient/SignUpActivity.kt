@@ -11,6 +11,7 @@ import com.example.lexiapp.ui.customDialog.ErrorDialog
 import com.example.lexiapp.databinding.ActivitySignUpBinding
 import com.example.lexiapp.ui.login.LoginActivity
 import com.example.lexiapp.domain.model.UserSignUp
+import com.example.lexiapp.ui.categories.CategoriesActivity
 import com.example.lexiapp.ui.customDialog.show
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -41,7 +42,7 @@ class SignUpActivity : AppCompatActivity() {
     private fun initObservers() {
         viewModel.navigateToLogin.observe(this) {
             it.getContentIfNotHandled()?.let {
-                goToLogin()
+                goToCategories()
             }
         }
         viewModel.showErrorDialog.observe(this) { showError ->
@@ -62,8 +63,10 @@ class SignUpActivity : AppCompatActivity() {
         ).show(dialogLauncher, this)
     }
 
-    private fun goToLogin() {
-        startActivity(LoginActivity.create(this))
+    private fun goToCategories() {
+        //When a new player register is send to categories screen
+        startActivity(Intent(this, CategoriesActivity::class.java))
+        finish()
     }
 
     private fun initListeners() {

@@ -50,5 +50,7 @@ interface FireStoreService {
 
     suspend fun getObjectives(email: String): List<Objective>
 
+    suspend fun saveCategoriesFromPatient(email: String, categories: List<String>)
 
+    suspend fun getPatientCategories(email: String): List<String>
 }

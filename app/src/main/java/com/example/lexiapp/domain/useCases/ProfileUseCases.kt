@@ -140,6 +140,8 @@ class ProfileUseCases @Inject constructor(
 
     fun closeSesion()=editor.clear().apply()
 
+    fun verifyIfPatientHasRegisteredButNotChooseCategories() = prefs.contains("categories")
+
 
     companion object{
         private const val TAG = "ProfileUseCases"
