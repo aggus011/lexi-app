@@ -100,7 +100,8 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                             mainLetter = data["mainLetter"] as String,
                             result = data["result"] as Boolean,
                             selectedLetter = data["selectedLetter"] as String,
-                            word = data["word"] as String
+                            word = data["word"] as String,
+                            date = documentId
                         )
                     )
                 }
@@ -119,7 +120,8 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                         CorrectWordDataResult(
                             mainWord = data["mainWord"] as String,
                             result = data["result"] as Boolean,
-                            selectedWord = data["selectedWord"] as String
+                            selectedWord = data["selectedWord"] as String,
+                            date = documentId
                         )
                     )
                 }
@@ -302,8 +304,6 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     }
 
     override suspend fun saveCorrectWordResult(result: CorrectWordDataResult, email: String) {
-
-
         val data = hashMapOf(
             "result" to result.result,
             "mainWord" to result.mainWord,

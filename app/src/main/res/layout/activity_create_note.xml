@@ -43,13 +43,12 @@
         <EditText
             android:id="@+id/txtNote"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:hint="@string/write_note"
             android:backgroundTint="@android:color/transparent"
             android:inputType="textMultiLine"
             android:textColor="@color/black"
-            android:textSize="20sp"
-            android:layout_margin="12dp"/>
+            android:textSize="20sp"/>
     </ScrollView>
 
     <com.google.android.material.button.MaterialButton

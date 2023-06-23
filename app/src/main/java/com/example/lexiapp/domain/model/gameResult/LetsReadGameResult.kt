@@ -4,5 +4,6 @@ data class LetsReadGameResult(
     override var email: String,
     override val success: Boolean,
     val wrongWords: List<String>,
-    val totalWords: Int
-): ResultGame(email, success)
+    val totalWords: Int,
+    override val date: String?=null
+): ResultGame(email, success, date)
