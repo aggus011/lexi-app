@@ -4,12 +4,11 @@ import com.example.lexiapp.data.model.CorrectWordDataResult
 import com.example.lexiapp.data.model.LetsReadGameDataResult
 import com.example.lexiapp.data.model.WhereIsTheLetterDataResult
 import com.example.lexiapp.domain.model.FirebaseResult
+import com.example.lexiapp.domain.model.Objective
 import com.example.lexiapp.domain.model.Professional
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.model.gameResult.CorrectWordGameResult
 import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
-import com.example.lexiapp.domain.model.*
-import com.example.lexiapp.domain.model.gameResult.LetsReadGameResult
 import com.google.firebase.firestore.DocumentReference
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
@@ -53,5 +52,7 @@ interface FireStoreService {
     suspend fun getObjectives(email: String): List<Objective>
     suspend fun saveLetsReadResult(result: LetsReadGameDataResult)
 
+    suspend fun saveCategoriesFromPatient(email: String, categories: List<String>)
 
+    suspend fun getPatientCategories(email: String): List<String>
 }

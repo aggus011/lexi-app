@@ -26,6 +26,9 @@ import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 @Singleton
 class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireStoreService {
@@ -41,6 +44,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
         { collection: String, email: String -> firebase.firestore.collection("${collection}/${email}/results") }
     private val db = firebase.firestore
     private lateinit var registration: ListenerRegistration
+    private val categoryCollection = firebase.firestore.collection("category")
 
     override suspend fun saveAccount(user: User) {
         val data = hashMapOf(
@@ -387,6 +391,43 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
         )
         letsReadCollection.document(result.email).collection("results")
             .document(System.currentTimeMillis().toString()).set(data).await()
+
+    }
+
+    override suspend fun saveCategoriesFromPatient(email: String, categories: List<String>) {
+        val data = hashMapOf(
+            "categories" to categories
+        )
+
+        categoryCollection
+            .document(email)
+            .set(data)
+            .addOnSuccessListener {
+                Log.v(TAG, "Categories saved for patient $email")
+            }
+            .addOnFailureListener {
+                throw FirestoreException("Failure to save categories for patient $email")
+            }
+    }
+
+    override suspend fun getPatientCategories(email: String): List<String> {
+
+        return suspendCoroutine { continuation ->
+            categoryCollection
+                .document(email)
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if (documentSnapshot != null && documentSnapshot.exists()) {
+                        val categories = documentSnapshot.data?.get("categories") as List<String>
+                        continuation.resume(categories)
+                    } else {
+                        continuation.resume(emptyList())
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    continuation.resumeWithException(exception)
+                }
+        }
     }
 
     companion object {
