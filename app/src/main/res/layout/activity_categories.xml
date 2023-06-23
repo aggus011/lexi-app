@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.categories.CategoriesActivity">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationLogo"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_colorFilter="@color/purple"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/amoeba" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/logo"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:textColor="@color/black"
+        android:textAppearance="@style/title"/>
+
+    <TextView
+        android:id="@+id/tvCategories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/choose_three_favs"
+        android:textAppearance="@style/title"
+        android:layout_marginTop="80dp"/>
+
+    <ImageView
+        android:id="@+id/ivIcRead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/tvCategories"
+        app:layout_constraintStart_toEndOf="@id/tvCategories"
+        app:layout_constraintBottom_toBottomOf="@id/tvCategories"
+        android:src="@drawable/volume_high"
+        android:layout_marginStart="10dp"/>
+
+    <View
+        android:id="@+id/vCheckBoxCategory1"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:background="@drawable/background_category_btn"
+        app:layout_constraintStart_toStartOf="@id/checkboxCategory1"
+        app:layout_constraintTop_toTopOf="@id/checkboxCategory1"
+        app:layout_constraintEnd_toEndOf="@id/checkboxCategory1"
+        app:layout_constraintBottom_toBottomOf="@id/checkboxCategory1"/>
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/checkboxCategory1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/animals"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvCategories"
+        app:layout_constraintEnd_toStartOf="@id/checkboxCategory2"
+        android:textAppearance="@style/textMaterialButton"
+        android:buttonTint="@color/blue"/>
+
+    <View
+        android:id="@+id/vCheckBoxCategory2"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:background="@drawable/background_category_btn"
+        app:layout_constraintStart_toStartOf="@id/checkboxCategory2"
+        app:layout_constraintTop_toTopOf="@id/checkboxCategory2"
+        app:layout_constraintEnd_toEndOf="@id/checkboxCategory2"
+        app:layout_constraintBottom_toBottomOf="@id/checkboxCategory2"/>
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/checkboxCategory2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/insects"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvCategories"
+        app:layout_constraintStart_toEndOf="@id/checkboxCategory1"
+        android:textAppearance="@style/textMaterialButton"
+        android:buttonTint="@color/blue"/>
+
+    <View
+        android:id="@+id/vCheckBoxCategory3"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:background="@drawable/background_category_btn"
+        app:layout_constraintStart_toStartOf="@id/checkboxCategory3"
+        app:layout_constraintTop_toTopOf="@id/checkboxCategory3"
+        app:layout_constraintEnd_toEndOf="@id/checkboxCategory3"
+        app:layout_constraintBottom_toBottomOf="@id/checkboxCategory3"/>
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/checkboxCategory3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fruits"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkboxCategory1"
+        android:buttonTint="@color/blue"
+        android:textAppearance="@style/textMaterialButton"/>
+
+    <View
+        android:id="@+id/vCheckBoxCategory4"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:background="@drawable/background_category_btn"
+        app:layout_constraintStart_toStartOf="@id/checkboxCategory4"
+        app:layout_constraintTop_toTopOf="@id/checkboxCategory4"
+        app:layout_constraintEnd_toEndOf="@id/checkboxCategory4"
+        app:layout_constraintBottom_toBottomOf="@id/checkboxCategory4"/>
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/checkboxCategory4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/vegetables"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkboxCategory3"
+        app:layout_constraintEnd_toStartOf="@id/checkboxCategory5"
+        android:buttonTint="@color/blue"
+        android:textAppearance="@style/textMaterialButton"/>
+
+    <View
+        android:id="@+id/vCheckBoxCategory5"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:background="@drawable/background_category_btn"
+        app:layout_constraintStart_toStartOf="@id/checkboxCategory5"
+        app:layout_constraintTop_toTopOf="@id/checkboxCategory5"
+        app:layout_constraintEnd_toEndOf="@id/checkboxCategory5"
+        app:layout_constraintBottom_toBottomOf="@id/checkboxCategory5"/>
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/checkboxCategory5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/colors"
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toBottomOf="@id/checkboxCategory3"
+        app:layout_constraintStart_toEndOf="@id/checkboxCategory4"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:buttonTint="@color/blue"
+        android:textAppearance="@style/textMaterialButton"/>
+
+    <View
+        android:id="@+id/vCheckBoxCategory6"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:background="@drawable/background_category_btn"
+        app:layout_constraintStart_toStartOf="@id/checkboxCategory6"
+        app:layout_constraintTop_toTopOf="@id/checkboxCategory6"
+        app:layout_constraintEnd_toEndOf="@id/checkboxCategory6"
+        app:layout_constraintBottom_toBottomOf="@id/checkboxCategory6"/>
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/checkboxCategory6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/names"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkboxCategory5"
+        android:buttonTint="@color/blue"
+        android:textAppearance="@style/textMaterialButton"/>
+
+    <View
+        android:id="@+id/vCheckBoxCategory7"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:background="@drawable/background_category_btn"
+        app:layout_constraintStart_toStartOf="@id/checkboxCategory7"
+        app:layout_constraintTop_toTopOf="@id/checkboxCategory7"
+        app:layout_constraintEnd_toEndOf="@id/checkboxCategory7"
+        app:layout_constraintBottom_toBottomOf="@id/checkboxCategory7"/>
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/checkboxCategory7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/places"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkboxCategory6"
+        app:layout_constraintEnd_toStartOf="@id/checkboxCategory8"
+        android:buttonTint="@color/blue"
+        android:textAppearance="@style/textMaterialButton"/>
+
+    <View
+        android:id="@+id/vCheckBoxCategory8"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:background="@drawable/background_category_btn"
+        app:layout_constraintStart_toStartOf="@id/checkboxCategory8"
+        app:layout_constraintTop_toTopOf="@id/checkboxCategory8"
+        app:layout_constraintEnd_toEndOf="@id/checkboxCategory8"
+        app:layout_constraintBottom_toBottomOf="@id/checkboxCategory8"/>
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/checkboxCategory8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/countries"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkboxCategory6"
+        app:layout_constraintStart_toEndOf="@id/checkboxCategory7"
+        android:buttonTint="@color/blue"
+        android:textAppearance="@style/textMaterialButton"/>
+
+    <View
+        android:id="@+id/vCheckBoxCategory9"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:background="@drawable/background_category_btn"
+        app:layout_constraintStart_toStartOf="@id/checkboxCategory9"
+        app:layout_constraintTop_toTopOf="@id/checkboxCategory9"
+        app:layout_constraintEnd_toEndOf="@id/checkboxCategory9"
+        app:layout_constraintBottom_toBottomOf="@id/checkboxCategory9"/>
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/checkboxCategory9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/vehicles"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkboxCategory8"
+        android:buttonTint="@color/blue"
+        android:textAppearance="@style/textMaterialButton"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mbContinueToHome"
+        android:layout_width="350dp"
+        android:layout_height="70dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vCheckBoxCategory9"
+        android:text="@string/continue_to_home"
+        app:cornerRadius="10dp"
+        android:textAppearance="@style/textMaterialButton"
+        android:layout_marginTop="30dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

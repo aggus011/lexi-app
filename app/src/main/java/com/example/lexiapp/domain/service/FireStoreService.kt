@@ -4,6 +4,7 @@ import com.example.lexiapp.data.model.CorrectWordDataResult
 import com.example.lexiapp.data.model.LetsReadGameDataResult
 import com.example.lexiapp.data.model.WhereIsTheLetterDataResult
 import com.example.lexiapp.domain.model.FirebaseResult
+import com.example.lexiapp.domain.model.Objective
 import com.example.lexiapp.domain.model.Professional
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.model.gameResult.CorrectWordGameResult
@@ -60,4 +61,7 @@ interface FireStoreService {
 
     suspend fun getNotes (emailPatient: String): Flow<List<Note>>
 
+    suspend fun saveCategoriesFromPatient(email: String, categories: List<String>)
+
+    suspend fun getPatientCategories(email: String): List<String>
 }
