@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityLoginBinding
 import com.example.lexiapp.domain.model.UserLogin
+import com.example.lexiapp.ui.categories.CategoriesActivity
 import com.example.lexiapp.ui.customDialog.DialogFragmentLauncher
 import com.example.lexiapp.ui.customDialog.ErrorDialog
 import com.example.lexiapp.ui.customDialog.show
@@ -114,8 +115,14 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun goToPatientHome() {
-        startActivity(Intent(this, HomePatientActivity::class.java))
-        finish()
+        if(viewModel.hasChoosedCategories.value == true){
+            startActivity(Intent(this, HomePatientActivity::class.java))
+            finish()
+        }else{
+            startActivity(Intent(this, CategoriesActivity::class.java))
+            finish()
+        }
+        //when a patient login is send to categories and in category activity is evaluate if has choosed categories
     }
 
     private fun goToProfessionalHome(){

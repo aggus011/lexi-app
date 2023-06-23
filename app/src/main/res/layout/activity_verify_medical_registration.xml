@@ -47,7 +47,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clValidationAccount"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivMiniLogo">
 
         <TextView
             android:id="@+id/tvValidation"
@@ -56,13 +60,12 @@
             android:text="@string/checking_your_account"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/waitingAnimation"
             app:layout_constraintTop_toTopOf="parent"
             android:textAppearance="@style/subtitle"
             android:gravity="center"
-            android:layout_marginTop="30dp"
             android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"/>
+            android:layout_marginEnd="10dp"
+            android:textSize="20sp"/>
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/waitingAnimation"
@@ -95,7 +98,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clValidatedAccount"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivMiniLogo"
         android:visibility="gone">
 
         <TextView
@@ -104,13 +111,12 @@
             android:text="@string/account_verified"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/validationSuccessAnimation"
             app:layout_constraintTop_toTopOf="parent"
             android:textAppearance="@style/subtitle"
             android:gravity="center"
-            android:layout_marginTop="30dp"
             android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"/>
+            android:layout_marginEnd="10dp"
+            android:textSize="20sp"/>
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/validationSuccessAnimation"
@@ -142,7 +148,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clNoValidatedAccount"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivMiniLogo"
         android:visibility="gone">
 
         <TextView
@@ -151,13 +161,12 @@
             android:text="@string/check_your_register"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/errorValidationAnimation"
             app:layout_constraintTop_toTopOf="parent"
             android:textAppearance="@style/subtitle"
             android:gravity="center"
-            android:layout_marginTop="30dp"
             android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"/>
+            android:layout_marginEnd="10dp"
+            android:textSize="20sp"/>
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/errorValidationAnimation"

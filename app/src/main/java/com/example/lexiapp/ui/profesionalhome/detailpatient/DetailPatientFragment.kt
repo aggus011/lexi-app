@@ -23,7 +23,7 @@ import java.util.*
 @AndroidEntryPoint
 class DetailPatientFragment : Fragment() {
 
-    private var _binding: com.example.lexiapp.databinding.FragmentDetailPatientBinding? = null
+    private var _binding: FragmentDetailPatientBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: ProfesionalHomeViewModel by activityViewModels()
