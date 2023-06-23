@@ -26,6 +26,9 @@ import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 @Singleton
 class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireStoreService {
@@ -152,13 +155,14 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     }
 
     override suspend fun getProfessional(email: String): Professional {
-        var professional = Professional(User(null, email), null, null, false, null)
-        professionalCollection.document(email).get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val documentSnapshot = task.result
-                    if (documentSnapshot.exists()) {
-                        professional = Professional.Builder()
+        return suspendCoroutine { continuation ->
+            professionalCollection
+                .document(email)
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if(documentSnapshot != null &&
+                            documentSnapshot.exists()){
+                        val professional = Professional.Builder()
                             .user(documentSnapshot.data?.get("user_name").toString(), email)
                             .medicalRegistration(
                                 documentSnapshot.data?.get("medical_registration").toString()
@@ -167,14 +171,16 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                             .isVerifiedAccount(documentSnapshot.data?.get("is_verificated_account") as Boolean)
                             .registrationDate((documentSnapshot.data?.get("registration_date") as Timestamp).toDate())
                             .build()
-                    } else {
-                        //User not found
+                        continuation.resume(professional)
+                    }else{
+                        val professional = Professional(User(null, email), null, null, false, null)
+                        continuation.resume(professional)
                     }
-                } else {
-                    throw FirestoreException("Problema en firestore para obtener datos")
                 }
-            }.await()
-        return professional
+                .addOnFailureListener { exception ->
+                    continuation.resumeWithException(exception)
+                }
+        }
     }
 
     override suspend fun getIsLinked(email: String): Boolean? {
