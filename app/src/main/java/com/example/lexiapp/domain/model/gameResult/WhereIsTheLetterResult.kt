@@ -5,5 +5,6 @@ data class WhereIsTheLetterResult(
     val mainLetter: Char,
     val selectedLetter: Char,
     val word: String,
-    override val success: Boolean
-): ResultGame(email, success)
+    override val success: Boolean,
+    override val date: String?
+): ResultGame(email, success, date)

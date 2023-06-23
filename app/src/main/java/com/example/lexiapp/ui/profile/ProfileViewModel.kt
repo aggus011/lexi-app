@@ -88,7 +88,7 @@ class ProfileViewModel @Inject constructor(
         countdownTimer?.cancel()
     }
 
-    private fun getProfile(){
+    fun getProfile(){
         viewModelScope.launch {
             _profileLiveData.value=profileUseCases.getProfile()
         }

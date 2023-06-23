@@ -53,14 +53,13 @@ class ProfesionalHomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProfesionalHomeBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
-
+        vM.getPatient()
         getViews()
         setListener()
-        //vM.getPatient()
         setRecyclerView()
-        setSearch()
         addFragment()
         visibilityDetailFragment()
+        setSearch()
     }
 
     private fun visibilityDetailFragment() {
@@ -147,24 +146,22 @@ class ProfesionalHomeActivity : AppCompatActivity() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }
-
             override fun onQueryTextChange(patientSearch: String?): Boolean {
                 vM.filter(patientSearch)
                 return true
             }
-
         })
     }
 
     private fun setRecyclerView() {
         binding.rvPatient.layoutManager= LinearLayoutManager(this)
+        vM.listFilterPatient.observe(this) { list ->
+            binding.rvPatient.adapter = UserAdapter(list, ::viewDetails, ::unbindPatient)
+        }
         suscribeToVM()
     }
 
     private fun suscribeToVM() {
-        vM.listFilterPatient.observe(this) { list ->
-            binding.rvPatient.adapter = UserAdapter(list, ::viewDetails, ::unbindPatient)
-        }
         vM.resultAddPatient.observe(this) { result ->
             if (result == FirebaseResult.TaskSuccess) {
                 Toast.makeText(this,"Se agregó con éxito", Toast.LENGTH_SHORT).show()

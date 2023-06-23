@@ -46,7 +46,8 @@ class CorrectWordViewModel @Inject constructor(
                     email = "",
                     wordSelected = selecterWord,
                     correctWord = correctWord,
-                    success = success
+                    success = success,
+                    date = null
                 )
             )
         }
