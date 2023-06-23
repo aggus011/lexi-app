@@ -211,7 +211,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
         emailPatient: String,
         emailProfessional: String
     ): FirebaseResult {
-        var result: FirebaseResult = FirebaseResult.TaskFaliure
+        var result: FirebaseResult = FirebaseResult.TaskFailure
         val data = mapOf(
             "professional_link" to emailProfessional
         )
@@ -270,7 +270,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     override suspend fun unBindProfessionalFromPatient(
         emailPatient: String
     ): FirebaseResult {
-        var result: FirebaseResult = FirebaseResult.TaskFaliure
+        var result: FirebaseResult = FirebaseResult.TaskFailure
         val data = mapOf(
             "professional_link" to null
         )
@@ -445,7 +445,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
             documentRef.set(data).await()
             emit(FirebaseResult.TaskSuccess)
         } catch (e: Exception) {
-            emit(FirebaseResult.TaskFaliure)
+            emit(FirebaseResult.TaskFailure)
         }
     }
 
@@ -454,7 +454,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
             val notes = notesCollection(emailPatient).document(date).delete().await()
             emit(FirebaseResult.TaskSuccess)
         } catch (e: Exception) {
-            emit(FirebaseResult.TaskFaliure)
+            emit(FirebaseResult.TaskFailure)
         }
     }
 

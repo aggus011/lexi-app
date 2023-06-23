@@ -36,7 +36,7 @@ class RecordNoteActivity : AppCompatActivity() {
         vM.resultDelete.observe(this) { result->
             when(result){
                 FirebaseResult.TaskSuccess->toast("Se eliminó la nota")
-                FirebaseResult.TaskFaliure->toast("No se pudo eliminar")
+                FirebaseResult.TaskFailure->toast("No se pudo eliminar")
                 else -> {}
             }
         }

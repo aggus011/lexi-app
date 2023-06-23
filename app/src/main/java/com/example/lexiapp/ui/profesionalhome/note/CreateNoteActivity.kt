@@ -33,7 +33,7 @@ class CreateNoteActivity : AppCompatActivity() {
                     binding.txtNote.text.clear()
                     finish()
                 }
-                FirebaseResult.TaskFaliure->{
+                FirebaseResult.TaskFailure->{
                     toast("No se pudo guardar")
                 }
                 else -> {}

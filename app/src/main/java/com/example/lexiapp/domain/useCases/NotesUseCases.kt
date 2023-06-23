@@ -18,7 +18,7 @@ class NotesUseCases @Inject constructor(
     suspend fun getNotes(emailPatient: String) = fireStoreService.getNotes(emailPatient)
 
     suspend fun saveNote (note: Note): Flow<FirebaseResult> {
-        if (!havePermitLength(note.text)) return flowOf(FirebaseResult.TaskFaliure)
+        if (!havePermitLength(note.text)) return flowOf(FirebaseResult.TaskFailure)
         return fireStoreService.saveNote(note)
     }
 
