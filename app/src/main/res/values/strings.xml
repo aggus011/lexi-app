@@ -102,6 +102,12 @@
     <string name="progress_last_week">Progreso última semana</string>
     <string name="total_progress">Progreso histórico</string>
     <string name="last_week">Uso en la última semana</string>
+    <string name="see_note">Ver notas</string>
+    <string name="note">Hacer nota</string>
+    <string name="notes">Notas del paciente</string>
+    <string name="message_length">Ten en cuenta que el máximo son 200 caracteres</string>
+    <string name="write_note">Escribe tu nota aquí</string>
+    <string name="save_note">Guardar nota</string>
     <plurals name="days_left">
         <item quantity="one">Día Restante: %d </item>
         <item quantity="other">Días Restantes: %d </item>

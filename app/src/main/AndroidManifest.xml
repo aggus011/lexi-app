@@ -28,6 +28,12 @@
         android:theme="@style/Theme.LexiApp"
         tools:targetApi="31">
         <activity
+            android:name=".ui.profesionalhome.note.CreateNoteActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ui.profesionalhome.note.RecordNoteActivity"
+            android:exported="false"/>
+        <activity
             android:name=".ui.categories.CategoriesActivity"
             android:exported="false" />
         <activity
@@ -96,8 +102,9 @@
         <activity
             android:name=".ui.signup.patient.SignUpActivity"
             android:exported="false" />
-        <activity android:name=".ui.games.letsread.ResultActivity"
-            android:exported="false"/>
+        <activity
+            android:name=".ui.games.letsread.ResultActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true">

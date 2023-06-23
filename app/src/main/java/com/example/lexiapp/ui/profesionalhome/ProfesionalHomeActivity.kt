@@ -19,9 +19,12 @@ import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.useCases.ProfileUseCases
 import com.example.lexiapp.ui.adapter.UserAdapter
 import com.example.lexiapp.ui.profesionalhome.detailpatient.DetailPatientFragment
+import com.example.lexiapp.ui.profesionalhome.note.CreateNoteActivity
+import com.example.lexiapp.ui.profesionalhome.note.RecordNoteActivity
 import com.example.lexiapp.ui.profesionalhome.resultlink.SuccessfulLinkActivity
 import com.example.lexiapp.ui.profesionalhome.resultlink.UnsuccessfulLinkActivity
 import com.example.lexiapp.ui.profile.professional.ProfessionalProfileFragment
+import com.google.gson.Gson
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,13 +56,12 @@ class ProfesionalHomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProfesionalHomeBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
-        vM.getPatient()
         getViews()
         setListener()
         setRecyclerView()
+        setSearch()
         addFragment()
         visibilityDetailFragment()
-        setSearch()
     }
 
     private fun visibilityDetailFragment() {
@@ -146,22 +148,30 @@ class ProfesionalHomeActivity : AppCompatActivity() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }
+
             override fun onQueryTextChange(patientSearch: String?): Boolean {
                 vM.filter(patientSearch)
                 return true
             }
+
         })
     }
 
     private fun setRecyclerView() {
         binding.rvPatient.layoutManager= LinearLayoutManager(this)
-        vM.listFilterPatient.observe(this) { list ->
-            binding.rvPatient.adapter = UserAdapter(list, ::viewDetails, ::unbindPatient)
-        }
         suscribeToVM()
     }
 
     private fun suscribeToVM() {
+        vM.listFilterPatient.observe(this) { list ->
+            binding.rvPatient.adapter = UserAdapter(
+                list,
+                ::viewDetails,
+                ::unbindPatient,
+                ::startCreateNoteActivity,
+                ::startRecordNoteActivity
+            )
+        }
         vM.resultAddPatient.observe(this) { result ->
             if (result == FirebaseResult.TaskSuccess) {
                 Toast.makeText(this,"Se agregó con éxito", Toast.LENGTH_SHORT).show()
@@ -188,6 +198,18 @@ class ProfesionalHomeActivity : AppCompatActivity() {
             .show(detailFragment!!)
             .addToBackStack(TAG_FRAGMENT_DETAIL)
             .commit()
+    }
+
+    private fun startCreateNoteActivity(emailPatient: String){
+        val intent = Intent(applicationContext, CreateNoteActivity::class.java)
+        intent.putExtra("emailPatient", emailPatient)
+        startActivity(intent)
+    }
+
+    private fun startRecordNoteActivity(patient: User){
+        val intent = Intent(applicationContext, RecordNoteActivity::class.java)
+        intent.putExtra("patient", Gson().toJson(patient))
+        startActivity(intent)
     }
 
     @Deprecated("Deprecated in Java")

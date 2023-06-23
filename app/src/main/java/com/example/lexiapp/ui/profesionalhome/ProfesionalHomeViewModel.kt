@@ -14,6 +14,7 @@ import com.example.lexiapp.domain.useCases.CodeQRUseCases
 import com.example.lexiapp.domain.useCases.LinkUseCases
 import com.example.lexiapp.domain.useCases.ResultGamesUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -57,29 +58,27 @@ class ProfesionalHomeViewModel @Inject constructor(
     val weekPieWITL : LiveData<Pair<Float, Float>> = _weekPieWITL
 
     init {
+        listenerOfPatients()
     }
 
-    fun getPatient() {
+    fun listenerOfPatients() {
         viewModelScope.launch {
-            linkUseCases.getListLinkPatientOfProfessional { list ->
-                val helpList = users(list)
-                _listPatient.value = helpList
-                _listFilterPatient.value = _listPatient.value
+            linkUseCases.getListLinkPatientOfProfessional().collect { list ->
+                patients(list).collect{ patients ->
+                    _listPatient.value = patients
+                    _listFilterPatient.value = _listPatient.value
+                }
             }
         }
     }
 
-    private fun users(list: List<String>?): List<User> {
-        val helpList = mutableListOf<User>()
-        viewModelScope.launch {
-            list?.forEach {
-                val patient = linkUseCases.getUser(it)
-                Log.v("VALIDATE_FILTER_USERS", "${patient.userName}//${patient.email}")
-                helpList.add(patient)
+    suspend fun patients(emails: List<String>) = flow{
+            val patients = mutableListOf<User>()
+            emails.forEach { email ->
+                patients.add(linkUseCases.getUser(email))
             }
+            emit (patients)
         }
-        return helpList
-    }
 
     fun getScanOptions() = codeQRUseCases.getScanOptions()
 
