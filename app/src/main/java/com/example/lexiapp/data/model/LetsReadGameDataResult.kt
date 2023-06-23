@@ -6,7 +6,8 @@ data class LetsReadGameDataResult(
     var email: String,
     val success: Boolean,
     val wrongWords: List<String>,
-    val totalWords: Int
+    val totalWords: Int,
+    val date: String? = null
 )
 
 fun LetsReadGameResult.toLetsReadGameDataResult(): LetsReadGameDataResult {
@@ -15,5 +16,15 @@ fun LetsReadGameResult.toLetsReadGameDataResult(): LetsReadGameDataResult {
         success = this.success,
         wrongWords = this.wrongWords,
         totalWords = this.totalWords
+    )
+}
+
+fun LetsReadGameDataResult.toLetsReadGameResult(): LetsReadGameResult {
+    return LetsReadGameResult(
+        email = this.email,
+        success = this.success,
+        wrongWords = this.wrongWords,
+        totalWords = this.totalWords,
+        date = this.date
     )
 }

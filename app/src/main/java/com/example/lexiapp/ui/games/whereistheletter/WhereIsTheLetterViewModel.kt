@@ -65,7 +65,8 @@ class WhereIsTheLetterViewModel @Inject constructor(
                     mainLetter = letter.value!!,
                     selectedLetter = it,
                     word = basicWord.value!!,
-                    success = success
+                    success = success,
+                    date = null
                 )
             }?.let {
                 letterGameUseCases.saveWordInFirebase(
