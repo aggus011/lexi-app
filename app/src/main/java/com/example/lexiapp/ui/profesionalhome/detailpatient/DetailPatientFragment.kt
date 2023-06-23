@@ -1,7 +1,10 @@
 package com.example.lexiapp.ui.profesionalhome.detailpatient
 
+import android.content.ContentValues.TAG
 import android.graphics.Color
+import android.opengl.Visibility
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,6 +58,9 @@ class DetailPatientFragment : Fragment() {
     }
 
     private fun setCWObservers() {
+        viewModel.wasNotPlayedCW.observe(viewLifecycleOwner) {
+            binding.cvMetricsCW.visibility = if(it) View.VISIBLE else View.GONE
+        }
         viewModel.totalPieCW.observe(viewLifecycleOwner) { (total, percentError) ->
             setPieGraph(total, percentError, binding.pieTotalChartCW.id)
         }
@@ -70,6 +76,9 @@ class DetailPatientFragment : Fragment() {
     }
 
     private fun setWITLObservers() {
+        viewModel.wasNotPlayedWITL.observe(viewLifecycleOwner) {
+            binding.cvMetricsWITL.visibility = if(it) View.VISIBLE else View.GONE
+        }
         viewModel.totalPieWITL.observe(viewLifecycleOwner) { (total, percentError) ->
             setPieGraph(total, percentError, binding.pieTotalChartWITL.id)
         }
@@ -92,23 +101,27 @@ class DetailPatientFragment : Fragment() {
             binding.pieWeekChartCW.id-> binding.pieWeekChartCW
             else -> null
         } ?: return
-        val entries = listOf(
-            PieEntry(total, "Total ejercícios"),
-            PieEntry(errorPercentage, "Total error")
-        )
-        val colors = intArrayOf(Color.CYAN, Color.RED)
-        val dataSet = PieDataSet(entries, "")
-        dataSet.colors = colors.asList()
-        dataSet.valueTextSize=12f
-        val data = PieData(dataSet)
-        pieChart.apply {
-            this.data = data
-            description.isEnabled = false
-            setDrawEntryLabels(false)
-            setEntryLabelTextSize(12f)
-            legend.isEnabled = true
-            setDrawMarkers(false)
-            animateY(300)
+        try {
+            val entries = listOf(
+                PieEntry(total, "Total ejercícios"),
+                PieEntry(errorPercentage, "Total error")
+            )
+            val colors = intArrayOf(Color.CYAN, Color.RED)
+            val dataSet = PieDataSet(entries, "")
+            dataSet.colors = colors.asList()
+            dataSet.valueTextSize = 12f
+            val data = PieData(dataSet)
+            pieChart.apply {
+                this.data = data
+                description.isEnabled = false
+                setDrawEntryLabels(false)
+                setEntryLabelTextSize(12f)
+                legend.isEnabled = true
+                setDrawMarkers(false)
+                animateY(300)
+            }
+        } catch (e: Exception) {
+            Log.d(TAG, "Fallo: ${e.javaClass}")
         }
     }
 
@@ -118,46 +131,50 @@ class DetailPatientFragment : Fragment() {
             binding.barChartCW.id-> binding.barChartCW
             else -> null
         } ?: return
-        val entries = mutableListOf<BarEntry>()
-        val errorEntries = mutableListOf<BarEntry>()
-        val labels = mutableListOf<String>()
-        val countResultsLastWeek = resultsLastWeek.entries.first().value.third
-        resultsLastWeek.forEach { (date, thrid) ->
-            val countError = thrid.second
-            val countDay = thrid.first.toFloat()
-            val entry = BarEntry(entries.size.toFloat(), countDay)
-            entries.add(entry)
-            val errorEntry = BarEntry(errorEntries.size.toFloat(), countError)
-            errorEntries.add(errorEntry)
-            labels.add(date)
-        }
-        labels[labels.lastIndex] = "Hoy"
-        val barDataSet = BarDataSet(entries, "Ejercícios por día")
-        barDataSet.setColors(Color.CYAN)
-        val errorBarDataSet = BarDataSet(errorEntries, "Errores por día")
-        errorBarDataSet.setColors(Color.RED)
-        barDataSet.valueTextSize=12f
-        errorBarDataSet.valueTextSize=12f
-        val barData = BarData(barDataSet, errorBarDataSet)
-        val granularity: Int = (countResultsLastWeek/10)
-        barData.isHighlightEnabled = false
-        barChart.data = barData
-        barChart.setFitBars(true)
-        barChart.animateY(300)
-        barChart.setDrawValueAboveBar(true)
-        barChart.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
-        barChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-        barChart.axisLeft.axisMinimum = 0f
-        barChart.axisLeft.axisMaximum = countResultsLastWeek.toFloat()
-        barChart.axisLeft.granularity = granularity.toFloat()
-        barChart.axisRight.isEnabled = false
-        barChart.legend.isEnabled = true
-        barChart.xAxis.setDrawGridLines(false)
-        barChart.setScaleEnabled(false)
-        barChart.isDragEnabled = false
-        barChart.description=null
+        try {
+            val entries = mutableListOf<BarEntry>()
+            val errorEntries = mutableListOf<BarEntry>()
+            val labels = mutableListOf<String>()
+            val countResultsLastWeek = resultsLastWeek.entries.first().value.third
+            resultsLastWeek.forEach { (date, thrid) ->
+                val countError = thrid.second
+                val countDay = thrid.first.toFloat()
+                val entry = BarEntry(entries.size.toFloat(), countDay)
+                entries.add(entry)
+                val errorEntry = BarEntry(errorEntries.size.toFloat(), countError)
+                errorEntries.add(errorEntry)
+                labels.add(date)
+            }
+            labels[labels.lastIndex] = "Hoy"
+            val barDataSet = BarDataSet(entries, "Ejercícios por día")
+            barDataSet.setColors(Color.CYAN)
+            val errorBarDataSet = BarDataSet(errorEntries, "Errores por día")
+            errorBarDataSet.setColors(Color.RED)
+            barDataSet.valueTextSize = 12f
+            errorBarDataSet.valueTextSize = 12f
+            val barData = BarData(barDataSet, errorBarDataSet)
+            val granularity: Int = (countResultsLastWeek / 10)
+            barData.isHighlightEnabled = false
+            barChart.data = barData
+            barChart.setFitBars(true)
+            barChart.animateY(300)
+            barChart.setDrawValueAboveBar(true)
+            barChart.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
+            barChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+            barChart.axisLeft.axisMinimum = 0f
+            barChart.axisLeft.axisMaximum = countResultsLastWeek.toFloat()
+            barChart.axisLeft.granularity = granularity.toFloat()
+            barChart.axisRight.isEnabled = false
+            barChart.legend.isEnabled = true
+            barChart.xAxis.setDrawGridLines(false)
+            barChart.setScaleEnabled(false)
+            barChart.isDragEnabled = false
+            barChart.description = null
 
-        barChart.invalidate()
+            barChart.invalidate()
+        } catch (e: Exception) {
+            Log.d(TAG, "Fallo2: ${e.javaClass}")
+        }
     }
 
     private fun bind(patient: User) {

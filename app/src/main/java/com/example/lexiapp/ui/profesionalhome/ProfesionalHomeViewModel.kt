@@ -26,6 +26,10 @@ class ProfesionalHomeViewModel @Inject constructor(
     private val resultGamesUseCases: ResultGamesUseCases
 ) : ViewModel() {
 
+    private var _wasNotPlayedCW = MutableLiveData<Boolean>()
+    val wasNotPlayedCW = _wasNotPlayedCW as LiveData<Boolean>
+    private var _wasNotPlayedWITL = MutableLiveData<Boolean>()
+    val wasNotPlayedWITL = _wasNotPlayedWITL as LiveData<Boolean>
 
     private var _hardWordsCW = MutableLiveData<List<String>>()
     val hardWordsCW = _hardWordsCW as LiveData<List<String>>
@@ -58,6 +62,8 @@ class ProfesionalHomeViewModel @Inject constructor(
     val weekPieWITL : LiveData<Pair<Float, Float>> = _weekPieWITL
 
     init {
+        _wasNotPlayedWITL.value = false
+        _wasNotPlayedCW.value = false
         listenerOfPatients()
     }
 
@@ -113,12 +119,13 @@ class ProfesionalHomeViewModel @Inject constructor(
     private suspend fun setCWStats(patient: User) {
         resultGamesUseCases.getWhereIsCWResults(patient.email).collect {
             Log.d("CW Result", it.toString())
-            if (it.isNotEmpty()) {
+            _wasNotPlayedCW.value = if (it.isNotEmpty()) {
                 setHardWordsCW(it)
                 setResultsLastWeekCW(it)
                 setDataPiesCW(it)
+                true
             }else {
-                setBlankResultsCW()
+                false
             }
         }
     }
@@ -131,11 +138,6 @@ class ProfesionalHomeViewModel @Inject constructor(
 
     private fun setResultsLastWeekCW(results: List<CorrectWordGameResult>) {
         _resultSLastWeekCW.value=resultGamesUseCases.getResultsLastWeek(results)
-    }
-
-    private fun setBlankResultsCW() {
-        _hardWordsCW.value = emptyList()
-        _resultSLastWeekCW.value = emptyMap()
     }
 
     private fun setHardWordsCW(results: List<CorrectWordGameResult>) {
@@ -160,12 +162,13 @@ class ProfesionalHomeViewModel @Inject constructor(
 
     private suspend fun setWITLStats(patient: User) {
         resultGamesUseCases.getWhereIsTheLetterResults(patient.email).collect {
-            if(it.isNotEmpty()){
+            _wasNotPlayedWITL.value = if(it.isNotEmpty()) {
                 setHardLetters(it)
                 setResultsLastWeekWITL(it)
                 setDataPiesWITL(it)
+                true
             } else {
-                setBlankResults()
+                false
             }
         }
     }
