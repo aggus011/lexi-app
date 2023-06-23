@@ -6,100 +6,68 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginHorizontal="8dp"
-    android:layout_marginTop="50dp"
-    android:gravity="center_horizontal|top"
+    android:gravity="center_horizontal|center_vertical"
     android:orientation="vertical"
     tools:context=".ui.login.LoginActivity">
 
-    <TextView
-        android:id="@+id/tvLogoApp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/logo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textAppearance="@style/lexiLogo"
-        android:layout_marginTop="100dp"/>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_google"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="10dp"
-        android:backgroundTint="@color/btn_google"
-        android:text="@string/Google"
-        android:textAlignment="center"
-        app:icon="@drawable/logo_google"
-        app:iconTint="@android:color/transparent"
-        app:iconTintMode="src_atop" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_facebook"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="10dp"
-        android:backgroundTint="@color/btn_facebook"
-        android:text="@string/Facebook"
-        android:textAlignment="center"
-        app:icon="@drawable/logo_facebook"
-        app:iconTint="@android:color/transparent"
-        app:iconTintMode="src_atop" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/left_divider"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginStart="150dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/o"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationLogo"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_colorFilter="@color/purple"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/amoeba" />
 
         <TextView
-            android:id="@+id/o"
-            android:layout_width="0dp"
+            android:id="@+id/tvLogoApp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="0dp"
-            android:text="O"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/right_divider"
-            app:layout_constraintStart_toEndOf="@+id/left_divider"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/right_divider"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginEnd="150dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/o"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            android:text="@string/logo"
+            app:layout_constraintStart_toStartOf="@id/animationLogo"
+            app:layout_constraintEnd_toEndOf="@id/animationLogo"
+            app:layout_constraintTop_toTopOf="@id/animationLogo"
+            app:layout_constraintBottom_toBottomOf="@id/animationLogo"
+            android:textAppearance="@style/title"
+            android:textColor="@color/white"
+            tools:textColor="@color/black"
+            android:textSize="40sp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tvLoginTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_with_email_and_password"
+        android:textAppearance="@style/subtitle"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="20dp"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/et_mail"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="80dp"
         android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:hint="@string/mail"
         android:inputType="textEmailAddress"
         app:boxStrokeColor="@color/blue"
-        app:hintTextColor="@color/blue">
+        app:hintTextColor="@color/blue"
+        app:hintTextAppearance="@style/signUpText"
+        app:boxCornerRadiusTopStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusBottomEnd="10dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -111,14 +79,19 @@
         android:id="@+id/et_password"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="80dp"
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="10dp"
         android:hint="@string/password"
         android:inputType="textPassword"
         app:boxStrokeColor="@color/blue"
         app:hintTextColor="@color/blue"
-        app:passwordToggleEnabled="true">
+        app:passwordToggleEnabled="true"
+        app:hintTextAppearance="@style/signUpText"
+        app:boxCornerRadiusTopStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusBottomEnd="10dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -127,34 +100,31 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <TextView
+        android:id="@+id/tv_forget_password"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/tv_forget_password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
-            android:linksClickable="true"
-            android:text="@string/forgot_password"
-            android:textAlignment="textEnd"
-            android:textStyle="" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="5dp"
+        android:linksClickable="true"
+        android:text="@string/forgot_password"
+        android:textAlignment="textEnd"
+        android:textStyle="bold"
+        android:textAppearance="@style/subtitle"
+        android:textColor="@color/blue"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="70dp"
         android:layout_marginHorizontal="10dp"
         android:layout_marginVertical="10dp"
         android:backgroundTint="@color/blue"
         android:linksClickable="true"
         android:text="@string/login"
         android:textAlignment="center"
-        app:cornerRadius="10dp" />
+        app:cornerRadius="10dp"
+        android:textAppearance="@style/textMaterialButton"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -166,14 +136,14 @@
         <TextView
             android:id="@+id/tv_need_account"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:text="@string/need_account"
-            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tv_register"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:textAppearance="@style/subtitle"/>
 
         <TextView
             android:id="@+id/tv_register"
@@ -185,6 +155,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toEndOf="@+id/tv_need_account"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:textAppearance="@style/subtitle"
+            android:textStyle="bold"
+            android:textColor="@color/blue"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

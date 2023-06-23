@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.role.RoleActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clAppLogo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/animationLogo"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:lottie_autoPlay="true"
+                    app:lottie_colorFilter="@color/purple"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/amoeba" />
+
+                <TextView
+                    android:id="@+id/tvLogoApp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/logo"
+                    app:layout_constraintStart_toStartOf="@id/animationLogo"
+                    app:layout_constraintEnd_toEndOf="@id/animationLogo"
+                    app:layout_constraintTop_toTopOf="@id/animationLogo"
+                    app:layout_constraintBottom_toBottomOf="@id/animationLogo"
+                    android:textAppearance="@style/title"
+                    android:textColor="@color/white"
+                    tools:textColor="@color/black"
+                    android:textSize="40sp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tvRoleTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/clAppLogo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/choose_how_would_like_register"
+            android:textAppearance="@style/title"
+            android:layout_marginTop="60dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="center"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mbPatientRole"
+            android:layout_width="330dp"
+            android:layout_height="70dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvRoleTitle"
+            android:text="@string/im_player"
+            android:textAppearance="@style/textMaterialButton"
+            app:cornerRadius="10dp"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/blue"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mbProfessionalRole"
+            android:layout_width="300dp"
+            android:layout_height="65dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/im_professional"
+            android:textAppearance="@style/textMaterialButton"
+            app:cornerRadius="10dp"
+            app:layout_constraintTop_toBottomOf="@id/mbPatientRole"
+            android:layout_marginTop="5dp"
+            android:backgroundTint="@color/blue"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

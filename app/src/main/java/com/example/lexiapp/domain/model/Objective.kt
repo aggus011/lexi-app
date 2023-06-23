@@ -21,4 +21,8 @@ class Objective(
         fun goal(goal: Int?) = apply { this.goal = goal }
         fun build() = Objective(id, title, description, progress, goal)
     }
+    override fun toString(): String {
+        return "Objective(id=$id, title=$title, description=$description, progress=$progress, goal=$goal)"
+    }
+
 }

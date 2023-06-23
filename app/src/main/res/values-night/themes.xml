@@ -1,7 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.LexiApp" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.LexiApp" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+
+        <!--status bar color in dark mode-->
+        <item name="android:colorPrimaryDark">@color/light_purple</item>
     </style>
 </resources>

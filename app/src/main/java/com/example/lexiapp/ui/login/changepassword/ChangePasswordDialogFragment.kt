@@ -47,7 +47,7 @@ class ChangePasswordDialogFragment : DialogFragment() {
         vM.recoverResult.observe(viewLifecycleOwner){
             handleProgressBar(false)
             when (it) {
-                false-> {
+                FirebaseResult.TaskFailure-> {
                     Toast.makeText(
                         activity,
                         "Ocurrió un error, compruebe el correo o intentelo mas tarde",
@@ -55,7 +55,7 @@ class ChangePasswordDialogFragment : DialogFragment() {
                     ).show()
                     Log.v("UI_RESPONSE", "NO_EXITOSO")
                 }
-                true -> {
+                FirebaseResult.TaskSuccess -> {
                     Toast.makeText(
                         activity,
                         "Se envió el correo de recuperación",
@@ -64,6 +64,14 @@ class ChangePasswordDialogFragment : DialogFragment() {
                     Log.v("UI_RESPONSE", "EXITOSO")
                     dismiss()
                 }
+                null -> {
+                    Toast.makeText(
+                        activity,
+                        "Debe completar el campo correo",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                else -> {}
             }
         }
     }
@@ -112,6 +120,10 @@ class ChangePasswordDialogFragment : DialogFragment() {
         vM.sendRecoverEmail(email)
     }
 
-    private fun validateFormatEmail(email: String) =
-        (email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches())
+    private fun validateFormatEmail(email: String) = Patterns.EMAIL_ADDRESS.matcher(email).matches()
+
+    override fun onDestroy() {
+        super.onDestroy()
+        vM.cleanRecoverResult()
+    }
 }

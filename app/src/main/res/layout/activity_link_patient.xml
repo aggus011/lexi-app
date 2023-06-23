@@ -7,49 +7,56 @@
     tools:context=".ui.profile.link.LinkPatientActivity"
     android:background="@color/purple">
 
-    <ImageView
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/ivMiniLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/mini_logo"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/app_name"/>
+        app:lottie_autoPlay="true"
+        app:lottie_colorFilter="@color/white"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/amoeba" />
 
     <TextView
-        android:id="@+id/txtTimeout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="El QR EXPIRA EN: "
-        android:textSize="22sp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/logo"
         android:textColor="@color/white"
-        app:layout_constraintTop_toTopOf="@id/txtTimerCount"
-        app:layout_constraintBottom_toBottomOf="@id/txtTimerCount"
-        app:layout_constraintEnd_toStartOf="@id/txtTimerCount"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textAppearance="@style/title"/>
     <TextView
         android:id="@+id/txtTimerCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="27sp"
         android:textColor="@color/white"
         android:layout_marginEnd="5dp"
-        app:layout_constraintTop_toTopOf="@id/ivMiniLogo"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/ivMiniLogo"/>
+        android:layout_marginTop="5dp"
+        android:textAppearance="@style/title"
+        tools:text="40s"/>
 
     <TextView
         android:id="@+id/txtShare"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Mostrá o compartí el QR con tu profesional"
-        android:textSize="28sp"
+        android:text="@string/show_qr_to_professional"
         android:layout_marginTop="15dp"
         android:textColor="@color/white"
+        android:textAppearance="@style/title"
         app:layout_constraintTop_toBottomOf="@id/ivMiniLogo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/cvQr"/>
+        app:layout_constraintBottom_toTopOf="@id/cvQr"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"/>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cvQr"

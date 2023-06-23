@@ -39,5 +39,12 @@ class AuthenticationServiceImpl @Inject constructor(private val firebase: Fireba
         firebase.auth.signOut()
     }
 
-    override suspend fun sendRecoverEmail(email: String) = firebase.auth.sendPasswordResetEmail(email)
+    override suspend fun sendRecoverEmail(email: String) = flow {
+        try {
+            val result = firebase.auth.sendPasswordResetEmail(email)
+            emit(FirebaseResult.TaskSuccess)
+        } catch (e: Exception) {
+            emit(FirebaseResult.TaskFailure)
+        }
+    }
 }

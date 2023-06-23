@@ -6,23 +6,61 @@
     android:layout_height="match_parent"
     tools:context=".ui.games.letsread.LetsReadActivity">
 
-    <ImageView
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/ivMiniLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/mini_logo"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_colorFilter="@color/purple"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/amoeba" />
 
-    <ImageButton
-        android:id="@+id/btnArrowBack"
-        android:background="@drawable/arrow_back"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="6dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/logo"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/ivMiniLogo"/>
+        android:textAppearance="@style/title"
+        tools:textColor="@color/black"/>
+
+    <View
+        android:id="@+id/vIcClose"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/round_background"
+        android:backgroundTint="@color/light_purple"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="10dp"/>
+
+    <ImageView
+        android:id="@+id/btnBack"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintTop_toTopOf="@id/vIcClose"
+        app:layout_constraintStart_toStartOf="@id/vIcClose"
+        app:layout_constraintEnd_toEndOf="@id/vIcClose"
+        app:layout_constraintBottom_toBottomOf="@id/vIcClose"
+        android:background="@drawable/ic_close" />
+
+    <ImageView
+        android:id="@+id/btnHelp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/help_circle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/vIcClose"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"/>
 
     <TextView
         android:id="@+id/txtNameText"
@@ -32,67 +70,94 @@
         app:layout_constraintTop_toBottomOf="@id/ivMiniLogo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="30dp"
         android:textAppearance="@style/title"/>
-
-    <View
-        android:id="@+id/vTextToReadBackground"
+    
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clAudioText"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:background="@drawable/btn_objectives_shape"
+        android:layout_height="60dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtNameText"
-        android:alpha="0.35"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="40dp"/>
+        android:layout_marginTop="20dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <View
+            android:id="@+id/vTextToReadAudioBackground"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/btn_objectives_shape"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:alpha="0.35"
+            android:layout_marginHorizontal="30dp" />
 
 
-    <ImageButton
-        android:id="@+id/ibPlayAudioText"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        app:layout_constraintStart_toStartOf="@id/vTextToReadBackground"
-        android:src="@drawable/ic_play"
-        android:backgroundTint="@color/transparent"
-        app:layout_constraintTop_toTopOf="@id/vTextToReadBackground"
-        android:layout_marginTop="4dp"/>
+        <ImageButton
+            android:id="@+id/ibPlayAudioText"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            app:layout_constraintStart_toStartOf="@id/vTextToReadAudioBackground"
+            android:src="@drawable/ic_play"
+            android:backgroundTint="@color/transparent"
+            app:layout_constraintTop_toTopOf="@id/vTextToReadAudioBackground"
+            app:layout_constraintBottom_toBottomOf="@id/vTextToReadAudioBackground" />
 
-    <SeekBar
-        android:id="@+id/seekBarAudioText"
-        android:layout_width="280dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@id/tvAudioTextDuration"
-        app:layout_constraintTop_toTopOf="@id/ibPlayAudioText"
-        app:layout_constraintBottom_toBottomOf="@id/ibPlayAudioText"
-        android:progress="0"
-        tools:progress="70"
-        android:thumbTint="@color/purple"
-        android:progressTint="@color/purple"
-        app:layout_constraintStart_toEndOf="@id/ibPlayAudioText"/>
+        <SeekBar
+            android:id="@+id/seekBarAudioText"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@id/tvAudioTextDuration"
+            app:layout_constraintTop_toTopOf="@id/ibPlayAudioText"
+            app:layout_constraintBottom_toBottomOf="@id/ibPlayAudioText"
+            android:progress="0"
+            tools:progress="70"
+            android:thumbTint="@color/purple"
+            android:progressTint="@color/purple"
+            app:layout_constraintStart_toEndOf="@id/ibPlayAudioText"/>
 
-    <TextView
-        android:id="@+id/tvAudioTextDuration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@id/vTextToReadBackground"
-        app:layout_constraintTop_toTopOf="@id/ibPlayAudioText"
-        tools:text="1:25"
-        app:layout_constraintBottom_toBottomOf="@id/ibPlayAudioText"
-        android:layout_marginEnd="4dp"
-        android:textAppearance="@style/audioDuration"/>
+        <TextView
+            android:id="@+id/tvAudioTextDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/vTextToReadAudioBackground"
+            app:layout_constraintTop_toTopOf="@id/ibPlayAudioText"
+            tools:text="1:25"
+            app:layout_constraintBottom_toBottomOf="@id/ibPlayAudioText"
+            android:layout_marginEnd="4dp"
+            android:textAppearance="@style/audioDuration"/>
+        
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progressBarAudioText"
+        android:layout_width="350dp"
+        android:layout_height="5dp"
+        android:indeterminate="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtNameText"
+        android:layout_marginTop="50dp"
+        android:visibility="visible"
+        tools:visibility="gone"/>
+    
 
     <TextView
         android:id="@+id/tvText"
-        android:layout_margin="8dp"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="@id/vTextToReadBackground"
-        app:layout_constraintEnd_toEndOf="@id/vTextToReadBackground"
-        app:layout_constraintBottom_toBottomOf="@id/vTextToReadBackground"
-        app:layout_constraintTop_toBottomOf="@id/ibPlayAudioText"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtNameText"
         android:scrollbars="vertical"
-        android:textAppearance="@style/textToRead"/>
+        android:textAppearance="@style/textToRead"
+        android:background="@drawable/btn_home_games"
+        android:padding="15dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginHorizontal="30dp"
+        tools:text="En el país de los cuentos, el ratón Pérez recogía los dientes de los niños. Dejaban sus dientitos bajo la almohada y por la noche, él los cambiaba por monedas de oro. ¡Qué magia tan maravillosa!"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clAudioRecord"
@@ -105,14 +170,25 @@
         android:layout_marginHorizontal="30dp"
         android:visibility="gone">
 
+        <View
+            android:id="@+id/vYourRecording"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/btn_objectives_shape" />
+
         <TextView
             android:id="@+id/tvYourRecording"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/your_recording"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:textAppearance="@style/subtitle"/>
+            app:layout_constraintStart_toStartOf="@id/vYourRecording"
+            app:layout_constraintEnd_toEndOf="@id/vYourRecording"
+            app:layout_constraintTop_toTopOf="@id/vYourRecording"
+            app:layout_constraintBottom_toBottomOf="@id/vYourRecording"
+            android:textAppearance="@style/subtitle"
+            android:textColor="@color/white"/>
 
         <ImageButton
             android:id="@+id/ibPlayAudioRecord"
@@ -157,13 +233,13 @@
             app:layout_constraintTop_toBottomOf="@id/ibPlayAudioRecord"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btnShowResults"
-            android:layout_margin="10dp"
             android:backgroundTint="@color/purple"
             app:icon="@drawable/ic_mic"
             app:iconPadding="-10dp"
             android:textAppearance="@style/textMaterialButton"
-            android:textSize="19sp"
-            app:iconSize="30dp"/>
+            android:textSize="18sp"
+            app:iconSize="30dp"
+            android:layout_marginEnd="5dp"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnShowResults"
@@ -175,25 +251,39 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/btnReRecordAudio"
             android:text="@string/audio_record_results"
-            android:layout_margin="10dp"
             android:backgroundTint="@color/green"
             android:textColor="@color/black"
             app:icon="@drawable/ic_games"
             app:iconTint="@color/black"
             app:iconSize="24dp"
-            app:iconPadding="5dp"
-            android:textAppearance="@style/textMaterialButton"/>
+            app:iconPadding="2dp"
+            android:textAppearance="@style/textMaterialButton"
+            android:textSize="20sp"
+            android:layout_marginStart="5dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageButton
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/btnRec"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@drawable/rec_text_off"
-        android:layout_marginBottom="30dp"/>
+        android:layout_marginBottom="30dp"
+        app:lottie_rawRes="@raw/mic"
+        app:lottie_colorFilter="@color/light_purple"
+        app:lottie_autoPlay="false"
+        app:lottie_loop="true"
+        android:clickable="true"/>
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_mic"
+        app:layout_constraintStart_toStartOf="@id/btnRec"
+        app:layout_constraintEnd_toEndOf="@id/btnRec"
+        app:layout_constraintTop_toTopOf="@id/btnRec"
+        app:layout_constraintBottom_toBottomOf="@id/btnRec"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

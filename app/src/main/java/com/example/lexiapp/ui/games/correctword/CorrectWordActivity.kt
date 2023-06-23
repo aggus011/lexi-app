@@ -19,14 +19,14 @@ import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityCorrectWordBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import android.media.MediaPlayer
 import kotlinx.coroutines.withContext
+
 @AndroidEntryPoint
 class CorrectWordActivity : AppCompatActivity() {
 
-    private val vM: CorrectWordViewModel by viewModels()
+    private val viewModel: CorrectWordViewModel by viewModels()
     private lateinit var binding: ActivityCorrectWordBinding
     private var mediaPlayer: MediaPlayer? = null
 
@@ -38,8 +38,8 @@ class CorrectWordActivity : AppCompatActivity() {
     }
 
     private fun setObservers() {
-        vM.basicWords.observe(this){
-            if(!it.isNullOrEmpty()){
+        viewModel.basicWords.observe(this) {
+            if (!it.isNullOrEmpty()) {
                 setListeners()
                 waitForValues()
                 progressBarOff()
@@ -57,10 +57,16 @@ class CorrectWordActivity : AppCompatActivity() {
     }
 
     private fun activateButton() {
-        binding.wordOne.isEnabled = true
-        binding.wordTwo.isEnabled = true
-        binding.wordThree.isEnabled = true
-        binding.wordFour.isEnabled = true
+        binding.apply {
+            wordOne.isEnabled = true
+            wordOne.setTextColor(Color.WHITE)
+            wordTwo.isEnabled = true
+            wordTwo.setTextColor(Color.WHITE)
+            wordThree.isEnabled = true
+            wordThree.setTextColor(Color.WHITE)
+            wordFour.isEnabled = true
+            wordFour.setTextColor(Color.WHITE)
+        }
     }
 
     private fun resetGame() {
@@ -68,7 +74,7 @@ class CorrectWordActivity : AppCompatActivity() {
         constraintLayout.setBackgroundColor(Color.WHITE)
         binding.btnOtherWord.visibility = View.GONE
         activateButton()
-        vM.generateWords()
+        viewModel.generateWords()
         progressBarOn()
         setListeners()
         waitForValues()
@@ -105,8 +111,7 @@ class CorrectWordActivity : AppCompatActivity() {
     }
 
     private fun checkAnswer(selectedButton: Button) {
-        val correctButtonText = binding.txtVariableWord.text.toString()
-        if (selectedButton.text == correctButtonText) {
+        if (viewModel.validateAnswer(selectedButton.text.toString())) {
             animateCorrectButton(selectedButton)
             binding.btnOtherWord.visibility = View.VISIBLE
         } else {
@@ -117,11 +122,16 @@ class CorrectWordActivity : AppCompatActivity() {
     private fun animateCorrectButton(button: Button) {
         val constraintLayout = findViewById<ConstraintLayout>(R.id.constraintLayout)
         desactivateButton()
-            Handler(Looper.getMainLooper()).postDelayed({
-            makeText(binding.txtSelectWord.context, "Felicidades, Elegiste la palabra correcta", LENGTH_SHORT).show()
+        Handler(Looper.getMainLooper()).postDelayed({
+            makeText(
+                binding.txtSelectWord.context,
+                "Felicidades, Elegiste la palabra correcta",
+                LENGTH_SHORT
+            ).show()
             progressBarOff()
             constraintLayout.setBackgroundColor(Color.GREEN)
-            button.setBackgroundColor(Color.WHITE)
+            button.setTextColor(Color.BLUE)
+            // button.setBackgroundColor(Color.WHITE)
         }, 1000)
     }
 
@@ -139,12 +149,16 @@ class CorrectWordActivity : AppCompatActivity() {
             withContext(Dispatchers.Main) {
                 try {
                     setValues()
-                }catch (e: Exception){
-                    binding.progressBar3.visibility=View.GONE
-                    binding.txtWord.visibility= View.GONE
-                    binding.txtVariableWord.visibility= View.GONE
-                    binding.iconVolume.visibility= View.GONE
-                    Toast.makeText(applicationContext ,"NO SE PUDO CARGAR LA PALABRA", Toast.LENGTH_SHORT).show()
+                } catch (e: Exception) {
+                    binding.progressBar3.visibility = View.GONE
+                    binding.txtWord.visibility = View.GONE
+                    binding.txtVariableWord.visibility = View.GONE
+                    binding.iconVolume.visibility = View.GONE
+                    Toast.makeText(
+                        applicationContext,
+                        "NO SE PUDO CARGAR LA PALABRA",
+                        Toast.LENGTH_SHORT
+                    ).show()
 
                 }
             }
@@ -171,15 +185,15 @@ class CorrectWordActivity : AppCompatActivity() {
         binding.txtWordToPlay.visibility = View.VISIBLE
     }
 
-    private fun setValues(){
-        val words = vM.basicWords.value!!
+    private fun setValues() {
+        val words = viewModel.basicWords.value!!
         binding.txtVariableWord.text = words[0]
-          val shuffledArray = words.shuffled().toTypedArray()
+        val shuffledArray = words.shuffled().toTypedArray()
 
-          binding.wordOne.text = shuffledArray[0]
-          binding.wordTwo.text = shuffledArray[1]
-          binding.wordThree.text = shuffledArray[2]
-          binding.wordFour.text = shuffledArray[3]
+        binding.wordOne.text = shuffledArray[0]
+        binding.wordTwo.text = shuffledArray[1]
+        binding.wordThree.text = shuffledArray[2]
+        binding.wordFour.text = shuffledArray[3]
     }
 
 }

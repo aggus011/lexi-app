@@ -7,7 +7,9 @@ import com.example.lexiapp.domain.model.LoginResult
 import com.example.lexiapp.domain.service.AuthenticationService
 import com.google.rpc.context.AttributeContext
 import io.grpc.internal.SharedResourceHolder
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.tasks.await
 import java.util.ResourceBundle
 import javax.inject.Inject
@@ -28,24 +30,16 @@ class LoginUseCases @Inject constructor(
     private fun verifyEmail(email: String): Boolean =
         PatternsCompat.EMAIL_ADDRESS.matcher(email).matches()
 
-    private fun verifyPassword(pass: String): Boolean = pass.length >= PASSWORD_MIN_LENGHT
+    private fun verifyPassword(pass: String): Boolean = pass.length >= PASSWORD_MIN_LENGTH
 
-    suspend fun sendRecoverEmail(email: String)=flow {
-        try {
-            var isSuccess = false
-            authenticationServiceImpl.sendRecoverEmail(email)
-                .addOnCompleteListener{ isSuccess=it.isSuccessful }
-                .await()
-            emit(isSuccess)
-        } catch (e: Exception) {
-            Log.v("MY EXCEPTION", "CAUSA: ${e.cause} //// MESSAGE: ${e.message} //// TRACE: ${e.stackTrace}")
-            emit(false)
-        }
+    suspend fun sendRecoverEmail(email: String?): Flow<FirebaseResult?> {
+        if(email==null) return flowOf(null)
+        return authenticationServiceImpl.sendRecoverEmail(email)
     }
 
 
     companion object {
-        private const val PASSWORD_MIN_LENGHT = 6
+        private const val PASSWORD_MIN_LENGTH = 6
     }
 }
 

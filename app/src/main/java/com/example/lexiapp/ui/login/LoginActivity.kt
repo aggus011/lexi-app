@@ -4,18 +4,19 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lexiapp.R
+import com.example.lexiapp.databinding.ActivityLoginBinding
+import com.example.lexiapp.domain.model.UserLogin
 import com.example.lexiapp.ui.customDialog.DialogFragmentLauncher
 import com.example.lexiapp.ui.customDialog.ErrorDialog
-import com.example.lexiapp.databinding.ActivityLoginBinding
-import com.example.lexiapp.ui.MainActivity
-import com.example.lexiapp.domain.model.UserLogin
-import com.example.lexiapp.ui.signup.SignUpActivity
 import com.example.lexiapp.ui.customDialog.show
 import com.example.lexiapp.ui.login.changepassword.ChangePasswordDialogFragment
+import com.example.lexiapp.ui.patienthome.HomePatientActivity
+import com.example.lexiapp.ui.profesionalhome.ProfesionalHomeActivity
+import com.example.lexiapp.ui.role.RoleActivity
+import com.example.lexiapp.ui.verifymedicalregistration.VerifyMedicalRegistrationActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -91,22 +92,40 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initObservers() {
-        viewModel.navigateToHome.observe(this) {
-            it.getContentIfNotHandled()?.let {
-                goToHome()
+        viewModel.userType.observe(this){
+            if(it != null){
+                when(it){
+                    "patient" -> goToPatientHome()
+                    "professional" -> viewModel.setProfessionalState()
+                }
             }
         }
         viewModel.showErrorDialog.observe(this) { userLogin ->
             if (userLogin.showErrorDialog) showErrorDialog(userLogin)
         }
 
-        /*
-        lifecycleScope.launchWhenStarted {
-            viewModel.viewState.collect { viewState ->
-                updateUI(viewState)
+        viewModel.professionalState.observe(this){
+            when(it){
+                2 -> goToProfessionalHome()
+                1 -> goToVerification()
             }
         }
-                 */
+
+    }
+
+    private fun goToPatientHome() {
+        startActivity(Intent(this, HomePatientActivity::class.java))
+        finish()
+    }
+
+    private fun goToProfessionalHome(){
+        startActivity(Intent(this, ProfesionalHomeActivity::class.java))
+        finish()
+    }
+
+    private fun goToVerification(){
+        startActivity(Intent(this, VerifyMedicalRegistrationActivity::class.java))
+        finish()
     }
 
     private fun showErrorDialog(userLogin: UserLogin) {
@@ -128,13 +147,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setUpRegister() {
         binding.tvRegister.setOnClickListener {
-            startActivity(SignUpActivity.create(this))
+            startActivity(Intent(this, RoleActivity::class.java))
         }
-    }
-
-    private fun goToHome() {
-        //Intent a la homePage
-        Toast.makeText(this, "Se accedió correctamente", Toast.LENGTH_SHORT).show()
-        startActivity(Intent(this, MainActivity::class.java))
     }
 }

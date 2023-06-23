@@ -1,6 +1,5 @@
 package com.example.lexiapp.ui.login
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,8 +13,11 @@ import com.example.lexiapp.domain.model.FirebaseResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,8 +26,8 @@ class LoginViewModel @Inject constructor(
     private val profileUseCases: ProfileUseCases
 ) : ViewModel() {
 
-    private val _recoverResult = MutableLiveData<Boolean>()
-    val recoverResult: LiveData<Boolean> = _recoverResult
+    private val _recoverResult = MutableLiveData<FirebaseResult?>()
+    val recoverResult = _recoverResult as LiveData<FirebaseResult?>
 
     private val _navigateToHome = MutableLiveData<Event<Boolean>>()
     val navigateToHome: LiveData<Event<Boolean>>
@@ -34,6 +36,18 @@ class LoginViewModel @Inject constructor(
     private var _showErrorDialog = MutableLiveData(UserLogin())
     val showErrorDialog: LiveData<UserLogin>
         get() = _showErrorDialog
+
+    private var _userType = MutableLiveData<String?>(null)
+    val userType: LiveData<String?>
+    get() = _userType
+
+    private var _professionalState = MutableLiveData<Int>(0)
+    val professionalState: LiveData<Int>
+    get() = _professionalState
+
+    init{
+        cleanRecoverResult()
+    }
 
     fun loginUser(email: String, password: String) {
         viewModelScope.launch {
@@ -47,6 +61,7 @@ class LoginViewModel @Inject constructor(
 
                 is LoginResult.Success -> {
                     profileUseCases.saveProfile(UserLogin(email=email))
+                    setUserType()
                     _navigateToHome.value = Event(true)
                 }
             }
@@ -54,17 +69,35 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    private fun setUserType(){
+        viewModelScope.launch(Dispatchers.IO){
+            val userType = profileUseCases.getUserType()
+            if(userType != null){
+                withContext(Dispatchers.Main){
+                    _userType.value = userType
+                }
+            }
+        }
+    }
+
+    fun setProfessionalState(){
+      when(profileUseCases.getProfessionalVerificationState()){
+          2 -> _professionalState.value = 2
+          1 -> _professionalState.value = 1
+      }
+    }
+
     fun sendRecoverEmail(email: String){
         viewModelScope.launch {
-            loginUseCases.sendRecoverEmail(email).onEach {
-                _recoverResult.value = it
-            }.launchIn(viewModelScope)
-            /*loginUseCases.sendRecoverEmail(email).collect{
-                _recoverResult.value = it
-            }*/
-            /*_recoverResult.value=loginUseCases.sendRecoverEmail(email)*/
+            loginUseCases.sendRecoverEmail(email).collect{ result ->
+                _recoverResult.value=result
+            }
         }
 
+    }
+
+    fun cleanRecoverResult() {
+        _recoverResult.value=null
     }
 }
 

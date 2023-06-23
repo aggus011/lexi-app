@@ -6,19 +6,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.objectives.ObjectivesFragment">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/ivMiniLogo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/mini_logo"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationLogo"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/app_name"/>
+            app:lottie_autoPlay="true"
+            app:lottie_colorFilter="@color/purple"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/amoeba" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/logo"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:textColor="@color/black"
+            android:textAppearance="@style/title"/>
 
         <TextView
             android:id="@+id/tvObjectivesTitle"
@@ -26,25 +41,37 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivMiniLogo"
+            app:layout_constraintTop_toBottomOf="@id/animationLogo"
             android:text="@string/my_objectives"
             android:textAppearance="@style/title"
-            android:layout_marginTop="50dp"
-            android:textSize="40sp"/>
+            android:textSize="40sp"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:id="@+id/txtDaysLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/days_left"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textAppearance="@style/subtitle"
+            android:layout_marginTop="60dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvObjectives"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvObjectivesTitle"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="20dp"
-            tools:listitem="@layout/objective_item"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvObjectivesTitle"
+            app:layout_constraintVertical_bias="0.0"
+            tools:listitem="@layout/objective_item" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </FrameLayout>

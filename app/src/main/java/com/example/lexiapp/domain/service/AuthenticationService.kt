@@ -13,5 +13,5 @@ interface AuthenticationService {
 
     fun signOut()
 
-    suspend fun sendRecoverEmail(email: String): Task<Void>
+    suspend fun sendRecoverEmail(email: String): Flow<FirebaseResult>
 }
