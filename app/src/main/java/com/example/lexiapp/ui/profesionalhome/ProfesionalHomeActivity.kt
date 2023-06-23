@@ -19,9 +19,12 @@ import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.useCases.ProfileUseCases
 import com.example.lexiapp.ui.adapter.UserAdapter
 import com.example.lexiapp.ui.profesionalhome.detailpatient.DetailPatientFragment
+import com.example.lexiapp.ui.profesionalhome.note.CreateNoteActivity
+import com.example.lexiapp.ui.profesionalhome.note.RecordNoteActivity
 import com.example.lexiapp.ui.profesionalhome.resultlink.SuccessfulLinkActivity
 import com.example.lexiapp.ui.profesionalhome.resultlink.UnsuccessfulLinkActivity
 import com.example.lexiapp.ui.profile.professional.ProfessionalProfileFragment
+import com.google.gson.Gson
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,10 +56,8 @@ class ProfesionalHomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProfesionalHomeBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
-
         getViews()
         setListener()
-        //vM.getPatient()
         setRecyclerView()
         setSearch()
         addFragment()
@@ -163,7 +164,13 @@ class ProfesionalHomeActivity : AppCompatActivity() {
 
     private fun suscribeToVM() {
         vM.listFilterPatient.observe(this) { list ->
-            binding.rvPatient.adapter = UserAdapter(list, ::viewDetails, ::unbindPatient)
+            binding.rvPatient.adapter = UserAdapter(
+                list,
+                ::viewDetails,
+                ::unbindPatient,
+                ::startCreateNoteActivity,
+                ::startRecordNoteActivity
+            )
         }
         vM.resultAddPatient.observe(this) { result ->
             if (result == FirebaseResult.TaskSuccess) {
@@ -191,6 +198,18 @@ class ProfesionalHomeActivity : AppCompatActivity() {
             .show(detailFragment!!)
             .addToBackStack(TAG_FRAGMENT_DETAIL)
             .commit()
+    }
+
+    private fun startCreateNoteActivity(emailPatient: String){
+        val intent = Intent(applicationContext, CreateNoteActivity::class.java)
+        intent.putExtra("emailPatient", emailPatient)
+        startActivity(intent)
+    }
+
+    private fun startRecordNoteActivity(patient: User){
+        val intent = Intent(applicationContext, RecordNoteActivity::class.java)
+        intent.putExtra("patient", Gson().toJson(patient))
+        startActivity(intent)
     }
 
     @Deprecated("Deprecated in Java")

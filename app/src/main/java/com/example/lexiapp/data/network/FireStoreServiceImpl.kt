@@ -12,15 +12,14 @@ import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.Professional
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.model.*
-import com.example.lexiapp.domain.model.gameResult.LetsReadGameResult
-import com.example.lexiapp.domain.model.gameResult.ResultGame
-import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.example.lexiapp.domain.service.FireStoreService
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import java.util.*
@@ -39,8 +38,11 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     private val professionalCollection = firebase.firestore.collection("professional")
     private val resultGameCollection: (String, String) -> CollectionReference =
         { collection: String, email: String -> firebase.firestore.collection("${collection}/${email}/results") }
+    private val notesDocument = firebase.firestore.collection("profesional_notes")
+    private val notesCollection: (String) -> CollectionReference =
+        {email: String -> firebase.firestore.collection("profesional_notes/${email}/notes")}
+
     private val db = firebase.firestore
-    private lateinit var registration: ListenerRegistration
 
     override suspend fun saveAccount(user: User) {
         val data = hashMapOf(
@@ -238,24 +240,22 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     }
 
     override suspend fun getListLinkPatientOfProfessional(
-        emailProfessional: String,
-        listener: (List<String>?) -> Unit
-    ) {
+        emailProfessional: String
+    )= callbackFlow {
         val docRef = professionalCollection.document(emailProfessional)
-        val registration = docRef.addSnapshotListener { snapshot, e ->
-            if (e != null) {
-                Log.w(TAG, "Listen failed.", e)
-                listener(null)
+        val listener = docRef.addSnapshotListener { querySnapshot, error ->
+            if (error != null) {
+                close(error)
                 return@addSnapshotListener
             }
-            if (snapshot != null && snapshot.exists()) {
-                val list = snapshot.get("patients") as List<String>?
-                listener(list)
-            } else {
-                listener(null)
+            val result = mutableListOf<String>()
+            if (querySnapshot != null && querySnapshot.exists()) {
+                val list: List<String> = querySnapshot.get("patients") as List<String>
+                result.addAll(list)
             }
+            trySend(result.toList()).isSuccess
         }
-        this.registration = registration
+        awaitClose { listener.remove() }
     }
 
     override suspend fun unBindProfessionalFromPatient(
@@ -292,6 +292,8 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
             )
             newList
         }.addOnSuccessListener {
+            //THIS LINE CLEAN ALL THE NOTES OF PATIENT, WHEN IT IS UNLINK
+            cleanNotesFromPatient(emailPatient)
             completableDeferred.complete(FirebaseResult.TaskSuccess)
         }.addOnFailureListener {
             completableDeferred.completeExceptionally(FirestoreException("Failure to save a new patient"))
@@ -387,6 +389,64 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
         )
         letsReadCollection.document(result.email).collection("results")
             .document(System.currentTimeMillis().toString()).set(data).await()
+    }
+
+    override suspend fun saveNote(note: Note) = flow {
+        try {
+            val data = hashMapOf(
+                "note" to note.text
+            )
+            val documentRef = notesDocument.document(note.emailPatient)
+                .collection("notes")
+                .document(System.currentTimeMillis().toString())
+            documentRef.set(data).await()
+            emit(FirebaseResult.TaskSuccess)
+        } catch (e: Exception) {
+            emit(FirebaseResult.TaskFaliure)
+        }
+    }
+
+    override suspend fun deleteNote (emailPatient: String, date: String) = flow {
+        try {
+            val notes = notesCollection(emailPatient).document(date).delete().await()
+            emit(FirebaseResult.TaskSuccess)
+        } catch (e: Exception) {
+            emit(FirebaseResult.TaskFaliure)
+        }
+    }
+
+    override suspend fun getNotes(emailPatient: String) = callbackFlow {
+        val notesCollectionRef = notesDocument.document(emailPatient).collection("notes")
+        val listener = notesCollectionRef.addSnapshotListener { querySnapshot, error ->
+            if (error != null) {
+                close(error)
+                return@addSnapshotListener
+            }
+
+            val result = mutableListOf<Note>()
+            for (document in querySnapshot!!.documents) {
+                val date = document.id
+                val data = document.data
+                result.add(
+                    Note(
+                        text = data?.get("note")!! as String,
+                        emailPatient = emailPatient,
+                        date = date
+                    )
+                )
+            }
+            trySend(result.toList()).isSuccess
+        }
+
+        awaitClose { listener.remove() }
+    }
+
+    private fun cleanNotesFromPatient(emailPatient: String){
+        notesCollection(emailPatient).get().addOnSuccessListener { querySnapshot ->
+            for (document in querySnapshot.documents) {
+                document.reference.delete()
+            }
+        }
     }
 
     companion object {

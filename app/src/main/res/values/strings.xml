@@ -88,6 +88,12 @@
     <string name="login_with_email_and_password">Inicia Sesión con tu email y contraseña</string>
     <string name="complete_with_your_data_for_register_in_lexi">Completa con tus datos para registrarte en LEXI</string>
     <string name="add_patient">Agregar</string>
+    <string name="see_note">Ver notas</string>
+    <string name="note">Hacer nota</string>
+    <string name="notes">Notas del paciente</string>
+    <string name="message_length">Ten en cuenta que el máximo son 200 caracteres</string>
+    <string name="write_note">Escribe tu nota aquí</string>
+    <string name="save_note">Guardar nota</string>
     <plurals name="days_left">
         <item quantity="one">Día Restante: %d </item>
         <item quantity="other">Días Restantes: %d </item>

@@ -1,18 +1,18 @@
 package com.example.lexiapp.ui.adapter
 
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.OvalShape
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lexiapp.databinding.ItemPatientBinding
 import com.example.lexiapp.domain.model.User
+import kotlin.reflect.KFunction1
 
 class UserAdapter(
     private val patientList: List<User>,
     private val onClickPatient: (User) -> Unit,
-    private val onClickDelete: (String) -> Unit
+    private val onClickDelete: (String) -> Unit,
+    val startCreateNoteActivity: (String) -> Unit,
+    val startRecordNoteActivity: (User) -> Unit
 ): RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
@@ -24,7 +24,7 @@ class UserAdapter(
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val patient = patientList[position]
         holder.bind(patient)
-        holder.setListener (patient)
+        holder.setListener(patient)
     }
 
     override fun getItemCount(): Int {
@@ -46,6 +46,12 @@ class UserAdapter(
             }
             binding.clDetailPatient.setOnClickListener{
                 onClickPatient(patient)
+            }
+            binding.btnAddNote.setOnClickListener {
+                startCreateNoteActivity(patient.email)
+            }
+            binding.btnSeeNotes.setOnClickListener {
+                startRecordNoteActivity(patient)
             }
         }
     }
