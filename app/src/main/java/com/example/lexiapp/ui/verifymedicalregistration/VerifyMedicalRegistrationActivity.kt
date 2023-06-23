@@ -1,12 +1,11 @@
 package com.example.lexiapp.ui.verifymedicalregistration
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.activity.viewModels
-import com.example.lexiapp.R
+import androidx.appcompat.app.AppCompatActivity
 import com.example.lexiapp.databinding.ActivityVerifyMedicalRegistrationBinding
 import com.example.lexiapp.ui.profesionalhome.ProfesionalHomeActivity
 import com.example.lexiapp.ui.signup.professional.ProfessionalSignUpActivity
@@ -28,21 +27,20 @@ class VerifyMedicalRegistrationActivity : AppCompatActivity() {
         setListeners()
     }
 
-    private fun setObservers(){
-        viewModel.verificationState.observe(this){
-            if(it){
-              binding.clValidatedAccount.visibility = View.VISIBLE
-              binding.tvValidation.visibility = View.GONE
-              binding.clNoValidatedAccount.visibility = View.GONE
-              binding.mbUpdate.visibility = View.GONE
+    private fun setObservers() {
+        viewModel.verificationState.observe(this) {
+            if (it) {
+                showValidatedAccountState()
+                hideProgressCircular()
+            } else{
+                showValidationAccountState()
+                hideProgressCircular()
             }
         }
-        viewModel.errorVerification.observe(this){
-            if(it){
-                binding.clValidatedAccount.visibility = View.GONE
-                binding.tvValidation.visibility = View.GONE
-                binding.clNoValidatedAccount.visibility = View.VISIBLE
-                binding.mbUpdate.visibility = View.GONE
+        viewModel.errorVerification.observe(this) {
+            if (it) {
+                showNoValidatedAccountState()
+                hideProgressCircular()
             }
         }
     }
@@ -63,7 +61,33 @@ class VerifyMedicalRegistrationActivity : AppCompatActivity() {
             finish()
         }
         binding.mbUpdate.setOnClickListener {
+            showProgressCircular()
+            hideValidationAccountState()
             getLastUpdateVerification()
         }
+    }
+
+    private fun showProgressCircular() {
+        binding.progressCircularValidation.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressCircular() {
+        binding.progressCircularValidation.visibility = View.GONE
+    }
+
+    private fun showValidatedAccountState() {
+        binding.clValidatedAccount.visibility = View.VISIBLE
+    }
+
+    private fun showValidationAccountState() {
+        binding.clValidationAccount.visibility = View.VISIBLE
+    }
+
+    private fun hideValidationAccountState() {
+        binding.clValidationAccount.visibility = View.GONE
+    }
+
+    private fun showNoValidatedAccountState() {
+        binding.clNoValidatedAccount.visibility = View.VISIBLE
     }
 }

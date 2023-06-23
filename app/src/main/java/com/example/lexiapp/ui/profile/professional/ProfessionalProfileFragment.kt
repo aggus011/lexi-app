@@ -1,10 +1,12 @@
 package com.example.lexiapp.ui.profile.professional
 
 import android.content.Intent
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.lexiapp.databinding.FragmentProfessionalProfileBinding
 import com.example.lexiapp.domain.useCases.ProfileUseCases
@@ -39,6 +41,28 @@ class ProfessionalProfileFragment : Fragment() {
         val user = profileUseCases.getProfile()
         binding.tvProfessionalName.text = user.userName
         binding.tvProfessionalEmail.text = user.email
+
+        setTextIcon()
+        setColors()
+    }
+
+    private fun setTextIcon() {
+        binding.tvUserInitials.text = profileUseCases.userInitials()
+    }
+
+    private fun setColors(){
+        val icColor = profileUseCases.getColorRandomForIconProfile()
+        setBackgroundIconColor(icColor)
+    }
+
+    private fun setBackgroundIconColor(icColor: Int) {
+        val color = ContextCompat.getColor(requireContext(), icColor)
+
+        val newDrawable = GradientDrawable()
+        newDrawable.shape = GradientDrawable.OVAL
+        newDrawable.setColor(color)
+
+        binding.vBackgroundUserIcon.background = newDrawable
     }
 
     private fun setListeners() {

@@ -7,21 +7,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import com.airbnb.lottie.LottieAnimationView
-import com.airbnb.lottie.LottieProperty
-import com.airbnb.lottie.model.KeyPath
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.FragmentPatientHomeBinding
 import com.example.lexiapp.ui.games.correctword.CorrectWordActivity
-import com.example.lexiapp.ui.games.isitsocalled.IsItSoCalledActivity
-import com.example.lexiapp.ui.games.letsread.LetsReadActivity
 import com.example.lexiapp.ui.games.letsread.ListTextActivity
 import com.example.lexiapp.ui.games.whereistheletter.WhereIsTheLetterActivity
 import com.example.lexiapp.ui.textscanner.TextScannerActivity
-import com.google.android.material.button.MaterialButton
 
 class PatientHomeFragment : Fragment() {
     private var _binding: FragmentPatientHomeBinding? = null

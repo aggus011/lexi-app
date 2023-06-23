@@ -5,7 +5,8 @@ import com.example.lexiapp.domain.model.gameResult.CorrectWordGameResult
 data class CorrectWordDataResult(
     val result: Boolean,
     val mainWord: String,
-    val selectedWord: String
+    val selectedWord: String,
+    val date: String?
 )
 
 fun CorrectWordDataResult.toCorrectWordGameResult(email: String): CorrectWordGameResult {
@@ -13,7 +14,8 @@ fun CorrectWordDataResult.toCorrectWordGameResult(email: String): CorrectWordGam
         email = email,
         wordSelected = this.selectedWord,
         correctWord = this.mainWord,
-        success = this.result
+        success = this.result,
+        date = this.date
     )
 }
 
@@ -21,6 +23,7 @@ fun CorrectWordGameResult.toCorrectWordDataResult(): CorrectWordDataResult {
     return CorrectWordDataResult(
         result = this.success,
         mainWord = this.correctWord,
-        selectedWord = this.wordSelected
+        selectedWord = this.wordSelected,
+        date = null
     )
 }

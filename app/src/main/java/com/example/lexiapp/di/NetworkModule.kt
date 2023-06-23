@@ -18,6 +18,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
     private const val BASE_WORD_URL="https://random-word-api.herokuapp.com/"
+    private const val NEW_WORD_API_URL="https://api.wordassociations.net/associations/v1.0/json/"
     private const val BASE_CHATGPT_CHAT_URL="https://api.openai.com/v1/"
     private const val BASE_DIFFERENCE_URL="https://api.diffchecker.com/public/"
 
@@ -26,7 +27,7 @@ object NetworkModule {
     @Named("word_retrofit")
     fun provideRetrofit(): Retrofit {
          return Retrofit.Builder()
-            .baseUrl(BASE_WORD_URL)
+            .baseUrl(NEW_WORD_API_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

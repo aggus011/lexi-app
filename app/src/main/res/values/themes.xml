@@ -4,6 +4,8 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="android:colorBackground">@color/white</item>
+        <!--status bar color-->
+        <item name="android:colorPrimaryDark">@color/light_purple</item>
     </style>
 
     <style name="TertiaryButton" parent="Widget.AppCompat.TextView">

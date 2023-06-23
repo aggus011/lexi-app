@@ -34,7 +34,7 @@ import java.util.*
 @AndroidEntryPoint
 class TextScannerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTextScannerBinding
-    private lateinit var btnBack: ImageButton
+    private lateinit var btnBack: ImageView
     private lateinit var photoToScan: ImageView
     private lateinit var textRecognized: TextView
     private lateinit var btnReScan: MaterialButton
@@ -134,7 +134,7 @@ class TextScannerActivity : AppCompatActivity() {
         textRecognized = binding.tvScannedText
         btnReScan = binding.btnReScan
         btnReadText = binding.btnReadText
-        btnBack = binding.btnArrowBack
+        btnBack = binding.btnBack
         progressBar = binding.pbLoadingRecognizedText
     }
 

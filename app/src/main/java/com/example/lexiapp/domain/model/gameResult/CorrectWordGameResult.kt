@@ -6,5 +6,6 @@ data class CorrectWordGameResult(
     override var email: String,
     val wordSelected: String,
     val correctWord: String,
-    override val success: Boolean
-): ResultGame(email, success)
+    override val success: Boolean,
+    override val date: String?
+): ResultGame(email, success, date)

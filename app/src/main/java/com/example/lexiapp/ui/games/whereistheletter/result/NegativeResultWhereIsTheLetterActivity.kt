@@ -1,5 +1,6 @@
 package com.example.lexiapp.ui.games.whereistheletter.result
 
+import android.content.Intent
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,6 +13,7 @@ import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityNegativeResultWhereIsTheLetterBinding
+import com.example.lexiapp.ui.games.whereistheletter.WhereIsTheLetterActivity
 import com.example.lexiapp.ui.games.whereistheletter.WhereIsTheLetterViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.properties.Delegates
@@ -29,6 +31,7 @@ class NegativeResultWhereIsTheLetterActivity : AppCompatActivity() {
         setContentView(binding.root)
         getValues()
         setWords(word)
+        setListeners()
     }
 
     private fun getValues() {
@@ -97,6 +100,24 @@ class NegativeResultWhereIsTheLetterActivity : AppCompatActivity() {
         view.layoutParams = params
         view.typeface = Typeface.DEFAULT_BOLD
         return view
+    }
+
+    private fun setListeners() {
+        goToNextWord()
+        goToHome()
+    }
+
+    private fun goToNextWord() {
+        binding.btnNextWord.setOnClickListener {
+            startActivity(Intent(this, WhereIsTheLetterActivity::class.java))
+            finish()
+        }
+    }
+
+    private fun goToHome() {
+        binding.btnGoInit.setOnClickListener {
+            finish()
+        }
     }
 }
 enum class TypeWord{
