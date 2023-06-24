@@ -52,7 +52,7 @@ class DetailPatientFragment : Fragment() {
     }
 
     private fun setView() {
-        binding.txtDate.text= SimpleDateFormat("HH:mm:ss").format(Date())
+        binding.txtDate.text = SimpleDateFormat("HH:mm:ss").format(Date())
     }
 
     private fun setObservers() {
@@ -66,54 +66,82 @@ class DetailPatientFragment : Fragment() {
 
     private fun setCWObservers() {
         viewModel.wasNotPlayedCW.observe(viewLifecycleOwner) {
-            binding.cvMetricsCW.visibility = if(it) View.VISIBLE else View.GONE
+            binding.cvMetricsCW.visibility = if (it) View.VISIBLE else View.GONE
         }
         viewModel.totalPieCW.observe(viewLifecycleOwner) { (total, percentError) ->
-            setPieGraph(total, percentError, binding.pieTotalChartCW.id, binding.txtTitlePieTotalGraphCW)
+            setPieGraph(
+                total,
+                percentError,
+                binding.pieTotalChartCW.id,
+                binding.txtTitlePieTotalGraphCW
+            )
         }
         viewModel.weekPieCW.observe(viewLifecycleOwner) { (total, percentError) ->
-            setPieGraph(total, percentError, binding.pieWeekChartCW.id, binding.txtTitlePieWeekGraphCW)
+            setPieGraph(
+                total,
+                percentError,
+                binding.pieWeekChartCW.id,
+                binding.txtTitlePieWeekGraphCW
+            )
         }
         viewModel.hardWordsCW.observe(viewLifecycleOwner) { letter ->
             binding.txtValueLettersDificultsCW.text = letter.toString()
         }
-        viewModel.resultSLastWeekCW.observe(viewLifecycleOwner) { resultsLastWeek->
+        viewModel.resultSLastWeekCW.observe(viewLifecycleOwner) { resultsLastWeek ->
             setBarGraph(resultsLastWeek, binding.barChartCW.id)
         }
     }
 
     private fun setWITLObservers() {
         viewModel.wasNotPlayedWITL.observe(viewLifecycleOwner) {
-            binding.cvMetricsWITL.visibility = if(it) View.VISIBLE else View.GONE
+            binding.cvMetricsWITL.visibility = if (it) View.VISIBLE else View.GONE
         }
         viewModel.totalPieWITL.observe(viewLifecycleOwner) { (total, percentError) ->
-            setPieGraph(total, percentError, binding.pieTotalChartWITL.id, binding.txtTitlePieTotalGraphWITL)
+            setPieGraph(
+                total,
+                percentError,
+                binding.pieTotalChartWITL.id,
+                binding.txtTitlePieTotalGraphWITL
+            )
         }
         viewModel.weekPieWITL.observe(viewLifecycleOwner) { (total, percentError) ->
-            setPieGraph(total, percentError, binding.pieWeekChartWITL.id, binding.txtTitlePieWeekGraphWITL)
+            setPieGraph(
+                total,
+                percentError,
+                binding.pieWeekChartWITL.id,
+                binding.txtTitlePieWeekGraphWITL
+            )
         }
         viewModel.hardLettersWITL.observe(viewLifecycleOwner) { letter ->
             binding.txtValueLettersDificultsWITL.text = letter.toString()
         }
-        viewModel.resultSLastWeekWITL.observe(viewLifecycleOwner) { resultsLastWeek->
+        viewModel.resultSLastWeekWITL.observe(viewLifecycleOwner) { resultsLastWeek ->
             setBarGraph(resultsLastWeek, binding.barChartWITL.id)
         }
     }
 
-    private fun setPieGraph(total: Float, errorPercentage: Float, idChart: Int, titleGraph: TextView) {
+    private fun setPieGraph(
+        total: Float,
+        errorPercentage: Float,
+        idChart: Int,
+        titleGraph: TextView
+    ) {
         val pieChart = when (idChart) {
             binding.pieTotalChartWITL.id -> binding.pieTotalChartWITL
-            binding.pieWeekChartWITL.id-> binding.pieWeekChartWITL
-            binding.pieTotalChartCW.id-> binding.pieTotalChartCW
-            binding.pieWeekChartCW.id-> binding.pieWeekChartCW
+            binding.pieWeekChartWITL.id -> binding.pieWeekChartWITL
+            binding.pieTotalChartCW.id -> binding.pieTotalChartCW
+            binding.pieWeekChartCW.id -> binding.pieWeekChartCW
             else -> null
         } ?: return
         try {
             when (idChart) {
                 binding.pieTotalChartWITL.id, binding.pieTotalChartCW.id ->
-                    titleGraph.text = "${getString(R.string.total_progress)} (${(total+errorPercentage).toInt()})"
+                    titleGraph.text =
+                        "${getString(R.string.total_progress)} (${(total + errorPercentage).toInt()})"
+
                 binding.pieWeekChartWITL.id, binding.pieWeekChartCW.id ->
-                    titleGraph.text = "${getString(R.string.progress_last_week)} (${(total+errorPercentage).toInt()})"
+                    titleGraph.text =
+                        "${getString(R.string.progress_last_week)} (${(total + errorPercentage).toInt()})"
             }
             val entries = listOf(
                 PieEntry(total, "Total correctos"),
@@ -141,7 +169,7 @@ class DetailPatientFragment : Fragment() {
     private fun setBarGraph(resultsLastWeek: Map<String, Triple<Int, Float, Int>>, idChart: Int) {
         val barChart = when (idChart) {
             binding.barChartWITL.id -> binding.barChartWITL
-            binding.barChartCW.id-> binding.barChartCW
+            binding.barChartCW.id -> binding.barChartCW
             else -> null
         } ?: return
         try {
@@ -152,7 +180,7 @@ class DetailPatientFragment : Fragment() {
             resultsLastWeek.forEach { (date, thrid) ->
                 val countError = thrid.second
                 val countDay = thrid.first
-                if (maxCount<countDay) maxCount=countDay
+                if (maxCount < countDay) maxCount = countDay
                 val entry = BarEntry(entries.size.toFloat(), countDay.toFloat())
                 entries.add(entry)
                 val errorEntry = BarEntry(errorEntries.size.toFloat(), countError)
@@ -167,7 +195,7 @@ class DetailPatientFragment : Fragment() {
             barDataSet.valueTextSize = 12f
             errorBarDataSet.valueTextSize = 12f
             val barData = BarData(barDataSet, errorBarDataSet)
-            val granularity = if ((maxCount / 10)>1) maxCount / 10 else 1
+            val granularity = if ((maxCount / 10) > 1) maxCount / 10 else 1
             barData.isHighlightEnabled = false
             barChart.data = barData
             barChart.setFitBars(true)
@@ -176,7 +204,8 @@ class DetailPatientFragment : Fragment() {
             barChart.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
             barChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
             barChart.axisLeft.axisMinimum = 0f
-            barChart.axisLeft.axisMaximum = if (maxCount>1) (maxCount+granularity).toFloat() else maxCount.toFloat()
+            barChart.axisLeft.axisMaximum =
+                if (maxCount > 1) (maxCount + granularity).toFloat() else maxCount.toFloat()
             barChart.axisLeft.granularity = granularity.toFloat()
             barChart.axisRight.isEnabled = false
             barChart.legend.isEnabled = true

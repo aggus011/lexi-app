@@ -40,17 +40,18 @@ class ProfesionalHomeActivity : AppCompatActivity() {
     @Inject
     lateinit var profileUseCases: ProfileUseCases
 
-    private val barcodeLauncher: ActivityResultLauncher<ScanOptions> = registerForActivityResult(ScanContract()){ result->
-        if(result.contents != null) {
-            try {
-                val email = vM.getPatientEmail(result.contents)
-                vM.addPatientToProfessional(email!!)
-                startActivity(Intent(this, SuccessfulLinkActivity::class.java))
-            } catch (e: Exception) {
-                startActivity(Intent(this, UnsuccessfulLinkActivity::class.java))
+    private val barcodeLauncher: ActivityResultLauncher<ScanOptions> =
+        registerForActivityResult(ScanContract()) { result ->
+            if (result.contents != null) {
+                try {
+                    val email = vM.getPatientEmail(result.contents)
+                    vM.addPatientToProfessional(email!!)
+                    startActivity(Intent(this, SuccessfulLinkActivity::class.java))
+                } catch (e: Exception) {
+                    startActivity(Intent(this, UnsuccessfulLinkActivity::class.java))
+                }
             }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,7 +96,7 @@ class ProfesionalHomeActivity : AppCompatActivity() {
             .commit()
     }
 
-    private fun getViews(){
+    private fun getViews() {
         setIconAccount()
     }
 
@@ -108,7 +109,7 @@ class ProfesionalHomeActivity : AppCompatActivity() {
         binding.tvUserInitials.text = profileUseCases.userInitials()
     }
 
-    private fun setColors(){
+    private fun setColors() {
         val icColor = profileUseCases.getColorRandomForIconProfile()
 
         //setTextColor(icColor)
@@ -130,10 +131,10 @@ class ProfesionalHomeActivity : AppCompatActivity() {
     }
 
     private fun setListener() {
-        binding.btnAddPatient.setOnClickListener{
+        binding.btnAddPatient.setOnClickListener {
             barcodeLauncher.launch(vM.getScanOptions())
         }
-        binding.clIconAccount.setOnClickListener{
+        binding.clIconAccount.setOnClickListener {
             val accountFragment = ProfessionalProfileFragment()
 
             supportFragmentManager
@@ -144,7 +145,7 @@ class ProfesionalHomeActivity : AppCompatActivity() {
     }
 
     private fun setSearch() {
-        binding.search.setOnQueryTextListener (object : SearchView.OnQueryTextListener {
+        binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }
@@ -158,7 +159,7 @@ class ProfesionalHomeActivity : AppCompatActivity() {
     }
 
     private fun setRecyclerView() {
-        binding.rvPatient.layoutManager= LinearLayoutManager(this)
+        binding.rvPatient.layoutManager = LinearLayoutManager(this)
         suscribeToVM()
     }
 
@@ -174,25 +175,25 @@ class ProfesionalHomeActivity : AppCompatActivity() {
         }
         vM.resultAddPatient.observe(this) { result ->
             if (result == FirebaseResult.TaskSuccess) {
-                Toast.makeText(this,"Se agregó con éxito", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Se agregó con éxito", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this,"No se pudo agregar", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "No se pudo agregar", Toast.LENGTH_SHORT).show()
             }
         }
         vM.resultDeletePatient.observe(this) { result ->
             if (result == FirebaseResult.TaskSuccess) {
-                Toast.makeText(this,"Se eliminó con éxito", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Se eliminó con éxito", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this,"No se pudo eliminar", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "No se pudo eliminar", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun unbindPatient(email: String){
+    private fun unbindPatient(email: String) {
         vM.unbindPatient(email)
     }
 
-    private fun viewDetails(patient: User){
+    private fun viewDetails(patient: User) {
         vM.setPatientSelected(patient)
         supportFragmentManager.beginTransaction()
             .show(detailFragment!!)
@@ -200,13 +201,13 @@ class ProfesionalHomeActivity : AppCompatActivity() {
             .commit()
     }
 
-    private fun startCreateNoteActivity(emailPatient: String){
+    private fun startCreateNoteActivity(emailPatient: String) {
         val intent = Intent(applicationContext, CreateNoteActivity::class.java)
         intent.putExtra("emailPatient", emailPatient)
         startActivity(intent)
     }
 
-    private fun startRecordNoteActivity(patient: User){
+    private fun startRecordNoteActivity(patient: User) {
         val intent = Intent(applicationContext, RecordNoteActivity::class.java)
         intent.putExtra("patient", Gson().toJson(patient))
         startActivity(intent)
@@ -214,7 +215,7 @@ class ProfesionalHomeActivity : AppCompatActivity() {
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        supportFragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL).let{
+        supportFragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL).let {
             when (it?.isVisible) {
                 true -> supportFragmentManager.popBackStack()
                 else -> super.onBackPressed()
