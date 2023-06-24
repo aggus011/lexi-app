@@ -13,15 +13,12 @@ class ResultGamesUseCases @Inject constructor(
     private val service: ResultGamesService
 ) {
 
-    suspend fun getWhereIsTheLetterResults(email: String): Flow<List<WhereIsTheLetterResult>> {
-        return service.getWhereIsTheLetterResults(email)
-    }
+    suspend fun getWhereIsTheLetterResults(email: String) =
+        service.getWhereIsTheLetterResults(email)
 
-    suspend fun getWhereIsCWResults(email: String) = flow {
-        service.getCorrectWordResults(email).collect{
-            emit(it)
-        }
-    }
+
+    suspend fun getWhereIsCWResults(email: String) =
+        service.getCorrectWordResults(email)
 
     fun getResultsLastWeek(results: List<ResultGame>): Map<String, Triple<Int, Float, Int>> {
         val calendar = Calendar.getInstance()
@@ -36,11 +33,11 @@ class ResultGamesUseCases @Inject constructor(
                 isSameDay(resultDate, currentDate)
             }
 
-            val successCount = filteredResults.count { it.success }.toFloat()
+            val unsuccessCount = filteredResults.count { !it.success }.toFloat()
             val totalDayCount = filteredResults.size
             //val successPercentage = if (totalDayCount > 0) (successCount.toDouble() / totalDayCount) * 100 else 0.0
 
-            dateKeysMap[formatDateToString(currentDate)] = Triple(totalDayCount, successCount, countOfWeek)
+            dateKeysMap[formatDateToString(currentDate)] = Triple(totalDayCount, unsuccessCount, countOfWeek)
 
             calendar.add(Calendar.DAY_OF_YEAR, -1)
         }
