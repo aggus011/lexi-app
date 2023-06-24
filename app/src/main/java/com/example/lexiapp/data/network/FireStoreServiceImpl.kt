@@ -39,6 +39,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     private val letsReadCollection = firebase.firestore.collection(Game.LETS_READ.toString().lowercase())
     private val openaiCollection = firebase.firestore.collection("openai_api_use")
     private val professionalCollection = firebase.firestore.collection("professional")
+    private val objectivesCollection = firebase.firestore.collection("objectives")
     private val resultGameCollection: (String, String) -> CollectionReference =
         { collection: String, email: String -> firebase.firestore.collection("${collection}/${email}/results") }
     private val notesDocument = firebase.firestore.collection("profesional_notes")
@@ -321,9 +322,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     }
 
     override suspend fun saveObjectives(email: String, objectives: List<Objective>) {
-        val firestore = FirebaseFirestore.getInstance()
-        val collection = firestore.collection("objectives")
-        val document = collection.document(email)
+        val document = objectivesCollection.document(email)
         val objectiveMap = hashMapOf<String, Any?>()
 
         objectives.forEachIndexed { index, objective ->
@@ -347,9 +346,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
 
 
     override suspend fun checkObjectivesExist(email: String): Boolean {
-        val firestore = FirebaseFirestore.getInstance()
-        val collection = firestore.collection("objectives")
-        val document = collection.document(email)
+        val document = objectivesCollection.document(email)
 
         return try {
             val snapshot = document.get().await()
@@ -360,9 +357,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     }
 
     override suspend fun getObjectives(email: String): List<Objective> {
-        val firestore = FirebaseFirestore.getInstance()
-        val collection = firestore.collection("objectives")
-        val document = collection.document(email)
+        val document = objectivesCollection.document(email)
         return try {
             val snapshot = document.get().await()
             if (snapshot.exists()) {
@@ -376,7 +371,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                         val progress = (objectiveFields["progress"] as Long?)?.toInt() ?: 0
                         val goal = (objectiveFields["goal"] as Long?)?.toInt()
                         Log.d(TAG, title.toString())
-                        objectives.add(Objective(id, title, description, 0, goal))
+                        objectives.add(Objective(id, title, description, progress, goal))
                     }
                 }
                 objectives

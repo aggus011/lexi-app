@@ -1,5 +1,8 @@
 package com.example.lexiapp.ui.objectives
 
+import ObjectivesAdapter
+import android.animation.ObjectAnimator
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import androidx.fragment.app.Fragment
@@ -11,10 +14,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.FragmentObjectivesBinding
-import com.example.lexiapp.ui.adapter.ObjectivesAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import com.google.firebase.auth.FirebaseAuth
 import android.os.Looper
+import android.util.Log
+import android.widget.Button
+import com.example.lexiapp.data.network.FireStoreServiceImpl
+import com.example.lexiapp.domain.model.Objective
 
 @AndroidEntryPoint
 class ObjectivesFragment : Fragment() {
@@ -22,7 +28,6 @@ class ObjectivesFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var rvObjectives: RecyclerView
     private lateinit var objectivesAdapter: ObjectivesAdapter
-   // private val handler = Handler()
 
     private val objectivesViewModel: ObjectivesViewModel by viewModels()
 
@@ -45,6 +50,7 @@ class ObjectivesFragment : Fragment() {
         rvObjectives = binding.rvObjectives
         rvObjectives.layoutManager = LinearLayoutManager(requireContext())
         rvObjectives.adapter = objectivesAdapter
+
     }
 
     private fun loadObjectivesWithDelay() {
@@ -58,6 +64,7 @@ class ObjectivesFragment : Fragment() {
         objectivesViewModel.objectives.observe(viewLifecycleOwner) { objectives ->
             objectivesAdapter.updateObjectiveList(objectives)
             objectivesAdapter.notifyDataSetChanged()
+            checkObjectivesCompletion(objectives) // Comprobar la finalización de los objetivos
         }
 
         objectivesViewModel.daysLeft.observe(viewLifecycleOwner) { daysLeft ->
@@ -72,6 +79,28 @@ class ObjectivesFragment : Fragment() {
             objectivesViewModel.saveObjectivesToFirestore(email)
         }
     }
+
+    private fun checkObjectivesCompletion(objectives: List<Objective>) {
+        for (i in 0 until objectivesAdapter.itemCount) {
+            Handler(Looper.getMainLooper()).postDelayed({
+                val viewHolder = rvObjectives.findViewHolderForAdapterPosition(i)
+                if (viewHolder is ObjectivesAdapter.ObjectiveViewHolder) {
+                    val button = viewHolder.button
+                    val objective = objectives[i]
+                    if (objective.progress == objective.goal) {
+                        val greenColor = Color.parseColor("#71dea2")
+                        button.setBackgroundColor(greenColor)
+                        val translationXAnimation = ObjectAnimator.ofFloat(
+                            button, "translationX",0f, -30f, 30f, -30f, 30f, 0f
+                        )
+                        translationXAnimation.duration = 1000
+                        translationXAnimation.start()
+                    }
+                }
+            }, 200)
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
