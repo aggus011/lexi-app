@@ -17,6 +17,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.*
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
@@ -507,6 +508,24 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                 ref.set(hashMapOf("errorWords" to errorWords))
             }
         }
+    }
+
+    override suspend fun getWordPlayed(email: String) = callbackFlow {
+        val ref = errorWordsDocument(email)
+        ref.get().addOnSuccessListener { documentSnapshot ->
+            if (documentSnapshot.exists() && documentSnapshot.contains("errorWords")) {
+                val currentWords = documentSnapshot["errorWords"] as List<String>
+                val validation = currentWords.size >= 15
+                val result = Pair(validation, currentWords)
+                trySend(result).isSuccess
+            } else {
+                val result = Pair(false, listOf<String>())
+                trySend(result).isSuccess
+            }
+        }.addOnFailureListener { exception ->
+            close(exception)
+        }
+        awaitClose()
     }
 
     companion object {
