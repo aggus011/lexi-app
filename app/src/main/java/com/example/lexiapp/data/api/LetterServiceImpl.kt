@@ -26,7 +26,8 @@ class LetterServiceImpl @Inject constructor(
     private val userMail = prefs.getString("email", null)!!
 
     override suspend fun getWord(count: Int, length: Int, language: String) = flow {
-        apiWordService.getWordToWhereIsTheLetterGame(count, length, language)
+        val words = db.getWordCategories(userMail)
+        apiWordService.getWordToWhereIsTheLetterGame(count, length, language, words)
             .map { inputList -> inputList.filter { !BlackList.words.contains(it.uppercase()) } }
             .collect {
                 emit(it[0].uppercase())

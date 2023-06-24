@@ -33,6 +33,7 @@ import kotlin.coroutines.suspendCoroutine
 class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireStoreService {
 
     private val userCollection = firebase.firestore.collection("user")
+    private val categoriesWordCollection = firebase.firestore.collection("categories")
     private val whereIsTheLetterCollection =
         firebase.firestore.collection(Game.WHERE_IS_THE_LETTER.toString().lowercase())
     private val correctWordCollection = firebase.firestore.collection(Game.CORRECT_WORD.toString().lowercase())
@@ -432,6 +433,22 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                     continuation.resumeWithException(exception)
                 }
         }
+    }
+
+    override suspend fun getWordCategories(email: String): List<String> {
+        val categories = getPatientCategories(email)
+        val wordCategories = mutableListOf<String>()
+        categories.forEach {
+            categoriesWordCollection
+                .document(it.lowercase())
+                .get()
+                .addOnSuccessListener {document ->
+                    wordCategories.add(document.data?.get("palabra1") as String)
+                    wordCategories.add(document.data?.get("palabra3") as String)
+                    wordCategories.add(document.data?.get("palabra2") as String)
+                }
+        }
+        return wordCategories
     }
 
     override suspend fun saveNote(note: Note) = flow {

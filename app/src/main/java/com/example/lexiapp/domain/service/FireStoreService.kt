@@ -64,4 +64,5 @@ interface FireStoreService {
     suspend fun saveCategoriesFromPatient(email: String, categories: List<String>)
 
     suspend fun getPatientCategories(email: String): List<String>
+    suspend fun getWordCategories(email: String): List<String>
 }
