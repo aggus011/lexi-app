@@ -131,9 +131,8 @@ class ProfesionalHomeViewModel @Inject constructor(
     }
 
     private fun setDataPiesCW(results: List<CorrectWordGameResult>){
-        _totalPieCW.value = Pair(results.size.toFloat(),getCountError(results))
-        val weekList=resultGamesUseCases.filterResultsByWeek(results)
-        _weekPieCW.value = Pair(weekList.size.toFloat(), getCountError(weekList))
+        _totalPieCW.value = setTotalPie(results)
+        _weekPieCW.value = setWeekPie(results)
     }
 
     private fun setResultsLastWeekCW(results: List<CorrectWordGameResult>) {
@@ -150,11 +149,16 @@ class ProfesionalHomeViewModel @Inject constructor(
                 list[result.correctWord]!!.plus(1)
             }
         }
-        val maxCount = list.values.toSet().max()
+        var maxCount: Int? = null
+        try {
+            maxCount = list.values.toSet().max()
+        }catch (e: NoSuchElementException){}
         val wordList = mutableListOf<String>()
-        for (word in list.keys) {
-            if (list[word] == maxCount) {
-                wordList.add(word)
+        if (maxCount!=null){
+            for (word in list.keys) {
+                if (list[word] == maxCount) {
+                    wordList.add(word)
+                }
             }
         }
         _hardWordsCW.value = wordList
@@ -174,9 +178,8 @@ class ProfesionalHomeViewModel @Inject constructor(
     }
 
     private fun setDataPiesWITL(results: List<WhereIsTheLetterResult>){
-        _totalPieWITL.value = Pair(results.size.toFloat(),getCountError(results))
-        val weekList=resultGamesUseCases.filterResultsByWeek(results)
-        _weekPieWITL.value = Pair(weekList.size.toFloat(), getCountError(weekList))
+        _totalPieWITL.value = setTotalPie(results)
+        _weekPieWITL.value = setWeekPie(results)
     }
 
     private fun setResultsLastWeekWITL(results: List<WhereIsTheLetterResult>) {
@@ -193,6 +196,19 @@ class ProfesionalHomeViewModel @Inject constructor(
         return subList.size.toFloat()
     }
 
+    private fun setTotalPie(results: List<ResultGame>): Pair<Float, Float>{
+        val countError = getCountError(results)
+        val countCorrect = (results.size-countError)
+        return Pair (countCorrect,countError)
+    }
+
+    private fun setWeekPie(results: List<ResultGame>): Pair<Float, Float>{
+        val weekList=resultGamesUseCases.filterResultsByWeek(results)
+        val countError = getCountError(weekList)
+        val countCorrect = (weekList.size-countError)
+        return Pair (countCorrect,countError)
+    }
+
     private fun setHardLetters(results: List<WhereIsTheLetterResult>) {
         val list = mutableMapOf<Char, Int>()
         val filteredList = results.filter { !it.success }
@@ -203,11 +219,16 @@ class ProfesionalHomeViewModel @Inject constructor(
                 list[result.mainLetter]!!.plus(1)
             }
         }
-        val maxCount = list.values.toSet().max()
+        var maxCount: Int? = null
+        try {
+            maxCount = list.values.toSet().max()
+        }catch (e: NoSuchElementException){}
         val letterList = mutableListOf<Char>()
-        for (letter in list.keys) {
-            if (list[letter] == maxCount) {
-                letterList.add(letter)
+        if (maxCount!=null){
+            for (letter in list.keys) {
+                if (list[letter] == maxCount) {
+                    letterList.add(letter)
+                }
             }
         }
         _hardLettersWITL.value = letterList

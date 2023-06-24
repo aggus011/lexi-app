@@ -2,16 +2,17 @@ package com.example.lexiapp.ui.profesionalhome.detailpatient
 
 import android.content.ContentValues.TAG
 import android.graphics.Color
-import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.lexiapp.databinding.FragmentDetailPatientBinding
 import androidx.fragment.app.activityViewModels
+import com.example.lexiapp.R
 import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.ui.profesionalhome.ProfesionalHomeViewModel
@@ -41,7 +42,13 @@ class DetailPatientFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setVisibilityCards()
         setObservers()
+    }
+
+    private fun setVisibilityCards() {
+        binding.cvMetricsCW.visibility = View.GONE
+        binding.cvMetricsWITL.visibility = View.GONE
     }
 
     private fun setView() {
@@ -62,10 +69,10 @@ class DetailPatientFragment : Fragment() {
             binding.cvMetricsCW.visibility = if(it) View.VISIBLE else View.GONE
         }
         viewModel.totalPieCW.observe(viewLifecycleOwner) { (total, percentError) ->
-            setPieGraph(total, percentError, binding.pieTotalChartCW.id)
+            setPieGraph(total, percentError, binding.pieTotalChartCW.id, binding.txtTitlePieTotalGraphCW)
         }
         viewModel.weekPieCW.observe(viewLifecycleOwner) { (total, percentError) ->
-            setPieGraph(total, percentError, binding.pieWeekChartCW.id)
+            setPieGraph(total, percentError, binding.pieWeekChartCW.id, binding.txtTitlePieWeekGraphCW)
         }
         viewModel.hardWordsCW.observe(viewLifecycleOwner) { letter ->
             binding.txtValueLettersDificultsCW.text = letter.toString()
@@ -80,10 +87,10 @@ class DetailPatientFragment : Fragment() {
             binding.cvMetricsWITL.visibility = if(it) View.VISIBLE else View.GONE
         }
         viewModel.totalPieWITL.observe(viewLifecycleOwner) { (total, percentError) ->
-            setPieGraph(total, percentError, binding.pieTotalChartWITL.id)
+            setPieGraph(total, percentError, binding.pieTotalChartWITL.id, binding.txtTitlePieTotalGraphWITL)
         }
         viewModel.weekPieWITL.observe(viewLifecycleOwner) { (total, percentError) ->
-            setPieGraph(total, percentError, binding.pieWeekChartWITL.id)
+            setPieGraph(total, percentError, binding.pieWeekChartWITL.id, binding.txtTitlePieWeekGraphWITL)
         }
         viewModel.hardLettersWITL.observe(viewLifecycleOwner) { letter ->
             binding.txtValueLettersDificultsWITL.text = letter.toString()
@@ -93,7 +100,7 @@ class DetailPatientFragment : Fragment() {
         }
     }
 
-    private fun setPieGraph(total: Float, errorPercentage: Float, idChart: Int) {
+    private fun setPieGraph(total: Float, errorPercentage: Float, idChart: Int, titleGraph: TextView) {
         val pieChart = when (idChart) {
             binding.pieTotalChartWITL.id -> binding.pieTotalChartWITL
             binding.pieWeekChartWITL.id-> binding.pieWeekChartWITL
@@ -102,8 +109,14 @@ class DetailPatientFragment : Fragment() {
             else -> null
         } ?: return
         try {
+            when (idChart) {
+                binding.pieTotalChartWITL.id, binding.pieTotalChartCW.id ->
+                    titleGraph.text = "${getString(R.string.total_progress)} (${(total+errorPercentage).toInt()})"
+                binding.pieWeekChartWITL.id, binding.pieWeekChartCW.id ->
+                    titleGraph.text = "${getString(R.string.progress_last_week)} (${(total+errorPercentage).toInt()})"
+            }
             val entries = listOf(
-                PieEntry(total, "Total ejercícios"),
+                PieEntry(total, "Total correctos"),
                 PieEntry(errorPercentage, "Total error")
             )
             val colors = intArrayOf(Color.CYAN, Color.RED)
@@ -135,11 +148,12 @@ class DetailPatientFragment : Fragment() {
             val entries = mutableListOf<BarEntry>()
             val errorEntries = mutableListOf<BarEntry>()
             val labels = mutableListOf<String>()
-            val countResultsLastWeek = resultsLastWeek.entries.first().value.third
+            var maxCount = 0
             resultsLastWeek.forEach { (date, thrid) ->
                 val countError = thrid.second
-                val countDay = thrid.first.toFloat()
-                val entry = BarEntry(entries.size.toFloat(), countDay)
+                val countDay = thrid.first
+                if (maxCount<countDay) maxCount=countDay
+                val entry = BarEntry(entries.size.toFloat(), countDay.toFloat())
                 entries.add(entry)
                 val errorEntry = BarEntry(errorEntries.size.toFloat(), countError)
                 errorEntries.add(errorEntry)
@@ -153,7 +167,7 @@ class DetailPatientFragment : Fragment() {
             barDataSet.valueTextSize = 12f
             errorBarDataSet.valueTextSize = 12f
             val barData = BarData(barDataSet, errorBarDataSet)
-            val granularity: Int = (countResultsLastWeek / 10)
+            val granularity = if ((maxCount / 10)>1) maxCount / 10 else 1
             barData.isHighlightEnabled = false
             barChart.data = barData
             barChart.setFitBars(true)
@@ -162,7 +176,7 @@ class DetailPatientFragment : Fragment() {
             barChart.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
             barChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
             barChart.axisLeft.axisMinimum = 0f
-            barChart.axisLeft.axisMaximum = countResultsLastWeek.toFloat()
+            barChart.axisLeft.axisMaximum = if (maxCount>1) (maxCount+granularity).toFloat() else maxCount.toFloat()
             barChart.axisLeft.granularity = granularity.toFloat()
             barChart.axisRight.isEnabled = false
             barChart.legend.isEnabled = true
