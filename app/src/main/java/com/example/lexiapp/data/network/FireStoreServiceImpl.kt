@@ -387,6 +387,63 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
         }
     }
 
+    override suspend fun saveNote(note: Note) = flow {
+        try {
+            val data = hashMapOf(
+                "note" to note.text
+            )
+            val documentRef = notesDocument.document(note.emailPatient)
+                .collection("notes")
+                .document(System.currentTimeMillis().toString())
+            documentRef.set(data).await()
+            emit(FirebaseResult.TaskSuccess)
+        } catch (e: Exception) {
+            emit(FirebaseResult.TaskFailure)
+        }
+    }
+
+    override suspend fun deleteNote (emailPatient: String, date: String) = flow {
+        try {
+            val notes = notesCollection(emailPatient).document(date).delete().await()
+            emit(FirebaseResult.TaskSuccess)
+        } catch (e: Exception) {
+            emit(FirebaseResult.TaskFailure)
+        }
+    }
+
+    override suspend fun getNotes(emailPatient: String) = callbackFlow {
+        val notesCollectionRef = notesDocument.document(emailPatient).collection("notes")
+        val listener = notesCollectionRef.addSnapshotListener { querySnapshot, error ->
+            if (error != null) {
+                close(error)
+                return@addSnapshotListener
+            }
+
+            val result = mutableListOf<Note>()
+            for (document in querySnapshot!!.documents) {
+                val date = document.id
+                val data = document.data
+                result.add(
+                    Note(
+                        text = data?.get("note")!! as String,
+                        emailPatient = emailPatient,
+                        date = date
+                    )
+                )
+            }
+            trySend(result.toList()).isSuccess
+        }
+
+        awaitClose { listener.remove() }
+    }
+
+    private fun cleanNotesFromPatient(emailPatient: String){
+        notesCollection(emailPatient).get().addOnSuccessListener { querySnapshot ->
+            for (document in querySnapshot.documents) {
+                document.reference.delete()
+            }
+        }
+    }
 
     override suspend fun saveLetsReadResult(result: LetsReadGameDataResult) {
         val data = hashMapOf(
@@ -484,13 +541,6 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
         awaitClose { listener.remove() }
     }
 
-    private fun cleanNotesFromPatient(emailPatient: String){
-        notesCollection(emailPatient).get().addOnSuccessListener { querySnapshot ->
-            for (document in querySnapshot.documents) {
-                document.reference.delete()
-            }
-        }
-    }
     override suspend fun updateObjectiveProgress(game: String, type: String) {
         val currentUser = FirebaseAuth.getInstance().currentUser
         val userId = currentUser?.uid
