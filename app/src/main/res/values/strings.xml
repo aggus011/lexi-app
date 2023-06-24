@@ -99,7 +99,7 @@
     <string name="complete_with_your_data_for_register_in_lexi">Completa con tus datos para registrarte en LEXI</string>
     <string name="add_patient">Agregar</string>
     <string name="update_date">Ultima actualización:</string>
-    <string name="progress_last_week">Progreso última semana</string>
+    <string name="progress_last_week">Progreso semanal</string>
     <string name="total_progress">Progreso histórico</string>
     <string name="last_week">Uso en la última semana</string>
     <string name="see_note">Ver notas</string>
