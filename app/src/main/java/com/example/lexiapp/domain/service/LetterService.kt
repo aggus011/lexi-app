@@ -1,5 +1,6 @@
 package com.example.lexiapp.domain.service
 
+import com.example.lexiapp.data.model.WhereIsTheLetterDataResult
 import com.example.lexiapp.domain.model.gameResult.ResultGame
 import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import kotlinx.coroutines.flow.Flow

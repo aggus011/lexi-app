@@ -14,9 +14,7 @@ import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.model.*
 import com.example.lexiapp.domain.service.FireStoreService
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.*
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -44,6 +42,8 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     private val notesDocument = firebase.firestore.collection("profesional_notes")
     private val notesCollection: (String) -> CollectionReference =
         {email: String -> firebase.firestore.collection("profesional_notes/${email}/notes")}
+    private val errorWordsDocument: (String) -> DocumentReference =
+        { email: String -> firebase.firestore.collection("error_words").document(email) }
 
     private val db = firebase.firestore
     private val categoryCollection = firebase.firestore.collection("category")
@@ -82,6 +82,10 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
         result: WhereIsTheLetterDataResult,
         email: String
     ) {
+        Log.v("SAVE_ANSWER_FIRESTORE_IMPL_pre", "${result.result}//${result.word}")
+        //SAVE WORDS WHEN RESULT=false
+        if (!result.result) saveErrorWord(email, listOf(result.word))
+        Log.v("SAVE_ANSWER_FIRESTORE_IMPL_post", "${result.result}")
         val data = hashMapOf(
             "result" to result.result,
             "mainLetter" to result.mainLetter,
@@ -311,6 +315,8 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     }
 
     override suspend fun saveCorrectWordResult(result: CorrectWordDataResult, email: String) {
+        //SAVE ERROR WORDS, OF RESULT
+        if (!result.result) saveErrorWord(email, listOf(result.mainWord))
         val data = hashMapOf(
             "result" to result.result,
             "mainWord" to result.mainWord,
@@ -389,6 +395,8 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     }
 
     override suspend fun saveLetsReadResult(result: LetsReadGameDataResult) {
+        //SAVE WORDS, OF RESULT=false
+        saveErrorWord(result.email, result.wrongWords)
         val data = hashMapOf(
             "wrongWords" to result.wrongWords,
             "totalWords" to result.totalWords,
@@ -488,6 +496,20 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
         notesCollection(emailPatient).get().addOnSuccessListener { querySnapshot ->
             for (document in querySnapshot.documents) {
                 document.reference.delete()
+            }
+        }
+    }
+
+    private fun saveErrorWord(email: String, errorWords: List<String>){
+        val ref = errorWordsDocument(email)
+        ref.get().addOnSuccessListener { documentSnapshot ->
+            if (documentSnapshot.exists() && documentSnapshot.contains("errorWords")) {
+                val currentErrorWords = documentSnapshot["errorWords"] as List<String>
+                val updatedErrorWords = currentErrorWords.toMutableSet()
+                updatedErrorWords.addAll(errorWords)
+                ref.update("errorWords", updatedErrorWords.toList())
+            } else {
+                ref.set(hashMapOf("errorWords" to errorWords))
             }
         }
     }

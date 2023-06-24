@@ -45,6 +45,7 @@ interface FireStoreService {
     suspend fun unBindProfessionalFromPatient (emailPatient: String): FirebaseResult
 
     suspend fun deletePatientFromProfessional (emailPatient: String, emailProfessional: String): CompletableDeferred<FirebaseResult>
+
     suspend fun saveCorrectWordResult(result: CorrectWordDataResult, email: String)
 
     suspend fun saveObjectives(email: String, objectives: List<Objective>)
