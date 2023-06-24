@@ -13,6 +13,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.temporal.ChronoUnit
 import java.time.temporal.TemporalAdjusters
 import javax.inject.Inject
 
@@ -33,17 +36,18 @@ class ObjectivesViewModel @Inject constructor(
     }
 
     fun loadObjectives() {
-        val today = LocalDate.now()
-        val monday = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+        val today = LocalDate.now(ZoneId.of("America/Argentina/Buenos_Aires"))
+        val nextMonday = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY))
+        val nextMondayDateTime = nextMonday.atStartOfDay(ZoneId.of("America/Argentina/Buenos_Aires"))
         val currentUser = FirebaseAuth.getInstance().currentUser
-        val email = currentUser?.email
-        if (email != null) {
+        val uid = currentUser?.uid
+        if (uid != null) {
             viewModelScope.launch {
-                val objectives = fireStoreService.getObjectives(email)
+                val objectives = fireStoreService.getObjectives(uid)
                 _objectives.value = objectives
 
-                val daysLeft = objectivesUseCases.calculateDaysLeft(monday)
-                _daysLeft.value = daysLeft
+                val daysLeft = ChronoUnit.DAYS.between(LocalDateTime.now(ZoneId.of("America/Argentina/Buenos_Aires")), nextMondayDateTime)
+                _daysLeft.value = daysLeft.toInt()
             }
         }
     }

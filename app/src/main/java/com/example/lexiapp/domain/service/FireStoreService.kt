@@ -16,6 +16,7 @@ import java.util.*
 
 interface FireStoreService {
 
+
     suspend fun saveAccount(user: User)
 
     suspend fun getUser(email: String): User
@@ -55,4 +56,7 @@ interface FireStoreService {
     suspend fun saveCategoriesFromPatient(email: String, categories: List<String>)
 
     suspend fun getPatientCategories(email: String): List<String>
+
+    suspend fun updateObjectiveProgress(game: String, type: String)
+
 }

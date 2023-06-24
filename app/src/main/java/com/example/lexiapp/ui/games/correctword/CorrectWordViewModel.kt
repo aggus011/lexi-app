@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lexiapp.domain.model.gameResult.CorrectWordGameResult
+import com.example.lexiapp.domain.service.FireStoreService
 import com.example.lexiapp.domain.useCases.CorrectWordUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CorrectWordViewModel @Inject constructor(
-    private val useCases: CorrectWordUseCases
+    private val useCases: CorrectWordUseCases,
+    private val fireStoreService: FireStoreService
 ) : ViewModel() {
 
     init {
@@ -50,8 +52,16 @@ class CorrectWordViewModel @Inject constructor(
                     date = null
                 )
             )
+            withContext(Dispatchers.IO) {
+                if (success) {
+                    fireStoreService.updateObjectiveProgress("CW", "hit")
+                    fireStoreService.updateObjectiveProgress("CW", "play")
+                } else {
+                    fireStoreService.updateObjectiveProgress("CW", "play")
+                }
+            }
         }
         return success
     }
-
 }
+

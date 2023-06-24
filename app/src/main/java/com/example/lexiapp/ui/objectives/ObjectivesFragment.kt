@@ -57,27 +57,28 @@ class ObjectivesFragment : Fragment() {
         Handler(Looper.getMainLooper()).postDelayed({
             saveObjectives()
             loadObjectives()
-        }, 200) // Delay de 1 segundo (1000 milisegundos)
+        }, 200)
     }
 
     private fun loadObjectives() {
         objectivesViewModel.objectives.observe(viewLifecycleOwner) { objectives ->
             objectivesAdapter.updateObjectiveList(objectives)
             objectivesAdapter.notifyDataSetChanged()
-            checkObjectivesCompletion(objectives) // Comprobar la finalización de los objetivos
+            checkObjectivesCompletion(objectives)
         }
-
         objectivesViewModel.daysLeft.observe(viewLifecycleOwner) { daysLeft ->
-            binding.txtDaysLeft.text = resources.getQuantityString(R.plurals.days_left, daysLeft, daysLeft)
+            val daysLeftText = resources.getQuantityString(R.plurals.days_left, daysLeft, daysLeft)
+            binding.txtDaysLeft.text = daysLeftText
         }
     }
 
     private fun saveObjectives() {
         val currentUser = FirebaseAuth.getInstance().currentUser
-        val email = currentUser?.email
-        if (email != null) {
-            objectivesViewModel.saveObjectivesToFirestore(email)
+        val userid = currentUser?.uid
+        if (userid != null) {
+            objectivesViewModel.saveObjectivesToFirestore(userid)
         }
+
     }
 
     private fun checkObjectivesCompletion(objectives: List<Objective>) {

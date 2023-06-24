@@ -12,13 +12,10 @@ import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.Professional
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.model.*
-import com.example.lexiapp.domain.model.gameResult.LetsReadGameResult
-import com.example.lexiapp.domain.model.gameResult.ResultGame
-import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.example.lexiapp.domain.service.FireStoreService
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.flow
@@ -326,7 +323,11 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                 "title" to objective.title,
                 "description" to objective.description,
                 "progress" to objective.progress,
-                "goal" to objective.goal
+                "goal" to objective.goal,
+                "game" to objective.game,
+                "type" to objective.type,
+                "completed" to objective.completed,
+                "date" to objective.date
             )
             objectiveMap["objective$index"] = objectiveFields
         }
@@ -365,8 +366,11 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                         val description = objectiveFields["description"] as String?
                         val progress = (objectiveFields["progress"] as Long?)?.toInt() ?: 0
                         val goal = (objectiveFields["goal"] as Long?)?.toInt()
-                        Log.d(TAG, title.toString())
-                        objectives.add(Objective(id, title, description, progress, goal))
+                        val game = objectiveFields["game"] as String?
+                        val type = objectiveFields["type"] as String?
+                        val completed = objectiveFields["completed"] as Boolean?
+                        val date = objectiveFields["date"] as String?
+                        objectives.add(Objective(id, title, description, progress, goal, game, type,completed, date))
                     }
                 }
                 objectives
@@ -406,7 +410,6 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     }
 
     override suspend fun getPatientCategories(email: String): List<String> {
-
         return suspendCoroutine { continuation ->
             categoryCollection
                 .document(email)
@@ -424,6 +427,35 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                 }
         }
     }
+
+    override suspend fun updateObjectiveProgress(game: String, type: String) {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val userId = currentUser?.uid
+        if (userId != null) {
+            val document = objectivesCollection.document(userId)
+            val snapshot = document.get().await()
+            if (snapshot.exists()) {
+                val objectivesMap = snapshot.data
+                objectivesMap?.forEach { (index, objectiveFields) ->
+                    if (objectiveFields is Map<*, *>) {
+                        val gameValue = objectiveFields["game"] as String?
+                        val typeValue = objectiveFields["type"] as String?
+                        val goal = objectiveFields["goal"] as Int
+                        val progress = objectiveFields["progress"] as Int
+                        val completed = objectiveFields["completed"] as Boolean
+                        if (gameValue == game && typeValue == type && progress != goal) {
+                            val updatedProgress = (objectiveFields["progress"] as Long?)?.toInt()?.plus(1)
+                            val objectivePath = "$index.progress"
+                            if (updatedProgress != null) {
+                                document.update(objectivePath, updatedProgress).await()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     companion object {
         private const val TAG = "FireStoreServiceImpl"
