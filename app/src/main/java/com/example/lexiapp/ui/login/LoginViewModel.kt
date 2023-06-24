@@ -13,7 +13,9 @@ import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.useCases.CategoriesUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -24,7 +26,8 @@ class LoginViewModel @Inject constructor(
     private val categoriesUseCases: CategoriesUseCases
 ) : ViewModel() {
 
-    val authResult = MutableLiveData<FirebaseResult>()
+    private val _recoverResult = MutableLiveData<FirebaseResult?>()
+    val recoverResult = _recoverResult as LiveData<FirebaseResult?>
 
     private val _navigateToHome = MutableLiveData<Event<Boolean>>()
     val navigateToHome: LiveData<Event<Boolean>>
@@ -45,6 +48,10 @@ class LoginViewModel @Inject constructor(
     private var _hasChoosedCategories = MutableLiveData(false)
     val hasChoosedCategories: LiveData<Boolean>
     get() = _hasChoosedCategories
+
+    init{
+        cleanRecoverResult()
+    }
 
     fun loginUser(email: String, password: String) {
         viewModelScope.launch {
@@ -88,6 +95,19 @@ class LoginViewModel @Inject constructor(
           2 -> _professionalState.value = 2
           1 -> _professionalState.value = 1
       }
+    }
+
+    fun sendRecoverEmail(email: String){
+        viewModelScope.launch {
+            loginUseCases.sendRecoverEmail(email).collect{ result ->
+                _recoverResult.value=result
+            }
+        }
+
+    }
+
+    fun cleanRecoverResult() {
+        _recoverResult.value=null
     }
 }
 

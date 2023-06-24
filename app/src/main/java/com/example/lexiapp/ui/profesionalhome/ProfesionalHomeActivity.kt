@@ -19,9 +19,12 @@ import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.useCases.ProfileUseCases
 import com.example.lexiapp.ui.adapter.UserAdapter
 import com.example.lexiapp.ui.profesionalhome.detailpatient.DetailPatientFragment
+import com.example.lexiapp.ui.profesionalhome.note.CreateNoteActivity
+import com.example.lexiapp.ui.profesionalhome.note.RecordNoteActivity
 import com.example.lexiapp.ui.profesionalhome.resultlink.SuccessfulLinkActivity
 import com.example.lexiapp.ui.profesionalhome.resultlink.UnsuccessfulLinkActivity
 import com.example.lexiapp.ui.profile.professional.ProfessionalProfileFragment
+import com.google.gson.Gson
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,29 +40,29 @@ class ProfesionalHomeActivity : AppCompatActivity() {
     @Inject
     lateinit var profileUseCases: ProfileUseCases
 
-    private val barcodeLauncher: ActivityResultLauncher<ScanOptions> = registerForActivityResult(ScanContract()){ result->
-        if(result.contents != null) {
-            try {
-                val email = vM.getPatientEmail(result.contents)
-                vM.addPatientToProfessional(email!!)
-                startActivity(Intent(this, SuccessfulLinkActivity::class.java))
-            } catch (e: Exception) {
-                startActivity(Intent(this, UnsuccessfulLinkActivity::class.java))
+    private val barcodeLauncher: ActivityResultLauncher<ScanOptions> =
+        registerForActivityResult(ScanContract()) { result ->
+            if (result.contents != null) {
+                try {
+                    val email = vM.getPatientEmail(result.contents)
+                    vM.addPatientToProfessional(email!!)
+                    startActivity(Intent(this, SuccessfulLinkActivity::class.java))
+                } catch (e: Exception) {
+                    startActivity(Intent(this, UnsuccessfulLinkActivity::class.java))
+                }
             }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfesionalHomeBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
-        vM.getPatient()
         getViews()
         setListener()
         setRecyclerView()
+        setSearch()
         addFragment()
         visibilityDetailFragment()
-        setSearch()
     }
 
     private fun visibilityDetailFragment() {
@@ -93,7 +96,7 @@ class ProfesionalHomeActivity : AppCompatActivity() {
             .commit()
     }
 
-    private fun getViews(){
+    private fun getViews() {
         setIconAccount()
     }
 
@@ -106,7 +109,7 @@ class ProfesionalHomeActivity : AppCompatActivity() {
         binding.tvUserInitials.text = profileUseCases.userInitials()
     }
 
-    private fun setColors(){
+    private fun setColors() {
         val icColor = profileUseCases.getColorRandomForIconProfile()
 
         //setTextColor(icColor)
@@ -128,10 +131,10 @@ class ProfesionalHomeActivity : AppCompatActivity() {
     }
 
     private fun setListener() {
-        binding.btnAddPatient.setOnClickListener{
+        binding.btnAddPatient.setOnClickListener {
             barcodeLauncher.launch(vM.getScanOptions())
         }
-        binding.clIconAccount.setOnClickListener{
+        binding.clIconAccount.setOnClickListener {
             val accountFragment = ProfessionalProfileFragment()
 
             supportFragmentManager
@@ -142,47 +145,55 @@ class ProfesionalHomeActivity : AppCompatActivity() {
     }
 
     private fun setSearch() {
-        binding.search.setOnQueryTextListener (object : SearchView.OnQueryTextListener {
+        binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }
+
             override fun onQueryTextChange(patientSearch: String?): Boolean {
                 vM.filter(patientSearch)
                 return true
             }
+
         })
     }
 
     private fun setRecyclerView() {
-        binding.rvPatient.layoutManager= LinearLayoutManager(this)
-        vM.listFilterPatient.observe(this) { list ->
-            binding.rvPatient.adapter = UserAdapter(list, ::viewDetails, ::unbindPatient)
-        }
+        binding.rvPatient.layoutManager = LinearLayoutManager(this)
         suscribeToVM()
     }
 
     private fun suscribeToVM() {
+        vM.listFilterPatient.observe(this) { list ->
+            binding.rvPatient.adapter = UserAdapter(
+                list,
+                ::viewDetails,
+                ::unbindPatient,
+                ::startCreateNoteActivity,
+                ::startRecordNoteActivity
+            )
+        }
         vM.resultAddPatient.observe(this) { result ->
             if (result == FirebaseResult.TaskSuccess) {
-                Toast.makeText(this,"Se agregó con éxito", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Se agregó con éxito", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this,"No se pudo agregar", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "No se pudo agregar", Toast.LENGTH_SHORT).show()
             }
         }
         vM.resultDeletePatient.observe(this) { result ->
             if (result == FirebaseResult.TaskSuccess) {
-                Toast.makeText(this,"Se eliminó con éxito", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Se eliminó con éxito", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this,"No se pudo eliminar", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "No se pudo eliminar", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun unbindPatient(email: String){
+    private fun unbindPatient(email: String) {
         vM.unbindPatient(email)
     }
 
-    private fun viewDetails(patient: User){
+    private fun viewDetails(patient: User) {
         vM.setPatientSelected(patient)
         supportFragmentManager.beginTransaction()
             .show(detailFragment!!)
@@ -190,9 +201,21 @@ class ProfesionalHomeActivity : AppCompatActivity() {
             .commit()
     }
 
+    private fun startCreateNoteActivity(emailPatient: String) {
+        val intent = Intent(applicationContext, CreateNoteActivity::class.java)
+        intent.putExtra("emailPatient", emailPatient)
+        startActivity(intent)
+    }
+
+    private fun startRecordNoteActivity(patient: User) {
+        val intent = Intent(applicationContext, RecordNoteActivity::class.java)
+        intent.putExtra("patient", Gson().toJson(patient))
+        startActivity(intent)
+    }
+
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        supportFragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL).let{
+        supportFragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL).let {
             when (it?.isVisible) {
                 true -> supportFragmentManager.popBackStack()
                 else -> super.onBackPressed()

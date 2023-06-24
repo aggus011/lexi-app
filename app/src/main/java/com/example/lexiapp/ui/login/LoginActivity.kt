@@ -13,6 +13,7 @@ import com.example.lexiapp.ui.categories.CategoriesActivity
 import com.example.lexiapp.ui.customDialog.DialogFragmentLauncher
 import com.example.lexiapp.ui.customDialog.ErrorDialog
 import com.example.lexiapp.ui.customDialog.show
+import com.example.lexiapp.ui.login.changepassword.ChangePasswordDialogFragment
 import com.example.lexiapp.ui.patienthome.HomePatientActivity
 import com.example.lexiapp.ui.profesionalhome.ProfesionalHomeActivity
 import com.example.lexiapp.ui.role.RoleActivity
@@ -79,20 +80,19 @@ class LoginActivity : AppCompatActivity() {
         binding.btnLogin.setOnClickListener {
             if (binding.etMail.editText?.text!!.isNotEmpty() && binding.etPassword.editText?.text!!.isNotEmpty()) {
                 viewModel.loginUser(
-                    binding.etMail.editText?.text!!.toString(),
+                    binding.etMail.editText?.text!!.toString().trim(),
                     binding.etPassword.editText?.text!!.toString()
                 )
             }
+        }
+        binding.tvForgetPassword.setOnClickListener {
+            ChangePasswordDialogFragment()
+                .show(supportFragmentManager, "change_password_dialog")
         }
         setUpRegister()
     }
 
     private fun initObservers() {
-        /*viewModel.navigateToHome.observe(this) {
-            it.getContentIfNotHandled()?.let {
-                goToHome()
-            }
-        }*/
         viewModel.userType.observe(this){
             if(it != null){
                 when(it){
@@ -112,13 +112,6 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        /*
-        lifecycleScope.launchWhenStarted {
-            viewModel.viewState.collect { viewState ->
-                updateUI(viewState)
-            }
-        }
-                 */
     }
 
     private fun goToPatientHome() {

@@ -23,7 +23,6 @@ class VerifyMedicalRegistrationActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setObservers()
-        getLastUpdateVerification()
         setListeners()
     }
 
