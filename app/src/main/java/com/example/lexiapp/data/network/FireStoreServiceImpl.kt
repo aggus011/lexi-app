@@ -443,10 +443,13 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                 .document(it.lowercase())
                 .get()
                 .addOnSuccessListener {document ->
-                    wordCategories.add(document.data?.get("palabra1") as String)
-                    wordCategories.add(document.data?.get("palabra3") as String)
-                    wordCategories.add(document.data?.get("palabra2") as String)
-                }
+                    val words = document.data?.get("words") as List<String>
+                    try {
+                        wordCategories.addAll(words)
+                    } catch (e: Exception){
+                        Log.d("Exception", e.javaClass.toString())
+                    }
+                }.await()
         }
         return wordCategories
     }

@@ -14,7 +14,8 @@ class WordAssociationService @Inject constructor(
         try {
             var text = ""
             if(estimulo.isNotEmpty()){
-                estimulo.forEach { text += "$it " }
+                val newEstimulo = estimulo.shuffled(Random(System.currentTimeMillis() % estimulo.size)).take(3)
+                newEstimulo.forEach { text += "$it " }
             } else {
                 stimulus().forEach { text += "$it " }
             }
