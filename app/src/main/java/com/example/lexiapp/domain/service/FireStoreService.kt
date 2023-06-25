@@ -49,7 +49,7 @@ interface FireStoreService {
 
     suspend fun saveObjectives(email: String, objectives: List<Objective>)
 
-    suspend fun checkObjectivesExist(email: String): Boolean
+    suspend fun checkObjectivesExist(email: String, lastMondayDate: String): Boolean
 
     suspend fun getObjectives(email: String, lastMondayDate: String): List<Objective>
 
