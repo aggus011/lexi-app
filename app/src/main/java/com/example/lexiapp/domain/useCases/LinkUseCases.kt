@@ -1,6 +1,8 @@
 package com.example.lexiapp.domain.useCases
 
 import android.content.SharedPreferences
+import android.util.Log
+import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.service.FireStoreService
 import com.example.lexiapp.domain.service.FirebaseNotificationService
 import kotlinx.coroutines.flow.flow
@@ -39,9 +41,8 @@ class LinkUseCases @Inject constructor(
         emit(result)
     }
 
-    suspend fun getListLinkPatientOfProfessional(listener: (List<String>?) -> Unit) {
-        firestoreService.getListLinkPatientOfProfessional(getEmail()!!, listener)
-    }
+    suspend fun getListLinkPatientOfProfessional() =
+        firestoreService.getListLinkPatientOfProfessional(getEmail()!!)
 
     suspend fun unBindProfessionalFromPatient(
         emailPatient: String

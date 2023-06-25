@@ -3,10 +3,7 @@ package com.example.lexiapp.domain.service
 import com.example.lexiapp.data.model.CorrectWordDataResult
 import com.example.lexiapp.data.model.LetsReadGameDataResult
 import com.example.lexiapp.data.model.WhereIsTheLetterDataResult
-import com.example.lexiapp.domain.model.FirebaseResult
-import com.example.lexiapp.domain.model.Objective
-import com.example.lexiapp.domain.model.Professional
-import com.example.lexiapp.domain.model.User
+import com.example.lexiapp.domain.model.*
 import com.example.lexiapp.domain.model.gameResult.CorrectWordGameResult
 import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.google.firebase.firestore.DocumentReference
@@ -38,11 +35,12 @@ interface FireStoreService {
 
     suspend fun addPatientToProfessional (emailPatient: String, emailProfessional: String): CompletableDeferred<FirebaseResult>
 
-    suspend fun getListLinkPatientOfProfessional (emailProfessional: String, listener: (List<String>?) -> Unit )
+    suspend fun getListLinkPatientOfProfessional (emailProfessional: String): Flow<List<String>>
 
     suspend fun unBindProfessionalFromPatient (emailPatient: String): FirebaseResult
 
     suspend fun deletePatientFromProfessional (emailPatient: String, emailProfessional: String): CompletableDeferred<FirebaseResult>
+
     suspend fun saveCorrectWordResult(result: CorrectWordDataResult, email: String)
 
     suspend fun saveObjectives(email: String, objectives: List<Objective>)
@@ -50,11 +48,20 @@ interface FireStoreService {
     suspend fun checkObjectivesExist(email: String): Boolean
 
     suspend fun getObjectives(email: String): List<Objective>
+
     suspend fun saveLetsReadResult(result: LetsReadGameDataResult)
+
+    suspend fun saveNote (note: Note): Flow<FirebaseResult>
+
+    suspend fun deleteNote (emailPatient: String, date: String): Flow<FirebaseResult>
+
+    suspend fun getNotes (emailPatient: String): Flow<List<Note>>
 
     suspend fun saveCategoriesFromPatient(email: String, categories: List<String>)
 
     suspend fun getPatientCategories(email: String): List<String>
+
+    suspend fun getWordPlayed(email: String): Flow<Pair<Boolean, List<String>>>
 
     suspend fun saveTokenToPatient(emailPatient: String)
 

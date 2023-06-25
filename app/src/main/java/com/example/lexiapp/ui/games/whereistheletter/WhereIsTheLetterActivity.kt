@@ -28,6 +28,7 @@ import kotlinx.coroutines.launch
 class WhereIsTheLetterActivity : AppCompatActivity() {
 
     private val vM: WhereIsTheLetterViewModel by viewModels()
+
     //private lateinit var observerWord:
     private lateinit var binding: ActivityWhereIsTheLetterBinding
 
@@ -46,44 +47,44 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
     }
 
     private fun setWordObserver() {
-        vM.basicWord.observe(this){
-            if(it.isNullOrEmpty()){
+        vM.basicWord.observe(this) {
+            if (it.isNullOrEmpty()) {
                 progressBarOn()
-            }else{
+            } else {
                 setValues()
                 progressBarOff()
-                binding.btnOtherWord.isClickable=true
+                binding.btnOtherWord.isClickable = true
             }
         }
-        vM.letter.observe(this){
+        vM.letter.observe(this) {
             binding.txtVariableLetter.text = it.uppercase()
         }
     }
 
-    private fun progressBarOn(){
+    private fun progressBarOn() {
         lifecycleScope.launch {
-            binding.progressBar.visibility= View.VISIBLE
-            binding.txtWord.visibility= View.GONE
-            binding.txtVariableWord.visibility= View.GONE
-            binding.iconVolume.visibility= View.GONE
-            binding.txtFindLetter.visibility= View.GONE
+            binding.progressBar.visibility = View.VISIBLE
+            binding.txtWord.visibility = View.GONE
+            binding.txtVariableWord.visibility = View.GONE
+            binding.iconVolume.visibility = View.GONE
+            binding.txtFindLetter.visibility = View.GONE
         }
     }
 
-    private fun progressBarOff(){
+    private fun progressBarOff() {
         lifecycleScope.launch {
-            binding.progressBar.visibility= View.GONE
-            binding.txtWord.visibility= View.VISIBLE
-            binding.txtVariableWord.visibility= View.VISIBLE
-            binding.iconVolume.visibility= View.VISIBLE
-            binding.txtFindLetter.visibility= View.VISIBLE
+            binding.progressBar.visibility = View.GONE
+            binding.txtWord.visibility = View.VISIBLE
+            binding.txtVariableWord.visibility = View.VISIBLE
+            binding.iconVolume.visibility = View.VISIBLE
+            binding.txtFindLetter.visibility = View.VISIBLE
         }
     }
 
     private fun listenerOtherWord() {
         binding.btnOtherWord.setOnClickListener {
-            if(!vM.basicWord.hasObservers()) setWordObserver()
-            binding.btnOtherWord.isClickable=false
+            if (!vM.basicWord.hasObservers()) setWordObserver()
+            binding.btnOtherWord.isClickable = false
             vM.onPositionDeselected()
             progressBarOn()
             deleteBtnLetter()
@@ -99,24 +100,26 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
 
     private fun listenerResult() {
         binding.btnResult.setOnClickListener {
-            if(!vM.basicWord.hasObservers()){
-                Toast.makeText(this, "Debe clickear el boton 'Otra palabra' ", Toast.LENGTH_SHORT).show()
-            }else{
-                vM.onSubmitAnswer()
+            if (!vM.basicWord.hasObservers()) {
+                Toast.makeText(this, "Debe clickear el boton 'Otra palabra' ", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
                 isAnyLetterSelected()
             }
         }
     }
 
-    private fun isAnyLetterSelected(){
-        if(vM.isAnyLetterSelected()){
+    private fun isAnyLetterSelected() {
+        if (vM.isAnyLetterSelected()) {
+            vM.onSubmitAnswer()
             validateLetterSelected()
-        }else{
+        } else {
             Toast.makeText(this, "Debe elegir una letra", Toast.LENGTH_SHORT).show()
         }
     }
+
     private fun validateLetterSelected() {
-        if(vM.correctAnswerSubmitted.value) {
+        if (vM.correctAnswerSubmitted.value) {
             startActivity(Intent(this, PositiveResultWhereIsTheLetterActivity::class.java))
         } else {
             val intent = Intent(this, NegativeResultWhereIsTheLetterActivity::class.java)
@@ -129,7 +132,7 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
     }
 
     private fun deleteBtnLetter() {
-        if(positions.isNotEmpty()){
+        if (positions.isNotEmpty()) {
             binding.containerWord.removeAllViews()
         }
         positions.clear()
@@ -148,9 +151,12 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
     private fun onLetterSelected(pos: Int) {
         resetAllBtns()
         Log.v("select_position_in_activity_before", "position: $pos")
-        if(vM.isItSelected(pos)){
+        if (vM.isItSelected(pos)) {
             vM.onPositionDeselected()
-            Log.v("select_position_in_activity_after_true", "position: ${vM.selectedPosition.value}")
+            Log.v(
+                "select_position_in_activity_after_true",
+                "position: ${vM.selectedPosition.value}"
+            )
             return
         }
         vM.onPositionSelected(pos)
@@ -159,20 +165,25 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
     }
 
     private fun setValues() {
-        val word=vM.basicWord.value!!
+        val word = vM.basicWord.value!!
         Log.v("init_word_in_activity", "response word: $word")
         Log.v("init_word_in_activity", "response word: ${vM.basicWord.value!!}")
         binding.txtVariableWord.text = word
-        for (letter in word.withIndex()){
-            Log.v("position_btn_in_activity", "position: ${letter.index} ${letter.value.uppercase()}")
-            createWordButton(letter.value.uppercase(), { this.onLetterSelected(letter.index) }) { btn ->
+        for (letter in word.withIndex()) {
+            Log.v(
+                "position_btn_in_activity",
+                "position: ${letter.index} ${letter.value.uppercase()}"
+            )
+            createWordButton(
+                letter.value.uppercase(),
+                { this.onLetterSelected(letter.index) }) { btn ->
                 saveBtnPosition(
                     pos = letter.index,
                     btn = btn
                 )
             }
         }
-        positions.keys.forEach{ Log.v("position_in_activity", "position: $it ${positions[it]}") }
+        positions.keys.forEach { Log.v("position_in_activity", "position: $it ${positions[it]}") }
     }
 
     private fun createWordButton(
@@ -188,7 +199,7 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
             100, 120
         )
         params.setMargins(8, 8, 8, 8)
-        params.gravity=Gravity.CENTER
+        params.gravity = Gravity.CENTER
         btnLetter.layoutParams = params
         btnLetter.typeface = Typeface.DEFAULT_BOLD
         btnLetter.background =
@@ -199,26 +210,39 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
         binding.containerWord.addView(btnLetter)
     }
 
-    private fun setStyle(pos: Int, type: SetStyleButton){
-        when(type){
-            SetStyleButton.NOT_SELECTED->{
-                positions[pos]!!.background = ContextCompat.getDrawable(applicationContext, R.drawable.btn_letter_not_select)
-                positions[pos]!!.setTextColor(ContextCompat.getColor(applicationContext, R.color.black))
+    private fun setStyle(pos: Int, type: SetStyleButton) {
+        when (type) {
+            SetStyleButton.NOT_SELECTED -> {
+                positions[pos]!!.background =
+                    ContextCompat.getDrawable(applicationContext, R.drawable.btn_letter_not_select)
+                positions[pos]!!.setTextColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.black
+                    )
+                )
             }
-            SetStyleButton.SELECTED->{
-                positions[pos]!!.background = ContextCompat.getDrawable(applicationContext, R.drawable.btn_letter_select)
-                positions[pos]!!.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+            SetStyleButton.SELECTED -> {
+                positions[pos]!!.background =
+                    ContextCompat.getDrawable(applicationContext, R.drawable.btn_letter_select)
+                positions[pos]!!.setTextColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.white
+                    )
+                )
             }
         }
     }
 
-    private fun btnBack(){
+    private fun btnBack() {
         binding.btnBack.setOnClickListener {
             finish()
         }
     }
 }
-enum class SetStyleButton{
+
+enum class SetStyleButton {
     SELECTED,
     NOT_SELECTED
 }

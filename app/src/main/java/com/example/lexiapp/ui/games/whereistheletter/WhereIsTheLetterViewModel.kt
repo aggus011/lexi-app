@@ -51,30 +51,31 @@ class WhereIsTheLetterViewModel @Inject constructor(
     }
 
     fun onSubmitAnswer() {
-        var success = false
-        if (_selectedPosition.value == _correctPosition.value || checkChar()) {
-            _correctAnswerSubmitted.value = true
-            success = true
-        } else {
-            _incorrectAnswerSubmitted.value = true
-        }
+        val success = validateAnswer()
+        Log.v("SUCCES_ANSWER", "$success")
         viewModelScope.launch(Dispatchers.IO) {
-            getLetterWithPosition()?.let {
-                WhereIsTheLetterResult(
+            val result= WhereIsTheLetterResult(
                     email= "",
                     mainLetter = letter.value!!,
-                    selectedLetter = it,
+                    selectedLetter = getLetterWithPosition()!!,
                     word = basicWord.value!!,
                     success = success,
                     date = null
                 )
-            }?.let {
-                letterGameUseCases.saveWordInFirebase(
-                    it
-                )
-            }
+            letterGameUseCases.saveWordInFirebase(result)
         }
     }
+
+    private fun validateAnswer()=
+        if (_selectedPosition.value == _correctPosition.value || checkChar()) {
+            _correctAnswerSubmitted.value = true
+            Log.v("SAVE_ANSWER", "${_selectedPosition.value}//${_correctPosition.value}//${checkChar()}")
+            true
+        } else {
+            Log.v("SAVE_ANSWER", "${_selectedPosition.value}//${_correctPosition.value}//${checkChar()}//${getLetterWithPosition()}")
+            _incorrectAnswerSubmitted.value = true
+            false
+        }
 
     private fun checkChar() = if (_selectedPosition.value != null)
         _basicWord.value!![_selectedPosition.value!!] == _basicWord.value!![_correctPosition.value] else false
@@ -116,7 +117,7 @@ class WhereIsTheLetterViewModel @Inject constructor(
         _incorrectAnswerSubmitted.value = false
     }
 
-    private fun getLetterWithPosition() = _selectedPosition.value?.let { _basicWord.value?.get(it) }
+    private fun getLetterWithPosition() = _basicWord.value?.get(_selectedPosition.value!!)
 
     fun getCorrectPosition() = _correctPosition.value
 

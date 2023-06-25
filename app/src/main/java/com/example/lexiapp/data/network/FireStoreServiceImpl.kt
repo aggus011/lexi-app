@@ -1,24 +1,16 @@
 package com.example.lexiapp.data.network
 
 import android.util.Log
-import com.example.lexiapp.data.model.CorrectWordDataResult
-import com.example.lexiapp.data.model.Game
-import com.example.lexiapp.data.model.LetsReadGameDataResult
-import com.example.lexiapp.data.model.WhereIsTheLetterDataResult
-import com.example.lexiapp.data.model.toCorrectWordGameResult
-import com.example.lexiapp.data.model.toWhereIsTheLetterResult
+import com.example.lexiapp.data.model.*
 import com.example.lexiapp.domain.exceptions.FirestoreException
-import com.example.lexiapp.domain.model.FirebaseResult
-import com.example.lexiapp.domain.model.Professional
-import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.model.*
 import com.example.lexiapp.domain.service.FireStoreService
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.firestore.DocumentReference
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import java.util.*
@@ -27,7 +19,6 @@ import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
-import com.google.firebase.messaging.RemoteMessage
 
 @Singleton
 class FireStoreServiceImpl @Inject constructor(
@@ -41,10 +32,16 @@ class FireStoreServiceImpl @Inject constructor(
     private val letsReadCollection = firebase.firestore.collection(Game.LETS_READ.toString().lowercase())
     private val openaiCollection = firebase.firestore.collection("openai_api_use")
     private val professionalCollection = firebase.firestore.collection("professional")
+    private val objectivesCollection = firebase.firestore.collection("objectives")
     private val resultGameCollection: (String, String) -> CollectionReference =
         { collection: String, email: String -> firebase.firestore.collection("${collection}/${email}/results") }
+    private val notesDocument = firebase.firestore.collection("profesional_notes")
+    private val notesCollection: (String) -> CollectionReference =
+        {email: String -> firebase.firestore.collection("profesional_notes/${email}/notes")}
+    private val errorWordsDocument: (String) -> DocumentReference =
+        { email: String -> firebase.firestore.collection("error_words").document(email) }
+
     private val db = firebase.firestore
-    private lateinit var registration: ListenerRegistration
     private val categoryCollection = firebase.firestore.collection("category")
     private val firebaseCloudMessaging = firebase.firebaseMessaging
 
@@ -83,6 +80,10 @@ class FireStoreServiceImpl @Inject constructor(
         result: WhereIsTheLetterDataResult,
         email: String
     ) {
+        Log.v("SAVE_ANSWER_FIRESTORE_IMPL_pre", "${result.result}//${result.word}")
+        //SAVE WORDS WHEN RESULT=false
+        if (!result.result) saveErrorWord(email, listOf(result.word))
+        Log.v("SAVE_ANSWER_FIRESTORE_IMPL_post", "${result.result}")
         val data = hashMapOf(
             "result" to result.result,
             "mainLetter" to result.mainLetter,
@@ -162,13 +163,14 @@ class FireStoreServiceImpl @Inject constructor(
     }
 
     override suspend fun getProfessional(email: String): Professional {
-        var professional = Professional(User(null, email), null, null, false, null)
-        professionalCollection.document(email).get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val documentSnapshot = task.result
-                    if (documentSnapshot.exists()) {
-                        professional = Professional.Builder()
+        return suspendCoroutine { continuation ->
+            professionalCollection
+                .document(email)
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if(documentSnapshot != null &&
+                            documentSnapshot.exists()){
+                        val professional = Professional.Builder()
                             .user(documentSnapshot.data?.get("user_name").toString(), email)
                             .medicalRegistration(
                                 documentSnapshot.data?.get("medical_registration").toString()
@@ -177,14 +179,16 @@ class FireStoreServiceImpl @Inject constructor(
                             .isVerifiedAccount(documentSnapshot.data?.get("is_verificated_account") as Boolean)
                             .registrationDate((documentSnapshot.data?.get("registration_date") as Timestamp).toDate())
                             .build()
-                    } else {
-                        //User not found
+                        continuation.resume(professional)
+                    }else{
+                        val professional = Professional(User(null, email), null, null, false, null)
+                        continuation.resume(professional)
                     }
-                } else {
-                    throw FirestoreException("Problema en firestore para obtener datos")
                 }
-            }.await()
-        return professional
+                .addOnFailureListener { exception ->
+                    continuation.resumeWithException(exception)
+                }
+        }
     }
 
     override suspend fun getIsLinked(email: String): Boolean? {
@@ -210,7 +214,7 @@ class FireStoreServiceImpl @Inject constructor(
         emailPatient: String,
         emailProfessional: String
     ): FirebaseResult {
-        var result: FirebaseResult = FirebaseResult.TaskFaliure
+        var result: FirebaseResult = FirebaseResult.TaskFailure
         val data = mapOf(
             "professional_link" to emailProfessional
         )
@@ -248,30 +252,28 @@ class FireStoreServiceImpl @Inject constructor(
     }
 
     override suspend fun getListLinkPatientOfProfessional(
-        emailProfessional: String,
-        listener: (List<String>?) -> Unit
-    ) {
+        emailProfessional: String
+    )= callbackFlow {
         val docRef = professionalCollection.document(emailProfessional)
-        val registration = docRef.addSnapshotListener { snapshot, e ->
-            if (e != null) {
-                Log.w(TAG, "Listen failed.", e)
-                listener(null)
+        val listener = docRef.addSnapshotListener { querySnapshot, error ->
+            if (error != null) {
+                close(error)
                 return@addSnapshotListener
             }
-            if (snapshot != null && snapshot.exists()) {
-                val list = snapshot.get("patients") as List<String>?
-                listener(list)
-            } else {
-                listener(null)
+            val result = mutableListOf<String>()
+            if (querySnapshot != null && querySnapshot.exists()) {
+                val list: List<String> = querySnapshot.get("patients") as List<String>
+                result.addAll(list)
             }
+            trySend(result.toList()).isSuccess
         }
-        this.registration = registration
+        awaitClose { listener.remove() }
     }
 
     override suspend fun unBindProfessionalFromPatient(
         emailPatient: String
     ): FirebaseResult {
-        var result: FirebaseResult = FirebaseResult.TaskFaliure
+        var result: FirebaseResult = FirebaseResult.TaskFailure
         val data = mapOf(
             "professional_link" to null
         )
@@ -302,6 +304,8 @@ class FireStoreServiceImpl @Inject constructor(
             )
             newList
         }.addOnSuccessListener {
+            //THIS LINE CLEAN ALL THE NOTES OF PATIENT, WHEN IT IS UNLINK
+            cleanNotesFromPatient(emailPatient)
             completableDeferred.complete(FirebaseResult.TaskSuccess)
         }.addOnFailureListener {
             completableDeferred.completeExceptionally(FirestoreException("Failure to save a new patient"))
@@ -310,6 +314,8 @@ class FireStoreServiceImpl @Inject constructor(
     }
 
     override suspend fun saveCorrectWordResult(result: CorrectWordDataResult, email: String) {
+        //SAVE ERROR WORDS, OF RESULT
+        if (!result.result) saveErrorWord(email, listOf(result.mainWord))
         val data = hashMapOf(
             "result" to result.result,
             "mainWord" to result.mainWord,
@@ -320,9 +326,7 @@ class FireStoreServiceImpl @Inject constructor(
     }
 
     override suspend fun saveObjectives(email: String, objectives: List<Objective>) {
-        val firestore = FirebaseFirestore.getInstance()
-        val collection = firestore.collection("objectives")
-        val document = collection.document(email)
+        val document = objectivesCollection.document(email)
         val objectiveMap = hashMapOf<String, Any?>()
 
         objectives.forEachIndexed { index, objective ->
@@ -346,9 +350,7 @@ class FireStoreServiceImpl @Inject constructor(
 
 
     override suspend fun checkObjectivesExist(email: String): Boolean {
-        val firestore = FirebaseFirestore.getInstance()
-        val collection = firestore.collection("objectives")
-        val document = collection.document(email)
+        val document = objectivesCollection.document(email)
 
         return try {
             val snapshot = document.get().await()
@@ -359,9 +361,7 @@ class FireStoreServiceImpl @Inject constructor(
     }
 
     override suspend fun getObjectives(email: String): List<Objective> {
-        val firestore = FirebaseFirestore.getInstance()
-        val collection = firestore.collection("objectives")
-        val document = collection.document(email)
+        val document = objectivesCollection.document(email)
         return try {
             val snapshot = document.get().await()
             if (snapshot.exists()) {
@@ -375,7 +375,7 @@ class FireStoreServiceImpl @Inject constructor(
                         val progress = (objectiveFields["progress"] as Long?)?.toInt() ?: 0
                         val goal = (objectiveFields["goal"] as Long?)?.toInt()
                         Log.d(TAG, title.toString())
-                        objectives.add(Objective(id, title, description, 0, goal))
+                        objectives.add(Objective(id, title, description, progress, goal))
                     }
                 }
                 objectives
@@ -388,6 +388,8 @@ class FireStoreServiceImpl @Inject constructor(
     }
 
     override suspend fun saveLetsReadResult(result: LetsReadGameDataResult) {
+        //SAVE WORDS, OF RESULT=false
+        saveErrorWord(result.email, result.wrongWords)
         val data = hashMapOf(
             "wrongWords" to result.wrongWords,
             "totalWords" to result.totalWords,
@@ -395,7 +397,6 @@ class FireStoreServiceImpl @Inject constructor(
         )
         letsReadCollection.document(result.email).collection("results")
             .document(System.currentTimeMillis().toString()).set(data).await()
-
     }
 
     override suspend fun saveCategoriesFromPatient(email: String, categories: List<String>) {
@@ -432,6 +433,96 @@ class FireStoreServiceImpl @Inject constructor(
                     continuation.resumeWithException(exception)
                 }
         }
+    }
+
+    override suspend fun saveNote(note: Note) = flow {
+        try {
+            val data = hashMapOf(
+                "note" to note.text
+            )
+            val documentRef = notesDocument.document(note.emailPatient)
+                .collection("notes")
+                .document(System.currentTimeMillis().toString())
+            documentRef.set(data).await()
+            emit(FirebaseResult.TaskSuccess)
+        } catch (e: Exception) {
+            emit(FirebaseResult.TaskFailure)
+        }
+    }
+
+    override suspend fun deleteNote (emailPatient: String, date: String) = flow {
+        try {
+            val notes = notesCollection(emailPatient).document(date).delete().await()
+            emit(FirebaseResult.TaskSuccess)
+        } catch (e: Exception) {
+            emit(FirebaseResult.TaskFailure)
+        }
+    }
+
+    override suspend fun getNotes(emailPatient: String) = callbackFlow {
+        val notesCollectionRef = notesDocument.document(emailPatient).collection("notes")
+        val listener = notesCollectionRef.addSnapshotListener { querySnapshot, error ->
+            if (error != null) {
+                close(error)
+                return@addSnapshotListener
+            }
+
+            val result = mutableListOf<Note>()
+            for (document in querySnapshot!!.documents) {
+                val date = document.id
+                val data = document.data
+                result.add(
+                    Note(
+                        text = data?.get("note")!! as String,
+                        emailPatient = emailPatient,
+                        date = date
+                    )
+                )
+            }
+            trySend(result.toList()).isSuccess
+        }
+
+        awaitClose { listener.remove() }
+    }
+
+    private fun cleanNotesFromPatient(emailPatient: String){
+        notesCollection(emailPatient).get().addOnSuccessListener { querySnapshot ->
+            for (document in querySnapshot.documents) {
+                document.reference.delete()
+            }
+        }
+    }
+
+    private fun saveErrorWord(email: String, errorWords: List<String>){
+        val ref = errorWordsDocument(email)
+        ref.get().addOnSuccessListener { documentSnapshot ->
+            if (documentSnapshot.exists() && documentSnapshot.contains("errorWords")) {
+                val currentErrorWords = documentSnapshot["errorWords"] as List<String>
+                val updatedErrorWords = currentErrorWords.toMutableSet()
+                updatedErrorWords.addAll(errorWords)
+                ref.update("errorWords", updatedErrorWords.toList())
+            } else {
+                ref.set(hashMapOf("errorWords" to errorWords))
+            }
+        }
+    }
+
+    override suspend fun getWordPlayed(email: String) = callbackFlow {
+        val ref = errorWordsDocument(email)
+        ref.get().addOnSuccessListener { documentSnapshot ->
+            if (documentSnapshot.exists() && documentSnapshot.contains("errorWords")) {
+                val currentWords = documentSnapshot["errorWords"] as List<String>
+                val validation = currentWords.size >= 15
+                val result = Pair(validation, currentWords)
+                trySend(result).isSuccess
+            } else {
+                val result = Pair(false, listOf<String>())
+                trySend(result).isSuccess
+            }
+        }.addOnFailureListener { exception ->
+            close(exception)
+        }
+        awaitClose()
     }
 
     override suspend fun saveTokenToPatient(emailPatient: String) {
@@ -473,7 +564,7 @@ class FireStoreServiceImpl @Inject constructor(
                 .get()
                 .addOnSuccessListener { documentSnapshot ->
                     if(documentSnapshot.exists() &&
-                            documentSnapshot.contains("token")){
+                        documentSnapshot.contains("token")){
                         val token = documentSnapshot.data?.get("token") as String
 
                         continuation.resume(token)
