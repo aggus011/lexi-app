@@ -6,6 +6,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.temporal.TemporalAdjusters
 import javax.inject.Inject
 
@@ -16,7 +17,7 @@ class ObjectivesUseCases @Inject constructor(private val objectivesService: Obje
     }
 
     fun calculateDaysLeft(startDate: LocalDate): Int {
-        val today = LocalDate.now()
+        val today = LocalDate.now(ZoneId.of("America/Argentina/Buenos_Aires"))
         val nextMonday = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY))
 
         val daysLeft = nextMonday.dayOfWeek.value - today.dayOfWeek.value
