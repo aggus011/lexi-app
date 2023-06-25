@@ -15,13 +15,16 @@ import com.example.lexiapp.domain.service.FireStoreService
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.temporal.TemporalAdjusters
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -301,8 +304,15 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
         correctWordCollection.document(email).collection("results")
             .document(System.currentTimeMillis().toString()).set(data).await()
     }
+
     override suspend fun saveObjectives(email: String, objectives: List<Objective>) {
-        val document = objectivesCollection.document(email)
+        val zonaHoraria = ZoneId.of("America/Argentina/Buenos_Aires")
+        val fechaActual = LocalDate.now(zonaHoraria)
+        val ultimoLunes = fechaActual.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).atStartOfDay(zonaHoraria).toLocalDate()
+        val formato = DateTimeFormatter.ofPattern("yyyyMMdd")
+        val fechaUltimoLunes = ultimoLunes.format(formato)
+
+        val document = objectivesCollection.document(email).collection(fechaUltimoLunes)
         val objectiveMap = hashMapOf<String, Any?>()
         objectives.forEachIndexed { index, objective ->
             val objectiveFields = hashMapOf<String, Any?>(
@@ -316,15 +326,18 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                 "type" to objective.type,
                 "date" to objective.date
             )
-            objectiveMap["objective$index"] = objectiveFields
+            document.document("objective$index")
+                .set(objectiveFields)
+                .addOnSuccessListener {
+                    // Éxito al guardar el objetivo
+                }
+                .addOnFailureListener { e ->
+                    // Error al guardar el objetivo
+                }
+                .await()
         }
-        document.set(objectiveMap)
-            .addOnSuccessListener {
-            }
-            .addOnFailureListener { e ->
-            }
-            .await()
     }
+
     override suspend fun checkObjectivesExist(email: String): Boolean {
         val document = objectivesCollection.document(email)
         return try {
@@ -334,14 +347,16 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
             false
         }
     }
-    override suspend fun getObjectives(email: String): List<Objective> {
-        val document = objectivesCollection.document(email)
+
+    override suspend fun getObjectives(email: String, lastMondayDate: String): List<Objective> {
+        val document = objectivesCollection.document(email).collection(lastMondayDate)
         return try {
             val snapshot = document.get().await()
-            if (snapshot.exists()) {
+            if (!snapshot.isEmpty) {
                 val objectives = mutableListOf<Objective>()
-                val objectiveMap = snapshot.data
-                objectiveMap?.forEach { (_, objectiveFields) ->
+                val objectiveMap = snapshot.documents
+                objectiveMap.forEach { documentSnapshot ->
+                    val objectiveFields = documentSnapshot.data
                     if (objectiveFields is Map<*, *>) {
                         val id = objectiveFields["id"] as Long?
                         val title = objectiveFields["title"] as String?
@@ -363,6 +378,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
             emptyList()
         }
     }
+
 
 
     override suspend fun saveLetsReadResult(result: LetsReadGameDataResult) {
@@ -461,25 +477,29 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     }
 
     override suspend fun updateObjectiveProgress(game: String, type: String) {
+        val timeZone = ZoneId.of("America/Argentina/Buenos_Aires")
+        val currentDate = LocalDate.now(timeZone)
+        val lastMonday = currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+        val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+        val lastMondayDate = lastMonday.format(dateFormatter)
         val currentUser = FirebaseAuth.getInstance().currentUser
         val userId = currentUser?.uid
         if (userId != null) {
-            val document = objectivesCollection.document(userId)
+            val document = objectivesCollection.document(userId).collection(lastMondayDate)
             val snapshot = document.get().await()
-            if (snapshot.exists()) {
-                val objectivesMap = snapshot.data
-                objectivesMap?.forEach { (index, objectiveFields) ->
+            if (!snapshot.isEmpty) {
+                snapshot.documents.forEach { documentSnapshot ->
+                    val objectiveFields = documentSnapshot.data
                     if (objectiveFields is Map<*, *>) {
                         val gameValue = objectiveFields["game"] as String?
                         val typeValue = objectiveFields["type"] as String?
                         val goal = objectiveFields["goal"] as Long?
                         val progress = objectiveFields["progress"] as Long?
                         val completed = objectiveFields["completed"] as Boolean?
-                        if (gameValue == game && typeValue == type && !completed!!) {
+                        if (gameValue == game && typeValue == type && goal != progress && !completed!!) {
                             val updatedProgress = (objectiveFields["progress"] as Long?)?.toInt()?.plus(1)
-                            val objectivePath = "$index.progress"
                             if (updatedProgress != null) {
-                                document.update(objectivePath, updatedProgress).await()
+                                documentSnapshot.reference.update("progress", updatedProgress).await()
                             }
                         }
                     }
@@ -487,6 +507,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
             }
         }
     }
+
 
     companion object {
         private const val TAG = "FireStoreServiceImpl"
