@@ -6,6 +6,7 @@ import com.example.lexiapp.domain.exceptions.FirestoreException
 import com.example.lexiapp.domain.model.*
 import com.example.lexiapp.domain.service.FireStoreService
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import kotlinx.coroutines.CompletableDeferred
@@ -13,6 +14,11 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.temporal.TemporalAdjusters
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -169,7 +175,7 @@ class FireStoreServiceImpl @Inject constructor(
                 .get()
                 .addOnSuccessListener { documentSnapshot ->
                     if(documentSnapshot != null &&
-                            documentSnapshot.exists()){
+                        documentSnapshot.exists()){
                         val professional = Professional.Builder()
                             .user(documentSnapshot.data?.get("user_name").toString(), email)
                             .medicalRegistration(
@@ -324,58 +330,69 @@ class FireStoreServiceImpl @Inject constructor(
         correctWordCollection.document(email).collection("results")
             .document(System.currentTimeMillis().toString()).set(data).await()
     }
-
     override suspend fun saveObjectives(email: String, objectives: List<Objective>) {
-        val document = objectivesCollection.document(email)
-        val objectiveMap = hashMapOf<String, Any?>()
+        val zonaHoraria = ZoneId.of("America/Argentina/Buenos_Aires")
+        val fechaActual = LocalDate.now(zonaHoraria)
+        val ultimoLunes = fechaActual.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).atStartOfDay(zonaHoraria).toLocalDate()
+        val formato = DateTimeFormatter.ofPattern("yyyyMMdd")
+        val fechaUltimoLunes = ultimoLunes.format(formato)
 
+        val document = objectivesCollection.document(email).collection(fechaUltimoLunes)
+        val objectiveMap = hashMapOf<String, Any?>()
         objectives.forEachIndexed { index, objective ->
             val objectiveFields = hashMapOf<String, Any?>(
                 "id" to objective.id,
                 "title" to objective.title,
                 "description" to objective.description,
                 "progress" to objective.progress,
-                "goal" to objective.goal
+                "goal" to objective.goal,
+                "completed" to objective.completed,
+                "game" to objective.game,
+                "type" to objective.type,
+                "date" to objective.date
             )
-            objectiveMap["objective$index"] = objectiveFields
+            document.document("objective$index")
+                .set(objectiveFields)
+                .addOnSuccessListener {
+                    // Éxito al guardar el objetivo
+                }
+                .addOnFailureListener { e ->
+                    // Error al guardar el objetivo
+                }
+                .await()
         }
-
-        document.set(objectiveMap)
-            .addOnSuccessListener {
-            }
-            .addOnFailureListener { e ->
-            }
-            .await()
     }
 
-
-    override suspend fun checkObjectivesExist(email: String): Boolean {
-        val document = objectivesCollection.document(email)
-
+    override suspend fun checkObjectivesExist(email: String, lastMondayDate: String): Boolean {
+        val document = objectivesCollection.document(email).collection(lastMondayDate)
         return try {
             val snapshot = document.get().await()
-            snapshot.exists()
+            !snapshot.isEmpty
         } catch (e: Exception) {
             false
         }
     }
 
-    override suspend fun getObjectives(email: String): List<Objective> {
-        val document = objectivesCollection.document(email)
+    override suspend fun getObjectives(email: String, lastMondayDate: String): List<Objective> {
+        val document = objectivesCollection.document(email).collection(lastMondayDate)
         return try {
             val snapshot = document.get().await()
-            if (snapshot.exists()) {
+            if (!snapshot.isEmpty) {
                 val objectives = mutableListOf<Objective>()
-                val objectiveMap = snapshot.data
-                objectiveMap?.forEach { (_, objectiveFields) ->
+                val objectiveMap = snapshot.documents
+                objectiveMap.forEach { documentSnapshot ->
+                    val objectiveFields = documentSnapshot.data
                     if (objectiveFields is Map<*, *>) {
                         val id = objectiveFields["id"] as Long?
                         val title = objectiveFields["title"] as String?
                         val description = objectiveFields["description"] as String?
                         val progress = (objectiveFields["progress"] as Long?)?.toInt() ?: 0
                         val goal = (objectiveFields["goal"] as Long?)?.toInt()
-                        Log.d(TAG, title.toString())
-                        objectives.add(Objective(id, title, description, progress, goal))
+                        val game = objectiveFields["game"] as String?
+                        val type = objectiveFields["type"] as String?
+                        val completed = objectiveFields["completed"] as Boolean?
+                        val date = objectiveFields["date"] as String?
+                        objectives.add(Objective(id, title, description, progress, goal, game, type,completed, date))
                     }
                 }
                 objectives
@@ -598,6 +615,38 @@ class FireStoreServiceImpl @Inject constructor(
                     Log.v(TAG, "failed to get token for patient $professionalEmail and exception ${exception.message}")
                     continuation.resumeWithException(exception)
                 }
+        }
+    }
+
+    override suspend fun updateObjectiveProgress(game: String, type: String) {
+        val timeZone = ZoneId.of("America/Argentina/Buenos_Aires")
+        val currentDate = LocalDate.now(timeZone)
+        val lastMonday = currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+        val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+        val lastMondayDate = lastMonday.format(dateFormatter)
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val userId = currentUser?.uid
+        if (userId != null) {
+            val document = objectivesCollection.document(userId).collection(lastMondayDate)
+            val snapshot = document.get().await()
+            if (!snapshot.isEmpty) {
+                snapshot.documents.forEach { documentSnapshot ->
+                    val objectiveFields = documentSnapshot.data
+                    if (objectiveFields is Map<*, *>) {
+                        val gameValue = objectiveFields["game"] as String?
+                        val typeValue = objectiveFields["type"] as String?
+                        val goal = objectiveFields["goal"] as Long?
+                        val progress = objectiveFields["progress"] as Long?
+                        val completed = objectiveFields["completed"] as Boolean?
+                        if (gameValue == game && typeValue == type && goal != progress && !completed!!) {
+                            val updatedProgress = (objectiveFields["progress"] as Long?)?.toInt()?.plus(1)
+                            if (updatedProgress != null) {
+                                documentSnapshot.reference.update("progress", updatedProgress).await()
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

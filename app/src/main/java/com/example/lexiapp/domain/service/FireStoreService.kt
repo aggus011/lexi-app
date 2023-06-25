@@ -45,9 +45,9 @@ interface FireStoreService {
 
     suspend fun saveObjectives(email: String, objectives: List<Objective>)
 
-    suspend fun checkObjectivesExist(email: String): Boolean
+    suspend fun checkObjectivesExist(email: String, lastMondayDate: String): Boolean
 
-    suspend fun getObjectives(email: String): List<Objective>
+    suspend fun getObjectives(email: String, lastMondayDate: String): List<Objective>
 
     suspend fun saveLetsReadResult(result: LetsReadGameDataResult)
 
@@ -72,4 +72,7 @@ interface FireStoreService {
     suspend fun getPatientToken(patientEmail: String): String?
 
     suspend fun getProfessionalToken(professionalEmail: String): String?
+
+    suspend fun updateObjectiveProgress(game: String, type: String)
+
 }
