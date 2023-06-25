@@ -78,7 +78,6 @@ class ObjectivesFragment : Fragment() {
         if (userid != null) {
             objectivesViewModel.saveObjectivesToFirestore(userid)
         }
-
     }
 
     private fun checkObjectivesCompletion(objectives: List<Objective>) {
