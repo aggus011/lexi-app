@@ -310,7 +310,11 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                 "title" to objective.title,
                 "description" to objective.description,
                 "progress" to objective.progress,
-                "goal" to objective.goal
+                "goal" to objective.goal,
+                "completed" to objective.completed,
+                "game" to objective.game,
+                "type" to objective.type,
+                "date" to objective.date
             )
             objectiveMap["objective$index"] = objectiveFields
         }
@@ -455,6 +459,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
             }
         }
     }
+
     override suspend fun updateObjectiveProgress(game: String, type: String) {
         val currentUser = FirebaseAuth.getInstance().currentUser
         val userId = currentUser?.uid
@@ -482,6 +487,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
             }
         }
     }
+
     companion object {
         private const val TAG = "FireStoreServiceImpl"
     }
