@@ -72,7 +72,7 @@
     <string name="next_word">Siguiente palabra</string>
     <string name="home_screen">INICIO</string>
     <string name="your_answer">TU RESPUESTA</string>
-    <string name="correct_option">OPCION CORRECTA</string>
+    <string name="correct_option">OPCIÓN CORRECTA</string>
     <string name="change_word">Otra palabra</string>
     <string name="result">RESULTADO</string>
     <string name="you_did_it_very_well">¡LO HICISTE MUY BIEN!</string>
@@ -108,6 +108,7 @@
     <string name="message_length">Ten en cuenta que el máximo son 200 caracteres</string>
     <string name="write_note">Escribe tu nota aquí</string>
     <string name="save_note">Guardar nota</string>
+    <string name="dont_give_up_large_message">AUNQUE NO ESTÉ DEL TODO CORRECTO,¡ÁNIMO! ¡YA CASI LO LOGRAS!</string>
     <plurals name="days_left">
         <item quantity="one">Día Restante: %d </item>
         <item quantity="other">Días Restantes: %d </item>

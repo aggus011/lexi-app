@@ -94,7 +94,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="AUNQUE NO ESTÉ DEL TODO CORRECTO,¡ANIMO! ¡YA CASI LO LOGRAS!"
+                android:text="@string/dont_give_up_large_message"
                 android:textColor="@color/black"
                 android:textAppearance="@style/subtitle"
                 android:layout_marginTop="10dp"
