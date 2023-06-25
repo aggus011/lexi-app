@@ -55,4 +55,14 @@ interface FireStoreService {
     suspend fun saveCategoriesFromPatient(email: String, categories: List<String>)
 
     suspend fun getPatientCategories(email: String): List<String>
+
+    suspend fun saveTokenToPatient(emailPatient: String)
+
+    suspend fun saveTokenToProfessional(emailProfessional: String)
+
+    suspend fun getDeviceToken(): String
+
+    suspend fun getPatientToken(patientEmail: String): String?
+
+    suspend fun getProfessionalToken(professionalEmail: String): String?
 }

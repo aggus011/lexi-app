@@ -12,14 +12,12 @@ import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.Professional
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.model.*
-import com.example.lexiapp.domain.model.gameResult.LetsReadGameResult
-import com.example.lexiapp.domain.model.gameResult.ResultGame
-import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.example.lexiapp.domain.service.FireStoreService
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
@@ -29,9 +27,12 @@ import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
+import com.google.firebase.messaging.RemoteMessage
 
 @Singleton
-class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireStoreService {
+class FireStoreServiceImpl @Inject constructor(
+    firebase: FirebaseClient
+) : FireStoreService {
 
     private val userCollection = firebase.firestore.collection("user")
     private val whereIsTheLetterCollection =
@@ -45,12 +46,14 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     private val db = firebase.firestore
     private lateinit var registration: ListenerRegistration
     private val categoryCollection = firebase.firestore.collection("category")
+    private val firebaseCloudMessaging = firebase.firebaseMessaging
 
     override suspend fun saveAccount(user: User) {
         val data = hashMapOf(
             "user_name" to user.userName,
             "birth_date" to user.birthDate,
-            "professional_link" to user.profesional as String?
+            "professional_link" to user.profesional as String?,
+            "token" to getDeviceToken()
         )
         userCollection.document(user.email).set(data).await()
     }
@@ -144,7 +147,8 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
             "medical_registration" to professional.medicalRegistration,
             "patients" to professional.patients,
             "is_verificated_account" to professional.isVerifiedAccount,
-            "registration_date" to registrationDate
+            "registration_date" to registrationDate,
+            "token" to getDeviceToken()
         )
 
         professionalCollection.document(professional.user.email)
@@ -425,6 +429,82 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                     }
                 }
                 .addOnFailureListener { exception ->
+                    continuation.resumeWithException(exception)
+                }
+        }
+    }
+
+    override suspend fun saveTokenToPatient(emailPatient: String) {
+        try{
+            val token = getDeviceToken()
+            userCollection
+                .document(emailPatient)
+                .update("token", token)
+                .addOnSuccessListener {
+                    Log.v(TAG, "new token saved to patient $emailPatient")
+                }
+        }catch (e: FirestoreException){
+            Log.v(TAG, "error to save token to patient $emailPatient with exception ${e.message}")
+        }
+    }
+
+    override suspend fun saveTokenToProfessional(emailProfessional: String) {
+        try{
+            val token = getDeviceToken()
+            professionalCollection
+                .document(emailProfessional)
+                .update("token", token)
+                .addOnSuccessListener {
+                    Log.v(TAG, "new token saved to professional $emailProfessional")
+                }
+        }catch (e: FirestoreException){
+            Log.v(TAG, "error to save token to professional $emailProfessional with exception ${e.message}")
+        }
+    }
+
+    override suspend fun getDeviceToken(): String {
+        return firebaseCloudMessaging.token.await()
+    }
+
+    override suspend fun getPatientToken(patientEmail: String): String? {
+        return suspendCoroutine { continuation ->
+            userCollection
+                .document(patientEmail)
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if(documentSnapshot.exists() &&
+                            documentSnapshot.contains("token")){
+                        val token = documentSnapshot.data?.get("token") as String
+
+                        continuation.resume(token)
+                    }else{
+                        continuation.resume(null)
+                    }
+                }
+                .addOnFailureListener{ exception ->
+                    Log.v(TAG, "failed to get token for patient $patientEmail and exception ${exception.message}")
+                    continuation.resumeWithException(exception)
+                }
+        }
+    }
+
+    override suspend fun getProfessionalToken(professionalEmail: String): String? {
+        return suspendCoroutine { continuation ->
+            professionalCollection
+                .document(professionalEmail)
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if(documentSnapshot.exists() &&
+                        documentSnapshot.contains("token")){
+                        val token = documentSnapshot.data?.get("token") as String
+
+                        continuation.resume(token)
+                    }else{
+                        continuation.resume(null)
+                    }
+                }
+                .addOnFailureListener{ exception ->
+                    Log.v(TAG, "failed to get token for patient $professionalEmail and exception ${exception.message}")
                     continuation.resumeWithException(exception)
                 }
         }
