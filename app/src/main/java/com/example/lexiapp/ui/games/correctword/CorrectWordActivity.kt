@@ -1,8 +1,8 @@
 package com.example.lexiapp.ui.games.correctword
 
 import android.content.Intent
-import android.media.MediaPlayer
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
@@ -17,20 +17,35 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.*
 
 @AndroidEntryPoint
 class CorrectWordActivity : AppCompatActivity() {
 
     private val viewModel: CorrectWordViewModel by viewModels()
     private lateinit var binding: ActivityCorrectWordBinding
-    private var mediaPlayer: MediaPlayer? = null
+
+    private lateinit var textToSpeech: TextToSpeech
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCorrectWordBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
+
+        setTextToSpeech()
         setListeners()
         setObservers()
+    }
+
+    private fun setTextToSpeech(){
+        val language = Locale("es", "US")
+
+        textToSpeech = TextToSpeech(this) {
+            if (it != TextToSpeech.ERROR) {
+                textToSpeech.language = language
+                textToSpeech.setSpeechRate(0.6f)
+            }
+        }
     }
 
     private fun setObservers() {
@@ -56,9 +71,6 @@ class CorrectWordActivity : AppCompatActivity() {
         binding.wordThree.setOnClickListener { checkAnswer(binding.wordThree) }
         binding.wordFour.setOnClickListener { checkAnswer(binding.wordFour) }
 
-        binding.iconVolume.setOnClickListener {
-            playWordSound()
-        }
         binding.btnBack.setOnClickListener {
             finish()
         }
@@ -66,20 +78,27 @@ class CorrectWordActivity : AppCompatActivity() {
         binding.btnOtherWord.setOnClickListener {
             resetGame()
         }
+
+        binding.iconVolume.setOnClickListener {
+            speechWord()
+        }
     }
 
+    private fun speechWord() {
+        if (this.textToSpeech.isSpeaking) {
+            this.textToSpeech.stop()
+        }
 
-    private fun playWordSound() {
-        val wordSoundResId = resources.getIdentifier("word_sound.xml", "raw", packageName)
-        mediaPlayer = MediaPlayer.create(this, wordSoundResId)
-        mediaPlayer?.start()
-    }
+        if (binding.txtVariableWord.text.isNotEmpty()) {
+            this.textToSpeech
+                .speak(
+                    binding.txtVariableWord.text.toString(),
+                    TextToSpeech.QUEUE_FLUSH,
+                    null,
+                    null
+                )
+        }
 
-
-    override fun onStop() {
-        super.onStop()
-        mediaPlayer?.release()
-        mediaPlayer = null
     }
 
     private fun checkAnswer(selectedButton: Button) {
@@ -152,6 +171,11 @@ class CorrectWordActivity : AppCompatActivity() {
 
         startActivity(intent)
         finish()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        textToSpeech.shutdown()
     }
 
 }
