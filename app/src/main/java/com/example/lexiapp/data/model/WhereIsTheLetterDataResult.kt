@@ -21,7 +21,7 @@ fun WhereIsTheLetterDataResult.toWhereIsTheLetterResult(email: String): WhereIsT
     )
 }
 
-fun WhereIsTheLetterResult.toWhereIsGameResult() : WhereIsTheLetterDataResult{
+fun WhereIsTheLetterResult.toWhereIsTheLetterDataResult() : WhereIsTheLetterDataResult{
     return WhereIsTheLetterDataResult(
         result = this.success,
         mainLetter = this.mainLetter.toString(),
