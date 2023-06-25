@@ -63,8 +63,9 @@ class ObjectivesViewModel @Inject constructor(
     }
 
     fun saveObjectivesToFirestore(email: String) {
+        val lastMondayDate= getLastMondayDate()
         viewModelScope.launch {
-            val objectivesExist = fireStoreService.checkObjectivesExist(email)
+            val objectivesExist = fireStoreService.checkObjectivesExist(email,lastMondayDate)
             if (!objectivesExist) {
                 val today = LocalDate.now()
                 val monday = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))

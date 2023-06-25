@@ -338,11 +338,11 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
         }
     }
 
-    override suspend fun checkObjectivesExist(email: String): Boolean {
-        val document = objectivesCollection.document(email)
+    override suspend fun checkObjectivesExist(email: String, lastMondayDate: String): Boolean {
+        val document = objectivesCollection.document(email).collection(lastMondayDate)
         return try {
             val snapshot = document.get().await()
-            snapshot.exists()
+            !snapshot.isEmpty
         } catch (e: Exception) {
             false
         }

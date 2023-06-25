@@ -57,7 +57,7 @@ class ObjectivesFragment : Fragment() {
         Handler(Looper.getMainLooper()).postDelayed({
             saveObjectives()
             loadObjectives()
-        }, 200)
+        }, 300)
     }
 
     private fun loadObjectives() {
