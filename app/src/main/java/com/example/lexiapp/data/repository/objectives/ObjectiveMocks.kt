@@ -1,10 +1,14 @@
-package com.example.lexiapp.data.repository.objectives
-
 import com.example.lexiapp.domain.model.Objective
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 object ObjectiveMocks {
 
-    fun getObjectiveMocks(): List<Objective>{
+    fun getObjectiveMocks(): List<Objective> {
+        val currentDate = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        val formattedDate = currentDate.format(formatter)
 
         val allObjectives = listOf(
             Objective.Builder()
@@ -13,6 +17,10 @@ object ObjectiveMocks {
                 .description("Descripción de Jugar Palabra Correcta")
                 .progress(0)
                 .goal(4)
+                .game("CW")
+                .type("play")
+                .completed(false)
+                .date(formattedDate.toString())
                 .build(),
             Objective.Builder()
                 .id(2L)
@@ -20,6 +28,10 @@ object ObjectiveMocks {
                 .description("Descripción de Jugar ¡Vamos a Leer!")
                 .progress(0)
                 .goal(3)
+                .game("RL")
+                .type("play")
+                .completed(false)
+                .date(formattedDate.toString())
                 .build(),
             Objective.Builder()
                 .id(3L)
@@ -27,13 +39,10 @@ object ObjectiveMocks {
                 .description("Descripción de Jugar ¿Donde esta la Letra?")
                 .progress(0)
                 .goal(2)
-                .build(),
-            Objective.Builder()
-                .id(4L)
-                .title("Jugar ¿Así se Dice?")
-                .description("Descripción de Jugar ¿Así se Dice?")
-                .progress(0)
-                .goal(2)
+                .game("WL")
+                .type("play")
+                .completed(false)
+                .date(formattedDate.toString())
                 .build(),
             Objective.Builder()
                 .id(5L)
@@ -41,6 +50,10 @@ object ObjectiveMocks {
                 .description("Descripción de Escanear un Texto Propio")
                 .progress(0)
                 .goal(1)
+                .game("SCAN")
+                .type("play")
+                .completed(false)
+                .date(formattedDate.toString())
                 .build(),
             Objective.Builder()
                 .id(6L)
@@ -48,6 +61,10 @@ object ObjectiveMocks {
                 .description("Descripción de Jugar Lectura Desafío")
                 .progress(0)
                 .goal(2)
+                .game("RC")
+                .type("play")
+                .completed(false)
+                .date(formattedDate.toString())
                 .build(),
             Objective.Builder()
                 .id(7L)
@@ -55,6 +72,10 @@ object ObjectiveMocks {
                 .description("Descripción de Acertar en Palabra Correcta")
                 .progress(0)
                 .goal(3)
+                .game("CW")
+                .type("hit")
+                .completed(false)
+                .date(formattedDate.toString())
                 .build(),
             Objective.Builder()
                 .id(8L)
@@ -62,24 +83,13 @@ object ObjectiveMocks {
                 .description("Descripción de Acertar en ¡Vamos a Leer!")
                 .progress(0)
                 .goal(2)
+                .game("LR")
+                .type("hit")
+                .completed(false)
+                .date(formattedDate.toString())
                 .build(),
-            Objective.Builder()
-                .id(9L)
-                .title("Acertar en ¿Donde esta la Letra?")
-                .description("Descripción de Acertar en ¿Donde esta la Letra?")
-                .progress(0)
-                .goal(3)
-                .build(),
-            Objective.Builder()
-                .id(10L)
-                .title("Acertar en ¿Así se Dice?")
-                .description("Descripción de Acertar en ¿Así se Dice?")
-                .progress(0)
-                .goal(2)
-                .build()
         )
 
         return allObjectives.shuffled().take(4)
     }
-
 }

@@ -1,6 +1,6 @@
 package com.example.lexiapp.data.network
 
-import com.example.lexiapp.data.repository.objectives.ObjectiveMocks
+import ObjectiveMocks
 import com.example.lexiapp.domain.model.Objective
 import com.example.lexiapp.domain.service.ObjectivesService
 import java.time.LocalDate
