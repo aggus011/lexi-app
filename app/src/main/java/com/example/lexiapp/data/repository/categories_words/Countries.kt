@@ -1,8 +1,8 @@
 package com.example.lexiapp.data.repository.categories_words
 
-object Countries {
+object Countries: Category {
 
-    fun stimulus() = listOf(
+    override fun stimulus() = listOf(
         "Brasil",
         "Canadá",
         "Chile",

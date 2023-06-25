@@ -1,8 +1,8 @@
 package com.example.lexiapp.data.repository.categories_words
 
-object Insects {
+object Insects: Category {
 
-    fun stimulus() = listOf(
+    override fun stimulus() = listOf(
         "Hormiga",
         "Abeja",
         "Mosca",

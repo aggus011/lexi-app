@@ -1,5 +1,6 @@
 package com.example.lexiapp.data.network
 
+import android.graphics.Color
 import android.util.Log
 import com.example.lexiapp.data.model.CorrectWordDataResult
 import com.example.lexiapp.data.model.Game
@@ -7,6 +8,7 @@ import com.example.lexiapp.data.model.LetsReadGameDataResult
 import com.example.lexiapp.data.model.WhereIsTheLetterDataResult
 import com.example.lexiapp.data.model.toCorrectWordGameResult
 import com.example.lexiapp.data.model.toWhereIsTheLetterResult
+import com.example.lexiapp.data.repository.categories_words.*
 import com.example.lexiapp.domain.exceptions.FirestoreException
 import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.Professional
@@ -32,7 +34,6 @@ import kotlin.coroutines.suspendCoroutine
 class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireStoreService {
 
     private val userCollection = firebase.firestore.collection("user")
-    private val categoriesWordCollection = firebase.firestore.collection("categories")
     private val whereIsTheLetterCollection =
         firebase.firestore.collection(Game.WHERE_IS_THE_LETTER.toString().lowercase())
     private val correctWordCollection = firebase.firestore.collection(Game.CORRECT_WORD.toString().lowercase())
@@ -440,22 +441,24 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     }
 
     override suspend fun getWordCategories(email: String): List<String> {
-        val categories = getPatientCategories(email)
-        val wordCategories = mutableListOf<String>()
-        categories.forEach {
-            categoriesWordCollection
-                .document(it.lowercase())
-                .get()
-                .addOnSuccessListener {document ->
-                    val words = document.data?.get("words") as List<String>
-                    try {
-                        wordCategories.addAll(words)
-                    } catch (e: Exception){
-                        Log.d("Exception", e.javaClass.toString())
-                    }
-                }.await()
+        val categoriesNames = getPatientCategories(email)
+        val wordsCategories = mutableListOf<String>()
+        categoriesNames.forEach { categoryName ->
+            val category: Category? = when {
+                (categoryName == "Animales") -> Animals
+                (categoryName == "Insectos") -> Insects
+                (categoryName == "Frutas") -> Fruits
+                (categoryName == "Verduras") -> Vegetables
+                (categoryName == "Colores" )-> Colors
+                (categoryName == "Nombres" )-> Names
+                (categoryName == "Lugares" )-> Places
+                (categoryName == "Países" )-> Countries
+                (categoryName == "Vehículos")-> Vehicles
+                else -> null
+            }
+            if (category!=null) wordsCategories.addAll(category.stimulus())
         }
-        return wordCategories
+        return wordsCategories
     }
 
     override suspend fun saveNote(note: Note) = flow {
@@ -519,33 +522,32 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     private fun saveErrorWord(email: String, errorWords: List<String>){
         val ref = errorWordsDocument(email)
         ref.get().addOnSuccessListener { documentSnapshot ->
-            if (documentSnapshot.exists() && documentSnapshot.contains("errorWords")) {
-                val currentErrorWords = documentSnapshot["errorWords"] as List<String>
+            if (documentSnapshot.exists() && documentSnapshot.contains("words")) {
+                val currentErrorWords = documentSnapshot["words"] as List<String>
                 val updatedErrorWords = currentErrorWords.toMutableSet()
                 updatedErrorWords.addAll(errorWords)
-                ref.update("errorWords", updatedErrorWords.toList())
+                ref.update("words", updatedErrorWords.toList())
             } else {
-                ref.set(hashMapOf("errorWords" to errorWords))
+                ref.set(hashMapOf("words" to errorWords))
             }
         }
     }
 
-    override suspend fun getWordPlayed(email: String) = callbackFlow {
-        val ref = errorWordsDocument(email)
-        ref.get().addOnSuccessListener { documentSnapshot ->
-            if (documentSnapshot.exists() && documentSnapshot.contains("errorWords")) {
-                val currentWords = documentSnapshot["errorWords"] as List<String>
-                val validation = currentWords.size >= 15
-                val result = Pair(validation, currentWords)
-                trySend(result).isSuccess
+    override suspend fun getWordPlayed(email: String): Pair<Boolean, List<String>> {
+        Log.v("SAVE_ANSWER_LETTER_IMPL", "${email}")
+        val documentSnapshot = errorWordsDocument(email).get().await()
+        return try{
+            if (documentSnapshot.exists()) {
+                val errorWords = documentSnapshot.get("errorWords") as List<String>
+                val validation = errorWords.size >= 15
+                Pair(validation, errorWords)
             } else {
-                val result = Pair(false, listOf<String>())
-                trySend(result).isSuccess
+                Pair(false, emptyList())
             }
-        }.addOnFailureListener { exception ->
-            close(exception)
+        }catch (e: Exception){
+            Pair(false, emptyList())
         }
-        awaitClose()
+
     }
 
     companion object {

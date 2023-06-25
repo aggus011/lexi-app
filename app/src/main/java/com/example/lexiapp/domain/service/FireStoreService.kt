@@ -66,6 +66,7 @@ interface FireStoreService {
 
     suspend fun getPatientCategories(email: String): List<String>
 
-    suspend fun getWordPlayed(email: String): Flow<Pair<Boolean, List<String>>>
+    suspend fun getWordPlayed(email: String): Pair<Boolean, List<String>>
+
     suspend fun getWordCategories(email: String): List<String>
 }
