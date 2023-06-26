@@ -4,17 +4,33 @@ import android.content.SharedPreferences
 import android.util.Log
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.service.FireStoreService
+import com.example.lexiapp.domain.service.FirebaseNotificationService
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class LinkUseCases @Inject constructor(
     private val firestoreService: FireStoreService,
-    private val sharedPrefs: SharedPreferences
+    private val sharedPrefs: SharedPreferences,
+    private val firebaseNotificationService: FirebaseNotificationService
 ) {
 
     suspend fun bindProfessionalToPatient(
         emailPatient: String
     ) = flow {
+        val professionalToken = firestoreService.getProfessionalToken(getEmail()!!)
+        val patientToken = firestoreService.getPatientToken(emailPatient)
+
+        if(professionalToken != null && patientToken != null){
+            firebaseNotificationService.sendNotificationToProfessional(
+                professionalToken = professionalToken,
+                patientEmail = emailPatient
+            )
+
+            firebaseNotificationService.sendNotificationToPatient(
+                patientToken = patientToken,
+                professionalEmail = getEmail()!!
+            )
+        }
         emit(firestoreService.bindProfessionalToPatient(emailPatient, getEmail()!!))
     }
 

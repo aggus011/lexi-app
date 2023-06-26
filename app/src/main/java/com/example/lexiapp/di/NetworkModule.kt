@@ -4,6 +4,7 @@ import com.example.lexiapp.data.api.difference_text.DifferenceClient
 import com.example.lexiapp.data.api.openai_audio.SpeechToTextClient
 import com.example.lexiapp.data.api.openaicompletions.OpenAICompletionsClient
 import com.example.lexiapp.data.api.word_asociation_api.WordAssociationClient
+import com.example.lexiapp.data.network.FirebaseNotificationClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,6 +22,7 @@ object NetworkModule {
     private const val NEW_WORD_API_URL="https://api.wordassociations.net/associations/v1.0/json/"
     private const val BASE_CHATGPT_CHAT_URL="https://api.openai.com/v1/"
     private const val BASE_DIFFERENCE_URL="https://api.diffchecker.com/public/"
+    private const val BASE_FIREBASE_SEND_NOTIFICATIONS_URL="https://fcm.googleapis.com/"
 
     @Singleton
     @Provides
@@ -72,6 +74,20 @@ object NetworkModule {
     @Provides
     fun provideDifferenceClient(@Named("difference_retrofit")retrofit: Retrofit) : DifferenceClient =
         retrofit.create(DifferenceClient::class.java)
+
+    @Singleton
+    @Provides
+    @Named("firebase_notification_retrofit")
+    fun provideNotificationRetrofit(): Retrofit =
+        Retrofit.Builder()
+            .baseUrl(BASE_FIREBASE_SEND_NOTIFICATIONS_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+    @Singleton
+    @Provides
+    fun provideNotificationClient(@Named("firebase_notification_retrofit")retrofit: Retrofit): FirebaseNotificationClient =
+        retrofit.create(FirebaseNotificationClient::class.java)
 }
 
 
