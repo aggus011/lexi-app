@@ -55,7 +55,6 @@ class CorrectWordViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 if (success) {
                     fireStoreService.updateObjectiveProgress("CW", "hit")
-                } else {
                 }
                     fireStoreService.updateObjectiveProgress("CW", "play")
             }

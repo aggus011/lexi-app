@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lexiapp.data.api.difference_text.model.Rows
 import com.example.lexiapp.domain.model.gameResult.LetsReadGameResult
+import com.example.lexiapp.domain.service.FireStoreService
 import com.example.lexiapp.domain.useCases.DifferenceUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DifferenceViewModel @Inject constructor(
-    private val differenceUseCases: DifferenceUseCases
+    private val differenceUseCases: DifferenceUseCases,
+    private val fireStoreService: FireStoreService
 ) : ViewModel() {
 
     val difference: MutableLiveData<Rows> = MutableLiveData()
@@ -78,6 +80,10 @@ class DifferenceViewModel @Inject constructor(
                     success = success
                 )
             )
+            if (success) {
+                fireStoreService.updateObjectiveProgress("WL", "hit")
+            }
+                fireStoreService.updateObjectiveProgress("WL", "play")
         }
         return result
     }
