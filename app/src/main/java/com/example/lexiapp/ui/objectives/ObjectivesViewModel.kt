@@ -4,11 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.lexiapp.domain.model.MiniObjective
 import com.example.lexiapp.domain.model.Objective
 import com.example.lexiapp.domain.useCases.ObjectivesUseCases
 import com.example.lexiapp.domain.service.FireStoreService
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -31,8 +33,20 @@ class ObjectivesViewModel @Inject constructor(
     private val _daysLeft = MutableLiveData<Int>()
     val daysLeft: LiveData<Int> = _daysLeft
 
+    private var _completedObjectives = MutableLiveData<List<MiniObjective>>()
+    val completedObjectives = _completedObjectives as LiveData<List<MiniObjective>>
+
     init {
         loadObjectives()
+        listenerCompleteObjectives()
+    }
+
+    private fun listenerCompleteObjectives() {
+        viewModelScope.launch {
+            objectivesUseCases.listenerCompleteObjectives(FirebaseAuth.getInstance().currentUser!!.uid).collect{
+                _completedObjectives.value = it
+            }
+        }
     }
 
     fun getLastMondayDate(): String {

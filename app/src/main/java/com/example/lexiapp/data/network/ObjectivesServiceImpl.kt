@@ -6,7 +6,9 @@ import com.example.lexiapp.domain.service.ObjectivesService
 import java.time.LocalDate
 import javax.inject.Inject
 
-class ObjectivesServiceImpl @Inject constructor() : ObjectivesService {
+class ObjectivesServiceImpl @Inject constructor(
+    private val db: FireStoreServiceImpl
+    ) : ObjectivesService {
 
     private val objectiveMocks = ObjectiveMocks
 
@@ -14,4 +16,5 @@ class ObjectivesServiceImpl @Inject constructor() : ObjectivesService {
         return objectiveMocks.getObjectiveMocks()
     }
 
+    override suspend fun getCompleteObjectives(uid: String) = db.getObjectivesHistory(uid)
 }

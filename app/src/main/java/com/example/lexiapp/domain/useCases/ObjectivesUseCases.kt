@@ -29,5 +29,7 @@ class ObjectivesUseCases @Inject constructor(private val objectivesService: Obje
         }
     }
 
+    suspend fun listenerCompleteObjectives(uid: String) = objectivesService.getCompleteObjectives(uid)
+
 
 }

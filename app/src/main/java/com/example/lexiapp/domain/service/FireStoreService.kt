@@ -67,6 +67,9 @@ interface FireStoreService {
     suspend fun getPatientCategories(email: String): List<String>
 
     suspend fun getWordPlayed(email: String): Flow<Pair<Boolean, List<String>>>
+
     suspend fun updateObjectiveProgress(game: String, type: String)
+
+    suspend fun getObjectivesHistory(uid: String): Flow<List<MiniObjective>>
 
 }
