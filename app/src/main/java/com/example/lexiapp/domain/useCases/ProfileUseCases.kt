@@ -36,12 +36,14 @@ class ProfileUseCases @Inject constructor(
                 editor.putString("user_name", patient.userName).apply()
                 editor.putString("professional_link", patient.profesional).apply()
                 editor.putString("user_type", "patient").apply()
+                fireStoreService.saveTokenToPatient(user.email)
             }
             if(professional.user?.userName != null){
                 editor.putString("email", professional.user.email).apply()
                 editor.putString("user_name", professional.user.userName).apply()
                 editor.putString("user_type", "professional").apply()
                 editor.putInt("professional_account_state", if(professional.isVerifiedAccount) 2 else 1).apply()
+                fireStoreService.saveTokenToProfessional(professional.user.email)
             }
         }catch (e: UserNotFoundException){
             Log.v(TAG, "User not found in collections")
