@@ -18,7 +18,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.roundToInt
 
 @HiltViewModel
 class ProfesionalHomeViewModel @Inject constructor(
@@ -55,15 +54,22 @@ class ProfesionalHomeViewModel @Inject constructor(
     private var _resultDeletePatient = MutableLiveData<FirebaseResult>()
     val resultDeletePatient: LiveData<FirebaseResult> = _resultDeletePatient
 
-    private var _resultSLastWeekWITL = MutableLiveData<Map<String, Triple<Int, Float, Int>>>()
-    val resultSLastWeekWITL: LiveData<Map<String, Triple<Int, Float, Int>>> = _resultSLastWeekWITL
-    private var _resultSLastWeekCW = MutableLiveData<Map<String, Triple<Int, Float, Int>>>()
-    val resultSLastWeekCW: LiveData<Map<String, Triple<Int, Float, Int>>> = _resultSLastWeekCW
+    private var _resultsLastWeekLR = MutableLiveData<Map<String, Triple<Int, Float, Int>>>()
+    val resultsLastWeekLR: LiveData<Map<String, Triple<Int, Float, Int>>> = _resultsLastWeekLR
+    private var _resultsLastWeekWITL = MutableLiveData<Map<String, Triple<Int, Float, Int>>>()
+    val resultsLastWeekWITL: LiveData<Map<String, Triple<Int, Float, Int>>> = _resultsLastWeekWITL
+    private var _resultsLastWeekCW = MutableLiveData<Map<String, Triple<Int, Float, Int>>>()
+    val resultsLastWeekCW: LiveData<Map<String, Triple<Int, Float, Int>>> = _resultsLastWeekCW
 
+    private var _totalPieLR = MutableLiveData<Pair<Float, Float>>()
+    val totalPieLR: LiveData<Pair<Float, Float>> = _totalPieLR
     private var _totalPieCW = MutableLiveData<Pair<Float, Float>>()
     val totalPieCW: LiveData<Pair<Float, Float>> = _totalPieCW
     private var _totalPieWITL = MutableLiveData<Pair<Float, Float>>()
     val totalPieWITL: LiveData<Pair<Float, Float>> = _totalPieWITL
+
+    private var _weekPieLR = MutableLiveData<Pair<Float, Float>>()
+    val weekPieLR: LiveData<Pair<Float, Float>> = _weekPieLR
     private var _weekPieCW = MutableLiveData<Pair<Float, Float>>()
     val weekPieCW: LiveData<Pair<Float, Float>> = _weekPieCW
     private var _weekPieWITL = MutableLiveData<Pair<Float, Float>>()
@@ -129,8 +135,10 @@ class ProfesionalHomeViewModel @Inject constructor(
 
     private suspend fun setLRStats(patient: User) {
         resultGamesUseCases.getLRResults(patient.email).collect {
-            _totalTimesPlayedLR.value = if(it.isNotEmpty()) {
+            _totalTimesPlayedLR.value = if (it.isNotEmpty()) {
                 setWrongWordsLR(it)
+                setLastResultsLR(it)
+                setDataPiesLR(it)
                 it.size
             } else {
                 0
@@ -138,12 +146,16 @@ class ProfesionalHomeViewModel @Inject constructor(
         }
     }
 
+    private fun setLastResultsLR(results: List<LetsReadGameResult>) {
+        _resultsLastWeekLR.value = resultGamesUseCases.getResultsLastWeek(results)
+    }
+
     private fun setWrongWordsLR(results: List<LetsReadGameResult>) {
         val words = mutableListOf<String>()
         var timesSuccess = 0
-        for(result in results){
+        for (result in results) {
             words.addAll(result.wrongWords)
-            if (result.success) timesSuccess ++
+            if (result.success) timesSuccess++
         }
         _errorWordsLR.value = words
         _totalTimesSuccessLR.value = timesSuccess
@@ -168,8 +180,13 @@ class ProfesionalHomeViewModel @Inject constructor(
         _weekPieCW.value = setWeekPie(results)
     }
 
+    private fun setDataPiesLR(results: List<LetsReadGameResult>) {
+        _totalPieLR.value = setTotalPie(results)
+        _weekPieLR.value = setWeekPie(results)
+    }
+
     private fun setResultsLastWeekCW(results: List<CorrectWordGameResult>) {
-        _resultSLastWeekCW.value = resultGamesUseCases.getResultsLastWeek(results)
+        _resultsLastWeekCW.value = resultGamesUseCases.getResultsLastWeek(results)
     }
 
     private fun setHardWordsCW(results: List<CorrectWordGameResult>) {
@@ -217,12 +234,12 @@ class ProfesionalHomeViewModel @Inject constructor(
     }
 
     private fun setResultsLastWeekWITL(results: List<WhereIsTheLetterResult>) {
-        _resultSLastWeekWITL.value = resultGamesUseCases.getResultsLastWeek(results)
+        _resultsLastWeekWITL.value = resultGamesUseCases.getResultsLastWeek(results)
     }
 
     private fun setBlankResults() {
         _hardLettersWITL.value = emptyList()
-        _resultSLastWeekWITL.value = emptyMap()
+        _resultsLastWeekWITL.value = emptyMap()
     }
 
     private fun getCountError(results: List<ResultGame>): Float {

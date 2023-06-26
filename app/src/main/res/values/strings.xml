@@ -108,6 +108,7 @@
     <string name="message_length">Ten en cuenta que el máximo son 200 caracteres</string>
     <string name="write_note">Escribe tu nota aquí</string>
     <string name="save_note">Guardar nota</string>
+    <string name="LR_title">¡Vamos a Leer!</string>
     <plurals name="days_left">
         <item quantity="one">Día Restante: %d </item>
         <item quantity="other">Días Restantes: %d </item>

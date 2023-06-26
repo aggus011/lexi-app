@@ -62,6 +62,37 @@ class DetailPatientFragment : Fragment() {
         }
         setWITLObservers()
         setCWObservers()
+        setLRObservers()
+    }
+
+    private fun setLRObservers() {
+        viewModel.totalTimesPlayedLR.observe(viewLifecycleOwner) {
+            binding.cvMetricsLR.visibility =
+                if(it != 0) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
+        }
+        viewModel.totalPieCW.observe(viewLifecycleOwner) { (total, percentError) ->
+            setPieGraph(
+                total,
+                percentError,
+                binding.pieTotalChartLR.id,
+                binding.txtTitlePieTotalGraphLR
+            )
+        }
+        viewModel.weekPieLR.observe(viewLifecycleOwner) { (total, percentError) ->
+            setPieGraph(
+                total,
+                percentError,
+                binding.pieWeekChartLR.id,
+                binding.txtTitlePieWeekGraphLR
+            )
+        }
+        viewModel.resultsLastWeekLR.observe(viewLifecycleOwner) { resultsLastWeek ->
+            setBarGraph(resultsLastWeek, binding.barChartLR.id)
+        }
     }
 
     private fun setCWObservers() {
@@ -87,7 +118,7 @@ class DetailPatientFragment : Fragment() {
         viewModel.hardWordsCW.observe(viewLifecycleOwner) { letter ->
             binding.txtValueLettersDificultsCW.text = letter.toString()
         }
-        viewModel.resultSLastWeekCW.observe(viewLifecycleOwner) { resultsLastWeek ->
+        viewModel.resultsLastWeekCW.observe(viewLifecycleOwner) { resultsLastWeek ->
             setBarGraph(resultsLastWeek, binding.barChartCW.id)
         }
     }
@@ -115,7 +146,7 @@ class DetailPatientFragment : Fragment() {
         viewModel.hardLettersWITL.observe(viewLifecycleOwner) { letter ->
             binding.txtValueLettersDificultsWITL.text = letter.toString()
         }
-        viewModel.resultSLastWeekWITL.observe(viewLifecycleOwner) { resultsLastWeek ->
+        viewModel.resultsLastWeekWITL.observe(viewLifecycleOwner) { resultsLastWeek ->
             setBarGraph(resultsLastWeek, binding.barChartWITL.id)
         }
     }
