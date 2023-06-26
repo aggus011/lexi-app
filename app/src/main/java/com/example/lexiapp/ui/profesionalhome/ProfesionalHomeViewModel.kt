@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.model.gameResult.CorrectWordGameResult
+import com.example.lexiapp.domain.model.gameResult.LetsReadGameResult
 import com.example.lexiapp.domain.model.gameResult.ResultGame
 import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.example.lexiapp.domain.useCases.CodeQRUseCases
@@ -30,6 +31,13 @@ class ProfesionalHomeViewModel @Inject constructor(
     val wasNotPlayedCW = _wasNotPlayedCW as LiveData<Boolean>
     private var _wasNotPlayedWITL = MutableLiveData<Boolean>()
     val wasNotPlayedWITL = _wasNotPlayedWITL as LiveData<Boolean>
+
+    private var _errorWordsLR = MutableLiveData<List<String>>()
+    val errorWordsLR = _errorWordsLR as LiveData<List<String>>
+    private var _totalTimesPlayedLR = MutableLiveData<Int>()
+    val totalTimesPlayedLR = _totalTimesPlayedLR as LiveData<Int>
+    private var _totalTimesSuccessLR = MutableLiveData<Int>()
+    val totalTimesSuccessLR = _totalTimesSuccessLR as LiveData<Int>
 
     private var _hardWordsCW = MutableLiveData<List<String>>()
     val hardWordsCW = _hardWordsCW as LiveData<List<String>>
@@ -113,7 +121,32 @@ class ProfesionalHomeViewModel @Inject constructor(
             this.launch {
                 setCWStats(patient)
             }
+            this.launch {
+                setLRStats(patient)
+            }
         }
+    }
+
+    private suspend fun setLRStats(patient: User) {
+        resultGamesUseCases.getLRResults(patient.email).collect {
+            _totalTimesPlayedLR.value = if(it.isNotEmpty()) {
+                setWrongWordsLR(it)
+                it.size
+            } else {
+                0
+            }
+        }
+    }
+
+    private fun setWrongWordsLR(results: List<LetsReadGameResult>) {
+        val words = mutableListOf<String>()
+        var timesSuccess = 0
+        for(result in results){
+            words.addAll(result.wrongWords)
+            if (result.success) timesSuccess ++
+        }
+        _errorWordsLR.value = words
+        _totalTimesSuccessLR.value = timesSuccess
     }
 
     private suspend fun setCWStats(patient: User) {

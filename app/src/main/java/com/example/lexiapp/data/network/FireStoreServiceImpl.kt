@@ -153,6 +153,27 @@ class FireStoreServiceImpl @Inject constructor(
         emit(result.map { it.toCorrectWordGameResult(userMail) })
     }
 
+    override fun getLastResultsLetsReadGame(email: String) = flow {
+        val result = mutableListOf<LetsReadGameDataResult>()
+        resultGameCollection(Game.LETS_READ.toString().lowercase(), email).get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot) {
+                    val documentId = document.id
+                    val data = document.data
+                    result.add(
+                        LetsReadGameDataResult(
+                            success = data["success"] as Boolean,
+                            email = email,
+                            wrongWords = data["wrongWords"] as List<String>,
+                            date = documentId,
+                            totalWords = (data["totalWords"] as Long).toInt()
+                        )
+                    )
+                }
+            }.await()
+        emit(result.map { it.toLetsReadGameResult() })
+    }
+
     override suspend fun getOpenAICollectionDocumentReference(document: String) = flow {
         emit(openaiCollection.document(document))
     }

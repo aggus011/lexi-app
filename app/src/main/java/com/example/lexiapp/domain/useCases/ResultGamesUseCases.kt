@@ -20,6 +20,8 @@ class ResultGamesUseCases @Inject constructor(
     suspend fun getWhereIsCWResults(email: String) =
         service.getCorrectWordResults(email)
 
+    fun getLRResults(email: String) = service.getLRResults(email)
+
     fun getResultsLastWeek(results: List<ResultGame>): Map<String, Triple<Int, Float, Int>> {
         val calendar = Calendar.getInstance()
         val dateKeysMap = sortedMapOf<String, Triple<Int, Float, Int>>()
@@ -75,4 +77,6 @@ class ResultGamesUseCases @Inject constructor(
         return calendar1.get(Calendar.DAY_OF_YEAR) == calendar2.get(Calendar.DAY_OF_YEAR) &&
                 calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR)
     }
+
+
 }
