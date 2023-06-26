@@ -15,8 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CorrectWordViewModel @Inject constructor(
-    private val useCases: CorrectWordUseCases,
-    private val fireStoreService: FireStoreService
+    private val useCases: CorrectWordUseCases
 ) : ViewModel() {
 
     init {
@@ -52,12 +51,6 @@ class CorrectWordViewModel @Inject constructor(
                     date = null
                 )
             )
-            withContext(Dispatchers.IO) {
-                if (success) {
-                    fireStoreService.updateObjectiveProgress("CW", "hit")
-                }
-                    fireStoreService.updateObjectiveProgress("CW", "play")
-            }
         }
         return success
     }

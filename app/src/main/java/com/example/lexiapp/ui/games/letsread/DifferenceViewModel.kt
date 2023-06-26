@@ -18,8 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DifferenceViewModel @Inject constructor(
-    private val differenceUseCases: DifferenceUseCases,
-    private val fireStoreService: FireStoreService
+    private val differenceUseCases: DifferenceUseCases
 ) : ViewModel() {
 
     val difference: MutableLiveData<Rows> = MutableLiveData()
@@ -80,10 +79,6 @@ class DifferenceViewModel @Inject constructor(
                     success = success
                 )
             )
-            if (success) {
-                fireStoreService.updateObjectiveProgress("WL", "hit")
-            }
-                fireStoreService.updateObjectiveProgress("WL", "play")
         }
         return result
     }

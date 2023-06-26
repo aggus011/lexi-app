@@ -72,9 +72,10 @@ object InterfaceModule {
 
     @Provides
     fun getSpeechToTextService(
-        apiService: SpeechToTextGateway
+        apiService: SpeechToTextGateway,
+        firestoreService: FireStoreServiceImpl
     ): SpeechToTextService {
-        return SpeechToTextServiceImpl(apiService)
+        return SpeechToTextServiceImpl(apiService, firestoreService)
     }
 
     @Provides

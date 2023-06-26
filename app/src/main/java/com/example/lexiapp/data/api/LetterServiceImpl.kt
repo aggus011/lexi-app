@@ -33,6 +33,7 @@ class LetterServiceImpl @Inject constructor(
     }
 
     override suspend fun saveResult(result: ResultGame) {
+        saveProgress(result)
         Log.v("SAVE_ANSWER_LETTER_IMPL", "${result.success}")
         when(result::class){
             WhereIsTheLetterResult::class -> {
@@ -43,6 +44,23 @@ class LetterServiceImpl @Inject constructor(
             }
             CorrectWordGameResult::class -> {
                 db.saveCorrectWordResult((result as CorrectWordGameResult).toCorrectWordDataResult(), result.email)
+            }
+        }
+    }
+
+    private suspend fun saveProgress(result: ResultGame){
+        when(result::class){
+            WhereIsTheLetterResult::class -> {
+                if (result.success) {
+                    db.updateObjectiveProgress("WL", "hit")
+                }
+                db.updateObjectiveProgress("WL", "play")
+            }
+            CorrectWordGameResult::class -> {
+                if (result.success) {
+                    db.updateObjectiveProgress("CW", "hit")
+                }
+                db.updateObjectiveProgress("CW", "play")
             }
         }
     }

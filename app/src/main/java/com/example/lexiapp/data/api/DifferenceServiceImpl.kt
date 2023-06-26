@@ -22,5 +22,13 @@ class DifferenceServiceImpl @Inject constructor(
 
     override suspend fun saveLetsReadResult(result: LetsReadGameResult) {
         db.saveLetsReadResult(result.toLetsReadGameDataResult())
+        saveProgress(result)
+    }
+
+    private suspend fun saveProgress(result: LetsReadGameResult){
+        if (result.success) {
+            db.updateObjectiveProgress("RL", "hit")
+        }
+        db.updateObjectiveProgress("LR", "play")
     }
 }

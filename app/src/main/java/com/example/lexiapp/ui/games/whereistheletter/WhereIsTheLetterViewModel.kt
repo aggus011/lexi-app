@@ -15,8 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WhereIsTheLetterViewModel @Inject constructor(
-    private val letterGameUseCases: LetterGameUseCases,
-    private val fireStoreService: FireStoreService
+    private val letterGameUseCases: LetterGameUseCases
 ) : ViewModel() {
 
     private var _selectedPosition = MutableStateFlow<Int?>(null)
@@ -66,11 +65,7 @@ class WhereIsTheLetterViewModel @Inject constructor(
                 date = null
             )
             letterGameUseCases.saveWordInFirebase(result)
-                if (success) {
-                    fireStoreService.updateObjectiveProgress("WL", "hit")
-                }
-                    fireStoreService.updateObjectiveProgress("WL", "play")
-            }
+        }
     }
 
     private fun validateAnswer()=
