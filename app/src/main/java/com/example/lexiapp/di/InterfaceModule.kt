@@ -24,9 +24,10 @@ object InterfaceModule {
     @Provides
     fun getLetterRepository(
         apiWordService: WordAssociationService,
-        db: FireStoreServiceImpl
+        db: FireStoreServiceImpl,
+        prefs: SharedPreferences
     ): LetterService {
-        return LetterServiceImpl(apiWordService, db)
+        return LetterServiceImpl(apiWordService, db, prefs)
     }
 
     @Provides

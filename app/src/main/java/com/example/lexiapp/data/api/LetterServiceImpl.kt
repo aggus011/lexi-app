@@ -11,6 +11,8 @@ import com.example.lexiapp.domain.model.gameResult.CorrectWordGameResult
 import com.example.lexiapp.domain.model.gameResult.ResultGame
 import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.example.lexiapp.domain.service.LetterService
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -18,13 +20,17 @@ import javax.inject.Inject
 
 class LetterServiceImpl @Inject constructor(
     private val apiWordService: WordAssociationService,
-    private val db: FireStoreServiceImpl
+    private val db: FireStoreServiceImpl,
+    private val prefs: SharedPreferences
 ) : LetterService {
 
-    //private val userMail = prefs.getString("email", null)!!
+    private val userMail = prefs.getString("email", null)!!
 
     override suspend fun getWord(count: Int, length: Int, language: String) = flow {
-        apiWordService.getWordToWhereIsTheLetterGame(count, length, language)
+        val errorWords = db.getWordPlayed(userMail)
+        Log.d("WORDS_ERROR", "${errorWords.first}//${errorWords.second}")
+        val stimulus = if (errorWords.first) errorWords.second else db.getWordCategories(userMail)
+        apiWordService.getWordToWhereIsTheLetterGame(count, length, language, stimulus)
             .map { inputList -> inputList.filter { !BlackList.words.contains(it.uppercase()) } }
             .collect {
                 emit(it[0].uppercase())
@@ -64,4 +70,8 @@ class LetterServiceImpl @Inject constructor(
         }
     }
 
+    private suspend fun getErrorWords(){
+        var errorWords = Pair(false,listOf<String>())
+
+    }
 }

@@ -6,6 +6,8 @@ import com.example.lexiapp.data.model.WhereIsTheLetterDataResult
 import com.example.lexiapp.domain.model.*
 import com.example.lexiapp.domain.model.gameResult.CorrectWordGameResult
 import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
+import com.example.lexiapp.domain.model.*
+import com.example.lexiapp.domain.model.gameResult.LetsReadGameResult
 import com.google.firebase.firestore.DocumentReference
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
@@ -61,8 +63,6 @@ interface FireStoreService {
 
     suspend fun getPatientCategories(email: String): List<String>
 
-    suspend fun getWordPlayed(email: String): Flow<Pair<Boolean, List<String>>>
-
     suspend fun saveTokenToPatient(emailPatient: String)
 
     suspend fun saveTokenToProfessional(emailProfessional: String)
@@ -72,6 +72,10 @@ interface FireStoreService {
     suspend fun getPatientToken(patientEmail: String): String?
 
     suspend fun getProfessionalToken(professionalEmail: String): String?
+
+    suspend fun getWordPlayed(email: String): Pair<Boolean, List<String>>
+
+    suspend fun getWordCategories(email: String): List<String>
 
     suspend fun updateObjectiveProgress(game: String, type: String)
 
