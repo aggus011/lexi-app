@@ -9,11 +9,16 @@ import kotlin.random.Random
 class WordAssociationService @Inject constructor(
     private val client: WordAssociationClient
 ) {
-    suspend fun getWordToWhereIsTheLetterGame(count: Int, length: Int, language: String) = flow {
-
+    suspend fun getWordToWhereIsTheLetterGame(count: Int, length: Int, language: String, estimulo: List<String?>) = flow {
+        Log.d("Estimulo", estimulo.toString())
         try {
             var text = ""
-            stimulus().forEach { text += "$it " }
+            if(estimulo.isNotEmpty()){
+                val newEstimulo = estimulo.shuffled(Random(System.currentTimeMillis() % estimulo.size)).take(3)
+                newEstimulo.forEach { text += "$it " }
+            } else {
+                stimulus().forEach { text += "$it " }
+            }
             val response = client.getWordToWhereIsTheLetterGame(
                 count = count + 10,
                 language = language,
