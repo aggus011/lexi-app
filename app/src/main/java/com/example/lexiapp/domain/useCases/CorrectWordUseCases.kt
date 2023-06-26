@@ -1,7 +1,6 @@
 package com.example.lexiapp.domain.useCases
 
 import android.content.SharedPreferences
-import android.util.Log
 import com.example.lexiapp.domain.model.gameResult.CorrectWordGameResult
 import com.example.lexiapp.domain.service.LetterService
 import kotlinx.coroutines.flow.flow
@@ -61,7 +60,7 @@ class CorrectWordUseCases @Inject constructor(
                     words.add(finalWord)
                 }
             }
-            Log.i("Lucas", "$words")
+
             emit(words)
         }
     }
