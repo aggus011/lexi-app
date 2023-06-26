@@ -18,11 +18,10 @@ import javax.inject.Inject
 
 class LetterServiceImpl @Inject constructor(
     private val apiWordService: WordAssociationService,
-    private val db: FireStoreServiceImpl,
-    private val prefs: SharedPreferences
+    private val db: FireStoreServiceImpl
 ) : LetterService {
 
-    private val userMail = prefs.getString("email", null)!!
+    //private val userMail = prefs.getString("email", null)!!
 
     override suspend fun getWord(count: Int, length: Int, language: String) = flow {
         apiWordService.getWordToWhereIsTheLetterGame(count, length, language)

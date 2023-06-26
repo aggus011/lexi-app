@@ -38,7 +38,7 @@ class LetterGameUseCasesTest {
     @Before
     fun onBefore() {
         MockKAnnotations.init(this)
-        letterGameUseCases = LetterGameUseCases(repository, db, prefs)
+        letterGameUseCases = LetterGameUseCases(repository, prefs)
     }
 
     @Test
