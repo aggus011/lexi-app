@@ -1,5 +1,6 @@
 package com.example.lexiapp.data.network
 
+import android.graphics.Color
 import android.util.Log
 import com.example.lexiapp.data.model.CorrectWordDataResult
 import com.example.lexiapp.data.model.Game
@@ -7,6 +8,8 @@ import com.example.lexiapp.data.model.LetsReadGameDataResult
 import com.example.lexiapp.data.model.WhereIsTheLetterDataResult
 import com.example.lexiapp.data.model.toCorrectWordGameResult
 import com.example.lexiapp.data.model.toWhereIsTheLetterResult
+import com.example.lexiapp.data.repository.categories_words.*
+import com.example.lexiapp.data.model.*
 import com.example.lexiapp.domain.exceptions.FirestoreException
 import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.Professional
@@ -15,7 +18,8 @@ import com.example.lexiapp.domain.model.*
 import com.example.lexiapp.domain.service.FireStoreService
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentReference
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -35,7 +39,9 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 @Singleton
-class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireStoreService {
+class FireStoreServiceImpl @Inject constructor(
+    firebase: FirebaseClient
+) : FireStoreService {
 
     private val userCollection = firebase.firestore.collection("user")
     private val whereIsTheLetterCollection =
@@ -57,12 +63,14 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     private val categoryCollection = firebase.firestore.collection("category")
     private val completedObjectivesCollectionReference =
         { uid: String -> firebase.firestore.collection("history_objectives/${uid}/objectives") }
+    private val firebaseCloudMessaging = firebase.firebaseMessaging
 
     override suspend fun saveAccount(user: User) {
         val data = hashMapOf(
             "user_name" to user.userName,
             "birth_date" to user.birthDate,
-            "professional_link" to user.profesional as String?
+            "professional_link" to user.profesional as String?,
+            "token" to getDeviceToken()
         )
         userCollection.document(user.email).set(data).await()
     }
@@ -160,7 +168,8 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
             "medical_registration" to professional.medicalRegistration,
             "patients" to professional.patients,
             "is_verificated_account" to professional.isVerifiedAccount,
-            "registration_date" to registrationDate
+            "registration_date" to registrationDate,
+            "token" to getDeviceToken()
         )
 
         professionalCollection.document(professional.user.email)
@@ -411,8 +420,6 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
         }
     }
 
-
-
     override suspend fun saveLetsReadResult(result: LetsReadGameDataResult) {
         //SAVE WORDS, OF RESULT=false
         saveErrorWord(result.email, result.wrongWords)
@@ -459,6 +466,27 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                     continuation.resumeWithException(exception)
                 }
         }
+    }
+
+    override suspend fun getWordCategories(email: String): List<String> {
+        val categoriesNames = getPatientCategories(email)
+        val wordsCategories = mutableListOf<String>()
+        categoriesNames.forEach { categoryName ->
+            val category: Category? = when {
+                (categoryName == "Animales") -> Animals
+                (categoryName == "Insectos") -> Insects
+                (categoryName == "Frutas") -> Fruits
+                (categoryName == "Verduras") -> Vegetables
+                (categoryName == "Colores" )-> Colors
+                (categoryName == "Nombres" )-> Names
+                (categoryName == "Lugares" )-> Places
+                (categoryName == "Países" )-> Countries
+                (categoryName == "Vehículos")-> Vehicles
+                else -> null
+            }
+            if (category!=null) wordsCategories.addAll(category.stimulus())
+        }
+        return wordsCategories
     }
 
     override suspend fun saveNote(note: Note) = flow {
@@ -522,33 +550,109 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
     private fun saveErrorWord(email: String, errorWords: List<String>){
         val ref = errorWordsDocument(email)
         ref.get().addOnSuccessListener { documentSnapshot ->
-            if (documentSnapshot.exists() && documentSnapshot.contains("errorWords")) {
-                val currentErrorWords = documentSnapshot["errorWords"] as List<String>
+            if (documentSnapshot.exists() && documentSnapshot.contains("words")) {
+                val currentErrorWords = documentSnapshot["words"] as List<String>
                 val updatedErrorWords = currentErrorWords.toMutableSet()
                 updatedErrorWords.addAll(errorWords)
-                ref.update("errorWords", updatedErrorWords.toList())
+                ref.update("words", updatedErrorWords.toList())
             } else {
-                ref.set(hashMapOf("errorWords" to errorWords))
+                ref.set(hashMapOf("words" to errorWords))
             }
         }
     }
 
-    override suspend fun getWordPlayed(email: String) = callbackFlow {
-        val ref = errorWordsDocument(email)
-        ref.get().addOnSuccessListener { documentSnapshot ->
-            if (documentSnapshot.exists() && documentSnapshot.contains("errorWords")) {
-                val currentWords = documentSnapshot["errorWords"] as List<String>
-                val validation = currentWords.size >= 15
-                val result = Pair(validation, currentWords)
-                trySend(result).isSuccess
+    override suspend fun getWordPlayed(email: String): Pair<Boolean, List<String>> {
+        Log.v("GET_ERROR", "${email}")
+        val documentSnapshot = errorWordsDocument(email).get().await()
+        return try{
+            if (documentSnapshot.exists()) {
+                val errorWords = documentSnapshot.get("words") as List<String>
+                Log.v("ERRORS", "${errorWords}")
+                val validation = errorWords.size >= 15
+                Pair(validation, errorWords)
             } else {
-                val result = Pair(false, listOf<String>())
-                trySend(result).isSuccess
+                Pair(false, emptyList())
             }
-        }.addOnFailureListener { exception ->
-            close(exception)
+        }catch (e: Exception){
+            Pair(false, emptyList())
         }
-        awaitClose()
+
+    }
+
+    override suspend fun saveTokenToPatient(emailPatient: String) {
+        try{
+            val token = getDeviceToken()
+            userCollection
+                .document(emailPatient)
+                .update("token", token)
+                .addOnSuccessListener {
+                    Log.v(TAG, "new token saved to patient $emailPatient")
+                }
+        }catch (e: FirestoreException){
+            Log.v(TAG, "error to save token to patient $emailPatient with exception ${e.message}")
+        }
+    }
+
+    override suspend fun saveTokenToProfessional(emailProfessional: String) {
+        try{
+            val token = getDeviceToken()
+            professionalCollection
+                .document(emailProfessional)
+                .update("token", token)
+                .addOnSuccessListener {
+                    Log.v(TAG, "new token saved to professional $emailProfessional")
+                }
+        }catch (e: FirestoreException){
+            Log.v(TAG, "error to save token to professional $emailProfessional with exception ${e.message}")
+        }
+    }
+
+    override suspend fun getDeviceToken(): String {
+        return firebaseCloudMessaging.token.await()
+    }
+
+    override suspend fun getPatientToken(patientEmail: String): String? {
+        return suspendCoroutine { continuation ->
+            userCollection
+                .document(patientEmail)
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if(documentSnapshot.exists() &&
+                        documentSnapshot.contains("token")){
+                        val token = documentSnapshot.data?.get("token") as String
+
+                        continuation.resume(token)
+                    }else{
+                        continuation.resume(null)
+                    }
+                }
+                .addOnFailureListener{ exception ->
+                    Log.v(TAG, "failed to get token for patient $patientEmail and exception ${exception.message}")
+                    continuation.resumeWithException(exception)
+                }
+        }
+    }
+
+    override suspend fun getProfessionalToken(professionalEmail: String): String? {
+        return suspendCoroutine { continuation ->
+            professionalCollection
+                .document(professionalEmail)
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if(documentSnapshot.exists() &&
+                        documentSnapshot.contains("token")){
+                        val token = documentSnapshot.data?.get("token") as String
+
+                        continuation.resume(token)
+                    }else{
+                        continuation.resume(null)
+                    }
+                }
+                .addOnFailureListener{ exception ->
+                    Log.v(TAG, "failed to get token for patient $professionalEmail and exception ${exception.message}")
+                    continuation.resumeWithException(exception)
+                }
+        }
     }
 
     override suspend fun updateObjectiveProgress(game: String, type: String) {

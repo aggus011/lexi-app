@@ -1,8 +1,8 @@
 package com.example.lexiapp.data.repository.categories_words
 
-object Colors {
+object Colors: Category {
 
-    fun stimulus() = listOf(
+    override fun stimulus() = listOf(
         "Rojo",
         "Azul",
         "Verde",

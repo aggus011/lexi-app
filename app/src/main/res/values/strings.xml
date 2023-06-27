@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Lexi App</string>
+    <string name="app_name">Lexi</string>
     <string name="prefs_file">com.example.lexiapp.PREFERENCES_FILE_KEY</string>
     <string name="logo">LEXI</string>
     <string name="name">Nombre</string>
@@ -72,7 +72,7 @@
     <string name="next_word">Siguiente palabra</string>
     <string name="home_screen">INICIO</string>
     <string name="your_answer">TU RESPUESTA</string>
-    <string name="correct_option">OPCION CORRECTA</string>
+    <string name="correct_option">OPCIÓN CORRECTA</string>
     <string name="change_word">Otra palabra</string>
     <string name="result">RESULTADO</string>
     <string name="you_did_it_very_well">¡LO HICISTE MUY BIEN!</string>
@@ -108,6 +108,7 @@
     <string name="message_length">Ten en cuenta que el máximo son 200 caracteres</string>
     <string name="write_note">Escribe tu nota aquí</string>
     <string name="save_note">Guardar nota</string>
+    <string name="dont_give_up_large_message">AUNQUE NO ESTÉ DEL TODO CORRECTO,¡ÁNIMO! ¡YA CASI LO LOGRAS!</string>
     <string name="completed_objective">Mis Objetivos Cumplidos</string>
     <string name="dont_objetives_complete">todavía no tienes objetivos cumplidos de semanas anteriores</string>
     <plurals name="days_left">

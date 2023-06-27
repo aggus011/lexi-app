@@ -37,6 +37,4 @@ class LetterGameUseCases @Inject constructor(
         Log.v("SAVE_ANSWER_UC", "${result.success}")
         service.saveResult(result)
     }
-
-    private fun getRandomInt() = Random.nextInt(4, 7)
 }

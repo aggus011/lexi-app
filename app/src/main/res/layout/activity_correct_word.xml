@@ -110,28 +110,32 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="10dp"
-            android:background="@drawable/volume_high" />
+            android:background="@drawable/volume_high"
+            android:visibility="gone"
+            tools:visibility="visible"/>
     </LinearLayout>
 
     <LinearLayout
             android:id="@+id/option_word"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="30dp"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btnOtherWord"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txtWordToPlay">
+            app:layout_constraintTop_toBottomOf="@id/txtWordToPlay"
+            android:visibility="gone"
+            tools:visibility="visible">
 
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/word_one"
             style="@style/buttonWord"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="70dp"
             app:backgroundTint="@color/light_purple"
             tools:text="WordOne"
             app:cornerRadius="10dp"
@@ -141,7 +145,7 @@
             android:id="@+id/word_two"
             style="@style/buttonWord"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="70dp"
             app:backgroundTint="@color/light_purple"
             tools:text="WordTwo"
             app:cornerRadius="10dp"
@@ -151,7 +155,7 @@
             android:id="@+id/word_three"
             style="@style/buttonWord"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="70dp"
             app:backgroundTint="@color/light_purple"
             tools:text="WordThree"
             app:cornerRadius="10dp"
@@ -161,7 +165,7 @@
             android:id="@+id/word_four"
             style="@style/buttonWord"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="70dp"
             app:backgroundTint="@color/light_purple"
             tools:text="WordFour"
             app:cornerRadius="10dp"
@@ -171,15 +175,20 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnOtherWord"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="70dp"
         android:layout_marginBottom="20dp"
-        android:text="Otra palabra"
-        android:visibility="gone"
+        app:cornerRadius="10dp"
+        android:text="@string/change_word"
         app:icon="@drawable/swap_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/option_word"
+        android:textAppearance="@style/textMaterialButton"
+        app:iconSize="24dp"
+        android:visibility="gone"
+        tools:visibility="visible"/>
 
     <ProgressBar
         android:id="@+id/progressBar3"
@@ -187,9 +196,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:indeterminateTint="@color/light_purple"
-        app:layout_constraintBottom_toTopOf="@+id/option_word"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtWordToPlay" />
+        app:layout_constraintTop_toBottomOf="@+id/txtWordToPlay"
+        tools:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

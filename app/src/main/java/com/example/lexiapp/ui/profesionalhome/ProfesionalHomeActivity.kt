@@ -1,7 +1,9 @@
 package com.example.lexiapp.ui.profesionalhome
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +12,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lexiapp.R
@@ -18,6 +21,7 @@ import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.useCases.ProfileUseCases
 import com.example.lexiapp.ui.adapter.UserAdapter
+import com.example.lexiapp.ui.patienthome.HomePatientActivity
 import com.example.lexiapp.ui.profesionalhome.detailpatient.DetailPatientFragment
 import com.example.lexiapp.ui.profesionalhome.note.CreateNoteActivity
 import com.example.lexiapp.ui.profesionalhome.note.RecordNoteActivity
@@ -36,6 +40,7 @@ class ProfesionalHomeActivity : AppCompatActivity() {
     private val vM: ProfesionalHomeViewModel by viewModels()
     private val TAG_FRAGMENT_DETAIL = "detail_fragment_tag"
     private var detailFragment: DetailPatientFragment? = null
+    private lateinit var notificationPermission: Array<String>
 
     @Inject
     lateinit var profileUseCases: ProfileUseCases
@@ -57,12 +62,46 @@ class ProfesionalHomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProfesionalHomeBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
+
+        initArrayPermission()
+        verifyNotificationPermission()
         getViews()
         setListener()
         setRecyclerView()
         setSearch()
         addFragment()
         visibilityDetailFragment()
+    }
+
+    private fun initArrayPermission(){
+        notificationPermission = if(verifyIsApiVersionIsHigherThan33()){
+            arrayOf(android.Manifest.permission.POST_NOTIFICATIONS)
+        }else{
+            emptyArray()
+        }
+        if(notificationPermission.isNotEmpty()) {
+            verifyNotificationPermission()
+        }
+    }
+
+    private fun verifyNotificationPermission(){
+        if(!checkNotificationPermission()){
+            requestNotificationPermission()
+        }
+    }
+
+    private fun checkNotificationPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.POST_NOTIFICATIONS
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestNotificationPermission() {
+        ActivityCompat
+            .requestPermissions(this, notificationPermission,
+                NOTIFICATIONS_REQUEST_CODE
+            )
     }
 
     private fun visibilityDetailFragment() {
@@ -219,6 +258,37 @@ class ProfesionalHomeActivity : AppCompatActivity() {
             when (it?.isVisible) {
                 true -> supportFragmentManager.popBackStack()
                 else -> super.onBackPressed()
+            }
+        }
+    }
+
+    private fun verifyIsApiVersionIsHigherThan33(): Boolean{
+        return Build.VERSION.SDK_INT >=
+                Build.VERSION_CODES.TIRAMISU
+    }
+
+    private companion object {
+        private const val NOTIFICATIONS_REQUEST_CODE = 100
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        //handle permission(s) results
+
+        if(requestCode == NOTIFICATIONS_REQUEST_CODE) {
+            if(grantResults.isNotEmpty()) {
+                val notificationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED
+
+                if(notificationAccepted){
+                    Toast.makeText(this, "Gracias! Ahora recibirás notificaciones", Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(this, "Entendido, no te enviaremos notificaciones", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
