@@ -8,9 +8,9 @@ object TextToReadMocks {
 
         val text1 = TextToRead.Builder()
             .id(1)
-            .title("Trabalenguas Fabula")
+            .title("Trabalenguas Fábula")
             .text("""
-                Fabulas fabulosas hay
+                Fábulas fabulosas hay
                 en fabulosos fabularios,
                 fabuladores y fabulistas
                 hacen fábulas fabulosas

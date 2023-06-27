@@ -19,10 +19,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.text.HtmlCompat
 import com.airbnb.lottie.LottieAnimationView
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityLetsReadBinding
 import com.example.lexiapp.domain.model.TextToRead
+import com.example.lexiapp.ui.games.letsread.result.NegativeResultLetsReadActivity
+import com.example.lexiapp.ui.games.letsread.result.PositiveResultLetsReadActivity
 import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,6 +60,7 @@ class LetsReadActivity : AppCompatActivity() {
     private lateinit var btnReRecordAudio: MaterialButton
     private lateinit var btnShowResultsRecordAudio: MaterialButton
     private val vM: SpeechToTextViewModel by viewModels()
+    private val differenceVM: DifferenceViewModel by viewModels()
 
 
     private lateinit var recordAudioPermissions: Array<String>
@@ -416,7 +420,8 @@ class LetsReadActivity : AppCompatActivity() {
             // SEND AUDIO FILE TO ANALYSIS
             vM.transcription(audioPart)
             vM.transcription.observe(this) {
-                startResultActivity(originalText = textWithoutLineBreak, revisedText = it)
+                differenceVM.getDifference(originalText = textWithoutLineBreak, results = it)
+                manageResult()
             }
         }
     }
@@ -431,10 +436,20 @@ class LetsReadActivity : AppCompatActivity() {
        return textWithLineBreak.replace(System.getProperty("line.separator"), " ")
     }
 
-    private fun startResultActivity(originalText: String, revisedText: String) {
-        val intent = Intent(this, ResultActivity::class.java)
-        intent.putExtra("originalText", originalText)
-        intent.putExtra("results", revisedText)
+    private fun manageResult(){
+        differenceVM.difference.observe(this) {
+            val result = differenceVM.convertToText()
+            startResultActivity(result = result)
+        }
+    }
+
+    private fun startResultActivity(result: String) {
+        val intent = if(result == "Correct")
+            Intent(this, PositiveResultLetsReadActivity::class.java)
+        else Intent(this, NegativeResultLetsReadActivity::class.java)
+
+        intent.putExtra("results", result)
+        intent.putExtra("title", tvTextTitle.text)
         startActivity(intent)
     }
 

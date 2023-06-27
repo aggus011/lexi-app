@@ -63,7 +63,7 @@
         app:layout_constraintStart_toStartOf="@id/ivClaps"
         app:layout_constraintEnd_toEndOf="@id/ivClaps"
         app:layout_constraintBottom_toTopOf="@id/btnGoInit"
-        android:text="Ver palabras a ejercitar"
+        android:text="SEGUIR LEYENDO"
         android:textSize="30dp"
         android:layout_margin="20dp"
         android:backgroundTint="@color/purple"
