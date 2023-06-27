@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import com.example.lexiapp.data.model.toWhereIsTheLetterDataResult
 import com.example.lexiapp.domain.exceptions.OversizeException
+import com.example.lexiapp.domain.model.gameResult.ResultGame
 import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.example.lexiapp.domain.service.FireStoreService
 import com.example.lexiapp.domain.service.LetterService
@@ -13,7 +14,6 @@ import kotlin.random.Random
 
 class LetterGameUseCases @Inject constructor(
     private val service: LetterService,
-    private val db: FireStoreService,
     private val prefs: SharedPreferences
 ) {
     private val SPANISH_LANGUAGE = "es"
@@ -37,6 +37,4 @@ class LetterGameUseCases @Inject constructor(
         Log.v("SAVE_ANSWER_UC", "${result.success}")
         service.saveResult(result)
     }
-
-    private fun getRandomInt() = Random.nextInt(4, 7)
 }

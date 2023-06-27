@@ -42,6 +42,7 @@ class CorrectWordUseCases @Inject constructor(
     }
 
     private fun getRandomInt() = Random.nextInt(4, 7)
+
     suspend fun saveAnswer(result: CorrectWordGameResult) {
         result.email = prefs.getString("email", null).toString()
         service.saveResult(result)

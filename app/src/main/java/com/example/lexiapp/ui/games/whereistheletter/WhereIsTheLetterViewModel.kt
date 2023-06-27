@@ -3,12 +3,14 @@ package com.example.lexiapp.ui.games.whereistheletter
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
+import com.example.lexiapp.domain.service.FireStoreService
 import com.example.lexiapp.domain.useCases.LetterGameUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -54,14 +56,14 @@ class WhereIsTheLetterViewModel @Inject constructor(
         val success = validateAnswer()
         Log.v("SUCCES_ANSWER", "$success")
         viewModelScope.launch(Dispatchers.IO) {
-            val result= WhereIsTheLetterResult(
-                    email= "",
-                    mainLetter = letter.value!!,
-                    selectedLetter = getLetterWithPosition()!!,
-                    word = basicWord.value!!,
-                    success = success,
-                    date = null
-                )
+            val result = WhereIsTheLetterResult(
+                email = "",
+                mainLetter = letter.value!!,
+                selectedLetter = getLetterWithPosition()!!,
+                word = basicWord.value!!,
+                success = success,
+                date = null
+            )
             letterGameUseCases.saveWordInFirebase(result)
         }
     }
