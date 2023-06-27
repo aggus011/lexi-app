@@ -2,10 +2,6 @@ package com.example.lexiapp.data.network
 
 import android.graphics.Color
 import android.util.Log
-import com.example.lexiapp.data.model.CorrectWordDataResult
-import com.example.lexiapp.data.model.Game
-import com.example.lexiapp.data.model.LetsReadGameDataResult
-import com.example.lexiapp.data.model.WhereIsTheLetterDataResult
 import com.example.lexiapp.data.model.toCorrectWordGameResult
 import com.example.lexiapp.data.model.toWhereIsTheLetterResult
 import com.example.lexiapp.data.repository.categories_words.*
@@ -22,7 +18,6 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
@@ -406,14 +401,17 @@ class FireStoreServiceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getObjectives(email: String, lastMondayDate: String): List<Objective> {
+    override suspend fun getObjectives(email: String, lastMondayDate: String, listener: (List<Objective>) -> Unit) {
         val document = objectivesCollection.document(email).collection(lastMondayDate)
-        return try {
-            val snapshot = document.get().await()
-            if (!snapshot.isEmpty) {
+        val registration = document.addSnapshotListener { snapshot, exception ->
+            try {
+                if (exception != null || snapshot == null) {
+                    listener(emptyList())
+                    return@addSnapshotListener
+                }
+
                 val objectives = mutableListOf<Objective>()
-                val objectiveMap = snapshot.documents
-                objectiveMap.forEach { documentSnapshot ->
+                for (documentSnapshot in snapshot.documents) {
                     val objectiveFields = documentSnapshot.data
                     if (objectiveFields is Map<*, *>) {
                         val id = objectiveFields["id"] as Long?
@@ -425,15 +423,14 @@ class FireStoreServiceImpl @Inject constructor(
                         val type = objectiveFields["type"] as String?
                         val completed = objectiveFields["completed"] as Boolean?
                         val date = objectiveFields["date"] as String?
-                        objectives.add(Objective(id, title, description, progress, goal, game, type,completed, date))
+                        objectives.add(Objective(id, title, description, progress, goal, game, type, completed, date))
                     }
                 }
-                objectives
-            } else {
-                emptyList()
+
+                listener(objectives)
+            } catch (e: Exception) {
+                listener(emptyList())
             }
-        } catch (e: Exception) {
-            emptyList()
         }
     }
 
@@ -689,13 +686,19 @@ class FireStoreServiceImpl @Inject constructor(
                     if (objectiveFields is Map<*, *>) {
                         val gameValue = objectiveFields["game"] as String?
                         val typeValue = objectiveFields["type"] as String?
-                        val goal = objectiveFields["goal"] as Long?
+                        val goal = objectiveFields["goal"] as Long
                         val progress = objectiveFields["progress"] as Long?
-                        val completed = objectiveFields["completed"] as Boolean?
+                        var completed = objectiveFields["completed"] as Boolean?
                         if (gameValue == game && typeValue == type && goal != progress && !completed!!) {
                             val updatedProgress = (objectiveFields["progress"] as Long?)?.toInt()?.plus(1)
                             if (updatedProgress != null) {
-                                documentSnapshot.reference.update("progress", updatedProgress).await()
+                                if (updatedProgress >= goal) {
+                                    completed = true
+                                }
+                                documentSnapshot.reference.update(
+                                    "progress", updatedProgress.toLong(),
+                                    "completed", completed
+                                ).await()
                             }
                         }
                     }

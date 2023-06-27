@@ -53,11 +53,12 @@ class ObjectivesViewModel @Inject constructor(
         val lastMondayDate= getLastMondayDate()
         if (uid != null) {
             viewModelScope.launch {
-                val objectives = fireStoreService.getObjectives(uid, lastMondayDate)
-                _objectives.value = objectives
+                fireStoreService.getObjectives(uid, lastMondayDate) { objectives ->
+                    _objectives.value = objectives
 
-                val daysLeft = ChronoUnit.DAYS.between(LocalDateTime.now(ZoneId.of("America/Argentina/Buenos_Aires")), nextMondayDateTime)
-                _daysLeft.value = daysLeft.toInt()
+                    val daysLeft = ChronoUnit.DAYS.between(LocalDateTime.now(ZoneId.of("America/Argentina/Buenos_Aires")), nextMondayDateTime)
+                    _daysLeft.value = daysLeft.toInt()
+                }
             }
         }
     }
@@ -65,7 +66,7 @@ class ObjectivesViewModel @Inject constructor(
     fun saveObjectivesToFirestore(email: String) {
         val lastMondayDate= getLastMondayDate()
         viewModelScope.launch {
-            val objectivesExist = fireStoreService.checkObjectivesExist(email,lastMondayDate)
+            val objectivesExist = fireStoreService.checkObjectivesExist(email, lastMondayDate)
             if (!objectivesExist) {
                 val today = LocalDate.now()
                 val monday = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
