@@ -15,4 +15,5 @@ ResultGamesService {
 
     suspend fun getLRResults(email: String): Flow<List<LetsReadGameResult>>
 
+    suspend fun getTSResults(email: String): Flow<List<String>>
 }

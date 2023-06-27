@@ -78,6 +78,11 @@ interface FireStoreService {
     suspend fun getWordCategories(email: String): List<String>
 
     suspend fun updateObjectiveProgress(game: String, type: String)
-    fun getLastResultsLetsReadGame(email: String): Flow<List<LetsReadGameResult>>
+
+    suspend fun getLastResultsLetsReadGame(email: String): Flow<List<LetsReadGameResult>>
+
+    suspend fun getLastResultsTextScan(email: String): Flow<List<String>>
+
+    suspend fun saveTextScanResult(email: String)
 
 }

@@ -111,6 +111,8 @@
     <string name="LR_title">¡Vamos a Leer!</string>
     <string name="dont_give_up_large_message">AUNQUE NO ESTÉ DEL TODO CORRECTO,¡ÁNIMO! ¡YA CASI LO LOGRAS!</string>
     <string name="dont_have_progress">no tiene progresos esta semana</string>
+    <string name="not_use_seven_weeks">no se há usado en las últimas 7 semanas</string>
+    <string name="total_scans">Total histórico de escanéos:</string>
     <plurals name="days_left">
         <item quantity="one">Día Restante: %d </item>
         <item quantity="other">Días Restantes: %d </item>

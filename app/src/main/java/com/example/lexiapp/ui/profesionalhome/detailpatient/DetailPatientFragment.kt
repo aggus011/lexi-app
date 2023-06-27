@@ -45,7 +45,7 @@ class DetailPatientFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setVisibilityCards()
+        //setVisibilityCards()
         setObservers()
     }
 
@@ -67,6 +67,35 @@ class DetailPatientFragment : Fragment() {
         setWITLObservers()
         setCWObservers()
         setLRObservers()
+        setTSObservers()
+    }
+
+    private fun setTSObservers() {
+        viewModel.allDataTS.observe(viewLifecycleOwner){ (total, dataMap)->
+            Log.v("LOG_TEXT_SCANN_FRAGMENT", "${total}//${dataMap.keys}//${dataMap.values}")
+            Log.v("LOG_TEXT_SCANN_FRAGMENT", "${dataMap.entries.size}")
+            setVisibilityTSCard(total, dataMap)
+        }
+    }
+
+    private fun setVisibilityTSCard(total: Int, dataMap: Map<String, Int>) {
+        Log.v("LOG_TEXT_SCANN_FRAGMENT", "${total}")
+        if(total>0 && dataMap.entries.isNotEmpty()){
+            binding.txtValueTotalUsesTS.text = "$total"
+            binding.txtNotUseTS.visibility = View.GONE
+            binding.txtTitleGraphTS.visibility = View.VISIBLE
+            binding.barChartTS.visibility = View.VISIBLE
+            binding.cvMetricsTS.visibility = View.VISIBLE
+            setTSGraph(dataMap)
+            return
+        }
+        if (total==0){
+            binding.cvMetricsTS.visibility = View.GONE
+        }else{
+            binding.txtNotUseTS.visibility = View.VISIBLE
+            binding.txtTitleGraphTS.visibility = View.GONE
+            binding.barChartTS.visibility = View.GONE
+        }
     }
 
     private fun setLRObservers() {
@@ -274,6 +303,49 @@ class DetailPatientFragment : Fragment() {
         } catch (e: Exception) {
             Log.d(TAG, "Fallo2: ${e.javaClass}")
         }
+    }
+
+    private fun setTSGraph(dataMap: Map<String, Int>){
+        try{
+            Log.v("LOG_TEXT_SCANN_FRAGMENT_GRAPH", "${dataMap.keys}")
+            Log.v("LOG_TEXT_SCANN_FRAGMENT_GRAPH", "${dataMap.values}")
+            val barChart = binding.barChartTS
+            var countSevenWeeks = 0
+            var maxCount = 0
+            val entries = mutableListOf<BarEntry>()
+            val labels = mutableListOf<String>()
+            dataMap.forEach { (date , count) ->
+                if (maxCount < count) maxCount = count
+                countSevenWeeks += count
+                entries.add(BarEntry(entries.size.toFloat(), count.toFloat()))
+                labels.add(date)
+            }
+            binding.txtTitleGraphTS.text = "Úso de las últimas 5 semanas ($countSevenWeeks)"
+            val barDataSet = BarDataSet(entries, "Errores por día")
+            barDataSet.setColors(Color.RED)
+            barDataSet.valueTextSize = 12f
+            val barData = BarData(barDataSet)
+            val granularity = if ((maxCount / 10) > 1) maxCount / 10 else 1
+            barData.isHighlightEnabled = false
+            barChart.data = barData
+            barChart.setFitBars(true)
+            barChart.animateY(300)
+            barChart.setDrawValueAboveBar(true)
+            barChart.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
+            barChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+            barChart.axisLeft.axisMinimum = 0f
+            barChart.axisLeft.axisMaximum =
+                if (maxCount > 1) (maxCount + granularity).toFloat() else maxCount.toFloat()
+            barChart.axisLeft.granularity = granularity.toFloat()
+            barChart.axisRight.isEnabled = false
+            barChart.legend.isEnabled = true
+            barChart.xAxis.setDrawGridLines(false)
+            barChart.setScaleEnabled(false)
+            barChart.isDragEnabled = false
+            barChart.description = null
+
+            barChart.invalidate()
+        }catch (e: Exception){}
     }
 
     private fun setGraphsVisibility(

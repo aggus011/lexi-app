@@ -1,5 +1,6 @@
 package com.example.lexiapp.domain.useCases
 
+import android.util.Log
 import com.example.lexiapp.domain.model.gameResult.ResultGame
 import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.example.lexiapp.domain.service.ResultGamesService
@@ -7,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ResultGamesUseCases @Inject constructor(
@@ -16,12 +18,14 @@ class ResultGamesUseCases @Inject constructor(
     suspend fun getWhereIsTheLetterResults(email: String) =
         service.getWhereIsTheLetterResults(email)
 
-
     suspend fun getWhereIsCWResults(email: String) =
         service.getCorrectWordResults(email)
 
     suspend fun getLRResults(email: String) =
         service.getLRResults(email)
+
+    suspend fun getTSResults(email: String) =
+        service.getTSResults(email)
 
     fun getResultsLastWeek(results: List<ResultGame>): Map<String, Triple<Int, Float, Int>> {
         val calendar = Calendar.getInstance()
@@ -79,5 +83,45 @@ class ResultGamesUseCases @Inject constructor(
                 calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR)
     }
 
+    fun generateWeeklyMap(dateList: List<String>): Pair<Int,Map<String, Int>> {
+        Log.v("LOG_TEXT_SCANN_UC_WEEKLY", "${dateList}")
+        val currentDate = System.currentTimeMillis()
+        val sevenWeeksAgo = currentDate - TimeUnit.DAYS.toMillis(7 * 5)
+        val filteredDates = dateList
+            .filter { it.toLong() >= sevenWeeksAgo }
+            .sorted()
 
+        val weeklyMap = mutableMapOf<String, Int>()
+
+        for (date in filteredDates) {
+            val weekKey = getWeekFromDate(date.toLong(), currentDate)
+            val count = weeklyMap.getOrDefault(weekKey, 0)
+            weeklyMap[weekKey] = count + 1
+        }
+
+        return Pair(dateList.size, weeklyMap)
+    }
+
+    private fun getWeekFromDate(date: Long, currentDate: Long): String {
+        val dateFormat = SimpleDateFormat("dd/MM", Locale.getDefault())
+
+        val dateCalendar = Calendar.getInstance().apply {
+            timeInMillis = date
+        }
+
+        val currentCalendar = Calendar.getInstance().apply {
+            timeInMillis = currentDate
+        }
+
+        val startOfWeek = currentCalendar.clone() as Calendar
+        startOfWeek.add(Calendar.DAY_OF_YEAR, -startOfWeek.get(Calendar.DAY_OF_WEEK) + 2)
+
+        val endOfWeek = startOfWeek.clone() as Calendar
+        endOfWeek.add(Calendar.DAY_OF_YEAR, 6)
+
+        val weekStartDate = dateFormat.format(startOfWeek.time)
+        val weekEndDate = dateFormat.format(endOfWeek.time)
+
+        return "$weekStartDate - $weekEndDate"
+    }
 }

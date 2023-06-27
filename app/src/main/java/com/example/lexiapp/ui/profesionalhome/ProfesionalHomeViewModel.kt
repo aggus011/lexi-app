@@ -74,6 +74,9 @@ class ProfesionalHomeViewModel @Inject constructor(
     private var _weekPieWITL = MutableLiveData<Pair<Float, Float>>()
     val weekPieWITL: LiveData<Pair<Float, Float>> = _weekPieWITL
 
+    private var _allDataTS = MutableLiveData<Pair<Int,Map<String, Int>>>()
+    val allDataTS: LiveData<Pair<Int,Map<String, Int>>> = _allDataTS
+
     init {
         _wasNotPlayedWITL.value = false
         _wasNotPlayedCW.value = false
@@ -128,6 +131,20 @@ class ProfesionalHomeViewModel @Inject constructor(
             }
             this.launch {
                 setLRStats(patient)
+            }
+            this.launch {
+                setTSStats(patient)
+            }
+        }
+    }
+
+    private suspend fun setTSStats(patient: User) {
+        resultGamesUseCases.getTSResults(patient.email).collect{
+            _allDataTS.value = if (it.isNotEmpty()) {
+                Log.v("LOG_TEXT_SCANN_VM", "${it}")
+                resultGamesUseCases.generateWeeklyMap(it)
+            }else{
+                Pair(0,mapOf())
             }
         }
     }
