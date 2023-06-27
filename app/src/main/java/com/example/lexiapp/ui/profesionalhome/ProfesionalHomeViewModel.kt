@@ -33,10 +33,9 @@ class ProfesionalHomeViewModel @Inject constructor(
 
     private var _errorWordsLR = MutableLiveData<List<String>>()
     val errorWordsLR = _errorWordsLR as LiveData<List<String>>
+
     private var _totalTimesPlayedLR = MutableLiveData<Int>()
     val totalTimesPlayedLR = _totalTimesPlayedLR as LiveData<Int>
-    private var _totalTimesSuccessLR = MutableLiveData<Int>()
-    val totalTimesSuccessLR = _totalTimesSuccessLR as LiveData<Int>
 
     private var _hardWordsCW = MutableLiveData<List<String>>()
     val hardWordsCW = _hardWordsCW as LiveData<List<String>>
@@ -152,13 +151,10 @@ class ProfesionalHomeViewModel @Inject constructor(
 
     private fun setWrongWordsLR(results: List<LetsReadGameResult>) {
         val words = mutableListOf<String>()
-        var timesSuccess = 0
         for (result in results) {
             words.addAll(result.wrongWords)
-            if (result.success) timesSuccess++
         }
         _errorWordsLR.value = words
-        _totalTimesSuccessLR.value = timesSuccess
     }
 
     private suspend fun setCWStats(patient: User) {
