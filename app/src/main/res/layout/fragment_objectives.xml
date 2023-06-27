@@ -35,6 +35,16 @@
             tools:textColor="@color/black"
             android:textAppearance="@style/title"/>
 
+        <ImageButton
+            android:id="@+id/imbCompletedObjectives"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/ic_cup"
+            android:backgroundTint="@color/light_purple"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
         <TextView
             android:id="@+id/tvObjectivesTitle"
             android:layout_width="wrap_content"

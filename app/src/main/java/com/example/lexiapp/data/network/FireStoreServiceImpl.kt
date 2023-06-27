@@ -1,6 +1,10 @@
 package com.example.lexiapp.data.network
 
 import android.util.Log
+import com.example.lexiapp.data.model.CorrectWordDataResult
+import com.example.lexiapp.data.model.Game
+import com.example.lexiapp.data.model.LetsReadGameDataResult
+import com.example.lexiapp.data.model.WhereIsTheLetterDataResult
 import com.example.lexiapp.data.model.toCorrectWordGameResult
 import com.example.lexiapp.data.model.toWhereIsTheLetterResult
 import com.example.lexiapp.data.repository.categories_words.*
@@ -20,6 +24,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.ZoneId
@@ -54,6 +59,8 @@ class FireStoreServiceImpl @Inject constructor(
         { email: String -> firebase.firestore.collection("error_words").document(email) }
     private val db = firebase.firestore
     private val categoryCollection = firebase.firestore.collection("category")
+    private val completedObjectivesCollectionReference =
+        { uid: String -> firebase.firestore.collection("history_objectives/${uid}/objectives") }
     private val firebaseCloudMessaging = firebase.firebaseMessaging
 
     override suspend fun saveAccount(user: User) {
@@ -711,6 +718,7 @@ class FireStoreServiceImpl @Inject constructor(
                             if (updatedProgress != null) {
                                 if (updatedProgress >= goal) {
                                     completed = true
+                                    saveCompleteObjectives(userId ,goal, objectiveFields["title"] as String)
                                 }
                                 documentSnapshot.reference.update(
                                     "progress", updatedProgress.toLong(),
@@ -722,6 +730,40 @@ class FireStoreServiceImpl @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun saveCompleteObjectives(uid: String,count: Long, title: String) {
+        val data = mapOf(
+            "title" to title,
+            "count" to count
+        )
+        completedObjectivesCollectionReference(uid)
+            .document(System.currentTimeMillis().toString()).set(data)
+    }
+
+    override suspend fun getObjectivesHistory(uid: String) = callbackFlow {
+        val listener =
+            completedObjectivesCollectionReference(uid).addSnapshotListener { querySnapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+                val completeObjectives = mutableListOf<MiniObjective>()
+                for (document in querySnapshot!!.documents) {
+                    val date = document.id
+                    val data = document.data
+                    completeObjectives.add(
+                        MiniObjective(
+                            date = date,
+                            title = data?.get("title")!! as String,
+                            count = data?.get("count")!! as Long
+                        )
+                    )
+                }
+                trySend(completeObjectives.toList()).isSuccess
+            }
+
+        awaitClose { listener.remove() }
     }
 
     companion object {

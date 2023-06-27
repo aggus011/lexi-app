@@ -75,8 +75,10 @@ object InterfaceModule {
     }
 
     @Provides
-    fun getObjectiveService(): ObjectivesService {
-        return ObjectivesServiceImpl()
+    fun getObjectiveService(
+        firestoreService: FireStoreServiceImpl
+    ): ObjectivesService {
+        return ObjectivesServiceImpl(firestoreService)
     }
 
     @Provides

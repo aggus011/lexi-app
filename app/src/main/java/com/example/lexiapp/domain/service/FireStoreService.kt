@@ -85,4 +85,6 @@ interface FireStoreService {
 
     suspend fun saveTextScanResult(email: String)
 
+    suspend fun getObjectivesHistory(uid: String): Flow<List<MiniObjective>>
+
 }
