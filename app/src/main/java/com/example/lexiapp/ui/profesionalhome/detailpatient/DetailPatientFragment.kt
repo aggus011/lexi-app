@@ -162,15 +162,17 @@ class DetailPatientFragment : Fragment() {
             binding.pieWeekChartWITL.id -> binding.pieWeekChartWITL
             binding.pieTotalChartCW.id -> binding.pieTotalChartCW
             binding.pieWeekChartCW.id -> binding.pieWeekChartCW
+            binding.pieWeekChartLR.id -> binding.pieWeekChartLR
+            binding.pieTotalChartLR.id -> binding.pieTotalChartLR
             else -> null
         } ?: return
         try {
             when (idChart) {
-                binding.pieTotalChartWITL.id, binding.pieTotalChartCW.id ->
+                binding.pieTotalChartWITL.id, binding.pieTotalChartCW.id, binding.pieTotalChartLR.id ->
                     titleGraph.text =
                         "${getString(R.string.total_progress)} (${(total + errorPercentage).toInt()})"
 
-                binding.pieWeekChartWITL.id, binding.pieWeekChartCW.id ->
+                binding.pieWeekChartWITL.id, binding.pieWeekChartCW.id, binding.pieWeekChartLR.id ->
                     titleGraph.text =
                         "${getString(R.string.progress_last_week)} (${(total + errorPercentage).toInt()})"
             }
@@ -201,6 +203,7 @@ class DetailPatientFragment : Fragment() {
         val barChart = when (idChart) {
             binding.barChartWITL.id -> binding.barChartWITL
             binding.barChartCW.id -> binding.barChartCW
+            binding.barChartLR.id -> binding.barChartLR
             else -> null
         } ?: return
         try {
