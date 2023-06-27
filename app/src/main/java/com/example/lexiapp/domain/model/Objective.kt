@@ -36,3 +36,9 @@ class Objective(
         fun build() = Objective(id, title, description, progress, goal, game, type, completed, date)
     }
 }
+
+data class MiniObjective(
+    var date: String,
+    val title: String,
+    val count: Long
+)

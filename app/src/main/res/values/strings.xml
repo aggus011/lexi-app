@@ -109,6 +109,8 @@
     <string name="write_note">Escribe tu nota aquí</string>
     <string name="save_note">Guardar nota</string>
     <string name="dont_give_up_large_message">AUNQUE NO ESTÉ DEL TODO CORRECTO,¡ÁNIMO! ¡YA CASI LO LOGRAS!</string>
+    <string name="completed_objective">Mis Objetivos Cumplidos</string>
+    <string name="dont_objetives_complete">todavía no tienes objetivos cumplidos de semanas anteriores</string>
     <plurals name="days_left">
         <item quantity="one">Día Restante: %d </item>
         <item quantity="other">Días Restantes: %d </item>

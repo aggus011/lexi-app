@@ -79,4 +79,6 @@ interface FireStoreService {
 
     suspend fun updateObjectiveProgress(game: String, type: String)
 
+    suspend fun getObjectivesHistory(uid: String): Flow<List<MiniObjective>>
+
 }

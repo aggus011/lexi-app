@@ -2,6 +2,7 @@ package com.example.lexiapp.ui.objectives
 
 import ObjectivesAdapter
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -21,6 +22,7 @@ import android.util.Log
 import android.widget.Button
 import com.example.lexiapp.data.network.FireStoreServiceImpl
 import com.example.lexiapp.domain.model.Objective
+import com.example.lexiapp.ui.games.letsread.LetsReadActivity
 
 @AndroidEntryPoint
 class ObjectivesFragment : Fragment() {
@@ -43,6 +45,13 @@ class ObjectivesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
         loadObjectivesWithDelay()
+        setListener()
+    }
+
+    private fun setListener() {
+        binding.imbCompletedObjectives.setOnClickListener {
+            startActivity(Intent(activity, CompletedObjectiveActivity::class.java))
+        }
     }
 
     private fun setUpRecyclerView() {
