@@ -74,7 +74,7 @@ class DetailPatientFragment : Fragment() {
                     View.GONE
                 }
         }
-        viewModel.totalPieCW.observe(viewLifecycleOwner) { (total, percentError) ->
+        viewModel.totalPieLR.observe(viewLifecycleOwner) { (total, percentError) ->
             setPieGraph(
                 total,
                 percentError,
