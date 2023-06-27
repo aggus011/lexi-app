@@ -1,17 +1,13 @@
 package com.example.lexiapp.ui.objectives
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import androidx.activity.viewModels
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lexiapp.databinding.ActivityCompletedObjectiveBinding
 import com.example.lexiapp.ui.adapter.ObjectiveAdapter
-import com.example.lexiapp.ui.adapter.TextAdapter
-import com.example.lexiapp.ui.games.letsread.LetsReadActivity
-import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,6 +29,8 @@ class CompletedObjectiveActivity : AppCompatActivity() {
 
     private fun suscribeToVM() {
         vM.completedObjectives.observe(this) { objectives ->
+            if (objectives.isEmpty()) binding.txtNotHaveObjectives.visibility = View.VISIBLE
+                else binding.txtNotHaveObjectives.visibility = View.GONE
             binding.rvCompleteObjectives.adapter = ObjectiveAdapter(objectives)
         }
     }

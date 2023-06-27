@@ -608,7 +608,7 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
                 }
                 val completeObjectives = mutableListOf<MiniObjective>()
                 for (document in querySnapshot!!.documents) {
-                    val date = formatDate(document.id)
+                    val date = document.id
                     val data = document.data
                     completeObjectives.add(
                         MiniObjective(
@@ -622,12 +622,6 @@ class FireStoreServiceImpl @Inject constructor(firebase: FirebaseClient) : FireS
             }
 
         awaitClose { listener.remove() }
-    }
-
-    private fun formatDate(timeInMillis: String): String {
-        val date = Date(timeInMillis.toLong())
-        val format = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        return format.format(date)
     }
 
     companion object {

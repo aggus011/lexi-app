@@ -38,7 +38,7 @@ class Objective(
 }
 
 data class MiniObjective(
-    val date: String,
+    var date: String,
     val title: String,
     val count: Long
 )

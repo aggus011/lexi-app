@@ -56,4 +56,18 @@
         app:layout_constraintVertical_bias="0.0"
         tools:listitem="@layout/item_complete_objective" />
 
+    <TextView
+        android:id="@+id/txtNotHaveObjectives"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dont_objetives_complete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center"
+        android:lines="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvObjectivesTitle"
+        android:textAppearance="@style/subtitle"
+        android:layout_marginTop="60dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

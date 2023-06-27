@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -19,6 +20,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.time.temporal.TemporalAdjusters
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,7 +46,7 @@ class ObjectivesViewModel @Inject constructor(
     private fun listenerCompleteObjectives() {
         viewModelScope.launch {
             objectivesUseCases.listenerCompleteObjectives(FirebaseAuth.getInstance().currentUser!!.uid).collect{
-                _completedObjectives.value = it
+                _completedObjectives.value = objectivesUseCases.filterBeforeActualWeek(it)
             }
         }
     }

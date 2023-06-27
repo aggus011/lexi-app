@@ -4,11 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lexiapp.databinding.ItemCompleteObjectiveBinding
-import com.example.lexiapp.databinding.ItemNoteBinding
 import com.example.lexiapp.domain.model.MiniObjective
-import com.example.lexiapp.domain.model.Note
-import java.text.SimpleDateFormat
-import java.util.*
 
 class ObjectiveAdapter(
     val objectives: List<MiniObjective>
