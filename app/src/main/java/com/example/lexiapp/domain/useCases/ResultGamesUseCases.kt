@@ -20,7 +20,8 @@ class ResultGamesUseCases @Inject constructor(
     suspend fun getWhereIsCWResults(email: String) =
         service.getCorrectWordResults(email)
 
-    fun getLRResults(email: String) = service.getLRResults(email)
+    suspend fun getLRResults(email: String) =
+        service.getLRResults(email)
 
     fun getResultsLastWeek(results: List<ResultGame>): Map<String, Triple<Int, Float, Int>> {
         val calendar = Calendar.getInstance()

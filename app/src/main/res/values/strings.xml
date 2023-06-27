@@ -110,6 +110,7 @@
     <string name="save_note">Guardar nota</string>
     <string name="LR_title">¡Vamos a Leer!</string>
     <string name="dont_give_up_large_message">AUNQUE NO ESTÉ DEL TODO CORRECTO,¡ÁNIMO! ¡YA CASI LO LOGRAS!</string>
+    <string name="dont_have_progress">no tiene progresos esta semana</string>
     <plurals name="days_left">
         <item quantity="one">Día Restante: %d </item>
         <item quantity="other">Días Restantes: %d </item>

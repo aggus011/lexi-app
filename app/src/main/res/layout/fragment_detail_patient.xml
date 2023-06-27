@@ -193,6 +193,20 @@
                         app:layout_constraintTop_toBottomOf="@id/pieTotalChartWITL" />
 
                     <TextView
+                        android:id="@+id/txtNotHaveWeekProgresWITL"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="10dp"
+                        android:gravity="center"
+                        android:text="@string/dont_have_progress"
+                        android:textColor="@color/black"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/txtLettersDificultsWITL" />
+
+                    <TextView
                         android:id="@+id/txtValueLettersDificultsWITL"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -314,6 +328,20 @@
                         app:layout_constraintTop_toTopOf="@id/txtLettersDificultsCW" />
 
                     <TextView
+                        android:id="@+id/txtNotHaveWeekProgresCW"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="10dp"
+                        android:gravity="center"
+                        android:text="@string/dont_have_progress"
+                        android:textColor="@color/black"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/txtLettersDificultsCW" />
+
+                    <TextView
                         android:id="@+id/txtTitleGraphCW"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -425,6 +453,20 @@
                         app:layout_constraintBottom_toBottomOf="@id/txtLettersDificultsLR"
                         app:layout_constraintStart_toEndOf="@id/txtLettersDificultsLR"
                         app:layout_constraintTop_toTopOf="@id/txtLettersDificultsLR" />
+
+                    <TextView
+                        android:id="@+id/txtNotHaveWeekProgresLR"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="10dp"
+                        android:gravity="center"
+                        android:text="@string/dont_have_progress"
+                        android:textColor="@color/black"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/txtLettersDificultsLR" />
 
                     <TextView
                         android:id="@+id/txtTitleGraphLR"

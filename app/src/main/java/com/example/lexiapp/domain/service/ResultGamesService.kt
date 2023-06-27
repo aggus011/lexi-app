@@ -12,6 +12,7 @@ ResultGamesService {
     suspend fun getWhereIsTheLetterResults(email: String): Flow<List<WhereIsTheLetterResult>>
 
     suspend fun getCorrectWordResults(email: String): Flow<List<CorrectWordGameResult>>
-    fun getLRResults(email: String): Flow<List<LetsReadGameResult>>
+
+    suspend fun getLRResults(email: String): Flow<List<LetsReadGameResult>>
 
 }
