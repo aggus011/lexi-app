@@ -6,8 +6,6 @@ import com.example.lexiapp.data.model.WhereIsTheLetterDataResult
 import com.example.lexiapp.domain.model.*
 import com.example.lexiapp.domain.model.gameResult.CorrectWordGameResult
 import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
-import com.example.lexiapp.domain.model.*
-import com.example.lexiapp.domain.model.gameResult.LetsReadGameResult
 import com.google.firebase.firestore.DocumentReference
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
@@ -81,4 +79,6 @@ interface FireStoreService {
 
     suspend fun getObjectivesHistory(uid: String): Flow<List<MiniObjective>>
 
+    suspend fun getIncompleteGameNames(email: String, lastMondayDate: String): List<String>
+    suspend fun increaseGoalForGames(email: String, games: List<String>)
 }

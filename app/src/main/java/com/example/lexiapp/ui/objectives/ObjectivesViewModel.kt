@@ -10,9 +10,7 @@ import com.example.lexiapp.domain.useCases.ObjectivesUseCases
 import com.example.lexiapp.domain.service.FireStoreService
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -20,7 +18,6 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.time.temporal.TemporalAdjusters
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -80,16 +77,38 @@ class ObjectivesViewModel @Inject constructor(
     }
 
     fun saveObjectivesToFirestore(email: String) {
-        val lastMondayDate= getLastMondayDate()
+        val lastMondayDate= getMondayDateOfPreviousWeeks(0)
         viewModelScope.launch {
             val objectivesExist = fireStoreService.checkObjectivesExist(email, lastMondayDate)
             if (!objectivesExist) {
                 val today = LocalDate.now()
                 val monday = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
                 val objectives = objectivesUseCases.getObjectives(monday)
-
                 fireStoreService.saveObjectives(email, objectives ?: emptyList())
+
+                val loadObjectivesFromTwoWeeksAgo = getMondayDateOfPreviousWeeks(1)
+                val lastOjectivesExist =
+                    fireStoreService.checkObjectivesExist(email, loadObjectivesFromTwoWeeksAgo)
+                if (lastOjectivesExist) {
+                    val incompleteGames = fireStoreService.getIncompleteGameNames(email,loadObjectivesFromTwoWeeksAgo)
+                    fireStoreService.increaseGoalForGames(email, incompleteGames)
+                }
             }
         }
     }
+
+
+
+
+    private fun getMondayDateOfPreviousWeeks(weeks: Long): String {
+        val timeZone = ZoneId.of("America/Argentina/Buenos_Aires")
+        val currentDate = LocalDate.now(timeZone)
+        val previousMonday = currentDate
+            .minusWeeks(weeks)
+            .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+        val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+        return previousMonday.format(dateFormatter)
+    }
+
+
 }
