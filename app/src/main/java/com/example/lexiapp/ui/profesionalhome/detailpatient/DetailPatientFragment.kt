@@ -311,20 +311,20 @@ class DetailPatientFragment : Fragment() {
             Log.v("LOG_TEXT_SCANN_FRAGMENT_GRAPH", "${dataMap.keys}")
             Log.v("LOG_TEXT_SCANN_FRAGMENT_GRAPH", "${dataMap.values}")
             val barChart = binding.barChartTS
-            var countSevenWeeks = 0
+            var countWeek = 0
             var maxCount = 0
             val entries = mutableListOf<BarEntry>()
             val labels = mutableListOf<String>()
-            val historicUses = dataMap.values.sum()
             dataMap.forEach { (date, count) ->
                 if (maxCount < count) maxCount = count
-                countSevenWeeks += count
+                countWeek += count
                 entries.add(BarEntry(entries.size.toFloat(), count.toFloat()))
                 labels.add(date)
             }
-            binding.txtTitleGraphTS.text = "Úso de las últimas 5 semanas ($countSevenWeeks)"
-            val barDataSet = BarDataSet(entries, "Errores por día")
-            barDataSet.setColors(Color.RED)
+            labels[labels.lastIndex] = "Hoy"
+            binding.txtTitleGraphTS.text = "Úso de la última semana ($countWeek)"
+            val barDataSet = BarDataSet(entries, "Escanéos por día")
+            barDataSet.setColors(Color.CYAN)
             barDataSet.valueTextSize = 12f
             val barData = BarData(barDataSet)
             val granularity = if ((maxCount / 10) > 1) maxCount / 10 else 1

@@ -1,14 +1,9 @@
 package com.example.lexiapp.domain.useCases
 
-import android.util.Log
 import com.example.lexiapp.domain.model.gameResult.ResultGame
-import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.example.lexiapp.domain.service.ResultGamesService
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ResultGamesUseCases @Inject constructor(
@@ -85,26 +80,39 @@ class ResultGamesUseCases @Inject constructor(
     }
 
     fun generateWeeklyMap(dateList: List<String>): Pair<Int, Map<String, Int>> {
-        val currentDate = System.currentTimeMillis()
-
-        val results = getCountForWeeks(dateList, currentDate)
+        val results = getScansLastWeek(dateList)
         return Pair(dateList.size, results)
     }
 
-    private fun getCountForWeeks(resultsList: List<String>, dateRef: Long): Map<String, Int> {
-        val oneWeekLess = dateRef - TimeUnit.DAYS.toMillis(7)
-        val bucleCount = (System.currentTimeMillis() - oneWeekLess) / (24 * 7 * 60 * 60 * 1000)
-        val restList = resultsList.filter { it.toLong() < oneWeekLess }
-        val result = mutableMapOf<String, Int>()
-        val actualList = resultsList.filter {
-            it.toLong() >= oneWeekLess
-        }.toMutableList()
-        result[getWeekFromDate(oneWeekLess, dateRef)] = actualList.size
-        if (bucleCount < 5) {
-            result.putAll(getCountForWeeks(restList, oneWeekLess))
+    private fun getScansLastWeek(allScans: List<String>): Map<String, Int>{
+        val calendar = Calendar.getInstance()
+        val dateKeysMap = sortedMapOf<String, Int>()
+        val resultsLastWeek = filterScansByWeek(allScans)
+        for (i in 0 until 7) {
+            val currentDate = calendar.time
+            val filteredResults = resultsLastWeek.filter { scanDate ->
+                val resultDate = convertStringToDate(scanDate)
+                isSameDay(resultDate, currentDate)
+            }
+            val totalDayCount = filteredResults.size
+            dateKeysMap[formatDateToString(currentDate)] = totalDayCount
+            calendar.add(Calendar.DAY_OF_YEAR, -1)
         }
-        return result
+        return dateKeysMap.toMap()
     }
+
+    private fun filterScansByWeek(allScans: List<String>): List<String> {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.WEEK_OF_YEAR, -1)
+        val filteredResults = allScans.filter { scanDate ->
+            val resultDate = Date(scanDate.toLong())
+            resultDate.after(calendar.time)
+        }
+        return filteredResults
+    }
+
+
+
 
     private fun getWeekFromDate(date: Long, currentDate: Long): String {
         val dateFormat = SimpleDateFormat("dd/MM", Locale.getDefault())
@@ -120,6 +128,6 @@ class ResultGamesUseCases @Inject constructor(
         val weekStartDate = dateFormat.format(dateCalendar.time)
         val weekEndDate = dateFormat.format(currentCalendar.time)
 
-        return "$weekStartDate - $weekEndDate"
+        return "$weekStartDate-$weekEndDate"
     }
 }

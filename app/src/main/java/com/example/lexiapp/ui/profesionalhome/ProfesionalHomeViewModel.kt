@@ -141,9 +141,11 @@ class ProfesionalHomeViewModel @Inject constructor(
     private suspend fun setTSStats(patient: User) {
         resultGamesUseCases.getTSResults(patient.email).collect{
             _allDataTS.value = if (it.isNotEmpty()) {
-                resultGamesUseCases.generateWeeklyMap(it)
+                val results = resultGamesUseCases.generateWeeklyMap(it)
+                Log.v("LOG_WEEKLY_MAP_VM", "${results}")
+                results
             }else{
-                Pair(0,mapOf())
+                Pair(0, LinkedHashMap())
             }
         }
     }
