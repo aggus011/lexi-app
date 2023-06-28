@@ -8,7 +8,6 @@ object ObjectiveMocks {
         val currentDate = LocalDate.now()
         val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
         val formattedDate = currentDate.format(formatter)
-
         val allObjectives = listOf(
             Objective.Builder()
                 .id(1L)
@@ -70,8 +69,19 @@ object ObjectiveMocks {
                 .title("Acertar en Lectura Desafío")
                 .description("Descripción de Acertar en Lectura Desafío")
                 .progress(0)
-                .goal(2)
+                .goal(3)
                 .game("RC")
+                .type("hit")
+                .completed(false)
+                .date(formattedDate.toString())
+                .build(),
+            Objective.Builder()
+                .id(8L)
+                .title("Acertar en ¿Donde esta la Letra?")
+                .description("Descripción de Acertar en ¿Donde esta la Letra?")
+                .progress(0)
+                .goal(5)
+                .game("WL")
                 .type("hit")
                 .completed(false)
                 .date(formattedDate.toString())

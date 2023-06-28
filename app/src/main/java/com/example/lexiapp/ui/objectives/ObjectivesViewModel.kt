@@ -8,6 +8,7 @@ import com.example.lexiapp.domain.model.MiniObjective
 import com.example.lexiapp.domain.model.Objective
 import com.example.lexiapp.domain.useCases.ObjectivesUseCases
 import com.example.lexiapp.domain.service.FireStoreService
+import com.example.lexiapp.domain.useCases.GetObjectiveCases
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -23,6 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ObjectivesViewModel @Inject constructor(
     private val objectivesUseCases: ObjectivesUseCases,
+    private val getObjectivesCases: GetObjectiveCases,
     private val fireStoreService: FireStoreService
 ) : ViewModel() {
 
@@ -77,23 +79,8 @@ class ObjectivesViewModel @Inject constructor(
     }
 
     fun saveObjectivesToFirestore(email: String) {
-        val lastMondayDate= getMondayDateOfPreviousWeeks(0)
         viewModelScope.launch {
-            val objectivesExist = fireStoreService.checkObjectivesExist(email, lastMondayDate)
-            if (!objectivesExist) {
-                val today = LocalDate.now()
-                val monday = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-                val objectives = objectivesUseCases.getObjectives(monday)
-                fireStoreService.saveObjectives(email, objectives ?: emptyList())
-
-                val loadObjectivesFromTwoWeeksAgo = getMondayDateOfPreviousWeeks(1)
-                val lastOjectivesExist =
-                    fireStoreService.checkObjectivesExist(email, loadObjectivesFromTwoWeeksAgo)
-                if (lastOjectivesExist) {
-                    val incompleteGames = fireStoreService.getIncompleteGameNames(email,loadObjectivesFromTwoWeeksAgo)
-                    fireStoreService.increaseGoalForGames(email, incompleteGames)
-                }
-            }
+            getObjectivesCases.saveObjectivesToFirestore(email)
         }
     }
 
