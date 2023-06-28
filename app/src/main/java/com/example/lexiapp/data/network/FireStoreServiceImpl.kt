@@ -452,30 +452,39 @@ class FireStoreServiceImpl @Inject constructor(
     }
 
 
-    override suspend fun getObjectives(email: String, lastMondayDate: String): List<Objective> {
+    override suspend fun getObjectives(email: String, lastMondayDate: String, listener: (List<Objective>) -> Unit) {
         val document = objectivesCollection.document(email).collection(lastMondayDate)
-        val snapshot = document.get().await()
+        val registration = document.addSnapshotListener { snapshot, exception ->
+            try {
+                if (exception != null || snapshot == null) {
+                    listener(emptyList())
+                    return@addSnapshotListener
 
-        val objectives = mutableListOf<Objective>()
-        for (documentSnapshot in snapshot.documents) {
-            val objectiveFields = documentSnapshot.data
-            if (objectiveFields is Map<*, *>) {
-                val id = objectiveFields["id"] as Long?
-                val title = objectiveFields["title"] as String?
-                val description = objectiveFields["description"] as String?
-                val progress = (objectiveFields["progress"] as Long?)?.toInt() ?: 0
-                val goal = (objectiveFields["goal"] as Long?)?.toInt()
-                val game = objectiveFields["game"] as String?
-                val type = objectiveFields["type"] as String?
-                val completed = objectiveFields["completed"] as Boolean?
-                val date = objectiveFields["date"] as String?
-                objectives.add(Objective(id, title, description, progress, goal, game, type, completed, date))
+                }
+
+                val objectives = mutableListOf<Objective>()
+                for (documentSnapshot in snapshot.documents) {
+                    val objectiveFields = documentSnapshot.data
+                    if (objectiveFields is Map<*, *>) {
+                        val id = objectiveFields["id"] as Long?
+                        val title = objectiveFields["title"] as String?
+                        val description = objectiveFields["description"] as String?
+                        val progress = (objectiveFields["progress"] as Long?)?.toInt() ?: 0
+                        val goal = (objectiveFields["goal"] as Long?)?.toInt()
+                        val game = objectiveFields["game"] as String?
+                        val type = objectiveFields["type"] as String?
+                        val completed = objectiveFields["completed"] as Boolean?
+                        val date = objectiveFields["date"] as String?
+                        objectives.add(Objective(id, title, description, progress, goal, game, type, completed, date))
+                    }
+                }
+
+                listener(objectives)
+            } catch (e: Exception) {
+                listener(emptyList())
             }
         }
-
-        return objectives
     }
-
 
     override suspend fun saveLetsReadResult(result: LetsReadGameDataResult) {
         //SAVE WORDS, OF RESULT=false

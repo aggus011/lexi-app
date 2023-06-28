@@ -55,10 +55,11 @@ class ObjectivesViewModel @Inject constructor(
         val currentDate = LocalDate.now(timeZone)
         val lastMonday = currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
         val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
-        return lastMonday.format(dateFormatter)
+        val lastMondayDate = lastMonday.format(dateFormatter)
+        return lastMondayDate
     }
 
-    private fun loadObjectives() {
+    fun loadObjectives() {
         val today = LocalDate.now(ZoneId.of("America/Argentina/Buenos_Aires"))
         val nextMonday = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY))
         val nextMondayDateTime = nextMonday.atStartOfDay(ZoneId.of("America/Argentina/Buenos_Aires"))
@@ -67,14 +68,12 @@ class ObjectivesViewModel @Inject constructor(
         val lastMondayDate= getLastMondayDate()
         if (uid != null) {
             viewModelScope.launch {
-                val objectives = getObjectivesCases.getObjectives(uid, lastMondayDate)
-                _objectives.value = objectives
+                fireStoreService.getObjectives(uid, lastMondayDate) { objectives ->
+                    _objectives.value = objectives
 
-                val daysLeft = ChronoUnit.DAYS.between(
-                    LocalDateTime.now(ZoneId.of("America/Argentina/Buenos_Aires")),
-                    nextMondayDateTime
-                )
-                _daysLeft.value = daysLeft.toInt()
+                    val daysLeft = ChronoUnit.DAYS.between(LocalDateTime.now(ZoneId.of("America/Argentina/Buenos_Aires")), nextMondayDateTime)
+                    _daysLeft.value = daysLeft.toInt()
+                }
             }
         }
     }
@@ -85,6 +84,17 @@ class ObjectivesViewModel @Inject constructor(
         }
     }
 
+
+
+    private fun getMondayDateOfPreviousWeeks(weeks: Long): String {
+        val timeZone = ZoneId.of("America/Argentina/Buenos_Aires")
+        val currentDate = LocalDate.now(timeZone)
+        val previousMonday = currentDate
+            .minusWeeks(weeks)
+            .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+        val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+        return previousMonday.format(dateFormatter)
+    }
 
 
 }
