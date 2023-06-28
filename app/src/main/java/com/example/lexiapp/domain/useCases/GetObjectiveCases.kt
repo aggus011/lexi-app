@@ -35,10 +35,10 @@ class GetObjectiveCases @Inject constructor(
     private fun getMondayDateOfPreviousWeeks(weeks: Int): String {
         val timeZone = ZoneId.of("America/Argentina/Buenos_Aires")
         val currentDate = LocalDate.now(timeZone)
-        val lastMonday = currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).atStartOfDay(timeZone).toLocalDate()
+        val lastMonday = currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+            .atStartOfDay(timeZone).toLocalDate()
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
-        val lastMondayDate = lastMonday.minusWeeks(weeks.toLong()).format(formatter)
-        return lastMondayDate
+        return lastMonday.minusWeeks(weeks.toLong()).format(formatter)
     }
 
 

@@ -55,11 +55,10 @@ class ObjectivesViewModel @Inject constructor(
         val currentDate = LocalDate.now(timeZone)
         val lastMonday = currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
         val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
-        val lastMondayDate = lastMonday.format(dateFormatter)
-        return lastMondayDate
+        return lastMonday.format(dateFormatter)
     }
 
-    fun loadObjectives() {
+    private fun loadObjectives() {
         val today = LocalDate.now(ZoneId.of("America/Argentina/Buenos_Aires"))
         val nextMonday = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY))
         val nextMondayDateTime = nextMonday.atStartOfDay(ZoneId.of("America/Argentina/Buenos_Aires"))
@@ -86,17 +85,6 @@ class ObjectivesViewModel @Inject constructor(
         }
     }
 
-
-
-    private fun getMondayDateOfPreviousWeeks(weeks: Long): String {
-        val timeZone = ZoneId.of("America/Argentina/Buenos_Aires")
-        val currentDate = LocalDate.now(timeZone)
-        val previousMonday = currentDate
-            .minusWeeks(weeks)
-            .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-        val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
-        return previousMonday.format(dateFormatter)
-    }
 
 
 }
