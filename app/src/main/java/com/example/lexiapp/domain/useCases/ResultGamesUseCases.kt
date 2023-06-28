@@ -100,12 +100,8 @@ class ResultGamesUseCases @Inject constructor(
             it.toLong() >= oneWeekLess
         }.toMutableList()
         result[getWeekFromDate(oneWeekLess, dateRef)] = actualList.size
-
-
-        if (restList.isNotEmpty() && bucleCount < 5) {
+        if (bucleCount < 5) {
             result.putAll(getCountForWeeks(restList, oneWeekLess))
-        } else if(bucleCount < 5) {
-            result.putAll(getCountForWeeks(emptyList(), oneWeekLess))
         }
         return result
     }
