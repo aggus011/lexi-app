@@ -37,7 +37,6 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 import kotlin.math.ceil
-import kotlin.math.roundToInt
 
 @Singleton
 class FireStoreServiceImpl @Inject constructor(
@@ -452,8 +451,9 @@ class FireStoreServiceImpl @Inject constructor(
     }
 
 
-    override suspend fun getObjectives(email: String, lastMondayDate: String, listener: (List<Objective>) -> Unit) {
-        val document = objectivesCollection.document(email).collection(lastMondayDate)
+    override suspend fun getObjectives(uid: String, lastMondayDate: String, listener: (List<Objective>) -> Unit
+    ) {
+        val document = objectivesCollection.document(uid).collection(lastMondayDate)
         val registration = document.addSnapshotListener { snapshot, exception ->
             try {
                 if (exception != null || snapshot == null) {

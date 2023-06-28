@@ -8,7 +8,6 @@ import com.example.lexiapp.domain.model.MiniObjective
 import com.example.lexiapp.domain.model.Objective
 import com.example.lexiapp.domain.useCases.ObjectivesUseCases
 import com.example.lexiapp.domain.service.FireStoreService
-import com.example.lexiapp.domain.useCases.GetObjectiveCases
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -24,7 +23,6 @@ import javax.inject.Inject
 @HiltViewModel
 class ObjectivesViewModel @Inject constructor(
     private val objectivesUseCases: ObjectivesUseCases,
-    private val getObjectivesCases: GetObjectiveCases,
     private val fireStoreService: FireStoreService
 ) : ViewModel() {
 
@@ -55,16 +53,14 @@ class ObjectivesViewModel @Inject constructor(
         val currentDate = LocalDate.now(timeZone)
         val lastMonday = currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
         val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
-        val lastMondayDate = lastMonday.format(dateFormatter)
-        return lastMondayDate
+        return lastMonday.format(dateFormatter)
     }
 
     fun loadObjectives() {
         val today = LocalDate.now(ZoneId.of("America/Argentina/Buenos_Aires"))
         val nextMonday = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY))
         val nextMondayDateTime = nextMonday.atStartOfDay(ZoneId.of("America/Argentina/Buenos_Aires"))
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        val uid = currentUser?.uid
+        var uid = objectivesUseCases.getCurrentUser()
         val lastMondayDate= getLastMondayDate()
         if (uid != null) {
             viewModelScope.launch {
@@ -78,23 +74,12 @@ class ObjectivesViewModel @Inject constructor(
         }
     }
 
-    fun saveObjectivesToFirestore(email: String) {
+    fun saveObjectivesToFirestore(uId: String) {
         viewModelScope.launch {
-            getObjectivesCases.saveObjectivesToFirestore(email)
+            objectivesUseCases.saveObjectives(uId)
         }
     }
 
-
-
-    private fun getMondayDateOfPreviousWeeks(weeks: Long): String {
-        val timeZone = ZoneId.of("America/Argentina/Buenos_Aires")
-        val currentDate = LocalDate.now(timeZone)
-        val previousMonday = currentDate
-            .minusWeeks(weeks)
-            .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-        val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
-        return previousMonday.format(dateFormatter)
-    }
 
 
 }

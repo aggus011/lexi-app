@@ -47,7 +47,7 @@ interface FireStoreService {
 
     suspend fun checkObjectivesExist(email: String, lastMondayDate: String): Boolean
 
-    suspend fun getObjectives(email: String, lastMondayDate: String, listener: (List<Objective>) -> Unit)
+    suspend fun getObjectives(uid: String, lastMondayDate: String, listener: (List<Objective>) -> Unit)
 
     suspend fun saveLetsReadResult(result: LetsReadGameDataResult)
 
