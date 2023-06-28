@@ -68,12 +68,14 @@ class ObjectivesViewModel @Inject constructor(
         val lastMondayDate= getLastMondayDate()
         if (uid != null) {
             viewModelScope.launch {
-                fireStoreService.getObjectives(uid, lastMondayDate) { objectives ->
-                    _objectives.value = objectives
+                val objectives = getObjectivesCases.getObjectives(uid, lastMondayDate)
+                _objectives.value = objectives
 
-                    val daysLeft = ChronoUnit.DAYS.between(LocalDateTime.now(ZoneId.of("America/Argentina/Buenos_Aires")), nextMondayDateTime)
-                    _daysLeft.value = daysLeft.toInt()
-                }
+                val daysLeft = ChronoUnit.DAYS.between(
+                    LocalDateTime.now(ZoneId.of("America/Argentina/Buenos_Aires")),
+                    nextMondayDateTime
+                )
+                _daysLeft.value = daysLeft.toInt()
             }
         }
     }

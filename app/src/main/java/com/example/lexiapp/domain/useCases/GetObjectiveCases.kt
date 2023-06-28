@@ -1,5 +1,6 @@
 package com.example.lexiapp.domain.useCases
 
+import com.example.lexiapp.domain.model.Objective
 import com.example.lexiapp.domain.service.FireStoreService
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -38,5 +39,10 @@ class GetObjectiveCases @Inject constructor(
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
         val lastMondayDate = lastMonday.minusWeeks(weeks.toLong()).format(formatter)
         return lastMondayDate
+    }
+
+
+    suspend fun getObjectives(uid: String, lastMondayDate: String): List<Objective> {
+        return fireStoreService.getObjectives(uid, lastMondayDate)
     }
 }
