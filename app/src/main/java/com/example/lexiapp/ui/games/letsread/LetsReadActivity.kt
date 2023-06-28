@@ -94,6 +94,7 @@ class LetsReadActivity : AppCompatActivity() {
 
     private fun btnBackListener() {
         btnBack.setOnClickListener {
+            startActivity(Intent(this, ListTextActivity::class.java))
             finish()
         }
     }
@@ -456,6 +457,7 @@ class LetsReadActivity : AppCompatActivity() {
     private val onBackPressedCallback: OnBackPressedCallback =
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
+                startActivity(Intent(this@LetsReadActivity, ListTextActivity::class.java))
                 finish()
             }
         }
