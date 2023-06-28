@@ -71,16 +71,14 @@ class DetailPatientFragment : Fragment() {
     }
 
     private fun setTSObservers() {
-        viewModel.allDataTS.observe(viewLifecycleOwner){ (total, dataMap)->
-            Log.v("LOG_TEXT_SCANN_FRAGMENT", "${total}//${dataMap.keys}//${dataMap.values}")
-            Log.v("LOG_TEXT_SCANN_FRAGMENT", "${dataMap.entries.size}")
+        viewModel.allDataTS.observe(viewLifecycleOwner) { (total, dataMap) ->
             setVisibilityTSCard(total, dataMap)
         }
     }
 
     private fun setVisibilityTSCard(total: Int, dataMap: Map<String, Int>) {
         Log.v("LOG_TEXT_SCANN_FRAGMENT", "${total}")
-        if(total>0 && dataMap.entries.isNotEmpty()){
+        if (total > 0 && dataMap.entries.isNotEmpty()) {
             binding.txtValueTotalUsesTS.text = "$total"
             binding.txtNotUseTS.visibility = View.GONE
             binding.txtTitleGraphTS.visibility = View.VISIBLE
@@ -89,9 +87,9 @@ class DetailPatientFragment : Fragment() {
             setTSGraph(dataMap)
             return
         }
-        if (total==0){
+        if (total == 0) {
             binding.cvMetricsTS.visibility = View.GONE
-        }else{
+        } else {
             binding.txtNotUseTS.visibility = View.VISIBLE
             binding.txtTitleGraphTS.visibility = View.GONE
             binding.barChartTS.visibility = View.GONE
@@ -101,7 +99,7 @@ class DetailPatientFragment : Fragment() {
     private fun setLRObservers() {
         viewModel.totalTimesPlayedLR.observe(viewLifecycleOwner) {
             binding.cvMetricsLR.visibility =
-                if(it != 0) {
+                if (it != 0) {
                     View.VISIBLE
                 } else {
                     View.GONE
@@ -116,7 +114,7 @@ class DetailPatientFragment : Fragment() {
             )
         }
         viewModel.weekPieLR.observe(viewLifecycleOwner) { (countCorrect, countError) ->
-            if ((countCorrect+countError).toInt()==0){
+            if ((countCorrect + countError).toInt() == 0) {
                 setGraphsVisibility(
                     binding.pieWeekChartLR,
                     binding.txtTitlePieWeekGraphLR,
@@ -125,7 +123,7 @@ class DetailPatientFragment : Fragment() {
                     binding.txtNotHaveWeekProgresLR,
                     binding.txtTitlePieTotalGraphLR
                 )
-            }else{
+            } else {
                 setPieGraph(
                     countCorrect,
                     countError,
@@ -152,7 +150,7 @@ class DetailPatientFragment : Fragment() {
             )
         }
         viewModel.weekPieCW.observe(viewLifecycleOwner) { (countCorrect, countError) ->
-            if ((countCorrect+countError).toInt()==0){
+            if ((countCorrect + countError).toInt() == 0) {
                 setGraphsVisibility(
                     binding.pieWeekChartCW,
                     binding.txtTitlePieWeekGraphCW,
@@ -161,7 +159,7 @@ class DetailPatientFragment : Fragment() {
                     binding.txtNotHaveWeekProgresCW,
                     binding.txtTitlePieTotalGraphCW
                 )
-            }else{
+            } else {
                 setPieGraph(
                     countCorrect,
                     countError,
@@ -191,7 +189,7 @@ class DetailPatientFragment : Fragment() {
             )
         }
         viewModel.weekPieWITL.observe(viewLifecycleOwner) { (countCorrect, countError) ->
-            if ((countCorrect+countError).toInt()==0){
+            if ((countCorrect + countError).toInt() == 0) {
                 setGraphsVisibility(
                     binding.pieWeekChartWITL,
                     binding.txtTitlePieWeekGraphWITL,
@@ -200,7 +198,7 @@ class DetailPatientFragment : Fragment() {
                     binding.txtNotHaveWeekProgresWITL,
                     binding.txtTitlePieTotalGraphWITL
                 )
-            }else{
+            } else {
                 setPieGraph(
                     countCorrect,
                     countError,
@@ -256,7 +254,10 @@ class DetailPatientFragment : Fragment() {
         }
     }
 
-    private fun setBarGraph(resultsLastWeek: Map<String, Triple<Int, Float, Int>>, barChart: BarChart) {
+    private fun setBarGraph(
+        resultsLastWeek: Map<String, Triple<Int, Float, Int>>,
+        barChart: BarChart
+    ) {
         try {
             val entries = mutableListOf<BarEntry>()
             val errorEntries = mutableListOf<BarEntry>()
@@ -305,8 +306,8 @@ class DetailPatientFragment : Fragment() {
         }
     }
 
-    private fun setTSGraph(dataMap: Map<String, Int>){
-        try{
+    private fun setTSGraph(dataMap: Map<String, Int>) {
+        try {
             Log.v("LOG_TEXT_SCANN_FRAGMENT_GRAPH", "${dataMap.keys}")
             Log.v("LOG_TEXT_SCANN_FRAGMENT_GRAPH", "${dataMap.values}")
             val barChart = binding.barChartTS
@@ -314,7 +315,8 @@ class DetailPatientFragment : Fragment() {
             var maxCount = 0
             val entries = mutableListOf<BarEntry>()
             val labels = mutableListOf<String>()
-            dataMap.forEach { (date , count) ->
+            val historicUses = dataMap.values.sum()
+            dataMap.forEach { (date, count) ->
                 if (maxCount < count) maxCount = count
                 countSevenWeeks += count
                 entries.add(BarEntry(entries.size.toFloat(), count.toFloat()))
@@ -345,7 +347,8 @@ class DetailPatientFragment : Fragment() {
             barChart.description = null
 
             barChart.invalidate()
-        }catch (e: Exception){}
+        } catch (e: Exception) {
+        }
     }
 
     private fun setGraphsVisibility(

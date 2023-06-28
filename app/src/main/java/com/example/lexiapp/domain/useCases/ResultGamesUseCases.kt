@@ -44,7 +44,8 @@ class ResultGamesUseCases @Inject constructor(
             val totalDayCount = filteredResults.size
             //val successPercentage = if (totalDayCount > 0) (successCount.toDouble() / totalDayCount) * 100 else 0.0
 
-            dateKeysMap[formatDateToString(currentDate)] = Triple(totalDayCount, unsuccessCount, countOfWeek)
+            dateKeysMap[formatDateToString(currentDate)] =
+                Triple(totalDayCount, unsuccessCount, countOfWeek)
 
             calendar.add(Calendar.DAY_OF_YEAR, -1)
         }
@@ -83,23 +84,28 @@ class ResultGamesUseCases @Inject constructor(
                 calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR)
     }
 
-    fun generateWeeklyMap(dateList: List<String>): Pair<Int,Map<String, Int>> {
-        Log.v("LOG_TEXT_SCANN_UC_WEEKLY", "${dateList}")
+    fun generateWeeklyMap(dateList: List<String>): Pair<Int, Map<String, Int>> {
         val currentDate = System.currentTimeMillis()
-        val sevenWeeksAgo = currentDate - TimeUnit.DAYS.toMillis(7 * 5)
-        val filteredDates = dateList
-            .filter { it.toLong() >= sevenWeeksAgo }
-            .sorted()
 
-        val weeklyMap = mutableMapOf<String, Int>()
+        val results = getCountForWeeks(dateList, currentDate)
+        return Pair(dateList.size, results)
+    }
 
-        for (date in filteredDates) {
-            val weekKey = getWeekFromDate(date.toLong(), currentDate)
-            val count = weeklyMap.getOrDefault(weekKey, 0)
-            weeklyMap[weekKey] = count + 1
+    private fun getCountForWeeks(resultsList: List<String>, dateRef: Long): Map<String, Int> {
+        val oneWeekLess = dateRef - TimeUnit.DAYS.toMillis(7)
+        val bucleCount = (System.currentTimeMillis() - oneWeekLess) / (24 * 7 * 60 * 60 * 1000)
+        val restList = resultsList.filter { it.toLong() < oneWeekLess }
+        val result = mutableMapOf<String, Int>()
+        val actualList = resultsList.filter {
+            it.toLong() >= oneWeekLess
+        }.toMutableList()
+        result[getWeekFromDate(oneWeekLess, dateRef)] = actualList.size
+        if (restList.isNotEmpty()) {
+            result.putAll(getCountForWeeks(restList, oneWeekLess))
+        } else if(bucleCount <= 5) {
+            result.putAll(getCountForWeeks(emptyList(), oneWeekLess))
         }
-
-        return Pair(dateList.size, weeklyMap)
+        return result
     }
 
     private fun getWeekFromDate(date: Long, currentDate: Long): String {
@@ -113,14 +119,8 @@ class ResultGamesUseCases @Inject constructor(
             timeInMillis = currentDate
         }
 
-        val startOfWeek = currentCalendar.clone() as Calendar
-        startOfWeek.add(Calendar.DAY_OF_YEAR, -startOfWeek.get(Calendar.DAY_OF_WEEK) + 2)
-
-        val endOfWeek = startOfWeek.clone() as Calendar
-        endOfWeek.add(Calendar.DAY_OF_YEAR, 6)
-
-        val weekStartDate = dateFormat.format(startOfWeek.time)
-        val weekEndDate = dateFormat.format(endOfWeek.time)
+        val weekStartDate = dateFormat.format(dateCalendar.time)
+        val weekEndDate = dateFormat.format(currentCalendar.time)
 
         return "$weekStartDate - $weekEndDate"
     }
