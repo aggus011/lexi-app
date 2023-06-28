@@ -102,7 +102,7 @@ class ResultGamesUseCases @Inject constructor(
         result[getWeekFromDate(oneWeekLess, dateRef)] = actualList.size
         if (restList.isNotEmpty()) {
             result.putAll(getCountForWeeks(restList, oneWeekLess))
-        } else if(bucleCount <= 5) {
+        } else if(bucleCount < 5) {
             result.putAll(getCountForWeeks(emptyList(), oneWeekLess))
         }
         return result
