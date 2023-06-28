@@ -345,6 +345,7 @@ class FireStoreServiceImpl @Inject constructor(
         correctWordCollection.document(email).collection("results")
             .document(System.currentTimeMillis().toString()).set(data).await()
     }
+
     override suspend fun saveObjectives(email: String, objectives: List<Objective>) {
         val timeZone = ZoneId.of("America/Argentina/Buenos_Aires")
         val currentDate = LocalDate.now(timeZone)

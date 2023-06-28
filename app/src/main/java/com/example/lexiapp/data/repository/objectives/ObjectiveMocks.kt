@@ -8,7 +8,6 @@ object ObjectiveMocks {
         val currentDate = LocalDate.now()
         val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
         val formattedDate = currentDate.format(formatter)
-
         val allObjectives = listOf(
             Objective.Builder()
                 .id(1L)
