@@ -80,5 +80,7 @@ interface FireStoreService {
     suspend fun getObjectivesHistory(uid: String): Flow<List<MiniObjective>>
 
     suspend fun getIncompleteGameNames(email: String, lastMondayDate: String): List<String>
+
     suspend fun increaseGoalForGames(email: String, games: List<String>)
+
 }

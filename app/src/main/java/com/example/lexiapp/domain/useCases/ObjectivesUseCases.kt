@@ -8,8 +8,10 @@ import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.time.temporal.TemporalAdjusters
 import java.util.*
 import javax.inject.Inject
@@ -17,28 +19,27 @@ import javax.inject.Inject
 
 class ObjectivesUseCases @Inject constructor(
     private val objectivesService: ObjectivesService,
-    private val fireStoreService: FireStoreService
 ) {
+    data class TimeLeft(val daysLeft: Int, val hoursLeft: Int)
 
-
-    fun getObjectives(startDate: LocalDate): List<Objective> {
+    private fun getObjectives(startDate: LocalDate): List<Objective> {
         return objectivesService.getObjectives(startDate)
     }
 
-    fun calculateDaysLeft(startDate: LocalDate): Int {
-        val today = LocalDate.now(ZoneId.of("America/Argentina/Buenos_Aires"))
-        val nextMonday = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY))
+    fun calculateDaysLeft(): TimeLeft {
+        val today = LocalDateTime.now(ZoneId.of("America/Argentina/Buenos_Aires"))
+        val nextMonday = today.with(TemporalAdjusters.next(DayOfWeek.MONDAY))
+            .withHour(0).withMinute(0).withSecond(0)
+        val hoursLeft = ChronoUnit.HOURS.between(today, nextMonday)
+        val daysLeft = ChronoUnit.DAYS.between(today.toLocalDate(), nextMonday.toLocalDate())
 
-        val daysLeft = nextMonday.dayOfWeek.value - today.dayOfWeek.value
-
-        return if (daysLeft < 0) {
-            7 - (today.dayOfWeek.value - nextMonday.dayOfWeek.value)
-        } else {
-            daysLeft
-        }
+        return TimeLeft(daysLeft.toInt(), hoursLeft.toInt())
     }
 
-    suspend fun listenerCompleteObjectives(uid: String) = objectivesService.getCompleteObjectives(uid)
+
+
+    suspend fun listenerCompleteObjectives() = objectivesService.getCompleteObjectives()
+
 
     fun filterBeforeActualWeek(results: List<MiniObjective>): List<MiniObjective> {
         val calendar = Calendar.getInstance()
@@ -57,24 +58,19 @@ class ObjectivesUseCases @Inject constructor(
         return format.format(date)
     }
 
-    fun getCurrentUser (): String? {
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        var uid = currentUser?.uid
-        return uid
-    }
-    suspend fun saveObjectives(email: String) {
+    suspend fun saveObjectives() {
         val lastMondayDate = getMondayDateOfPreviousWeeks(0)
-        val objectivesExist = fireStoreService.checkObjectivesExist(email, lastMondayDate)
+        val objectivesExist = objectivesService.checkObjectivesExist(lastMondayDate)
         if (!objectivesExist) {
             val today = LocalDate.now()
             val monday = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
             val objectives = getObjectives(monday)
-            fireStoreService.saveObjectives(email, objectives ?: emptyList())
+            objectivesService.saveObjectives(objectives ?: emptyList())
             val loadObjectivesFromTwoWeeksAgo = getMondayDateOfPreviousWeeks(1)
-            val lastObjectivesExist = fireStoreService.checkObjectivesExist(email, loadObjectivesFromTwoWeeksAgo)
+            val lastObjectivesExist = objectivesService.checkObjectivesExist(loadObjectivesFromTwoWeeksAgo)
             if (lastObjectivesExist) {
-                val incompleteGames = fireStoreService.getIncompleteGameNames(email, loadObjectivesFromTwoWeeksAgo)
-                fireStoreService.increaseGoalForGames(email, incompleteGames)
+                val incompleteGames = objectivesService.getIncompleteGameNames(loadObjectivesFromTwoWeeksAgo)
+                objectivesService.increaseGoalForGames(incompleteGames)
             }
         }
     }
@@ -88,8 +84,9 @@ class ObjectivesUseCases @Inject constructor(
         return lastMonday.minusWeeks(weeks.toLong()).format(formatter)
     }
 
-    suspend fun getObjectives(uid: String, lastMondayDate: String, listener: (List<Objective>) -> Unit) {
-        fireStoreService.getObjectives(uid, lastMondayDate, listener)
+    suspend fun getObjectivesActual(lastMondayDate: String, listener: (List<Objective>) -> Unit) {
+        objectivesService.getObjectivesActual(lastMondayDate, listener)
     }
+
 
 }
