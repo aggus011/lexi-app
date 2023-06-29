@@ -77,6 +77,12 @@ interface FireStoreService {
 
     suspend fun updateObjectiveProgress(game: String, type: String)
 
+    suspend fun getLastResultsLetsReadGame(email: String): Flow<List<LetsReadGameResult>>
+
+    suspend fun getLastResultsTextScan(email: String): Flow<List<String>>
+
+    suspend fun saveTextScanResult(email: String)
+
     suspend fun getObjectivesHistory(uid: String): Flow<List<MiniObjective>>
 
     suspend fun checkIfObjectiveAndWeeklyObjectivesWereCompleted(game: String, type: String): Pair<Boolean, Boolean>

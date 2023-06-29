@@ -12,4 +12,10 @@ class ResultGamesServiceImpl @Inject constructor(
 
     override suspend fun getCorrectWordResults(email: String) =
         db.getLastResultsCorrectWordGame(email)
+
+    override suspend fun getLRResults(email: String) =
+        db.getLastResultsLetsReadGame(email)
+
+    override suspend fun getTSResults(email: String) =
+        db.getLastResultsTextScan(email)
 }

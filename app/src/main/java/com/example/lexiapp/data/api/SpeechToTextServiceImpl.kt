@@ -14,7 +14,6 @@ class SpeechToTextServiceImpl @Inject constructor(
     ): SpeechToTextService {
 
     override suspend fun transcription(file: MultipartBody.Part): Response<Texts> {
-        db.updateObjectiveProgress("SCAN", "play")
         return apiService.transcription(file)
     }
 

@@ -15,6 +15,7 @@ import android.view.View
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -33,6 +34,8 @@ import java.util.*
 
 @AndroidEntryPoint
 class TextScannerActivity : AppCompatActivity() {
+    private val vM: TextScannerViewModel by viewModels()
+
     private lateinit var binding: ActivityTextScannerBinding
     private lateinit var btnBack: ImageView
     private lateinit var photoToScan: ImageView
@@ -226,6 +229,7 @@ class TextScannerActivity : AppCompatActivity() {
                             textRecognized.text = recognizedText
                             textRecognized.movementMethod = ScrollingMovementMethod()
                             binding.clNoTextImage.visibility = View.GONE
+                            vM.saveTSResult()
                         }else{
                             binding.clNoTextImage.visibility = View.VISIBLE
                         }
