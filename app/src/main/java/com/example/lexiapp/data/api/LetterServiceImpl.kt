@@ -6,13 +6,12 @@ import com.example.lexiapp.data.api.word_asociation_api.WordAssociationService
 import com.example.lexiapp.data.model.toCorrectWordDataResult
 import com.example.lexiapp.data.model.toWhereIsTheLetterDataResult
 import com.example.lexiapp.data.network.FireStoreServiceImpl
+import com.example.lexiapp.data.network.FirebaseNotificationServiceImpl
 import com.example.lexiapp.data.repository.BlackList
 import com.example.lexiapp.domain.model.gameResult.CorrectWordGameResult
 import com.example.lexiapp.domain.model.gameResult.ResultGame
 import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.example.lexiapp.domain.service.LetterService
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -21,7 +20,8 @@ import javax.inject.Inject
 class LetterServiceImpl @Inject constructor(
     private val apiWordService: WordAssociationService,
     private val db: FireStoreServiceImpl,
-    private val prefs: SharedPreferences
+    private val prefs: SharedPreferences,
+    private val notificationServiceImpl: FirebaseNotificationServiceImpl
 ) : LetterService {
 
     private val userMail = prefs.getString("email", null)!!
@@ -50,6 +50,23 @@ class LetterServiceImpl @Inject constructor(
             CorrectWordGameResult::class -> {
                 db.saveCorrectWordResult((result as CorrectWordGameResult).toCorrectWordDataResult(), result.email)
             }
+        }
+    }
+
+    override suspend fun generateNotificationIfObjectiveHasBeenCompleted(
+        game: String,
+        typeGame: String,
+        gameName: String
+    ) {
+        val patientToken = db.getDeviceToken()
+
+        val objectivesPair = db.checkIfObjectiveAndWeeklyObjectivesWereCompleted(game, typeGame)
+
+        if(objectivesPair.first && objectivesPair.second){
+            notificationServiceImpl.sendNotificationWeeklyObjectivesCompleted(patientToken)
+        }else if(objectivesPair.first){
+            notificationServiceImpl.sendNotificationObjectiveCompleted(patientToken,
+            if(typeGame == "hit") "Acertar en $gameName" else "Jugar $gameName")
         }
     }
 

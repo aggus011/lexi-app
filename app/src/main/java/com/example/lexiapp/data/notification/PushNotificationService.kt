@@ -44,14 +44,23 @@ class PushNotificationService : FirebaseMessagingService() {
             SimpleDateFormat("ddHHmmss",  Locale.getDefault()).format(
             Date()
         ))
-
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.ic_account_linked)
             .setContentTitle(title)
             .setContentText(body)
             .setColor(resources.getColor(R.color.purple, this.theme))
             .setColorized(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+        if(title?.contains("Felicitaciones") == true){
+            notificationBuilder
+                .setSmallIcon(R.drawable.ic_cup)
+        }
+
+        if(title?.contains("Vinculación") == true){
+            notificationBuilder
+                .setSmallIcon(R.drawable.ic_account_linked)
+        }
+
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channel = NotificationChannel(

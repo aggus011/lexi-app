@@ -25,9 +25,10 @@ object InterfaceModule {
     fun getLetterRepository(
         apiWordService: WordAssociationService,
         db: FireStoreServiceImpl,
-        prefs: SharedPreferences
+        prefs: SharedPreferences,
+        notifications: FirebaseNotificationServiceImpl
     ): LetterService {
-        return LetterServiceImpl(apiWordService, db, prefs)
+        return LetterServiceImpl(apiWordService, db, prefs, notifications)
     }
 
     @Provides
@@ -69,9 +70,10 @@ object InterfaceModule {
     @Provides
     fun getDifferenceService(
         apiDifferenceGateway: DifferenceGateway,
-        db: FireStoreService
+        db: FireStoreService,
+        notifications: FirebaseNotificationServiceImpl
     ): DifferenceService {
-        return DifferenceServiceImpl(apiDifferenceGateway, db)
+        return DifferenceServiceImpl(apiDifferenceGateway, db, notifications)
     }
 
     @Provides

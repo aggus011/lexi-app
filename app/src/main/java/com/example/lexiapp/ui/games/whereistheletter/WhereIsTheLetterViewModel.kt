@@ -1,16 +1,17 @@
 package com.example.lexiapp.ui.games.whereistheletter
 
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
-import com.example.lexiapp.domain.service.FireStoreService
 import com.example.lexiapp.domain.useCases.LetterGameUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -126,5 +127,11 @@ class WhereIsTheLetterViewModel @Inject constructor(
     fun getWord() = _basicWord.value
 
     fun getSelectedPosition() = _selectedPosition.value
+
+    fun checkIfObjectivesHasBeenCompleted(game: String, typeGame: String, gameName: String) {
+        viewModelScope.launch {
+            letterGameUseCases.generateNotificationForObjectives(game, typeGame, gameName)
+        }
+    }
 
 }
