@@ -1,6 +1,5 @@
 package com.example.lexiapp.data.network
 
-import android.graphics.Color
 import android.util.Log
 import com.example.lexiapp.data.model.CorrectWordDataResult
 import com.example.lexiapp.data.model.Game
@@ -58,7 +57,6 @@ class FireStoreServiceImpl @Inject constructor(
         {email: String -> firebase.firestore.collection("profesional_notes/${email}/notes")}
     private val errorWordsDocument: (String) -> DocumentReference =
         { email: String -> firebase.firestore.collection("error_words").document(email) }
-
     private val db = firebase.firestore
     private val categoryCollection = firebase.firestore.collection("category")
     private val completedObjectivesCollectionReference =
@@ -114,6 +112,12 @@ class FireStoreServiceImpl @Inject constructor(
             .document(System.currentTimeMillis().toString()).set(data).await()
     }
 
+    override suspend fun saveTextScanResult(email: String) {
+        resultGameCollection("text_scan",email)
+            .document(System.currentTimeMillis().toString())
+            .set(mapOf<String, Any>())
+    }
+
     override suspend fun getLastResultsWhereIsTheLetterGame(userMail: String) = flow {
         val result = mutableListOf<WhereIsTheLetterDataResult>()
         resultGameCollection(Game.WHERE_IS_THE_LETTER.toString().lowercase(), userMail).get()
@@ -153,6 +157,40 @@ class FireStoreServiceImpl @Inject constructor(
                 }
             }.await()
         emit(result.map { it.toCorrectWordGameResult(userMail) })
+    }
+
+    override suspend fun getLastResultsTextScan(email: String) = flow{
+        val result = mutableListOf<String>()
+        Log.v("LOG_TEXT_SCANN_SERVICE_IMPL", "${email}")
+        resultGameCollection("text_scan",email).get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot) {
+                    Log.v("LOG_TEXT_SCANN_SERVICE_IMPL", "${document.id}")
+                    result.add(document.id)
+                }
+            }.await()
+        emit(result)
+    }
+
+    override suspend fun getLastResultsLetsReadGame(email: String) = flow {
+        val result = mutableListOf<LetsReadGameDataResult>()
+        resultGameCollection(Game.LETS_READ.toString().lowercase(), email).get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot) {
+                    val documentId = document.id
+                    val data = document.data
+                    result.add(
+                        LetsReadGameDataResult(
+                            success = data["success"] as Boolean,
+                            email = email,
+                            wrongWords = data["wrongWords"] as List<String>,
+                            date = documentId,
+                            totalWords = (data["totalWords"] as Long).toInt()
+                        )
+                    )
+                }
+            }.await()
+        emit(result.map { it.toLetsReadGameResult() })
     }
 
     override suspend fun getOpenAICollectionDocumentReference(document: String) = flow {

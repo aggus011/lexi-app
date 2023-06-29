@@ -1,10 +1,7 @@
 package com.example.lexiapp.domain.useCases
 
 import com.example.lexiapp.domain.model.gameResult.ResultGame
-import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.example.lexiapp.domain.service.ResultGamesService
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -16,9 +13,14 @@ class ResultGamesUseCases @Inject constructor(
     suspend fun getWhereIsTheLetterResults(email: String) =
         service.getWhereIsTheLetterResults(email)
 
-
     suspend fun getWhereIsCWResults(email: String) =
         service.getCorrectWordResults(email)
+
+    suspend fun getLRResults(email: String) =
+        service.getLRResults(email)
+
+    suspend fun getTSResults(email: String) =
+        service.getTSResults(email)
 
     fun getResultsLastWeek(results: List<ResultGame>): Map<String, Triple<Int, Float, Int>> {
         val calendar = Calendar.getInstance()
@@ -37,7 +39,8 @@ class ResultGamesUseCases @Inject constructor(
             val totalDayCount = filteredResults.size
             //val successPercentage = if (totalDayCount > 0) (successCount.toDouble() / totalDayCount) * 100 else 0.0
 
-            dateKeysMap[formatDateToString(currentDate)] = Triple(totalDayCount, unsuccessCount, countOfWeek)
+            dateKeysMap[formatDateToString(currentDate)] =
+                Triple(totalDayCount, unsuccessCount, countOfWeek)
 
             calendar.add(Calendar.DAY_OF_YEAR, -1)
         }
@@ -74,5 +77,57 @@ class ResultGamesUseCases @Inject constructor(
         }
         return calendar1.get(Calendar.DAY_OF_YEAR) == calendar2.get(Calendar.DAY_OF_YEAR) &&
                 calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR)
+    }
+
+    fun generateWeeklyMap(dateList: List<String>): Pair<Int, Map<String, Int>> {
+        val results = getScansLastWeek(dateList)
+        return Pair(dateList.size, results)
+    }
+
+    private fun getScansLastWeek(allScans: List<String>): Map<String, Int>{
+        val calendar = Calendar.getInstance()
+        val dateKeysMap = sortedMapOf<String, Int>()
+        val resultsLastWeek = filterScansByWeek(allScans)
+        for (i in 0 until 7) {
+            val currentDate = calendar.time
+            val filteredResults = resultsLastWeek.filter { scanDate ->
+                val resultDate = convertStringToDate(scanDate)
+                isSameDay(resultDate, currentDate)
+            }
+            val totalDayCount = filteredResults.size
+            dateKeysMap[formatDateToString(currentDate)] = totalDayCount
+            calendar.add(Calendar.DAY_OF_YEAR, -1)
+        }
+        return dateKeysMap.toMap()
+    }
+
+    private fun filterScansByWeek(allScans: List<String>): List<String> {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.WEEK_OF_YEAR, -1)
+        val filteredResults = allScans.filter { scanDate ->
+            val resultDate = Date(scanDate.toLong())
+            resultDate.after(calendar.time)
+        }
+        return filteredResults
+    }
+
+
+
+
+    private fun getWeekFromDate(date: Long, currentDate: Long): String {
+        val dateFormat = SimpleDateFormat("dd/MM", Locale.getDefault())
+
+        val dateCalendar = Calendar.getInstance().apply {
+            timeInMillis = date
+        }
+
+        val currentCalendar = Calendar.getInstance().apply {
+            timeInMillis = currentDate
+        }
+
+        val weekStartDate = dateFormat.format(dateCalendar.time)
+        val weekEndDate = dateFormat.format(currentCalendar.time)
+
+        return "$weekStartDate-$weekEndDate"
     }
 }
