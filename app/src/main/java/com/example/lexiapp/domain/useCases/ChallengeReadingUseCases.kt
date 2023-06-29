@@ -2,6 +2,7 @@ package com.example.lexiapp.domain.useCases
 
 import com.example.lexiapp.domain.model.TextToRead
 import com.example.lexiapp.domain.service.ChallengeReadingService
+import com.example.lexiapp.domain.service.LetterService
 import com.example.lexiapp.domain.service.OpenAICompletionsService
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -12,14 +13,24 @@ import javax.inject.Inject
 
 class ChallengeReadingUseCases @Inject constructor(
     private val repositoryImpl: OpenAICompletionsService,
-    private val pendingReadingsRepositoryImpl: ChallengeReadingService
+    private val pendingReadingsRepositoryImpl: ChallengeReadingService,
+    private val service: LetterService,
 ) {
     private val promptChallengeReading =
-        "Necesito un texto de 200 caracteres para ser leído por niños que incluya las siguientes palabras:"
+        "Necesito un texto de 150 caracteres para ser leído por niños que incluya las siguientes palabras:"
     private val openAICompletionsDocumentReference = "completions"
 
     suspend fun getChallengeReading() = flow {
-        repositoryImpl.getChallengeReading(promptChallengeReading, listOf("entrenamiento", "desafio", "juego", "travesura"))
+
+        val challengeWords = mutableListOf("entrenamiento", "desafio", "juego")
+        getChallengeWords().collect{
+            if(it.isNotEmpty()){
+                challengeWords.clear()
+                challengeWords.addAll(it)
+            }
+        }
+
+        repositoryImpl.getChallengeReading(promptChallengeReading, challengeWords)
             .collect{ challengeReading ->
                 val text = removeLineBreaks(challengeReading)
                 val textToRead = generateTextToRead(text)
@@ -67,8 +78,22 @@ class ChallengeReadingUseCases @Inject constructor(
     private fun generateTextToRead(text: String): TextToRead{
         return TextToRead.Builder()
             .id(6666)
-            .title("Desafío 1")
+            .title("Desafío")
             .text(text)
             .build()
+    }
+
+    private suspend fun getChallengeWords() = flow {
+        service
+            .getWordsForChallengeReading(WORDS, MAX_LENGTH, SPANISH_LANGUAGE)
+            .collect{
+            emit(it)
+        }
+    }
+
+    private companion object {
+        private const val SPANISH_LANGUAGE = "es"
+        private const val MAX_LENGTH = 7
+        private const val WORDS = 5
     }
 }

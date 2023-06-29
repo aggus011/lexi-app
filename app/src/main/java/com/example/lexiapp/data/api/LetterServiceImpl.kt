@@ -53,21 +53,19 @@ class LetterServiceImpl @Inject constructor(
         }
     }
 
-    override suspend fun generateNotificationIfObjectiveHasBeenCompleted(
-        game: String,
-        typeGame: String,
-        gameName: String
-    ) {
-        val patientToken = db.getDeviceToken()
-
-        val objectivesPair = db.checkIfObjectiveAndWeeklyObjectivesWereCompleted(game, typeGame)
-
-        if(objectivesPair.first && objectivesPair.second){
-            notificationServiceImpl.sendNotificationWeeklyObjectivesCompleted(patientToken)
-        }else if(objectivesPair.first){
-            notificationServiceImpl.sendNotificationObjectiveCompleted(patientToken,
-            if(typeGame == "hit") "Acertar en $gameName" else "Jugar $gameName")
-        }
+    override suspend fun getWordsForChallengeReading(
+        count: Int,
+        length: Int,
+        language: String
+    ) = flow {
+        val errorWords = db.getWordPlayed(userMail)
+        Log.d("WORDS_ERROR", "${errorWords.first}//${errorWords.second}")
+        val stimulus = if (errorWords.first) errorWords.second else db.getWordCategories(userMail)
+        apiWordService.getWordToWhereIsTheLetterGame(count, length, language, stimulus)
+            .map { inputList -> inputList.filter { !BlackList.words.contains(it.uppercase()) } }
+            .collect {
+                emit(it.take(count))
+            }
     }
 
     private suspend fun saveProgress(result: ResultGame){
@@ -84,6 +82,25 @@ class LetterServiceImpl @Inject constructor(
                 }
                 db.updateObjectiveProgress("CW", "play")
             }
+        }
+    }
+
+    override suspend fun generateNotificationIfObjectiveHasBeenCompleted(
+        game: String,
+        typeGame: String,
+        gameName: String
+    ) {
+        val patientToken = db.getDeviceToken()
+
+        val objectivesPair = db.checkIfObjectiveAndWeeklyObjectivesWereCompleted(game, typeGame)
+
+        if (objectivesPair.first && objectivesPair.second) {
+            notificationServiceImpl.sendNotificationWeeklyObjectivesCompleted(patientToken)
+        } else if (objectivesPair.first) {
+            notificationServiceImpl.sendNotificationObjectiveCompleted(
+                patientToken,
+                if (typeGame == "hit") "Acertar en $gameName" else "Jugar $gameName"
+            )
         }
     }
 
