@@ -24,14 +24,20 @@ class NegativeResultWhereIsTheLetterActivity : AppCompatActivity() {
     private lateinit var word: String
     private var answerPosition by Delegates.notNull<Int>()
     private var correctPosition by Delegates.notNull<Int>()
+    private val vM: WhereIsTheLetterViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNegativeResultWhereIsTheLetterBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
+        checkObjectives()
         getValues()
         setWords(word)
         setListeners()
+    }
+
+    private fun checkObjectives() {
+        vM.checkIfObjectivesHasBeenCompleted("WL", "play", "¿Dónde está la letra?")
     }
 
     private fun getValues() {

@@ -230,6 +230,7 @@ class TextScannerActivity : AppCompatActivity() {
                             textRecognized.movementMethod = ScrollingMovementMethod()
                             binding.clNoTextImage.visibility = View.GONE
                             vM.saveTSResult()
+                            vM.checkIfObjectiveHasBeenCompleted("SCAN", "play", "Escanear foto")
                         }else{
                             binding.clNoTextImage.visibility = View.VISIBLE
                         }

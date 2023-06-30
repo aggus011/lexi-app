@@ -90,4 +90,6 @@ interface FireStoreService {
 
     suspend fun increaseGoalForGames(email: String, games: List<String>)
 
+    suspend fun checkIfObjectiveAndWeeklyObjectivesWereCompleted(game: String, type: String): Pair<Boolean, Boolean>
+
 }

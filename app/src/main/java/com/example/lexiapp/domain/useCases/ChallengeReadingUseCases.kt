@@ -85,7 +85,7 @@ class ChallengeReadingUseCases @Inject constructor(
 
     private suspend fun getChallengeWords() = flow {
         service
-            .getWordsForChallengeReading(WORDS, MAX_LENGHT, SPANISH_LANGUAGE)
+            .getWordsForChallengeReading(WORDS, MAX_LENGTH, SPANISH_LANGUAGE)
             .collect{
             emit(it)
         }
@@ -93,7 +93,7 @@ class ChallengeReadingUseCases @Inject constructor(
 
     private companion object {
         private const val SPANISH_LANGUAGE = "es"
-        private const val MAX_LENGHT = 7
+        private const val MAX_LENGTH = 7
         private const val WORDS = 5
     }
 }

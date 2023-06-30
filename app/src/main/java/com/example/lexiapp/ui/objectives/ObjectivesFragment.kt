@@ -1,6 +1,6 @@
 package com.example.lexiapp.ui.objectives
 
-import ObjectivesAdapter
+import com.example.lexiapp.ui.adapter.ObjectivesAdapter
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.graphics.Color
@@ -18,11 +18,7 @@ import com.example.lexiapp.databinding.FragmentObjectivesBinding
 import dagger.hilt.android.AndroidEntryPoint
 import com.google.firebase.auth.FirebaseAuth
 import android.os.Looper
-import android.util.Log
-import android.widget.Button
-import com.example.lexiapp.data.network.FireStoreServiceImpl
 import com.example.lexiapp.domain.model.Objective
-import com.example.lexiapp.ui.games.letsread.LetsReadActivity
 
 @AndroidEntryPoint
 class ObjectivesFragment : Fragment() {
@@ -92,7 +88,7 @@ class ObjectivesFragment : Fragment() {
                 if (viewHolder is ObjectivesAdapter.ObjectiveViewHolder) {
                     val button = viewHolder.button
                     val objective = objectives[i]
-                    if (objective.progress == objective.goal) {
+                    if (objective.progress >= objective.goal!!) {
                         val greenColor = Color.parseColor("#71dea2")
                         button.setBackgroundColor(greenColor)
                         val translationXAnimation = ObjectAnimator.ofFloat(

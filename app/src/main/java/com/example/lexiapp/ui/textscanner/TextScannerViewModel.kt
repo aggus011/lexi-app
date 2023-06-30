@@ -18,4 +18,10 @@ class TextScannerViewModel @Inject constructor(
         }
     }
 
+    fun checkIfObjectiveHasBeenCompleted(game: String, type: String, gameName: String) {
+        viewModelScope.launch {
+            scanUseCases.generateNotificationForObjectives(game, type, gameName)
+        }
+    }
+
 }

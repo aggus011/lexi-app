@@ -780,10 +780,10 @@ class FireStoreServiceImpl @Inject constructor(
                         val goal = objectiveFields["goal"] as Long
                         val progress = objectiveFields["progress"] as Long?
                         var completed = objectiveFields["completed"] as Boolean?
-                        if (gameValue == game && typeValue == type && goal != progress && !completed!!) {
-                            val updatedProgress = (objectiveFields["progress"] as Long?)?.toInt()?.plus(1)
+                        if (gameValue == game && typeValue == type) {
+                            val updatedProgress = progress?.toInt()?.plus(1)
                             if (updatedProgress != null) {
-                                if (updatedProgress >= goal) {
+                                if (updatedProgress.toLong() == goal) {
                                     completed = true
                                     saveCompleteObjectives(userId ,goal, objectiveFields["title"] as String)
                                 }
@@ -797,6 +797,59 @@ class FireStoreServiceImpl @Inject constructor(
                 }
             }
         }
+    }
+
+    override suspend fun checkIfObjectiveAndWeeklyObjectivesWereCompleted(game: String, type: String): Pair<Boolean, Boolean> {
+        return suspendCoroutine { continuation ->
+            val timeZone = ZoneId.of("America/Argentina/Buenos_Aires")
+            val currentDate = LocalDate.now(timeZone)
+            val lastMonday = currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+            val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+            val lastMondayDate = lastMonday.format(dateFormatter)
+            val currentUser = FirebaseAuth.getInstance().currentUser
+            val userId = currentUser?.uid
+
+            if (userId != null) {
+                objectivesCollection
+                    .document(userId)
+                    .collection(lastMondayDate)
+                    .get()
+                    .addOnSuccessListener { querySnapshot ->
+                        if (!querySnapshot.isEmpty) {
+                            var isGameCompleted = false
+                            var objectivesCompleted = 0
+
+                            querySnapshot.documents.forEach { documentSnapshot ->
+                                val objectiveFields = documentSnapshot.data
+
+                                val gameValue = objectiveFields?.get("game") as String
+                                val typeValue = objectiveFields["type"] as String
+                                val completed = objectiveFields["completed"] as Boolean
+                                val goal = objectiveFields["goal"] as Long
+                                val progress = objectiveFields["progress"] as Long
+
+                                if (gameValue == game &&
+                                    typeValue == type &&
+                                    completed &&
+                                    progress == goal) {
+                                    isGameCompleted = true
+                                }
+
+                                if (completed) {
+                                    objectivesCompleted++
+                                }
+                            }
+                            Log.v(TAG, "particular objective completed: $isGameCompleted, objectives of week completed: ${objectivesCompleted >= 4}")
+                            continuation.resume(Pair(isGameCompleted, objectivesCompleted >= 4))
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.v(TAG, "error to get objectives data")
+                        continuation.resumeWithException(exception)
+                    }
+            }
+        }
+
     }
 
     private fun saveCompleteObjectives(uid: String,count: Long, title: String) {

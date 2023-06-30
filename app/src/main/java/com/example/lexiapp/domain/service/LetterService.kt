@@ -11,4 +11,6 @@ interface LetterService {
 
     suspend fun getWordsForChallengeReading(count: Int, length: Int, language: String): Flow<List<String>>
 
+    suspend fun generateNotificationIfObjectiveHasBeenCompleted(game: String, typeGame: String, gameName: String)
+
 }

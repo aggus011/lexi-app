@@ -10,14 +10,16 @@ import com.example.lexiapp.domain.model.gameResult.CorrectWordGameResult
 import com.example.lexiapp.domain.model.gameResult.ResultGame
 import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.example.lexiapp.domain.service.LetterService
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 
 class LetterServiceImpl @Inject constructor(
     private val apiWordService: WordAssociationGateway,
     private val db: FireStoreServiceImpl,
-    private val prefs: SharedPreferences
+    private val prefs: SharedPreferences,
+    private val notificationServiceImpl: FirebaseNotificationServiceImpl
 ) : LetterService {
 
     private val userMail = prefs.getString("email", null)!!
@@ -78,6 +80,25 @@ class LetterServiceImpl @Inject constructor(
                 }
                 db.updateObjectiveProgress("CW", "play")
             }
+        }
+    }
+
+    override suspend fun generateNotificationIfObjectiveHasBeenCompleted(
+        game: String,
+        typeGame: String,
+        gameName: String
+    ) {
+        val patientToken = db.getDeviceToken()
+
+        val objectivesPair = db.checkIfObjectiveAndWeeklyObjectivesWereCompleted(game, typeGame)
+
+        if (objectivesPair.first && objectivesPair.second) {
+            notificationServiceImpl.sendNotificationWeeklyObjectivesCompleted(patientToken)
+        } else if (objectivesPair.first) {
+            notificationServiceImpl.sendNotificationObjectiveCompleted(
+                patientToken,
+                if (typeGame == "hit") "Acertar en $gameName" else "Jugar $gameName"
+            )
         }
     }
 

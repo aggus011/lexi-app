@@ -1,17 +1,13 @@
 package com.example.lexiapp.di
 
 import android.content.SharedPreferences
-import com.example.lexiapp.data.network.DifferenceServiceImpl
-import com.example.lexiapp.data.network.LetterServiceImpl
-import com.example.lexiapp.data.network.SpeechToTextServiceImpl
+import com.example.lexiapp.data.network.TextScannerServiceImpl
 import com.example.lexiapp.data.api.difference_text.DifferenceGateway
-import com.example.lexiapp.data.api.notifications.FirebaseNotificationClient
+import com.example.lexiapp.data.api.notifications.FirebaseNotificationGateway
 import com.example.lexiapp.data.api.openai_audio.SpeechToTextGateway
 import com.example.lexiapp.data.api.openaicompletions.OpenAICompletionsGateway
-import com.example.lexiapp.data.network.OpenAICompletionsServiceImpl
 import com.example.lexiapp.data.api.word_asociation_api.WordAssociationGateway
 import com.example.lexiapp.data.network.*
-import com.example.lexiapp.data.network.ChallengeReadingServiceImpl
 import com.example.lexiapp.domain.service.*
 import dagger.Module
 import dagger.Provides
@@ -26,9 +22,10 @@ object InterfaceModule {
     fun getLetterRepository(
         apiWordService: WordAssociationGateway,
         db: FireStoreServiceImpl,
-        prefs: SharedPreferences
+        prefs: SharedPreferences,
+        notifications: FirebaseNotificationServiceImpl
     ): LetterService {
-        return LetterServiceImpl(apiWordService, db, prefs)
+        return LetterServiceImpl(apiWordService, db, prefs, notifications)
     }
 
     @Provides
@@ -70,9 +67,10 @@ object InterfaceModule {
     @Provides
     fun getDifferenceService(
         apiDifferenceGateway: DifferenceGateway,
-        db: FireStoreService
+        db: FireStoreService,
+        notifications: FirebaseNotificationServiceImpl
     ): DifferenceService {
-        return DifferenceServiceImpl(apiDifferenceGateway, db)
+        return DifferenceServiceImpl(apiDifferenceGateway, db, notifications)
     }
 
     @Provides
@@ -89,8 +87,16 @@ object InterfaceModule {
 
     @Provides
     fun getFirebaseNotificationService(
-        firebaseCloudMessagingClient: FirebaseNotificationClient
+        firebaseNotificationGateway: FirebaseNotificationGateway
     ): FirebaseNotificationService {
-        return FirebaseNotificationServiceImpl(firebaseCloudMessagingClient)
+        return FirebaseNotificationServiceImpl(firebaseNotificationGateway)
+    }
+
+    @Provides
+    fun getTextScannerService(
+        db: FireStoreServiceImpl,
+        notifications: FirebaseNotificationServiceImpl
+    ): TextScannerService {
+        return TextScannerServiceImpl(db, notifications)
     }
 }

@@ -8,4 +8,5 @@ interface DifferenceService {
 
     suspend fun getDifference(originalText: String, revisedText: String) : Response<Rows>
     suspend fun saveLetsReadResult(result: LetsReadGameResult)
+    suspend fun generateNotificationIfObjectiveHasBeenCompleted(game: String, typeGame: String, gameName: String)
 }

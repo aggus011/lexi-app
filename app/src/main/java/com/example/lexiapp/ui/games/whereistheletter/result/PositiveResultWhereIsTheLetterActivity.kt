@@ -19,7 +19,12 @@ class PositiveResultWhereIsTheLetterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPositiveResultWhereIsTheLetterBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
+        checkObjectives()
         setListeners()
+    }
+
+    private fun checkObjectives() {
+        vM.checkIfObjectivesHasBeenCompleted("WL", "hit", "¿Dónde está la letra?")
     }
 
     private fun setListeners() {
