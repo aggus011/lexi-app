@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import com.example.lexiapp.data.api.DifferenceServiceImpl
 import com.example.lexiapp.data.api.LetterServiceImpl
 import com.example.lexiapp.data.api.SpeechToTextServiceImpl
+import com.example.lexiapp.data.api.TextScannerServiceImpl
 import com.example.lexiapp.data.api.difference_text.DifferenceGateway
 import com.example.lexiapp.data.api.openai_audio.SpeechToTextGateway
 import com.example.lexiapp.data.api.openaicompletions.OpenAICompletionsGateway
@@ -93,5 +94,13 @@ object InterfaceModule {
         firebaseCloudMessagingClient: FirebaseNotificationClient
     ): FirebaseNotificationService {
         return FirebaseNotificationServiceImpl(firebaseCloudMessagingClient)
+    }
+
+    @Provides
+    fun getTextScannerService(
+        db: FireStoreServiceImpl,
+        notifications: FirebaseNotificationServiceImpl
+    ): TextScannerService {
+        return TextScannerServiceImpl(db, notifications)
     }
 }
