@@ -1,8 +1,9 @@
 package com.example.lexiapp.data.network
 
 import android.util.Log
-import com.example.lexiapp.data.notification.NotificationData
-import com.example.lexiapp.data.notification.NotificationRequest
+import com.example.lexiapp.data.api.notifications.FirebaseNotificationClient
+import com.example.lexiapp.data.model.NotificationData
+import com.example.lexiapp.data.model.NotificationRequest
 import com.example.lexiapp.domain.service.FirebaseNotificationService
 import javax.inject.Inject
 import javax.inject.Singleton

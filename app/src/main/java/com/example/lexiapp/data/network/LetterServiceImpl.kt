@@ -1,11 +1,10 @@
-package com.example.lexiapp.data.api
+package com.example.lexiapp.data.network
 
 import android.content.SharedPreferences
 import android.util.Log
-import com.example.lexiapp.data.api.word_asociation_api.WordAssociationService
+import com.example.lexiapp.data.api.word_asociation_api.WordAssociationGateway
 import com.example.lexiapp.data.model.toCorrectWordDataResult
 import com.example.lexiapp.data.model.toWhereIsTheLetterDataResult
-import com.example.lexiapp.data.network.FireStoreServiceImpl
 import com.example.lexiapp.data.repository.BlackList
 import com.example.lexiapp.domain.model.gameResult.CorrectWordGameResult
 import com.example.lexiapp.domain.model.gameResult.ResultGame
@@ -16,7 +15,7 @@ import javax.inject.Inject
 
 
 class LetterServiceImpl @Inject constructor(
-    private val apiWordService: WordAssociationService,
+    private val apiWordService: WordAssociationGateway,
     private val db: FireStoreServiceImpl,
     private val prefs: SharedPreferences
 ) : LetterService {
