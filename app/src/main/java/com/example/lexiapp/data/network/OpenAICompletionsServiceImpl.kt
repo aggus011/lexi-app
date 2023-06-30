@@ -1,6 +1,7 @@
-package com.example.lexiapp.data.api.openaicompletions
+package com.example.lexiapp.data.network
 
 import android.util.Log
+import com.example.lexiapp.data.api.openaicompletions.OpenAICompletionsGateway
 import com.example.lexiapp.domain.service.OpenAICompletionsService
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

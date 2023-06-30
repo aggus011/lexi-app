@@ -1,4 +1,4 @@
-package com.example.lexiapp.data.api
+package com.example.lexiapp.data.network
 
 import com.example.lexiapp.data.api.difference_text.DifferenceGateway
 import com.example.lexiapp.data.api.difference_text.model.Rows

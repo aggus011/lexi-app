@@ -48,7 +48,7 @@ interface FireStoreService {
 
     suspend fun checkObjectivesExist(email: String, lastMondayDate: String): Boolean
 
-    suspend fun getObjectives(email: String, lastMondayDate: String, listener: (List<Objective>) -> Unit)
+    suspend fun getObjectives(uid: String, lastMondayDate: String, listener: (List<Objective>) -> Unit)
 
     suspend fun saveLetsReadResult(result: LetsReadGameDataResult)
 
@@ -86,5 +86,10 @@ interface FireStoreService {
 
     suspend fun getObjectivesHistory(uid: String): Flow<List<MiniObjective>>
 
+    suspend fun getIncompleteGameNames(email: String, lastMondayDate: String): List<String>
+
+    suspend fun increaseGoalForGames(email: String, games: List<String>)
+
     suspend fun checkIfObjectiveAndWeeklyObjectivesWereCompleted(game: String, type: String): Pair<Boolean, Boolean>
+
 }

@@ -78,11 +78,7 @@ class ObjectivesFragment : Fragment() {
     }
 
     private fun saveObjectives() {
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        val userid = currentUser?.uid
-        if (userid != null) {
-            objectivesViewModel.saveObjectivesToFirestore(userid)
-        }
+            objectivesViewModel.saveObjectives()
     }
 
     private fun checkObjectivesCompletion(objectives: List<Objective>) {

@@ -1,17 +1,18 @@
 package com.example.lexiapp.di
 
 import android.content.SharedPreferences
-import com.example.lexiapp.data.api.DifferenceServiceImpl
-import com.example.lexiapp.data.api.LetterServiceImpl
-import com.example.lexiapp.data.api.SpeechToTextServiceImpl
 import com.example.lexiapp.data.api.TextScannerServiceImpl
+import com.example.lexiapp.data.network.DifferenceServiceImpl
+import com.example.lexiapp.data.network.LetterServiceImpl
+import com.example.lexiapp.data.network.SpeechToTextServiceImpl
 import com.example.lexiapp.data.api.difference_text.DifferenceGateway
+import com.example.lexiapp.data.api.notifications.FirebaseNotificationClient
 import com.example.lexiapp.data.api.openai_audio.SpeechToTextGateway
 import com.example.lexiapp.data.api.openaicompletions.OpenAICompletionsGateway
-import com.example.lexiapp.data.api.openaicompletions.OpenAICompletionsServiceImpl
-import com.example.lexiapp.data.api.word_asociation_api.WordAssociationService
+import com.example.lexiapp.data.network.OpenAICompletionsServiceImpl
+import com.example.lexiapp.data.api.word_asociation_api.WordAssociationGateway
 import com.example.lexiapp.data.network.*
-import com.example.lexiapp.data.repository.challengereading.ChallengeReadingServiceImpl
+import com.example.lexiapp.data.network.ChallengeReadingServiceImpl
 import com.example.lexiapp.domain.service.*
 import dagger.Module
 import dagger.Provides
@@ -24,7 +25,7 @@ object InterfaceModule {
 
     @Provides
     fun getLetterRepository(
-        apiWordService: WordAssociationService,
+        apiWordService: WordAssociationGateway,
         db: FireStoreServiceImpl,
         prefs: SharedPreferences,
         notifications: FirebaseNotificationServiceImpl

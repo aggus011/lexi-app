@@ -4,7 +4,7 @@ import com.example.lexiapp.data.api.difference_text.DifferenceClient
 import com.example.lexiapp.data.api.openai_audio.SpeechToTextClient
 import com.example.lexiapp.data.api.openaicompletions.OpenAICompletionsClient
 import com.example.lexiapp.data.api.word_asociation_api.WordAssociationClient
-import com.example.lexiapp.data.network.FirebaseNotificationClient
+import com.example.lexiapp.data.api.notifications.FirebaseNotificationClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
