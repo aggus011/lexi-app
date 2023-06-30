@@ -1,26 +1,20 @@
 package com.example.lexiapp.domain.useCases
 
-import android.content.ContentValues.TAG
 import android.content.SharedPreferences
-import android.util.Log
-import com.example.lexiapp.data.api.LetterServiceImpl
+import com.example.lexiapp.data.network.LetterServiceImpl
 import com.example.lexiapp.data.network.FireStoreServiceImpl
 import com.example.lexiapp.domain.exceptions.OversizeException
-import com.example.lexiapp.domain.service.FireStoreService
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import java.util.Random
-import java.util.stream.IntStream.range
 
 class LetterGameUseCasesTest {
 
