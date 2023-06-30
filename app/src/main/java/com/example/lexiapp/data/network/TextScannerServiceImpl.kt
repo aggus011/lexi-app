@@ -1,7 +1,5 @@
-package com.example.lexiapp.data.api
+package com.example.lexiapp.data.network
 
-import com.example.lexiapp.data.network.FireStoreServiceImpl
-import com.example.lexiapp.data.network.FirebaseNotificationServiceImpl
 import com.example.lexiapp.domain.service.TextScannerService
 import javax.inject.Inject
 
