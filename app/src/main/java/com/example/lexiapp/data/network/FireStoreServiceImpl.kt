@@ -23,8 +23,8 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
-import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.ZoneId
@@ -36,6 +36,7 @@ import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
+import kotlin.math.ceil
 
 @Singleton
 class FireStoreServiceImpl @Inject constructor(
@@ -382,14 +383,15 @@ class FireStoreServiceImpl @Inject constructor(
         correctWordCollection.document(email).collection("results")
             .document(System.currentTimeMillis().toString()).set(data).await()
     }
-    override suspend fun saveObjectives(email: String, objectives: List<Objective>) {
-        val zonaHoraria = ZoneId.of("America/Argentina/Buenos_Aires")
-        val fechaActual = LocalDate.now(zonaHoraria)
-        val ultimoLunes = fechaActual.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).atStartOfDay(zonaHoraria).toLocalDate()
-        val formato = DateTimeFormatter.ofPattern("yyyyMMdd")
-        val fechaUltimoLunes = ultimoLunes.format(formato)
 
-        val document = objectivesCollection.document(email).collection(fechaUltimoLunes)
+    override suspend fun saveObjectives(email: String, objectives: List<Objective>) {
+        val timeZone = ZoneId.of("America/Argentina/Buenos_Aires")
+        val currentDate = LocalDate.now(timeZone)
+        val lastMonday = currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).atStartOfDay(timeZone).toLocalDate()
+        val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+        val lastMondayDate = lastMonday.format(formatter)
+
+        val document = objectivesCollection.document(email).collection(lastMondayDate)
         val objectiveMap = hashMapOf<String, Any?>()
         objectives.forEachIndexed { index, objective ->
             val objectiveFields = hashMapOf<String, Any?>(
@@ -414,6 +416,34 @@ class FireStoreServiceImpl @Inject constructor(
                 .await()
         }
     }
+    override suspend fun increaseGoalForGames(email: String, games: List<String>) {
+        val timeZone = ZoneId.of("America/Argentina/Buenos_Aires")
+        val currentDate = LocalDate.now(timeZone)
+        val lastMonday = currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).atStartOfDay(timeZone).toLocalDate()
+        val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+        val lastMondayDate = lastMonday.format(dateFormatter)
+        val document = objectivesCollection.document(email).collection(lastMondayDate)
+        val snapshot = document.get().await()
+        val batch = db.batch()
+
+
+        for (documentSnapshot in snapshot.documents) {
+            val objectiveFields = documentSnapshot.data
+            if (objectiveFields is Map<*, *>) {
+                val game = objectiveFields["game"] as String?
+                if (game != null && game in games) {
+                    val goal = objectiveFields["goal"] as Long?
+                    if (goal != null) {
+                        val newGoal = ceil(goal * 1.5).toInt()
+                        batch.update(documentSnapshot.reference, "goal", newGoal)
+                    }
+                }
+            }
+        }
+
+        batch.commit().await()
+    }
+
 
     override suspend fun checkObjectivesExist(email: String, lastMondayDate: String): Boolean {
         val document = objectivesCollection.document(email).collection(lastMondayDate)
@@ -424,14 +454,51 @@ class FireStoreServiceImpl @Inject constructor(
             false
         }
     }
+    override suspend fun getIncompleteGameNames(email: String, lastMondayDate: String): List<String> {
+        return suspendCancellableCoroutine { continuation ->
+            val document = objectivesCollection.document(email).collection(lastMondayDate)
+            val registration = document.addSnapshotListener { snapshot, exception ->
+                try {
+                    if (exception != null || snapshot == null) {
+                        continuation.resume(emptyList())
+                        return@addSnapshotListener
+                    }
+                    val gameNames = mutableListOf<String>()
+                    for (documentSnapshot in snapshot.documents) {
+                        val objectiveFields = documentSnapshot.data
+                        if (objectiveFields is Map<*, *>) {
+                            val completed = objectiveFields["completed"]
+                            if (completed == false) {
+                                val game = objectiveFields["game"] as String?
+                                val progress = objectiveFields["progress"] as String?
+                                if (game != null) {
+                                    gameNames.add(game)
+                                }
+                            }
+                        }
+                    }
+                    continuation.resume(gameNames)
+                } catch (e: Exception) {
+                    Log.v("TAG", "$e")
+                    continuation.resume(emptyList())
+                }
+            }
+            continuation.invokeOnCancellation {
+                registration.remove()
+            }
+        }
+    }
 
-    override suspend fun getObjectives(email: String, lastMondayDate: String, listener: (List<Objective>) -> Unit) {
-        val document = objectivesCollection.document(email).collection(lastMondayDate)
+
+    override suspend fun getObjectives(uid: String, lastMondayDate: String, listener: (List<Objective>) -> Unit
+    ) {
+        val document = objectivesCollection.document(uid).collection(lastMondayDate)
         val registration = document.addSnapshotListener { snapshot, exception ->
             try {
                 if (exception != null || snapshot == null) {
                     listener(emptyList())
                     return@addSnapshotListener
+
                 }
 
                 val objectives = mutableListOf<Objective>()

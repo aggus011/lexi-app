@@ -1,18 +1,18 @@
 package com.example.lexiapp.ui.objectives
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.lexiapp.data.api.openaicompletions.OpenAICompletionsGateway.Companion.TAG
 import com.example.lexiapp.domain.model.MiniObjective
 import com.example.lexiapp.domain.model.Objective
 import com.example.lexiapp.domain.useCases.ObjectivesUseCases
 import com.example.lexiapp.domain.service.FireStoreService
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -20,13 +20,11 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.time.temporal.TemporalAdjusters
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class ObjectivesViewModel @Inject constructor(
-    private val objectivesUseCases: ObjectivesUseCases,
-    private val fireStoreService: FireStoreService
+    private val objectivesUseCases: ObjectivesUseCases
 ) : ViewModel() {
 
     private val _objectives = MutableLiveData<List<Objective>>()
@@ -45,7 +43,7 @@ class ObjectivesViewModel @Inject constructor(
 
     private fun listenerCompleteObjectives() {
         viewModelScope.launch {
-            objectivesUseCases.listenerCompleteObjectives(FirebaseAuth.getInstance().currentUser!!.uid).collect{
+            objectivesUseCases.listenerCompleteObjectives().collect{
                 _completedObjectives.value = objectivesUseCases.filterBeforeActualWeek(it)
             }
         }
@@ -56,40 +54,32 @@ class ObjectivesViewModel @Inject constructor(
         val currentDate = LocalDate.now(timeZone)
         val lastMonday = currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
         val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
-        val lastMondayDate = lastMonday.format(dateFormatter)
-        return lastMondayDate
+        return lastMonday.format(dateFormatter)
     }
 
     fun loadObjectives() {
-        val today = LocalDate.now(ZoneId.of("America/Argentina/Buenos_Aires"))
-        val nextMonday = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY))
-        val nextMondayDateTime = nextMonday.atStartOfDay(ZoneId.of("America/Argentina/Buenos_Aires"))
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        val uid = currentUser?.uid
-        val lastMondayDate= getLastMondayDate()
-        if (uid != null) {
+        val lastMondayDate = getLastMondayDate()
             viewModelScope.launch {
-                fireStoreService.getObjectives(uid, lastMondayDate) { objectives ->
+                objectivesUseCases.getObjectivesActual(lastMondayDate) { objectives ->
                     _objectives.value = objectives
 
-                    val daysLeft = ChronoUnit.DAYS.between(LocalDateTime.now(ZoneId.of("America/Argentina/Buenos_Aires")), nextMondayDateTime)
-                    _daysLeft.value = daysLeft.toInt()
-                }
+                    val timeLeft = objectivesUseCases.calculateDaysLeft()
+                    val daysLeft = timeLeft.daysLeft
+                    val hoursLeft = timeLeft.hoursLeft
+
+                    Log.v(TAG, "hoursLeft: $hoursLeft")
+                    Log.v(TAG, "daysLeft: $daysLeft")
+
+                    _daysLeft.value = daysLeft
             }
         }
     }
-
-    fun saveObjectivesToFirestore(email: String) {
-        val lastMondayDate= getLastMondayDate()
+    fun saveObjectives() {
         viewModelScope.launch {
-            val objectivesExist = fireStoreService.checkObjectivesExist(email, lastMondayDate)
-            if (!objectivesExist) {
-                val today = LocalDate.now()
-                val monday = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-                val objectives = objectivesUseCases.getObjectives(monday)
-
-                fireStoreService.saveObjectives(email, objectives ?: emptyList())
-            }
+            objectivesUseCases.saveObjectives()
         }
     }
+
+
+
 }
