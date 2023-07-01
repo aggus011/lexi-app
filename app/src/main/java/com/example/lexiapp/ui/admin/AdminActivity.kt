@@ -40,12 +40,12 @@ class AdminActivity : AppCompatActivity() {
     private fun setListeners() {
         binding.btnLogout.setOnClickListener {
             closeSession()
+            startActivity(Intent(this, LoginActivity::class.java))
         }
     }
 
     private fun closeSession() {
         vM.closeSession()
-        startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }
 
