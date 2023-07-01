@@ -45,6 +45,10 @@ class ProfileUseCases @Inject constructor(
                 editor.putInt("professional_account_state", if(professional.isVerifiedAccount) 2 else 1).apply()
                 fireStoreService.saveTokenToProfessional(professional.user.email)
             }
+            if(isAdmin(user.email)){
+                editor.putString("email", user.email).apply()
+                editor.putString("user_type", "admin").apply()
+            }
         }catch (e: UserNotFoundException){
             Log.v(TAG, "User not found in collections")
         }
@@ -143,6 +147,10 @@ class ProfileUseCases @Inject constructor(
     fun closeSesion()=editor.clear().apply()
 
     fun verifyIfPatientHasRegisteredButNotChooseCategories() = prefs.contains("categories")
+
+    private fun isAdmin(email: String): Boolean {
+        return email == "lexiapp.2023@gmail.com"
+    }
 
 
     companion object{

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityLoginBinding
 import com.example.lexiapp.domain.model.UserLogin
+import com.example.lexiapp.ui.admin.AdminActivity
 import com.example.lexiapp.ui.categories.CategoriesActivity
 import com.example.lexiapp.ui.customDialog.DialogFragmentLauncher
 import com.example.lexiapp.ui.customDialog.ErrorDialog
@@ -98,6 +99,7 @@ class LoginActivity : AppCompatActivity() {
                 when(it){
                     "patient" -> goToPatientHome()
                     "professional" -> viewModel.setProfessionalState()
+                    "admin" -> startAdminActivity()
                 }
             }
         }
@@ -156,5 +158,10 @@ class LoginActivity : AppCompatActivity() {
         binding.tvRegister.setOnClickListener {
             startActivity(Intent(this, RoleActivity::class.java))
         }
+    }
+
+    private fun startAdminActivity(){
+        startActivity(Intent(this, AdminActivity::class.java))
+        finish()
     }
 }
