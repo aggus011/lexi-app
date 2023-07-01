@@ -36,6 +36,13 @@ object InterfaceModule {
     }
 
     @Provides
+    fun getAmdinService(
+        db: FireStoreServiceImpl
+    ): AdminService {
+        return AdminServiceImpl(db)
+    }
+
+    @Provides
     fun getChallengeReadingRepository(
         firestoreService: FireStoreServiceImpl
     ): ChallengeReadingService {

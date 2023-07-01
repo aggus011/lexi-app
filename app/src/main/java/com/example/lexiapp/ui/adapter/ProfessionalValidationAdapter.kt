@@ -7,7 +7,8 @@ import com.example.lexiapp.databinding.ItemProfessionalVerificationBinding
 import com.example.lexiapp.domain.model.ProfessionalValidation
 
 class ProfessionalValidationAdapter(
-    private val professionals: List<ProfessionalValidation>
+    private val professionals: List<ProfessionalValidation>,
+    private val setApproval: (String, Boolean) -> Unit
 ): RecyclerView.Adapter<ProfessionalValidationAdapter.ProfessionalValidationViewHolder>() {
 
     override fun onCreateViewHolder(
@@ -24,16 +25,25 @@ class ProfessionalValidationAdapter(
         position: Int
     ) {
         val professional = professionals[position]
-
-        holder.binding.tvProfessionalName.text = professional.name
-        holder.binding.tvProfessionalEmail.text = professional.email
-        holder.binding.tvMedicalRegistration.text = professional.medicalRegistration
-        holder.binding.switchValidate.isChecked = professional.validated
+        holder.bind(professional)
+        holder.setSwitchListener(professional)
     }
 
-    override fun getItemCount(): Int {
-        return professionals.size
-    }
+    override fun getItemCount() = professionals.size
 
-    inner class ProfessionalValidationViewHolder(val binding: ItemProfessionalVerificationBinding): RecyclerView.ViewHolder(binding.root)
+    inner class ProfessionalValidationViewHolder(val binding: ItemProfessionalVerificationBinding): RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(professional: ProfessionalValidation){
+            binding.tvProfessionalName.text = professional.name
+            binding.tvProfessionalEmail.text = professional.email
+            binding.tvMedicalRegistration.text = professional.medicalRegistration
+            binding.switchValidate.isChecked = professional.validated
+        }
+
+        fun setSwitchListener(professional: ProfessionalValidation) {
+            binding.switchValidate.setOnCheckedChangeListener{ _, isChecked ->
+                setApproval(professional.email, isChecked)
+            }
+        }
+    }
 }

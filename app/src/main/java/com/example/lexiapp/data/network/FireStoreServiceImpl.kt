@@ -19,6 +19,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.MetadataChanges
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -884,6 +885,44 @@ class FireStoreServiceImpl @Inject constructor(
             }
 
         awaitClose { listener.remove() }
+    }
+
+    override suspend fun getAllProfessional() = callbackFlow {
+        val listener = professionalCollection.addSnapshotListener(MetadataChanges.EXCLUDE) { querySnapshot, error ->
+            if (error != null) {
+                close(error)
+                return@addSnapshotListener
+            }
+            val result = mutableListOf<ProfessionalValidation>()
+            for (document in querySnapshot!!.documents) {
+                val email = document.id
+                val data = document.data!!
+                result.add(
+                    ProfessionalValidation(
+                        name = data["user_name"] as String,
+                        email = email,
+                        medicalRegistration = data["medical_registration"] as String,
+                        validated = data["is_verificated_account"] as Boolean
+                    )
+                )
+            }
+            trySend(result.toList()).isSuccess
+        }
+
+        awaitClose { listener.remove() }
+    }
+
+    override suspend fun saveValidationTOProfessional(emailProfessional: String, approval: Boolean) {
+        try{
+            professionalCollection
+                .document(emailProfessional)
+                .update("is_verificated_account", approval)
+                .addOnSuccessListener {
+                    Log.v(TAG, "saved validation to professional $emailProfessional")
+                }
+        }catch (e: FirestoreException){
+            Log.v(TAG, "error to save validation to professional $emailProfessional with exception ${e.message}")
+        }
     }
 
     companion object {

@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.viewModels
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lexiapp.databinding.ActivityAdminBinding
 import com.example.lexiapp.ui.adapter.ProfessionalValidationAdapter
 import com.example.lexiapp.ui.login.LoginActivity
@@ -15,8 +15,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class AdminActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAdminBinding
     private val vM: AdminViewModel by viewModels()
-    private lateinit var rvProfessionalValidation: RecyclerView
-    private lateinit var professionalValidationAdapter: ProfessionalValidationAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +23,18 @@ class AdminActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setListeners()
+        setRecycler()
+    }
+
+    private fun setRecycler() {
+        binding.rvProfessionals.layoutManager= LinearLayoutManager(this)
+        vM.professionals.observe(this){ professionals->
+            binding.rvProfessionals.adapter= ProfessionalValidationAdapter(professionals, ::setApproval)
+        }
+    }
+
+    private fun setApproval(emailProfessional: String, approval: Boolean) {
+        vM.setApproval(emailProfessional, approval)
     }
 
     private fun setListeners() {

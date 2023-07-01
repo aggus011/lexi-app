@@ -32,11 +32,13 @@
         android:textAppearance="@style/title"/>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvProfessionals"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="-20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnLogout"
         app:layout_constraintTop_toBottomOf="@id/animationLogo"
         tools:listitem="@layout/item_professional_verification"/>
 
@@ -47,7 +49,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/logout"
         android:backgroundTint="@color/red"
         app:cornerRadius="10dp"
