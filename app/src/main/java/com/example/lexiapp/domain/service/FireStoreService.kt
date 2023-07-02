@@ -92,4 +92,8 @@ interface FireStoreService {
 
     suspend fun checkIfObjectiveAndWeeklyObjectivesWereCompleted(game: String, type: String): Pair<Boolean, Boolean>
 
+    suspend fun getAllProfessional(): Flow<List<ProfessionalValidation>>
+
+    suspend fun saveValidationTOProfessional(emailProfessional: String, approval: Boolean)
+
 }

@@ -29,8 +29,11 @@
         android:theme="@style/Theme.LexiApp"
         tools:targetApi="31">
         <activity
+            android:name=".ui.admin.AdminActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.objectives.CompletedObjectiveActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".ui.profesionalhome.note.CreateNoteActivity"
             android:exported="false" />
@@ -133,12 +136,9 @@
             android:exported="false"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
-                <action
-                    android:name="com.google.firebase.MESSAGING_EVENT">
-                </action>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"></action>
             </intent-filter>
         </service>
-
     </application>
 
 </manifest>
