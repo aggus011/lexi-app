@@ -30,7 +30,7 @@ interface FireStoreService {
 
     suspend fun getProfessional(email: String): Professional
 
-    suspend fun getIsLinked(email: String): Boolean?
+    suspend fun getIsLinked(email: String): Flow<Boolean?>
 
     suspend fun bindProfessionalToPatient (emailPatient: String, emailProfessional: String): FirebaseResult
 

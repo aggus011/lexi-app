@@ -110,26 +110,26 @@ class ProfileFragment : Fragment() {
 
     private fun btnLink() {
         binding.btnLinkAccount.setOnClickListener {
-            viewModel.cleanIsLinked()
-            viewModel.isLinked()
+            Toast.makeText(
+                activity,
+                "Estamos validando si se encuentra vinculado a un profesional",
+                Toast.LENGTH_SHORT
+            ).show()
             viewModel.isLinked.observe(viewLifecycleOwner) { isLink ->
-                if (isLink == null) {
-                    Toast.makeText(
-                        activity,
-                        "Estamos validando que no se encuentre asociado",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else if (!isLink) {
-                    startActivity(Intent(activity, LinkPatientActivity::class.java))
-                    viewModel.isLinked.removeObservers(viewLifecycleOwner)
-                } else {
-                    Toast.makeText(
-                        activity,
-                        "Ya se encuentra vinculado a un profesional",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                when(isLink){
+                    true -> {
+                        Toast.makeText(
+                            activity,
+                            "Ya se encuentra vinculado a un profesional",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    false -> {
+                        startActivity(Intent(activity, LinkPatientActivity::class.java))
+                    }
                 }
             }
+            viewModel.isLinked.removeObservers(viewLifecycleOwner)
         }
     }
 
@@ -146,4 +146,5 @@ class ProfileFragment : Fragment() {
         viewModel.getProfile()
         setIconUserInitials()
     }
+
 }

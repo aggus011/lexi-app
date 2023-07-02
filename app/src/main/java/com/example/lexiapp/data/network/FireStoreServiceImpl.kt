@@ -250,23 +250,20 @@ class FireStoreServiceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getIsLinked(email: String): Boolean? {
-        var linkProfessional: Boolean? = null
-        userCollection.document(email).get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val documentSnapshot = task.result
-                    if (documentSnapshot.exists()) {
-                        linkProfessional =
-                            documentSnapshot.data?.get("professional_link") as String? != null
-                        Log.v("FSSImpl_PRE_LINK_PROF", "$linkProfessional")
-                    }
-                } else {
-                    throw FirestoreException("Problema en firestore para obtener datos")
-                }
-            }.await()
-        Log.v("FSSImpl_POST_LINK_PROF", "$linkProfessional")
-        return linkProfessional
+    override suspend fun getIsLinked(email: String)= callbackFlow {
+        val listener = userCollection.document(email).addSnapshotListener { querySnapshot, error ->
+            if (error != null) {
+                close(error)
+                return@addSnapshotListener
+            }
+            var linkProfessional: Boolean? = null
+            if (querySnapshot != null && querySnapshot.exists()) {
+                val email = querySnapshot.data?.get("professional_link") as String?
+                linkProfessional = email != null
+            }
+            trySend(linkProfessional).isSuccess
+        }
+        awaitClose { listener.remove() }
     }
 
     override suspend fun bindProfessionalToPatient(

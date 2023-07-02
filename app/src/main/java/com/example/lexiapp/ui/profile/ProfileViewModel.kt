@@ -37,10 +37,11 @@ class ProfileViewModel @Inject constructor(
     private val _isTimerRunning = MutableLiveData<Boolean>()
     val isTimerRunning: LiveData<Boolean> = _isTimerRunning
 
-    private val _isLinked = MutableLiveData<Boolean?>(null)
-    val isLinked: LiveData<Boolean?> = _isLinked
+    private val _isLinked = MutableLiveData<Boolean>()
+    val isLinked: LiveData<Boolean> = _isLinked
 
     init{
+        isLinked()
         _timeLeftInMillis.value = initialTimeInMillis
         _isTimerRunning.value = true
         getProfile()
@@ -48,16 +49,6 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun getQR()=qrUseCases.generateQR(profileUseCases.getEmail()!!)
-
-    fun cleanIsLinked() { _isLinked.value=null }
-
-    fun isLinked(){
-        viewModelScope.launch {
-            profileUseCases.isPatientLinked().collect{
-                _isLinked.value=it
-            }
-        }
-    }
 
     fun startTimer() {
         if (countdownTimer != null) {
@@ -108,5 +99,13 @@ class ProfileViewModel @Inject constructor(
 
     fun closeSesion(){
         profileUseCases.closeSesion()
+    }
+
+    private fun isLinked(){
+        viewModelScope.launch {
+            profileUseCases.isPatientLinked().collect{
+                _isLinked.value=it
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.viewModels
 import com.example.lexiapp.databinding.ActivityLinkPatientBinding
 import com.example.lexiapp.ui.profile.ProfileViewModel
@@ -37,6 +38,13 @@ class LinkPatientActivity : AppCompatActivity() {
     }
 
     private fun setObservers(){
+        vM.isLinked.observe(this){ isLink ->
+            if(isLink != null && isLink){
+                Toast.makeText(this, "Se vinculó con su profesional", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
+
         vM.timeLeftInMillis.observe(this) { timeLeftInMillis ->
             binding.txtTimerCount.text = "${(timeLeftInMillis / 1000).toString()}s"
         }
