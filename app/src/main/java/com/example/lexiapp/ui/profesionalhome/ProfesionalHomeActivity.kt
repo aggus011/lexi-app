@@ -2,14 +2,11 @@ package com.example.lexiapp.ui.profesionalhome
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.AutoCompleteTextView
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
@@ -45,6 +42,7 @@ class ProfesionalHomeActivity : AppCompatActivity() {
     private val TAG_FRAGMENT_DETAIL = "detail_fragment_tag"
     private var detailFragment: DetailPatientFragment? = null
     private lateinit var notificationPermission: Array<String>
+    private var iconUserColor: Int? = null
 
     @Inject
     lateinit var profileUseCases: ProfileUseCases
@@ -154,7 +152,7 @@ class ProfesionalHomeActivity : AppCompatActivity() {
 
     private fun setColors() {
         val icColor = profileUseCases.getColorRandomForIconProfile()
-
+        iconUserColor = icColor
         setBackgroundIconColor(icColor)
     }
 
@@ -174,6 +172,7 @@ class ProfesionalHomeActivity : AppCompatActivity() {
         }
         binding.clIconAccount.setOnClickListener {
             val accountFragment = ProfessionalProfileFragment()
+            accountFragment.arguments = getProfessionalData()
 
             supportFragmentManager
                 .beginTransaction()
@@ -279,6 +278,25 @@ class ProfesionalHomeActivity : AppCompatActivity() {
     private fun verifyIsApiVersionIsHigherThan33(): Boolean{
         return Build.VERSION.SDK_INT >=
                 Build.VERSION_CODES.TIRAMISU
+    }
+
+    private fun getProfessionalData(): Bundle{
+        val args = Bundle()
+        val name = profileUseCases.getProfile().userName
+        val email = profileUseCases.getEmail()
+        val initials = profileUseCases.userInitials()
+        val medicalRegistration = profileUseCases.getMedicalRegistration()
+
+        args.putString("name", name)
+        args.putString("email", email)
+        args.putString("initials", initials)
+        args.putString("medical_registration", medicalRegistration)
+
+        iconUserColor?.let {
+            args.putInt("icon_color", it)
+        }
+
+        return args
     }
 
     private companion object {

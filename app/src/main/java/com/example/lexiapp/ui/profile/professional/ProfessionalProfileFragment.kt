@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.example.lexiapp.R
 import com.example.lexiapp.databinding.FragmentProfessionalProfileBinding
 import com.example.lexiapp.domain.useCases.ProfileUseCases
 import com.example.lexiapp.ui.login.LoginActivity
@@ -38,16 +39,21 @@ class ProfessionalProfileFragment : Fragment() {
     }
 
     private fun setProfessionalData(){
-        val user = profileUseCases.getProfile()
-        binding.tvProfessionalName.text = user.userName
-        binding.tvProfessionalEmail.text = user.email
+        val name = arguments?.getString("name")
+        val email = arguments?.getString("email")
+        val medicalRegistration = arguments?.getString("medical_registration")
+
+        binding.tvProfessionalName.text = name
+        binding.tvProfessionalEmail.text = email
+        binding.tvProfessionalMedicalRegistration.text = getString(R.string.medical_registration_number).plus(medicalRegistration)
 
         setTextIcon()
         setColors()
     }
 
     private fun setTextIcon() {
-        binding.tvUserInitials.text = profileUseCases.userInitials()
+        val initials = arguments?.getString("initials")
+        binding.tvUserInitials.text = initials
     }
 
     private fun setColors(){
@@ -56,7 +62,10 @@ class ProfessionalProfileFragment : Fragment() {
     }
 
     private fun setBackgroundIconColor(icColor: Int) {
-        val color = ContextCompat.getColor(requireContext(), icColor)
+        val color = ContextCompat.getColor(
+            requireContext(),
+            arguments?.getInt("icon_color") ?: icColor
+        )
 
         val newDrawable = GradientDrawable()
         newDrawable.shape = GradientDrawable.OVAL

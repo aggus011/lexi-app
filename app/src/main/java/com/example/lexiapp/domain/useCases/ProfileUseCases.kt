@@ -42,6 +42,7 @@ class ProfileUseCases @Inject constructor(
                 editor.putString("email", professional.user.email).apply()
                 editor.putString("user_name", professional.user.userName).apply()
                 editor.putString("user_type", "professional").apply()
+                editor.putString("medical_registration", professional.medicalRegistration).apply()
                 editor.putInt("professional_account_state", if(professional.isVerifiedAccount) 2 else 1).apply()
                 fireStoreService.saveTokenToProfessional(professional.user.email)
             }
@@ -152,6 +153,7 @@ class ProfileUseCases @Inject constructor(
         return email == "lexiapp.2023@gmail.com"
     }
 
+    fun getMedicalRegistration() = prefs.getString("medical_registration", null)
 
     companion object{
         private const val TAG = "ProfileUseCases"
