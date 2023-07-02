@@ -142,7 +142,7 @@ class ProfileUseCases @Inject constructor(
 
     fun haveAccount()= getEmail()!=null
 
-    suspend fun isPatientLinked() = flow<Boolean?> { emit(fireStoreService.getIsLinked(getEmail()!!))}
+    suspend fun isPatientLinked() = fireStoreService.getIsLinked(getEmail()!!)
 
     fun closeSesion()=editor.clear().apply()
 
