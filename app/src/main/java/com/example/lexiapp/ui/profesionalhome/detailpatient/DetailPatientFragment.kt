@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.example.lexiapp.databinding.FragmentDetailPatientBinding
@@ -379,17 +380,32 @@ class DetailPatientFragment : Fragment() {
                 else patient.email[0].uppercase()
         }
         binding.btnTrash.setOnClickListener {
-            viewModel.unbindPatient(patient.email)
-            viewModel.resultDeletePatient.observe(viewLifecycleOwner) {
-                if (it == FirebaseResult.TaskSuccess)
-                    requireActivity().supportFragmentManager.popBackStack()
-                else Toast.makeText(
-                    activity,
-                    "No se pudo desvincular al paciente, intentelo mas tarde",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
+            showConfirmationDialog(patient.email)
+        }
+    }
+
+    private fun showConfirmationDialog(emailPatient: String) {
+        val builder = AlertDialog.Builder(requireActivity())
+        builder.setMessage("¿Esta seguro de que quiere desvincular al paciente: $emailPatient?")
+            .setPositiveButton("Confirmar") { _, _ ->
+                // Llama a la acción de confirmación
+                unbindPatient(emailPatient)
             }
+            .setNegativeButton("Cancelar", null)
+        builder.create().show()
+    }
+
+    private fun unbindPatient(email: String) {
+        viewModel.unbindPatient(email)
+        viewModel.resultDeletePatient.observe(viewLifecycleOwner) {
+            if (it == FirebaseResult.TaskSuccess)
+                requireActivity().supportFragmentManager.popBackStack()
+            else Toast.makeText(
+                activity,
+                "No se pudo desvincular al paciente, intentelo mas tarde",
+                Toast.LENGTH_SHORT
+            )
+                .show()
         }
     }
 

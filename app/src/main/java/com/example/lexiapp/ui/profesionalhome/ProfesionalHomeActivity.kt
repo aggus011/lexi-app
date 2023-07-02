@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
@@ -21,7 +22,6 @@ import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.useCases.ProfileUseCases
 import com.example.lexiapp.ui.adapter.UserAdapter
-import com.example.lexiapp.ui.patienthome.HomePatientActivity
 import com.example.lexiapp.ui.profesionalhome.detailpatient.DetailPatientFragment
 import com.example.lexiapp.ui.profesionalhome.note.CreateNoteActivity
 import com.example.lexiapp.ui.profesionalhome.note.RecordNoteActivity
@@ -207,7 +207,7 @@ class ProfesionalHomeActivity : AppCompatActivity() {
             binding.rvPatient.adapter = UserAdapter(
                 list,
                 ::viewDetails,
-                ::unbindPatient,
+                ::confirmUnbindPatient,
                 ::startCreateNoteActivity,
                 ::startRecordNoteActivity
             )
@@ -226,6 +226,21 @@ class ProfesionalHomeActivity : AppCompatActivity() {
                 Toast.makeText(this, "No se pudo eliminar", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun confirmUnbindPatient(emailPatient: String) {
+        showConfirmationDialog(emailPatient)
+    }
+
+    private fun showConfirmationDialog(emailPatient: String) {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("¿Esta seguro de que quiere desvincular al paciente: $emailPatient?")
+            .setPositiveButton("Confirmar") { _, _ ->
+                // Llama a la acción de confirmación
+                unbindPatient(emailPatient)
+            }
+            .setNegativeButton("Cancelar", null)
+        builder.create().show()
     }
 
     private fun unbindPatient(email: String) {
