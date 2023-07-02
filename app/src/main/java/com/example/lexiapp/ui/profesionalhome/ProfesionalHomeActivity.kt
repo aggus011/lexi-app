@@ -2,11 +2,14 @@ package com.example.lexiapp.ui.profesionalhome
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.AutoCompleteTextView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
@@ -33,6 +36,7 @@ import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class ProfesionalHomeActivity : AppCompatActivity() {
@@ -151,12 +155,7 @@ class ProfesionalHomeActivity : AppCompatActivity() {
     private fun setColors() {
         val icColor = profileUseCases.getColorRandomForIconProfile()
 
-        //setTextColor(icColor)
         setBackgroundIconColor(icColor)
-    }
-
-    private fun setTextColor(icColor: Int) {
-        binding.tvUserInitials.setTextColor(ContextCompat.getColor(this, icColor))
     }
 
     private fun setBackgroundIconColor(icColor: Int) {
