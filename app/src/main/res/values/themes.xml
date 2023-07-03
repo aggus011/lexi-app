@@ -16,5 +16,7 @@
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="Theme.LexiApp" parent="Base.Theme.LexiApp" />
+    <style name="Theme.LexiApp" parent="Base.Theme.LexiApp">
+        <item name="colorControlActivated">@color/purple</item>
+    </style>
 </resources>
