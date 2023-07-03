@@ -92,12 +92,13 @@
         android:layout_marginStart="10dp"
         android:gravity="center"
         android:text="@string/name"
+        android:textAppearance="@style/subtitle"
         android:textColor="@color/black"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivPatient"
-        android:textAppearance="@style/subtitle"/>
+        app:layout_constraintTop_toBottomOf="@id/ivPatient" />
 
     <TextView
         android:id="@+id/txtEmail"
@@ -147,24 +148,39 @@
         app:layout_constraintTop_toBottomOf="@id/txtCreateNote"
         android:textAppearance="@style/subtitle"/>
 
+    <TextView
+        android:id="@+id/tvNoteCharsCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="130/200"
+        android:textAppearance="@style/subtitle"
+        app:layout_constraintTop_toBottomOf="@+id/txtMessageLength"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/green"
+        android:layout_marginEnd="10dp"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:paddingHorizontal="12dp"
-        android:paddingVertical="20dp"
-        app:layout_constraintTop_toBottomOf="@id/txtMessageLength"
+        android:paddingBottom="20dp"
+        app:layout_constraintTop_toBottomOf="@id/tvNoteCharsCounter"
         app:layout_constraintBottom_toTopOf="@id/btnCreateNote"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-        <EditText
-            android:id="@+id/txtNote"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/write_note"
-            android:backgroundTint="@android:color/transparent"
-            android:inputType="textCapSentences"
-            android:textColor="@color/black"
-            android:textSize="20sp"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/txtNote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/write_note"
+                android:backgroundTint="@android:color/transparent"
+                android:inputType="textCapSentences|textMultiLine"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:maxLength="200" />
+
     </ScrollView>
 
     <com.google.android.material.button.MaterialButton
