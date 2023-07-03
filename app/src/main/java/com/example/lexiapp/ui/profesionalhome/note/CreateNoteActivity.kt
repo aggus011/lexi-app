@@ -31,6 +31,7 @@ class CreateNoteActivity : AppCompatActivity() {
         binding.tvUserInitials.text = patient.userName?.firstOrNull()?.uppercase() ?: "L"
         binding.txtName.text = patient.userName
         binding.txtEmail.text = patient.email
+        email = patient.email
     }
 
     private fun setObserver() {
