@@ -44,7 +44,9 @@ class ObjectivesViewModel @Inject constructor(
     private fun listenerCompleteObjectives() {
         viewModelScope.launch {
             objectivesUseCases.listenerCompleteObjectives().collect{
+                Log.v("OBJECTIVES_VM_BEFORE", "$it")
                 _completedObjectives.value = objectivesUseCases.filterBeforeActualWeek(it)
+                Log.v("OBJECTIVES_VM_AFTER", "${_completedObjectives.value}")
             }
         }
     }

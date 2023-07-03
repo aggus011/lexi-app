@@ -1,5 +1,6 @@
 package com.example.lexiapp.domain.useCases
 
+import android.util.Log
 import com.example.lexiapp.domain.model.MiniObjective
 import com.example.lexiapp.domain.model.Objective
 import com.example.lexiapp.domain.service.FireStoreService
@@ -43,19 +44,28 @@ class ObjectivesUseCases @Inject constructor(
 
     fun filterBeforeActualWeek(results: List<MiniObjective>): List<MiniObjective> {
         val calendar = Calendar.getInstance()
-        calendar.add(Calendar.WEEK_OF_YEAR, -1)
-        val filteredResults = results.filter { result ->
-            val resultDate = Date(result.date.toLong())
-            resultDate.before(calendar.time)
+        val currentWeek = calendar.get(Calendar.WEEK_OF_YEAR)
+        return results.filter { result ->
+            val resultCalendar = Calendar.getInstance().apply {
+                timeInMillis = result.date.toLong()
+            }
+            val resultWeek = resultCalendar.get(Calendar.WEEK_OF_YEAR)
+            resultWeek < currentWeek
+        }.map { result ->
+            MiniObjective(
+                date = formatDate(result.date),
+                title = result.title,
+                count = result.count
+            )
         }
-        filteredResults.map { it.copy(date = formatDate(it.date)) }
-        return filteredResults
     }
 
     private fun formatDate(timeInMillis: String): String {
         val date = Date(timeInMillis.toLong())
         val format = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        return format.format(date)
+        val dateFormated = format.format(date)
+        Log.v("OBJECTIVES_UC_DATE_FORMATE", "${dateFormated}")
+        return dateFormated
     }
 
     suspend fun saveObjectives() {
