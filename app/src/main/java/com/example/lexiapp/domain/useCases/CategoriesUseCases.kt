@@ -37,7 +37,11 @@ class CategoriesUseCases @Inject constructor(
     }
 
     suspend fun getCategoriesFromFirestore(email: String): List<String> {
-        return fireStoreServiceImpl.getPatientCategories(email)
+        val categories = fireStoreServiceImpl.getPatientCategories(email)
+        if(categories.isNotEmpty()){
+            saveCategoriesToSharedPreferences(categories)
+        }
+        return categories
     }
 
     private fun saveCategoriesToSharedPreferences(categories: List<String>) {
