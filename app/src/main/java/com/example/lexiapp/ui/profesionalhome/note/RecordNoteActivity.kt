@@ -26,6 +26,7 @@ class RecordNoteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRecordNoteBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
+        setBtnClose()
         setObserver()
         setPatient()
         setRV()
@@ -46,7 +47,7 @@ class RecordNoteActivity : AppCompatActivity() {
     }
 
     private fun setProfile(patient: User) {
-        //binding.tvUserInitials.text= (patient.userName?.get(0) ?: "") as CharSequence?
+        binding.tvUserInitials.text = patient.userName?.firstOrNull()?.uppercase() ?: "L"
         binding.txtName.text = patient.userName
         binding.txtEmail.text = patient.email
     }
@@ -77,7 +78,7 @@ class RecordNoteActivity : AppCompatActivity() {
 
     private fun showConfirmationDialog(note: Note) {
         val builder = AlertDialog.Builder(this)
-        builder.setMessage("¿Esta seguro de que quiere borrar la nota de fecha: ${getDateFormatted(note.date!!)}?")
+        builder.setMessage("¿Está segura/o de que quiere borrar la nota de fecha: ${getDateFormatted(note.date!!)}?")
             .setPositiveButton("Confirmar") { _, _ ->
                 // Llama a la acción de confirmación
                 delete(note)
@@ -92,6 +93,12 @@ class RecordNoteActivity : AppCompatActivity() {
         val date = Date(dateMillis.toLong())
         val format = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
         return format.format(date)
+    }
+
+    private fun setBtnClose() {
+        binding.icClose.setOnClickListener {
+            finish()
+        }
     }
 
     override fun onDestroy() {

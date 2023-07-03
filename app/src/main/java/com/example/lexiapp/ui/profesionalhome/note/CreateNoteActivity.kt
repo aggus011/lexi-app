@@ -7,6 +7,8 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import com.example.lexiapp.databinding.ActivityCreateNoteBinding
 import com.example.lexiapp.domain.model.FirebaseResult
+import com.example.lexiapp.domain.model.User
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,9 +22,15 @@ class CreateNoteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityCreateNoteBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
-        email= intent.getStringExtra("emailPatient").toString()
+        setPatientData(Gson().fromJson(intent.getStringExtra("patient"), User::class.java))
         setListener()
         setObserver()
+    }
+
+    private fun setPatientData(patient: User) {
+        binding.tvUserInitials.text = patient.userName?.firstOrNull()?.uppercase() ?: "L"
+        binding.txtName.text = patient.userName
+        binding.txtEmail.text = patient.email
     }
 
     private fun setObserver() {
@@ -44,6 +52,10 @@ class CreateNoteActivity : AppCompatActivity() {
     private fun setListener() {
         binding.btnCreateNote.setOnClickListener{
             vM.saveNote(email, getTextNote())
+        }
+
+        binding.icClose.setOnClickListener {
+            finish()
         }
     }
 

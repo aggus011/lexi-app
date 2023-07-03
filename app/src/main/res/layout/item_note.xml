@@ -22,7 +22,8 @@
             app:layout_constraintTop_toTopOf="@id/btnTrash"
             app:layout_constraintBottom_toBottomOf="@id/btnTrash"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="10dp"/>
+            android:layout_marginStart="10dp"
+            android:textAppearance="@style/subtitle"/>
 
         <TextView
             android:id="@+id/txtValueDate"
@@ -33,11 +34,12 @@
             app:layout_constraintTop_toTopOf="@id/txtDate"
             app:layout_constraintStart_toEndOf="@id/txtDate"
             app:layout_constraintBottom_toBottomOf="@id/txtDate"
-            android:layout_marginStart="10dp"/>
+            android:layout_marginStart="10dp"
+            android:textAppearance="@style/subtitle" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnTrash"
-            app:backgroundTint="@color/light_purple"
+            app:backgroundTint="@color/blue"
             app:srcCompat="@drawable/trash_icon"
             app:tint="@color/white"
             app:layout_constraintTop_toTopOf="parent"
@@ -61,7 +63,9 @@
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:textColor="@color/black"
-                android:layout_marginStart="10dp"/>
+                android:layout_marginStart="10dp"
+                android:textAppearance="@style/subtitle"
+                android:maxLength="200"/>
 
         </ScrollView>
 

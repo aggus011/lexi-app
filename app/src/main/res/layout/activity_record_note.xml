@@ -7,6 +7,52 @@
     android:background="@color/profile_background"
     tools:context=".ui.profesionalhome.note.RecordNoteActivity">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/ivMiniLogo"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_colorFilter="@color/purple"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/amoeba" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:textColor="@color/black"
+        android:textAppearance="@style/title"
+        android:textColor="@color/white"/>
+
+    <View
+        android:id="@+id/vIcClose"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/round_background"
+        android:backgroundTint="@color/light_purple"/>
+
+    <ImageView
+        android:id="@+id/icClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_close"
+        app:layout_constraintEnd_toEndOf="@id/vIcClose"
+        app:layout_constraintTop_toTopOf="@id/vIcClose"
+        app:layout_constraintStart_toStartOf="@id/vIcClose"
+        app:layout_constraintBottom_toBottomOf="@id/vIcClose"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ivPatient"
         android:layout_width="80dp"
@@ -21,9 +67,8 @@
             android:id="@+id/vBackgroundUserIcon"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:alpha="0.5"
             android:background="@drawable/round_background"
-            android:backgroundTint="@color/icon_profile8"
+            android:backgroundTint="@color/purple"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,7 +78,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/title"
             android:textColor="@color/white"
-            android:textSize="28dp"
+            tools:text="C"
+            android:textSize="40sp"
             app:layout_constraintBottom_toBottomOf="@id/vBackgroundUserIcon"
             app:layout_constraintEnd_toEndOf="@id/vBackgroundUserIcon"
             app:layout_constraintStart_toStartOf="@id/vBackgroundUserIcon"
@@ -45,11 +91,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="12dp"
         android:gravity="center"
         android:text="@string/name"
+        android:textAppearance="@style/subtitle"
         android:textColor="@color/black"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ivPatient" />
 
@@ -62,7 +111,17 @@
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="@id/txtName"
         app:layout_constraintStart_toStartOf="@id/txtName"
-        app:layout_constraintTop_toBottomOf="@id/txtName" />
+        app:layout_constraintTop_toBottomOf="@id/txtName"
+        android:textSize="20sp"
+        android:textAppearance="@style/subtitle"/>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtEmail"
+        app:layout_constraintBottom_toTopOf="@id/txtNotes"/>
 
     <TextView
         android:id="@+id/txtNotes"
@@ -75,7 +134,8 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtEmail" />
+        app:layout_constraintTop_toBottomOf="@id/txtEmail"
+        android:textAppearance="@style/subtitle"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="0dp"

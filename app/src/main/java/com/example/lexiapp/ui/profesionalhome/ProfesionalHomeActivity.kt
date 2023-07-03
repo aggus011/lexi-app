@@ -253,9 +253,9 @@ class ProfesionalHomeActivity : AppCompatActivity() {
             .commit()
     }
 
-    private fun startCreateNoteActivity(emailPatient: String) {
+    private fun startCreateNoteActivity(patient: User) {
         val intent = Intent(applicationContext, CreateNoteActivity::class.java)
-        intent.putExtra("emailPatient", emailPatient)
+        intent.putExtra("patient", Gson().toJson(patient))
         startActivity(intent)
     }
 

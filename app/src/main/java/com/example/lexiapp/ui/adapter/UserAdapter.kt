@@ -11,7 +11,7 @@ class UserAdapter(
     private val patientList: List<User>,
     private val onClickPatient: (User) -> Unit,
     private val onClickDelete: (String) -> Unit,
-    val startCreateNoteActivity: (String) -> Unit,
+    val startCreateNoteActivity: (User) -> Unit,
     val startRecordNoteActivity: (User) -> Unit
 ): RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
@@ -48,7 +48,7 @@ class UserAdapter(
                 onClickPatient(patient)
             }
             binding.btnAddNote.setOnClickListener {
-                startCreateNoteActivity(patient.email)
+                startCreateNoteActivity(patient)
             }
             binding.btnSeeNotes.setOnClickListener {
                 startRecordNoteActivity(patient)

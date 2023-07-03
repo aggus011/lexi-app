@@ -6,6 +6,120 @@
     android:layout_height="match_parent"
     tools:context=".ui.profesionalhome.note.CreateNoteActivity">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/ivMiniLogo"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_colorFilter="@color/purple"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/amoeba" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:textColor="@color/black"
+        android:textAppearance="@style/title"
+        android:textColor="@color/white"/>
+
+    <View
+        android:id="@+id/vIcClose"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/round_background"
+        android:backgroundTint="@color/light_purple"/>
+
+    <ImageView
+        android:id="@+id/icClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_close"
+        app:layout_constraintEnd_toEndOf="@id/vIcClose"
+        app:layout_constraintTop_toTopOf="@id/vIcClose"
+        app:layout_constraintStart_toStartOf="@id/vIcClose"
+        app:layout_constraintBottom_toBottomOf="@id/vIcClose"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ivPatient"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_user_photo"
+        app:layout_constraintEnd_toEndOf="@id/txtName"
+        app:layout_constraintStart_toStartOf="@id/txtName"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <View
+            android:id="@+id/vBackgroundUserIcon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/round_background"
+            android:backgroundTint="@color/purple"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvUserInitials"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/title"
+            android:textColor="@color/white"
+            tools:text="C"
+            android:textSize="40sp"
+            app:layout_constraintBottom_toBottomOf="@id/vBackgroundUserIcon"
+            app:layout_constraintEnd_toEndOf="@id/vBackgroundUserIcon"
+            app:layout_constraintStart_toStartOf="@id/vBackgroundUserIcon"
+            app:layout_constraintTop_toTopOf="@id/vBackgroundUserIcon" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/txtName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:gravity="center"
+        android:text="@string/name"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivPatient"
+        android:textAppearance="@style/subtitle"/>
+
+    <TextView
+        android:id="@+id/txtEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="@string/email"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@id/txtName"
+        app:layout_constraintStart_toStartOf="@id/txtName"
+        app:layout_constraintTop_toBottomOf="@id/txtName"
+        android:textSize="20sp"
+        android:textAppearance="@style/subtitle"/>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtEmail"
+        app:layout_constraintBottom_toTopOf="@id/txtCreateNote"/>
+
     <TextView
         android:id="@+id/txtCreateNote"
         android:layout_width="match_parent"
@@ -18,18 +132,20 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/txtEmail"
+        android:textAppearance="@style/subtitle"/>
 
     <TextView
         android:id="@+id/txtMessageLength"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
+        android:layout_marginHorizontal="5dp"
         android:text="@string/message_length"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="@id/txtCreateNote"
         app:layout_constraintStart_toStartOf="@id/txtCreateNote"
-        app:layout_constraintTop_toBottomOf="@id/txtCreateNote" />
+        app:layout_constraintTop_toBottomOf="@id/txtCreateNote"
+        android:textAppearance="@style/subtitle"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -46,7 +162,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/write_note"
             android:backgroundTint="@android:color/transparent"
-            android:inputType="textMultiLine"
+            android:inputType="textCapSentences"
             android:textColor="@color/black"
             android:textSize="20sp"/>
     </ScrollView>

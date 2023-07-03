@@ -110,7 +110,8 @@
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivPatient" />
+        app:layout_constraintTop_toBottomOf="@id/ivPatient"
+        android:textAppearance="@style/subtitle"/>
 
     <TextView
         android:id="@+id/txtEmail"
@@ -122,7 +123,8 @@
         app:layout_constraintEnd_toEndOf="@id/txtName"
         app:layout_constraintStart_toStartOf="@id/txtName"
         app:layout_constraintTop_toBottomOf="@id/txtName"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:textAppearance="@style/subtitle"/>
 
     <ScrollView
         android:id="@+id/cardContainer"
@@ -152,7 +154,8 @@
                     android:layout_marginStart="4dp"
                     android:text="@string/update_date"
                     android:textColor="@color/black"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp"
+                    android:textAppearance="@style/textItemsBottomNavigation"/>
 
                 <TextView
                     android:id="@+id/txtDate"
@@ -160,7 +163,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:textColor="@color/black"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp"
+                    android:textAppearance="@style/textItemsBottomNavigation"/>
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
