@@ -1,10 +1,9 @@
 package com.example.lexiapp.ui.games.whereistheletter
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -13,16 +12,16 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityWhereIsTheLetterBinding
-import com.example.lexiapp.ui.games.correctword.CorrectWordActivity
 import com.example.lexiapp.ui.games.whereistheletter.result.NegativeResultWhereIsTheLetterActivity
 import com.example.lexiapp.ui.games.whereistheletter.result.PositiveResultWhereIsTheLetterActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.*
 
 @AndroidEntryPoint
 class WhereIsTheLetterActivity : AppCompatActivity() {
@@ -32,7 +31,7 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
     //private lateinit var observerWord:
     private lateinit var binding: ActivityWhereIsTheLetterBinding
 
-    //Should be inject
+    private lateinit var textToSpeech: TextToSpeech
 
     private var positions = mutableMapOf<Int, Button>()
 
@@ -41,9 +40,21 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
         binding = ActivityWhereIsTheLetterBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
         vM.onOmitWord()
+        setTextToSpeech()
         setWordObserver()
         progressBarOn()
         setListeners()
+    }
+
+    private fun setTextToSpeech(){
+        val language = Locale("es", "US")
+
+        textToSpeech = TextToSpeech(this) {
+            if (it != TextToSpeech.ERROR) {
+                textToSpeech.language = language
+                textToSpeech.setSpeechRate(0.6f)
+            }
+        }
     }
 
     private fun setWordObserver() {
@@ -96,6 +107,7 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
         listenerResult()
         listenerOtherWord()
         btnBack()
+        btnReadWord()
     }
 
     private fun listenerResult() {
@@ -239,6 +251,31 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
         binding.btnBack.setOnClickListener {
             finish()
         }
+    }
+
+    private fun btnReadWord() {
+        binding.iconVolume.setOnClickListener {
+
+            if (this.textToSpeech.isSpeaking) {
+                this.textToSpeech.stop()
+            }
+
+            if (binding.txtVariableWord.text.isNotEmpty()) {
+                this.textToSpeech
+                    .speak(
+                        binding.txtVariableWord.text.toString(),
+                        TextToSpeech.QUEUE_FLUSH,
+                        null,
+                        null
+                    )
+            }
+        }
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        textToSpeech.shutdown()
     }
 }
 
