@@ -1,24 +1,24 @@
 package com.example.lexiapp.ui.objectives
 
-import com.example.lexiapp.ui.adapter.ObjectivesAdapter
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
-import androidx.fragment.app.Fragment
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.FragmentObjectivesBinding
-import dagger.hilt.android.AndroidEntryPoint
-import com.google.firebase.auth.FirebaseAuth
-import android.os.Looper
 import com.example.lexiapp.domain.model.Objective
+import com.example.lexiapp.ui.adapter.ObjectivesAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ObjectivesFragment : Fragment() {
@@ -89,8 +89,12 @@ class ObjectivesFragment : Fragment() {
                     val button = viewHolder.button
                     val objective = objectives[i]
                     if (objective.progress >= objective.goal!!) {
-                        val greenColor = Color.parseColor("#71dea2")
-                        button.setBackgroundColor(greenColor)
+                        val greenColor = Color.parseColor("#17FF20")
+                        val newDrawable = GradientDrawable()
+                        newDrawable.shape = GradientDrawable.RECTANGLE
+                        newDrawable.cornerRadius = 50f
+                        newDrawable.setColor(greenColor)
+                        button.background = newDrawable
                         val translationXAnimation = ObjectAnimator.ofFloat(
                             button, "translationX",0f, -30f, 30f, -30f, 30f, 0f
                         )
