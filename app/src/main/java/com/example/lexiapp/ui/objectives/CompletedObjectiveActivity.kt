@@ -18,8 +18,15 @@ class CompletedObjectiveActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCompletedObjectiveBinding.inflate(LayoutInflater.from(this))
+        setListener()
         setContentView(binding.root)
         setRecycler()
+    }
+
+    private fun setListener() {
+        binding.btnBack.setOnClickListener {
+            finish()
+        }
     }
 
     private fun setRecycler() {
