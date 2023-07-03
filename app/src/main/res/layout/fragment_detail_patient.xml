@@ -7,16 +7,62 @@
     android:background="@color/profile_background"
     tools:context=".ui.profesionalhome.detailpatient.DetailPatientFragment">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/ivMiniLogo"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_colorFilter="@color/purple"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/amoeba" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:textColor="@color/black"
+        android:textAppearance="@style/title"
+        android:textColor="@color/white"/>
+
+    <View
+        android:id="@+id/vIcClose"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/round_background"
+        android:backgroundTint="@color/light_purple"/>
+
+    <ImageView
+        android:id="@+id/icClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_close"
+        app:layout_constraintEnd_toEndOf="@id/vIcClose"
+        app:layout_constraintTop_toTopOf="@id/vIcClose"
+        app:layout_constraintStart_toStartOf="@id/vIcClose"
+        app:layout_constraintBottom_toBottomOf="@id/vIcClose"/>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnTrash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="6dp"
         android:contentDescription="@string/fab_delete_patient"
-        app:backgroundTint="@color/light_purple"
+        app:backgroundTint="@color/blue"
         app:fabSize="mini"
-        app:layout_constraintBottom_toTopOf="@id/cardContainer"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/vIcClose"
         app:srcCompat="@drawable/trash_icon"
         app:tint="@color/white" />
 
@@ -34,9 +80,8 @@
             android:id="@+id/vBackgroundUserIcon"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:alpha="0.5"
             android:background="@drawable/round_background"
-            android:backgroundTint="@color/icon_profile8"
+            android:backgroundTint="@color/purple"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,7 +91,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/title"
             android:textColor="@color/white"
-            android:textSize="28dp"
+            tools:text="C"
+            android:textSize="40sp"
             app:layout_constraintBottom_toBottomOf="@id/vBackgroundUserIcon"
             app:layout_constraintEnd_toEndOf="@id/vBackgroundUserIcon"
             app:layout_constraintStart_toStartOf="@id/vBackgroundUserIcon"
@@ -64,7 +110,8 @@
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivPatient" />
+        app:layout_constraintTop_toBottomOf="@id/ivPatient"
+        android:textAppearance="@style/subtitle"/>
 
     <TextView
         android:id="@+id/txtEmail"
@@ -75,7 +122,9 @@
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="@id/txtName"
         app:layout_constraintStart_toStartOf="@id/txtName"
-        app:layout_constraintTop_toBottomOf="@id/txtName" />
+        app:layout_constraintTop_toBottomOf="@id/txtName"
+        android:textSize="20sp"
+        android:textAppearance="@style/subtitle"/>
 
     <ScrollView
         android:id="@+id/cardContainer"
@@ -104,14 +153,18 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:text="@string/update_date"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textAppearance="@style/textItemsBottomNavigation"/>
 
                 <TextView
                     android:id="@+id/txtDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textAppearance="@style/textItemsBottomNavigation"/>
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
@@ -184,12 +237,14 @@
 
                     <TextView
                         android:id="@+id/txtLettersDificultsWITL"
-                        android:layout_width="wrap_content"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="Letras con mas equivocación: "
+                        android:text="Letras con las que más se confunde: "
                         android:textColor="@color/black"
+                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/txtValueLettersDificultsWITL"
                         app:layout_constraintTop_toBottomOf="@id/pieTotalChartWITL" />
 
                     <TextView
@@ -208,12 +263,16 @@
 
                     <TextView
                         android:id="@+id/txtValueLettersDificultsWITL"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
                         app:layout_constraintBottom_toBottomOf="@id/txtLettersDificultsWITL"
                         app:layout_constraintStart_toEndOf="@id/txtLettersDificultsWITL"
-                        app:layout_constraintTop_toTopOf="@id/txtLettersDificultsWITL" />
+                        app:layout_constraintTop_toTopOf="@id/txtLettersDificultsWITL"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        android:layout_marginStart="5dp"/>
 
                     <TextView
                         android:id="@+id/txtTitleGraphWITL"
@@ -224,7 +283,7 @@
                         android:textColor="@color/black"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/txtValueLettersDificultsWITL" />
+                        app:layout_constraintTop_toBottomOf="@id/txtLettersDificultsWITL" />
 
                     <com.github.mikephil.charting.charts.BarChart
                         android:id="@+id/barChartWITL"
@@ -310,22 +369,28 @@
 
                     <TextView
                         android:id="@+id/txtLettersDificultsCW"
-                        android:layout_width="wrap_content"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="Palabras con mas equivocación: "
+                        android:text="Palabras con las que más se confunde: "
                         android:textColor="@color/black"
+                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/pieTotalChartCW" />
+                        app:layout_constraintTop_toBottomOf="@id/pieTotalChartCW"
+                        app:layout_constraintEnd_toStartOf="@+id/txtValueLettersDificultsCW"/>
 
                     <TextView
                         android:id="@+id/txtValueLettersDificultsCW"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
                         app:layout_constraintBottom_toBottomOf="@id/txtLettersDificultsCW"
                         app:layout_constraintStart_toEndOf="@id/txtLettersDificultsCW"
-                        app:layout_constraintTop_toTopOf="@id/txtLettersDificultsCW" />
+                        app:layout_constraintTop_toTopOf="@id/txtLettersDificultsCW"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        android:layout_marginStart="5dp"/>
 
                     <TextView
                         android:id="@+id/txtNotHaveWeekProgresCW"
@@ -351,7 +416,7 @@
                         android:textColor="@color/black"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/txtValueLettersDificultsCW" />
+                        app:layout_constraintTop_toBottomOf="@id/txtLettersDificultsCW" />
 
                     <com.github.mikephil.charting.charts.BarChart
                         android:id="@+id/barChartCW"
@@ -437,22 +502,28 @@
 
                     <TextView
                         android:id="@+id/txtLettersDificultsLR"
-                        android:layout_width="wrap_content"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="Palabras con mas equivocación: "
+                        android:text="Palabras con las que más se confunde: "
                         android:textColor="@color/black"
+                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/pieTotalChartLR" />
+                        app:layout_constraintTop_toBottomOf="@id/pieTotalChartLR"
+                        app:layout_constraintEnd_toStartOf="@+id/txtValueLettersDificultsLR"/>
 
                     <TextView
                         android:id="@+id/txtValueLettersDificultsLR"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        android:layout_marginStart="5dp"
                         app:layout_constraintBottom_toBottomOf="@id/txtLettersDificultsLR"
                         app:layout_constraintStart_toEndOf="@id/txtLettersDificultsLR"
-                        app:layout_constraintTop_toTopOf="@id/txtLettersDificultsLR" />
+                        app:layout_constraintTop_toTopOf="@id/txtLettersDificultsLR"
+                        app:layout_constraintEnd_toEndOf="parent"/>
 
                     <TextView
                         android:id="@+id/txtNotHaveWeekProgresLR"
@@ -478,7 +549,7 @@
                         android:textColor="@color/black"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/txtValueLettersDificultsLR" />
+                        app:layout_constraintTop_toBottomOf="@id/txtLettersDificultsLR" />
 
                     <com.github.mikephil.charting.charts.BarChart
                         android:id="@+id/barChartLR"
@@ -513,7 +584,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="ESCANÉO DE TEXTOS"
+                        android:text="ESCANEO DE TEXTOS"
                         android:textColor="@color/black"
                         android:textSize="28sp"
                         android:textStyle="bold"
@@ -560,7 +631,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:gravity="center"
-                        android:text="Úso de las últimas 7 semanas"
+                        android:text="Uso en las últimas 7 semanas"
                         android:textColor="@color/black"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

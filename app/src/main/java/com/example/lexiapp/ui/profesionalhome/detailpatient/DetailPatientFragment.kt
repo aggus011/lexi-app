@@ -48,6 +48,7 @@ class DetailPatientFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         //setVisibilityCards()
         setObservers()
+        setBtnClose()
     }
 
     private fun setVisibilityCards() {
@@ -236,7 +237,7 @@ class DetailPatientFragment : Fragment() {
                 PieEntry(countCorrect, "Total correctos"),
                 PieEntry(countError, "Total error")
             )
-            val colors = intArrayOf(Color.CYAN, Color.RED)
+            val colors = intArrayOf(Color.GREEN, Color.RED)
             val dataSet = PieDataSet(entries, "")
             dataSet.colors = colors.asList()
             dataSet.valueTextSize = 12f
@@ -275,8 +276,8 @@ class DetailPatientFragment : Fragment() {
                 labels.add(date)
             }
             labels[labels.lastIndex] = "Hoy"
-            val barDataSet = BarDataSet(entries, "Ejercícios por día")
-            barDataSet.setColors(Color.CYAN)
+            val barDataSet = BarDataSet(entries, "Ejercicios por día")
+            barDataSet.setColors(Color.GREEN)
             val errorBarDataSet = BarDataSet(errorEntries, "Errores por día")
             errorBarDataSet.setColors(Color.RED)
             barDataSet.valueTextSize = 12f
@@ -323,9 +324,9 @@ class DetailPatientFragment : Fragment() {
                 labels.add(date)
             }
             labels[labels.lastIndex] = "Hoy"
-            binding.txtTitleGraphTS.text = "Úso de la última semana ($countWeek)"
-            val barDataSet = BarDataSet(entries, "Escanéos por día")
-            barDataSet.setColors(Color.CYAN)
+            binding.txtTitleGraphTS.text = "Uso de la última semana ($countWeek)"
+            val barDataSet = BarDataSet(entries, "Escaneos por día")
+            barDataSet.setColors(Color.GREEN)
             barDataSet.valueTextSize = 12f
             val barData = BarData(barDataSet)
             val granularity = if ((maxCount / 10) > 1) maxCount / 10 else 1
@@ -386,7 +387,7 @@ class DetailPatientFragment : Fragment() {
 
     private fun showConfirmationDialog(emailPatient: String) {
         val builder = AlertDialog.Builder(requireActivity())
-        builder.setMessage("¿Esta seguro de que quiere desvincular al paciente: $emailPatient?")
+        builder.setMessage("¿Está segura/o de que quiere desvincular al paciente: $emailPatient?")
             .setPositiveButton("Confirmar") { _, _ ->
                 // Llama a la acción de confirmación
                 unbindPatient(emailPatient)
@@ -402,10 +403,18 @@ class DetailPatientFragment : Fragment() {
                 requireActivity().supportFragmentManager.popBackStack()
             else Toast.makeText(
                 activity,
-                "No se pudo desvincular al paciente, intentelo mas tarde",
+                "No se pudo desvincular al paciente, inténtelo más tarde",
                 Toast.LENGTH_SHORT
             )
                 .show()
+        }
+    }
+
+    private fun setBtnClose() {
+        binding.icClose.setOnClickListener {
+            requireActivity()
+                .supportFragmentManager
+                .popBackStack()
         }
     }
 
