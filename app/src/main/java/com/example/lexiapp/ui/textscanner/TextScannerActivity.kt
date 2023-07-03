@@ -156,6 +156,7 @@ class TextScannerActivity : AppCompatActivity() {
         textToSpeech = TextToSpeech(this) {
             if (it != TextToSpeech.ERROR) {
                 textToSpeech.language = language
+                textToSpeech.setSpeechRate(0.6f)
             }
         }
     }
