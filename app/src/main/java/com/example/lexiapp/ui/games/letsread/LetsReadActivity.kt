@@ -24,6 +24,7 @@ import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityLetsReadBinding
 import com.example.lexiapp.domain.model.TextToRead
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -71,6 +72,7 @@ class LetsReadActivity : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
         getViews()
+        btnHelpListener()
         btnBackListener()
         setTextToReadData()
         setTextToSpeech()
@@ -90,6 +92,34 @@ class LetsReadActivity : AppCompatActivity() {
         tvAudioRecordDuration = binding.tvAudioRecordDuration
         btnReRecordAudio = binding.btnReRecordAudio
         btnShowResultsRecordAudio = binding.btnShowResults
+    }
+
+    private fun btnHelpListener() {
+        binding.btnHelp.setOnClickListener {
+            setAlertBuilderToGoToYoutube()
+        }
+    }
+
+    private fun setAlertBuilderToGoToYoutube() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Tutorial de Palabra Correcta")
+            .setMessage("¿Desea salir de LEXI e ir a YouTube?")
+            .setPositiveButton("SI"){dialog, _ ->
+                try{
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.data = Uri.parse(TUTORIAL_LINK)
+                    intent.setPackage("com.google.android.youtube")
+                    startActivity(intent)
+                }catch (e:Exception){
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(TUTORIAL_LINK)))
+                }
+
+            }
+            .setNegativeButton("NO") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+
     }
 
     private fun btnBackListener() {
@@ -453,6 +483,7 @@ class LetsReadActivity : AppCompatActivity() {
         private const val RECORD_AUDIO_REQUEST_CODE = 300
         private const val READ_EXTERNAL_STORAGE_PERMISSION_CODE = 300
         private const val TAG = "LetsReadActivity"
+        private const val TUTORIAL_LINK = "https://www.youtube.com/shorts/xAKtmpMt2UY"
     }
 
     private val onBackPressedCallback: OnBackPressedCallback =

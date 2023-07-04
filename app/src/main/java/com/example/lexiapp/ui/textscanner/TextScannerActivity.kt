@@ -24,7 +24,9 @@ import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityTextScannerBinding
+import com.example.lexiapp.ui.games.correctword.CorrectWordActivity
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
@@ -101,6 +103,7 @@ class TextScannerActivity : AppCompatActivity() {
         initArraysPermissions()
         checkImageInput(intent.extras)
         getViews()
+        btnHelpListener()
         btnBackListener()
         setTextRecognizer()
         setTextToSpeech()
@@ -139,6 +142,34 @@ class TextScannerActivity : AppCompatActivity() {
         btnReadText = binding.btnReadText
         btnBack = binding.btnBack
         progressBar = binding.pbLoadingRecognizedText
+    }
+
+    private fun btnHelpListener() {
+        binding.btnHelp.setOnClickListener {
+            setAlertBuilderToGoToYoutube()
+        }
+    }
+
+    private fun setAlertBuilderToGoToYoutube() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Tutorial de Palabra Correcta")
+            .setMessage("¿Desea salir de LEXI e ir a YouTube?")
+            .setPositiveButton("SI"){dialog, _ ->
+                try{
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.data = Uri.parse(TUTORIAL_LINK)
+                    intent.setPackage("com.google.android.youtube")
+                    startActivity(intent)
+                }catch (e:Exception){
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(TUTORIAL_LINK)))
+                }
+
+            }
+            .setNegativeButton("NO") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+
     }
 
     private fun btnBackListener(){
@@ -328,6 +359,7 @@ class TextScannerActivity : AppCompatActivity() {
         private const val CAMERA_REQUEST_CODE = 100
         private const val STORAGE_REQUEST_CODE = 200
         private const val TAG = "TextScannerActivity"
+        private const val TUTORIAL_LINK = "https://www.youtube.com/shorts/qxuh3YwJNac"
     }
 
     override fun onRequestPermissionsResult(
