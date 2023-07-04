@@ -24,7 +24,7 @@ class ResultGamesUseCases @Inject constructor(
 
     fun getResultsLastWeek(results: List<ResultGame>): Map<String, Triple<Int, Float, Int>> {
         val calendar = Calendar.getInstance()
-        val dateKeysMap = sortedMapOf<String, Triple<Int, Float, Int>>()
+        val dateKeysMap = mutableMapOf<String, Triple<Int, Float, Int>>()
         val resultsLastWeek = filterResultsByWeek(results)
         val countOfWeek = resultsLastWeek.size
         for (i in 0 until 7) {
@@ -45,7 +45,7 @@ class ResultGamesUseCases @Inject constructor(
             calendar.add(Calendar.DAY_OF_YEAR, -1)
         }
 
-        return dateKeysMap.toMap()
+        return sortMapResultGameByDate(dateKeysMap)
     }
 
     fun filterResultsByWeek(results: List<ResultGame>): List<ResultGame> {
@@ -68,6 +68,18 @@ class ResultGamesUseCases @Inject constructor(
         return format.format(time)
     }
 
+    private fun sortMapResultGameByDate(map: Map<String, Triple<Int, Float, Int>>): Map<String, Triple<Int, Float, Int>> {
+        val dateFormatter = SimpleDateFormat("dd/MM", Locale.getDefault())
+        val sortedKeys = map.keys.sortedBy { dateFormatter.parse(it) }
+        return sortedKeys.associateWith { key -> map[key]!! }
+    }
+
+    private fun sortMapScanTextByDate(map: Map<String, Int>): Map<String, Int> {
+        val dateFormatter = SimpleDateFormat("dd/MM", Locale.getDefault())
+        val sortedKeys = map.keys.sortedBy { dateFormatter.parse(it) }
+        return sortedKeys.associateWith { key -> map[key]!! }
+    }
+
     private fun isSameDay(date1: Date, date2: Date): Boolean {
         val calendar1 = Calendar.getInstance().apply {
             time = date1
@@ -86,7 +98,7 @@ class ResultGamesUseCases @Inject constructor(
 
     private fun getScansLastWeek(allScans: List<String>): Map<String, Int>{
         val calendar = Calendar.getInstance()
-        val dateKeysMap = sortedMapOf<String, Int>()
+        val dateKeysMap = mutableMapOf<String, Int>()
         val resultsLastWeek = filterScansByWeek(allScans)
         for (i in 0 until 7) {
             val currentDate = calendar.time
@@ -98,7 +110,7 @@ class ResultGamesUseCases @Inject constructor(
             dateKeysMap[formatDateToString(currentDate)] = totalDayCount
             calendar.add(Calendar.DAY_OF_YEAR, -1)
         }
-        return dateKeysMap.toMap()
+        return sortMapScanTextByDate(dateKeysMap)
     }
 
     private fun filterScansByWeek(allScans: List<String>): List<String> {
@@ -109,25 +121,5 @@ class ResultGamesUseCases @Inject constructor(
             resultDate.after(calendar.time)
         }
         return filteredResults
-    }
-
-
-
-
-    private fun getWeekFromDate(date: Long, currentDate: Long): String {
-        val dateFormat = SimpleDateFormat("dd/MM", Locale.getDefault())
-
-        val dateCalendar = Calendar.getInstance().apply {
-            timeInMillis = date
-        }
-
-        val currentCalendar = Calendar.getInstance().apply {
-            timeInMillis = currentDate
-        }
-
-        val weekStartDate = dateFormat.format(dateCalendar.time)
-        val weekEndDate = dateFormat.format(currentCalendar.time)
-
-        return "$weekStartDate-$weekEndDate"
     }
 }
