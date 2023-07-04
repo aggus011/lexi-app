@@ -1,5 +1,6 @@
 package com.example.lexiapp.ui.textscanner
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
@@ -24,7 +25,6 @@ import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityTextScannerBinding
-import com.example.lexiapp.ui.games.correctword.CorrectWordActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.mlkit.vision.common.InputImage
@@ -193,15 +193,8 @@ class TextScannerActivity : AppCompatActivity() {
     }
 
     private fun setListeners() {
-        setBtnReTakePhotoListener()
+        setInputImageDialog()
         setBtnReadTextRecognizedListener()
-    }
-
-    private fun setBtnReTakePhotoListener() {
-        btnReScan.setOnClickListener {
-            verifyCameraPermissions()
-            cleanPreviousRecognizedText()
-        }
     }
 
     private fun cleanPreviousRecognizedText() {
@@ -347,6 +340,50 @@ class TextScannerActivity : AppCompatActivity() {
     private fun verifyApiVersionIsHigherThat32(): Boolean{
         return android.os.Build.VERSION.SDK_INT >
                 android.os.Build.VERSION_CODES.S_V2
+    }
+
+    private fun setInputImageDialog() {
+        val popUpMenu = PopupMenu(this, btnReScan)
+
+        popUpMenu.inflate(R.menu.input_image)
+
+        setBtnScanListener(popUpMenu)
+
+        popUpMenu.setOnMenuItemClickListener { menuItem ->
+            goToScannerActivity(menuItem.itemId)
+            true
+        }
+    }
+
+    @SuppressLint("DiscouragedPrivateApi")
+    private fun setBtnScanListener(popUpMenu: PopupMenu) {
+        btnReScan.setOnClickListener {
+            try {
+                val popup = PopupMenu::class.java.getDeclaredField("mPopup")
+                popup.isAccessible = true
+                val menu = popup.get(popUpMenu)
+                menu.javaClass
+                    .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                    .invoke(menu, true)
+
+            } catch (e: Exception) {
+                Log.e("MainError", e.toString())
+            } finally {
+                popUpMenu.show()
+            }
+        }
+    }
+
+    private fun goToScannerActivity(itemId: Int) {
+        val intent = Intent(this, TextScannerActivity::class.java)
+
+        when (itemId) {
+            R.id.camera -> intent.putExtra("InputImage", 1)
+            R.id.gallery -> intent.putExtra("InputImage", 2)
+        }
+
+        startActivity(intent)
+        finish()
     }
 
     private val onBackPressedCallback: OnBackPressedCallback = object: OnBackPressedCallback(true){
