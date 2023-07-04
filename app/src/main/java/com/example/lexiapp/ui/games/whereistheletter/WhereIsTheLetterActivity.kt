@@ -53,7 +53,9 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
             if (it.isNullOrEmpty()) {
                 progressBarOn()
             } else {
-                setValues()
+                if (vM.visibleWord.value != it){
+                    setValues()
+                }
                 progressBarOff()
                 binding.btnOtherWord.isClickable = true
             }
@@ -85,6 +87,7 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
 
     private fun listenerOtherWord() {
         binding.btnOtherWord.setOnClickListener {
+            vM.setVisibleWord("")
             if (!vM.basicWord.hasObservers()) setWordObserver()
             binding.btnOtherWord.isClickable = false
             vM.onPositionDeselected()
@@ -169,6 +172,7 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
 
     private fun setValues() {
         val word = vM.basicWord.value!!
+        vM.setVisibleWord(word)
         Log.v("init_word_in_activity", "response word: $word")
         Log.v("init_word_in_activity", "response word: ${vM.basicWord.value!!}")
         binding.txtVariableWord.text = word
