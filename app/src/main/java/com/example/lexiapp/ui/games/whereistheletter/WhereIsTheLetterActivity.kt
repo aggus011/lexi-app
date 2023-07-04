@@ -3,6 +3,7 @@ package com.example.lexiapp.ui.games.whereistheletter
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -21,6 +22,7 @@ import com.example.lexiapp.databinding.ActivityWhereIsTheLetterBinding
 import com.example.lexiapp.ui.games.correctword.CorrectWordActivity
 import com.example.lexiapp.ui.games.whereistheletter.result.NegativeResultWhereIsTheLetterActivity
 import com.example.lexiapp.ui.games.whereistheletter.result.PositiveResultWhereIsTheLetterActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -96,6 +98,7 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
         listenerResult()
         listenerOtherWord()
         btnBack()
+        btnHelp()
     }
 
     private fun listenerResult() {
@@ -239,6 +242,38 @@ class WhereIsTheLetterActivity : AppCompatActivity() {
         binding.btnBack.setOnClickListener {
             finish()
         }
+    }
+
+    private fun btnHelp() {
+        binding.btnHelp.setOnClickListener {
+            setAlertBuilderToGoToYoutube()
+        }
+    }
+
+    private fun setAlertBuilderToGoToYoutube() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Tutorial de Palabra Correcta")
+            .setMessage("¿Desea salir de LEXI e ir a YouTube?")
+            .setPositiveButton("SI"){dialog, _ ->
+                try{
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.data = Uri.parse(TUTORIAL_LINK)
+                    intent.setPackage("com.google.android.youtube")
+                    startActivity(intent)
+                }catch (e:Exception){
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(TUTORIAL_LINK)))
+                }
+
+            }
+            .setNegativeButton("NO") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+
+    }
+
+    companion object{
+        private const val TUTORIAL_LINK = "https://www.youtube.com/shorts/rA4dQl9czl0"
     }
 }
 

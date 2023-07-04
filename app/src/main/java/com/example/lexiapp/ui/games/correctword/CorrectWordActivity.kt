@@ -1,6 +1,8 @@
 package com.example.lexiapp.ui.games.correctword
 
+import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.view.LayoutInflater
@@ -8,11 +10,14 @@ import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityCorrectWordBinding
 import com.example.lexiapp.ui.games.correctword.result.NegativeResultCorrectWordActivity
 import com.example.lexiapp.ui.games.correctword.result.PositiveResultCorrectWordActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -81,6 +86,10 @@ class CorrectWordActivity : AppCompatActivity() {
 
         binding.iconVolume.setOnClickListener {
             speechWord()
+        }
+
+        binding.btnHelp.setOnClickListener {
+            goToCorrectWordTutorial()
         }
     }
 
@@ -173,9 +182,38 @@ class CorrectWordActivity : AppCompatActivity() {
         finish()
     }
 
+    private fun goToCorrectWordTutorial() {
+        setAlertBuilderToGoToYoutube()
+    }
+
+    private fun setAlertBuilderToGoToYoutube() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Tutorial de Palabra Correcta")
+            .setMessage("¿Desea salir de LEXI e ir a YouTube?")
+            .setPositiveButton("SI"){dialog, _ ->
+                try{
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.data = Uri.parse(TUTORIAL_LINK)
+                    intent.setPackage("com.google.android.youtube")
+                    startActivity(intent)
+                }catch (e:Exception){
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(TUTORIAL_LINK)))
+                }
+
+            }
+            .setNegativeButton("NO") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         textToSpeech.shutdown()
     }
 
+    companion object{
+        private const val TUTORIAL_LINK = "https://www.youtube.com/shorts/FFUmXpqZPd0"
+    }
 }
