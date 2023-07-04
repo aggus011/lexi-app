@@ -1,4 +1,4 @@
-package com.example.lexiapp.data.notification
+package com.example.lexiapp.data.model
 
 import com.google.gson.annotations.SerializedName
 

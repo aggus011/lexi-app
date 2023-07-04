@@ -82,4 +82,7 @@ class CorrectWordUseCases @Inject constructor(
         service.saveResult(result)
     }
 
+    suspend fun generateNotificationForObjectives(game: String, type: String, gameName: String){
+        service.generateNotificationIfObjectiveHasBeenCompleted(game, type, gameName)
+    }
 }

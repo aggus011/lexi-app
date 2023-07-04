@@ -61,9 +61,7 @@ class NegativeResultLetsReadActivity : AppCompatActivity() {
         }
     }
 
-    private fun goToTryAgain() {
-        finish()
-    }
+    private fun goToTryAgain() = finish()
 
     private fun goToNextText() {
         nextTextBtn.setOnClickListener {

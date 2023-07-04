@@ -27,6 +27,7 @@ import com.example.lexiapp.domain.model.TextToRead
 import com.example.lexiapp.ui.games.letsread.result.NegativeResultLetsReadActivity
 import com.example.lexiapp.ui.games.letsread.result.PositiveResultLetsReadActivity
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -75,6 +76,7 @@ class LetsReadActivity : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
         getViews()
+        btnHelpListener()
         btnBackListener()
         setTextToReadData()
         setTextToSpeech()
@@ -96,8 +98,37 @@ class LetsReadActivity : AppCompatActivity() {
         btnShowResultsRecordAudio = binding.btnShowResults
     }
 
+    private fun btnHelpListener() {
+        binding.btnHelp.setOnClickListener {
+            setAlertBuilderToGoToYoutube()
+        }
+    }
+
+    private fun setAlertBuilderToGoToYoutube() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Tutorial de Palabra Correcta")
+            .setMessage("¿Desea salir de LEXI e ir a YouTube?")
+            .setPositiveButton("SI"){dialog, _ ->
+                try{
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.data = Uri.parse(TUTORIAL_LINK)
+                    intent.setPackage("com.google.android.youtube")
+                    startActivity(intent)
+                }catch (e:Exception){
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(TUTORIAL_LINK)))
+                }
+
+            }
+            .setNegativeButton("NO") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+
+    }
+
     private fun btnBackListener() {
         btnBack.setOnClickListener {
+            startActivity(Intent(this, ListTextActivity::class.java))
             finish()
         }
     }
@@ -420,6 +451,7 @@ class LetsReadActivity : AppCompatActivity() {
             // SEND AUDIO FILE TO ANALYSIS
             vM.transcription(audioPart)
             vM.transcription.observe(this) {
+                Log.d(TAG, "transcription $it")
                 differenceVM.getDifference(originalText = textWithoutLineBreak, results = it)
                 manageResult()
             }
@@ -439,18 +471,29 @@ class LetsReadActivity : AppCompatActivity() {
     private fun manageResult(){
         differenceVM.difference.observe(this) {
             val result = differenceVM.convertToText()
+            Log.d(TAG, "results $result")
             startResultActivity(result = result)
         }
     }
 
     private fun startResultActivity(result: String) {
-        val intent = if(result == "Correct")
-            Intent(this, PositiveResultLetsReadActivity::class.java)
-        else Intent(this, NegativeResultLetsReadActivity::class.java)
+        try {
+            val intent = if(result == "Correct") {
+                Intent(this, PositiveResultLetsReadActivity::class.java)
+            }else {
+                Intent(this, NegativeResultLetsReadActivity::class.java)
+            }
+            Log.d(TAG, "llega al intent")
+            intent.apply {
+                putExtra("results", result.toString())
+                putExtra("title", tvTextTitle.text.toString())
+            }
+            this.startActivity(intent)
+            Log.d(TAG, "pasa el startActivity")
+        }catch (e: Error){
+            Log.e(TAG, "Error! $e")
+        }
 
-        intent.putExtra("results", result)
-        intent.putExtra("title", tvTextTitle.text)
-        startActivity(intent)
     }
 
     private fun requestRecordAudioPermissions() {
@@ -466,11 +509,13 @@ class LetsReadActivity : AppCompatActivity() {
         private const val RECORD_AUDIO_REQUEST_CODE = 300
         private const val READ_EXTERNAL_STORAGE_PERMISSION_CODE = 300
         private const val TAG = "LetsReadActivity"
+        private const val TUTORIAL_LINK = "https://www.youtube.com/shorts/xAKtmpMt2UY"
     }
 
     private val onBackPressedCallback: OnBackPressedCallback =
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
+                startActivity(Intent(this@LetsReadActivity, ListTextActivity::class.java))
                 finish()
             }
         }

@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import kotlin.random.Random
 
-class WordAssociationService @Inject constructor(
+class WordAssociationGateway @Inject constructor(
     private val client: WordAssociationClient
 ) {
     suspend fun getWordToWhereIsTheLetterGame(count: Int, length: Int, language: String, estimulo: List<String?>) = flow {

@@ -1,7 +1,8 @@
+package com.example.lexiapp.ui.adapter
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lexiapp.databinding.ObjectiveItemBinding
 import com.example.lexiapp.domain.model.Objective
@@ -37,8 +38,9 @@ class ObjectivesAdapter : RecyclerView.Adapter<ObjectivesAdapter.ObjectiveViewHo
         val button: View = binding.btnObjective // Cambio aquí
 
         fun bind(objective: Objective) {
+            val progress = if(objective.progress <= objective.goal!!) objective.progress else objective.goal
             binding.tvObjectiveTitle.text = objective.title
-            binding.tvObjectiveProgress.text = "${objective.progress}/${objective.goal}"
+            binding.tvObjectiveProgress.text = "${progress}/${objective.goal}"
         }
     }
 

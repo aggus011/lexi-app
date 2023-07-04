@@ -1,4 +1,4 @@
-package com.example.lexiapp.data.api
+package com.example.lexiapp.data.network
 
 import com.example.lexiapp.data.api.openai_audio.SpeechToTextGateway
 import com.example.lexiapp.data.api.openai_audio.model.Texts
@@ -14,7 +14,6 @@ class SpeechToTextServiceImpl @Inject constructor(
     ): SpeechToTextService {
 
     override suspend fun transcription(file: MultipartBody.Part): Response<Texts> {
-        db.updateObjectiveProgress("SCAN", "play")
         return apiService.transcription(file)
     }
 

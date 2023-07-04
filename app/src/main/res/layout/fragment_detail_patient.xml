@@ -7,16 +7,62 @@
     android:background="@color/profile_background"
     tools:context=".ui.profesionalhome.detailpatient.DetailPatientFragment">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/ivMiniLogo"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_colorFilter="@color/purple"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/amoeba" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:textColor="@color/black"
+        android:textAppearance="@style/title"
+        android:textColor="@color/white"/>
+
+    <View
+        android:id="@+id/vIcClose"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/round_background"
+        android:backgroundTint="@color/light_purple"/>
+
+    <ImageView
+        android:id="@+id/icClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_close"
+        app:layout_constraintEnd_toEndOf="@id/vIcClose"
+        app:layout_constraintTop_toTopOf="@id/vIcClose"
+        app:layout_constraintStart_toStartOf="@id/vIcClose"
+        app:layout_constraintBottom_toBottomOf="@id/vIcClose"/>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnTrash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="6dp"
         android:contentDescription="@string/fab_delete_patient"
-        app:backgroundTint="@color/light_purple"
+        app:backgroundTint="@color/blue"
         app:fabSize="mini"
-        app:layout_constraintBottom_toTopOf="@id/cardContainer"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/vIcClose"
         app:srcCompat="@drawable/trash_icon"
         app:tint="@color/white" />
 
@@ -34,9 +80,8 @@
             android:id="@+id/vBackgroundUserIcon"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:alpha="0.5"
             android:background="@drawable/round_background"
-            android:backgroundTint="@color/icon_profile8"
+            android:backgroundTint="@color/purple"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,7 +91,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/title"
             android:textColor="@color/white"
-            android:textSize="28dp"
+            tools:text="C"
+            android:textSize="40sp"
             app:layout_constraintBottom_toBottomOf="@id/vBackgroundUserIcon"
             app:layout_constraintEnd_toEndOf="@id/vBackgroundUserIcon"
             app:layout_constraintStart_toStartOf="@id/vBackgroundUserIcon"
@@ -64,7 +110,8 @@
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivPatient" />
+        app:layout_constraintTop_toBottomOf="@id/ivPatient"
+        android:textAppearance="@style/subtitle"/>
 
     <TextView
         android:id="@+id/txtEmail"
@@ -75,7 +122,9 @@
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="@id/txtName"
         app:layout_constraintStart_toStartOf="@id/txtName"
-        app:layout_constraintTop_toBottomOf="@id/txtName" />
+        app:layout_constraintTop_toBottomOf="@id/txtName"
+        android:textSize="20sp"
+        android:textAppearance="@style/subtitle"/>
 
     <ScrollView
         android:id="@+id/cardContainer"
@@ -86,254 +135,522 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtEmail">
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="6dp">
-            <TextView
-                android:id="@+id/txtUpdateDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="@string/update_date"
-                android:textColor="@color/black"/>
-
-            <TextView
-                android:id="@+id/txtDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:textColor="@color/black"/>
-        </LinearLayout>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cvMetricsWITL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="6dp"
-            android:layout_marginBottom="6dp"
-            app:cardCornerRadius="5dp">
+            android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtUpdateDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/update_date"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textAppearance="@style/textItemsBottomNavigation"/>
+
+                <TextView
+                    android:id="@+id/txtDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textAppearance="@style/textItemsBottomNavigation"/>
+            </LinearLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvMetricsWITL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="5dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="8dp">
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginBottom="6dp"
+                app:cardCornerRadius="5dp">
 
-                <TextView
-                    android:id="@+id/txtNameGameWITL"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/WITL_title"
-                    android:textColor="@color/black"
-                    android:textSize="28sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:paddingHorizontal="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="8dp">
 
-                <TextView
-                    android:id="@+id/txtTitlePieTotalGraphWITL"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/total_progress"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/txtNameGameWITL"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/txtTitlePieWeekGraphWITL" />
+                    <TextView
+                        android:id="@+id/txtNameGameWITL"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/WITL_title"
+                        android:textColor="@color/black"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <com.github.mikephil.charting.charts.PieChart
-                    android:id="@+id/pieTotalChartWITL"
-                    android:layout_width="0dp"
-                    android:layout_height="200dp"
-                    app:layout_constraintTop_toBottomOf="@id/txtTitlePieTotalGraphWITL"
-                    app:layout_constraintStart_toStartOf="@id/txtTitlePieTotalGraphWITL"
-                    app:layout_constraintEnd_toEndOf="@id/txtTitlePieTotalGraphWITL" />
-                <TextView
-                    android:id="@+id/txtTitlePieWeekGraphWITL"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/progress_last_week"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/txtNameGameWITL"
-                    app:layout_constraintStart_toEndOf="@id/txtTitlePieTotalGraphWITL"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    <TextView
+                        android:id="@+id/txtTitlePieTotalGraphWITL"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:text="@string/total_progress"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toStartOf="@id/txtTitlePieWeekGraphWITL"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/txtNameGameWITL" />
 
-                <com.github.mikephil.charting.charts.PieChart
-                    android:id="@+id/pieWeekChartWITL"
-                    android:layout_width="0dp"
-                    android:layout_height="200dp"
-                    app:layout_constraintTop_toBottomOf="@id/txtTitlePieWeekGraphWITL"
-                    app:layout_constraintStart_toStartOf="@id/txtTitlePieWeekGraphWITL"
-                    app:layout_constraintEnd_toEndOf="@id/txtTitlePieWeekGraphWITL" />
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pieTotalChartWITL"
+                        android:layout_width="0dp"
+                        android:layout_height="200dp"
+                        app:layout_constraintEnd_toEndOf="@id/txtTitlePieTotalGraphWITL"
+                        app:layout_constraintStart_toStartOf="@id/txtTitlePieTotalGraphWITL"
+                        app:layout_constraintTop_toBottomOf="@id/txtTitlePieTotalGraphWITL" />
 
-                <TextView
-                    android:id="@+id/txtLettersDificultsWITL"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="Letras con mas equivocación: "
-                    android:textColor="@color/black"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/pieTotalChartWITL" />
+                    <TextView
+                        android:id="@+id/txtTitlePieWeekGraphWITL"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:text="@string/progress_last_week"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/txtTitlePieTotalGraphWITL"
+                        app:layout_constraintTop_toBottomOf="@id/txtNameGameWITL" />
 
-                <TextView
-                    android:id="@+id/txtValueLettersDificultsWITL"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="@id/txtLettersDificultsWITL"
-                    app:layout_constraintStart_toEndOf="@id/txtLettersDificultsWITL"
-                    app:layout_constraintTop_toTopOf="@id/txtLettersDificultsWITL" />
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pieWeekChartWITL"
+                        android:layout_width="0dp"
+                        android:layout_height="200dp"
+                        app:layout_constraintEnd_toEndOf="@id/txtTitlePieWeekGraphWITL"
+                        app:layout_constraintStart_toStartOf="@id/txtTitlePieWeekGraphWITL"
+                        app:layout_constraintTop_toBottomOf="@id/txtTitlePieWeekGraphWITL" />
 
-                <TextView
-                    android:id="@+id/txtTitleGraphWITL"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/last_week"
-                    android:textColor="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/txtValueLettersDificultsWITL"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    <TextView
+                        android:id="@+id/txtLettersDificultsWITL"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Letras con las que más se confunde: "
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/txtValueLettersDificultsWITL"
+                        app:layout_constraintTop_toBottomOf="@id/pieTotalChartWITL" />
 
-                <com.github.mikephil.charting.charts.BarChart
-                    android:id="@+id/barChartWITL"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    app:layout_constraintTop_toBottomOf="@id/txtTitleGraphWITL"
-                    app:layout_constraintStart_toStartOf="@id/txtTitleGraphWITL"
-                    app:layout_constraintEnd_toEndOf="@id/txtTitleGraphWITL" />
+                    <TextView
+                        android:id="@+id/txtNotHaveWeekProgresWITL"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="10dp"
+                        android:gravity="center"
+                        android:text="@string/dont_have_progress"
+                        android:textColor="@color/black"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/txtLettersDificultsWITL" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/txtValueLettersDificultsWITL"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@id/txtLettersDificultsWITL"
+                        app:layout_constraintStart_toEndOf="@id/txtLettersDificultsWITL"
+                        app:layout_constraintTop_toTopOf="@id/txtLettersDificultsWITL"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        android:layout_marginStart="5dp"/>
 
-        </androidx.cardview.widget.CardView>
+                    <TextView
+                        android:id="@+id/txtTitleGraphWITL"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/last_week"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/txtLettersDificultsWITL" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cvMetricsCW"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="6dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="6dp"
-            app:cardCornerRadius="5dp">
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/barChartWITL"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        app:layout_constraintEnd_toEndOf="@id/txtTitleGraphWITL"
+                        app:layout_constraintStart_toStartOf="@id/txtTitleGraphWITL"
+                        app:layout_constraintTop_toBottomOf="@id/txtTitleGraphWITL" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvMetricsCW"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="5dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="8dp">
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="6dp"
+                app:cardCornerRadius="5dp">
 
-                <TextView
-                    android:id="@+id/txtNameGameCW"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/CW_title"
-                    android:textColor="@color/black"
-                    android:textSize="28sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:paddingHorizontal="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="8dp">
+
+                    <TextView
+                        android:id="@+id/txtNameGameCW"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/CW_title"
+                        android:textColor="@color/black"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
 
-                <TextView
-                    android:id="@+id/txtTitlePieTotalGraphCW"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/total_progress"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/txtNameGameCW"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/txtTitlePieWeekGraphCW" />
+                    <TextView
+                        android:id="@+id/txtTitlePieTotalGraphCW"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:text="@string/total_progress"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toStartOf="@id/txtTitlePieWeekGraphCW"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/txtNameGameCW" />
 
-                <com.github.mikephil.charting.charts.PieChart
-                    android:id="@+id/pieTotalChartCW"
-                    android:layout_width="0dp"
-                    android:layout_height="200dp"
-                    app:layout_constraintTop_toBottomOf="@id/txtTitlePieTotalGraphCW"
-                    app:layout_constraintStart_toStartOf="@id/txtTitlePieTotalGraphCW"
-                    app:layout_constraintEnd_toEndOf="@id/txtTitlePieTotalGraphCW" />
-                <TextView
-                    android:id="@+id/txtTitlePieWeekGraphCW"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/progress_last_week"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/txtNameGameCW"
-                    app:layout_constraintStart_toEndOf="@id/txtTitlePieTotalGraphCW"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pieTotalChartCW"
+                        android:layout_width="0dp"
+                        android:layout_height="200dp"
+                        app:layout_constraintEnd_toEndOf="@id/txtTitlePieTotalGraphCW"
+                        app:layout_constraintStart_toStartOf="@id/txtTitlePieTotalGraphCW"
+                        app:layout_constraintTop_toBottomOf="@id/txtTitlePieTotalGraphCW" />
 
-                <com.github.mikephil.charting.charts.PieChart
-                    android:id="@+id/pieWeekChartCW"
-                    android:layout_width="0dp"
-                    android:layout_height="200dp"
-                    app:layout_constraintTop_toBottomOf="@id/txtTitlePieWeekGraphCW"
-                    app:layout_constraintStart_toStartOf="@id/txtTitlePieWeekGraphCW"
-                    app:layout_constraintEnd_toEndOf="@id/txtTitlePieWeekGraphCW" />
+                    <TextView
+                        android:id="@+id/txtTitlePieWeekGraphCW"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:text="@string/progress_last_week"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/txtTitlePieTotalGraphCW"
+                        app:layout_constraintTop_toBottomOf="@id/txtNameGameCW" />
 
-                <TextView
-                    android:id="@+id/txtLettersDificultsCW"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="Palabras con mas equivocación: "
-                    android:textColor="@color/black"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/pieTotalChartCW" />
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pieWeekChartCW"
+                        android:layout_width="0dp"
+                        android:layout_height="200dp"
+                        app:layout_constraintEnd_toEndOf="@id/txtTitlePieWeekGraphCW"
+                        app:layout_constraintStart_toStartOf="@id/txtTitlePieWeekGraphCW"
+                        app:layout_constraintTop_toBottomOf="@id/txtTitlePieWeekGraphCW" />
 
-                <TextView
-                    android:id="@+id/txtValueLettersDificultsCW"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="@id/txtLettersDificultsCW"
-                    app:layout_constraintStart_toEndOf="@id/txtLettersDificultsCW"
-                    app:layout_constraintTop_toTopOf="@id/txtLettersDificultsCW" />
+                    <TextView
+                        android:id="@+id/txtLettersDificultsCW"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Palabras con las que más se confunde: "
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/pieTotalChartCW"
+                        app:layout_constraintEnd_toStartOf="@+id/txtValueLettersDificultsCW"/>
 
-                <TextView
-                    android:id="@+id/txtTitleGraphCW"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/last_week"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/txtValueLettersDificultsCW"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    <TextView
+                        android:id="@+id/txtValueLettersDificultsCW"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@id/txtLettersDificultsCW"
+                        app:layout_constraintStart_toEndOf="@id/txtLettersDificultsCW"
+                        app:layout_constraintTop_toTopOf="@id/txtLettersDificultsCW"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        android:layout_marginStart="5dp"/>
 
-                <com.github.mikephil.charting.charts.BarChart
-                    android:id="@+id/barChartCW"
+                    <TextView
+                        android:id="@+id/txtNotHaveWeekProgresCW"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="10dp"
+                        android:gravity="center"
+                        android:text="@string/dont_have_progress"
+                        android:textColor="@color/black"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/txtLettersDificultsCW" />
+
+                    <TextView
+                        android:id="@+id/txtTitleGraphCW"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:text="@string/last_week"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/txtLettersDificultsCW" />
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/barChartCW"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        app:layout_constraintEnd_toEndOf="@+id/txtTitleGraphCW"
+                        app:layout_constraintStart_toStartOf="@+id/txtTitleGraphCW"
+                        app:layout_constraintTop_toBottomOf="@+id/txtTitleGraphCW" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvMetricsLR"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="6dp"
+                app:cardCornerRadius="5dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    app:layout_constraintTop_toBottomOf="@+id/txtTitleGraphCW"
-                    app:layout_constraintStart_toStartOf="@+id/txtTitleGraphCW"
-                    app:layout_constraintEnd_toEndOf="@+id/txtTitleGraphCW" />
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="8dp">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/txtNameGameLR"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/LR_title"
+                        android:textColor="@color/black"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/txtTitlePieTotalGraphLR"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:text="@string/total_progress"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toStartOf="@id/txtTitlePieWeekGraphLR"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/txtNameGameLR" />
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pieTotalChartLR"
+                        android:layout_width="0dp"
+                        android:layout_height="200dp"
+                        app:layout_constraintEnd_toEndOf="@id/txtTitlePieTotalGraphLR"
+                        app:layout_constraintStart_toStartOf="@id/txtTitlePieTotalGraphLR"
+                        app:layout_constraintTop_toBottomOf="@id/txtTitlePieTotalGraphLR" />
+
+                    <TextView
+                        android:id="@+id/txtTitlePieWeekGraphLR"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:text="@string/progress_last_week"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/txtTitlePieTotalGraphLR"
+                        app:layout_constraintTop_toBottomOf="@id/txtNameGameLR" />
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pieWeekChartLR"
+                        android:layout_width="0dp"
+                        android:layout_height="200dp"
+                        app:layout_constraintEnd_toEndOf="@id/txtTitlePieWeekGraphLR"
+                        app:layout_constraintStart_toStartOf="@id/txtTitlePieWeekGraphLR"
+                        app:layout_constraintTop_toBottomOf="@id/txtTitlePieWeekGraphLR" />
+
+                    <TextView
+                        android:id="@+id/txtLettersDificultsLR"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Palabras con las que más se confunde: "
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/pieTotalChartLR"
+                        app:layout_constraintEnd_toStartOf="@+id/txtValueLettersDificultsLR"/>
+
+                    <TextView
+                        android:id="@+id/txtValueLettersDificultsLR"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        android:layout_marginStart="5dp"
+                        app:layout_constraintBottom_toBottomOf="@id/txtLettersDificultsLR"
+                        app:layout_constraintStart_toEndOf="@id/txtLettersDificultsLR"
+                        app:layout_constraintTop_toTopOf="@id/txtLettersDificultsLR"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/txtNotHaveWeekProgresLR"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="10dp"
+                        android:gravity="center"
+                        android:text="@string/dont_have_progress"
+                        android:textColor="@color/black"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/txtLettersDificultsLR" />
+
+                    <TextView
+                        android:id="@+id/txtTitleGraphLR"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:text="@string/last_week"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/txtLettersDificultsLR" />
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/barChartLR"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        app:layout_constraintEnd_toEndOf="@+id/txtTitleGraphLR"
+                        app:layout_constraintStart_toStartOf="@+id/txtTitleGraphLR"
+                        app:layout_constraintTop_toBottomOf="@+id/txtTitleGraphLR" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvMetricsTS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="6dp"
+                app:cardCornerRadius="5dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="8dp">
+
+                    <TextView
+                        android:id="@+id/txtNameGameTS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="ESCANEO DE TEXTOS"
+                        android:textColor="@color/black"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/txtTotalUsesTS"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/total_scans"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/txtNameGameTS" />
+
+                    <TextView
+                        android:id="@+id/txtValueTotalUsesTS"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@id/txtTotalUsesTS"
+                        app:layout_constraintStart_toEndOf="@id/txtTotalUsesTS"
+                        app:layout_constraintTop_toTopOf="@id/txtTotalUsesTS" />
+
+                    <TextView
+                        android:id="@+id/txtNotUseTS"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="10dp"
+                        android:gravity="center"
+                        android:text="@string/not_use_seven_weeks"
+                        android:textColor="@color/black"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/txtTotalUsesTS" />
+
+                    <TextView
+                        android:id="@+id/txtTitleGraphTS"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:text="Uso en las últimas 7 semanas"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/txtTotalUsesTS" />
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/barChartTS"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        app:layout_constraintEnd_toEndOf="@+id/txtTitleGraphTS"
+                        app:layout_constraintStart_toStartOf="@+id/txtTitleGraphTS"
+                        app:layout_constraintTop_toBottomOf="@+id/txtTitleGraphTS" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
+
     </ScrollView>
 
 

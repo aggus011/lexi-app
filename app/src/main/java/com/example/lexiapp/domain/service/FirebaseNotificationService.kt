@@ -6,4 +6,7 @@ interface FirebaseNotificationService {
 
     suspend fun sendNotificationToPatient(patientToken: String, professionalEmail: String)
 
+    suspend fun sendNotificationObjectiveCompleted(patientToken: String, game: String)
+
+    suspend fun sendNotificationWeeklyObjectivesCompleted(patientToken: String)
 }

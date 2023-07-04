@@ -1,6 +1,7 @@
 package com.example.lexiapp.domain.service
 
 import com.example.lexiapp.domain.model.gameResult.CorrectWordGameResult
+import com.example.lexiapp.domain.model.gameResult.LetsReadGameResult
 import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import kotlinx.coroutines.flow.Flow
 
@@ -12,4 +13,7 @@ ResultGamesService {
 
     suspend fun getCorrectWordResults(email: String): Flow<List<CorrectWordGameResult>>
 
+    suspend fun getLRResults(email: String): Flow<List<LetsReadGameResult>>
+
+    suspend fun getTSResults(email: String): Flow<List<String>>
 }

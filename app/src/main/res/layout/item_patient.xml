@@ -2,22 +2,24 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="10dp"
     app:cardCornerRadius="10dp"
     android:id="@+id/itemCard"
-    android:backgroundTint="@color/purple"
+    android:backgroundTint="@color/light_purple"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnTrash"
-            app:backgroundTint="@color/light_purple"
+            app:backgroundTint="@color/blue"
             app:srcCompat="@drawable/trash_icon"
             app:tint="@color/white"
-            app:layout_constraintTop_toTopOf="@id/txtName"
-            app:layout_constraintBottom_toBottomOf="@id/ivEmailIcon"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,11 +27,10 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ivPatient"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/txtName"
-            app:layout_constraintBottom_toBottomOf="@id/ivEmailIcon">
+            app:layout_constraintTop_toTopOf="parent">
 
                 <View
                     android:id="@+id/vBackgroundUserIcon"
@@ -38,8 +39,7 @@
                     android:background="@drawable/round_background"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:backgroundTint="@color/icon_profile9"
-                    android:alpha="0.5"/>
+                    android:backgroundTint="@color/purple" />
 
                 <TextView
                     android:id="@+id/tvUserInitials"
@@ -50,7 +50,8 @@
                     app:layout_constraintBottom_toBottomOf="@id/vBackgroundUserIcon"
                     app:layout_constraintStart_toStartOf="@id/vBackgroundUserIcon"
                     android:textAppearance="@style/title"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    tools:text="C"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
@@ -58,11 +59,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/name"
-            android:textSize="20sp"
             android:textColor="@color/white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/ivPatient"
-            android:layout_marginStart="10dp"/>
+            android:layout_marginStart="10dp"
+            android:textAppearance="@style/subtitle"/>
 
         <ImageView
             android:id="@+id/ivEmailIcon"
@@ -84,7 +85,8 @@
             app:layout_constraintTop_toTopOf="@id/ivEmailIcon"
             app:layout_constraintStart_toEndOf="@id/ivEmailIcon"
             app:layout_constraintBottom_toBottomOf="@id/ivEmailIcon"
-            android:layout_marginStart="4dp"/>
+            android:layout_marginStart="4dp"
+            android:textAppearance="@style/textItemsBottomNavigation"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAddNote"
@@ -92,12 +94,12 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btnSeeNotes"
+            app:layout_constraintBottom_toTopOf="@+id/vDivider"
             app:layout_constraintTop_toBottomOf="@id/ivPatient"
             android:backgroundTint="@color/white"
             android:text="@string/note"
             android:layout_marginEnd="10dp"
-            android:textColor="@color/purple"
-            app:iconTint="@color/purple"
+            android:textColor="@color/light_purple"
             android:layout_marginTop="20dp"
             app:cornerRadius="10dp"
             android:textAppearance="@style/textMaterialButton"/>
@@ -112,8 +114,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:backgroundTint="@color/white"
             android:text="@string/see_note"
-            android:textColor="@color/purple"
-            app:iconTint="@color/purple"
+            android:textColor="@color/light_purple"
             app:iconPadding="-5dp"
             app:cornerRadius="10dp"
             android:textAppearance="@style/textMaterialButton"/>
@@ -141,12 +142,13 @@
                 android:id="@+id/txtSeeMore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ver más"
+                android:text="@string/show_more"
                 android:textColor="@color/white"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginStart="4dp"/>
+                android:layout_marginStart="4dp"
+                android:textAppearance="@style/textItemsBottomNavigation"/>
 
             <ImageView
                 android:id="@+id/icSeeMore"

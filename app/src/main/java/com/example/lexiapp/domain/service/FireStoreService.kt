@@ -5,9 +5,8 @@ import com.example.lexiapp.data.model.LetsReadGameDataResult
 import com.example.lexiapp.data.model.WhereIsTheLetterDataResult
 import com.example.lexiapp.domain.model.*
 import com.example.lexiapp.domain.model.gameResult.CorrectWordGameResult
-import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
-import com.example.lexiapp.domain.model.*
 import com.example.lexiapp.domain.model.gameResult.LetsReadGameResult
+import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.google.firebase.firestore.DocumentReference
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
@@ -31,7 +30,7 @@ interface FireStoreService {
 
     suspend fun getProfessional(email: String): Professional
 
-    suspend fun getIsLinked(email: String): Boolean?
+    suspend fun getIsLinked(email: String): Flow<Boolean?>
 
     suspend fun bindProfessionalToPatient (emailPatient: String, emailProfessional: String): FirebaseResult
 
@@ -49,7 +48,7 @@ interface FireStoreService {
 
     suspend fun checkObjectivesExist(email: String, lastMondayDate: String): Boolean
 
-    suspend fun getObjectives(email: String, lastMondayDate: String, listener: (List<Objective>) -> Unit)
+    suspend fun getObjectives(uid: String, lastMondayDate: String, listener: (List<Objective>) -> Unit)
 
     suspend fun saveLetsReadResult(result: LetsReadGameDataResult)
 
@@ -78,5 +77,23 @@ interface FireStoreService {
     suspend fun getWordCategories(email: String): List<String>
 
     suspend fun updateObjectiveProgress(game: String, type: String)
+
+    suspend fun getLastResultsLetsReadGame(email: String): Flow<List<LetsReadGameResult>>
+
+    suspend fun getLastResultsTextScan(email: String): Flow<List<String>>
+
+    suspend fun saveTextScanResult(email: String)
+
+    suspend fun getObjectivesHistory(uid: String): Flow<List<MiniObjective>>
+
+    suspend fun getIncompleteGameNames(email: String, lastMondayDate: String): List<String>
+
+    suspend fun increaseGoalForGames(email: String, games: List<String>)
+
+    suspend fun checkIfObjectiveAndWeeklyObjectivesWereCompleted(game: String, type: String): Pair<Boolean, Boolean>
+
+    suspend fun getAllProfessional(): Flow<List<ProfessionalValidation>>
+
+    suspend fun saveValidationTOProfessional(emailProfessional: String, approval: Boolean)
 
 }

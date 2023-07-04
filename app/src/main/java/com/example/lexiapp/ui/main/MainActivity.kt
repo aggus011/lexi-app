@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.lexiapp.databinding.ActivityMainBinding
 import com.example.lexiapp.domain.useCases.ProfileUseCases
+import com.example.lexiapp.ui.admin.AdminActivity
 import com.example.lexiapp.ui.categories.CategoriesActivity
 import com.example.lexiapp.ui.login.LoginActivity
 import com.example.lexiapp.ui.patienthome.HomePatientActivity
@@ -43,13 +44,15 @@ class MainActivity: AppCompatActivity() {
                 }else{
                     startActivity(Intent(this, CategoriesActivity::class.java))
                 }
-            }else{
+            }else if(userType == "professional"){
                 val professionalState = profileUseCases.getProfessionalVerificationState()
                 if(professionalState == 1){
                     startActivity(Intent(this, VerifyMedicalRegistrationActivity::class.java))
                 }else if(professionalState == 2){
                     startActivity(Intent(this, ProfesionalHomeActivity::class.java))
                 }
+            }else if(userType == "admin"){
+                startActivity(Intent(this, AdminActivity::class.java))
             }
         }else{
             startActivity(Intent(this, LoginActivity::class.java))

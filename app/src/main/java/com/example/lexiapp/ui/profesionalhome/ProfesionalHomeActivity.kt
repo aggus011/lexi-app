@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
@@ -21,7 +22,6 @@ import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.useCases.ProfileUseCases
 import com.example.lexiapp.ui.adapter.UserAdapter
-import com.example.lexiapp.ui.patienthome.HomePatientActivity
 import com.example.lexiapp.ui.profesionalhome.detailpatient.DetailPatientFragment
 import com.example.lexiapp.ui.profesionalhome.note.CreateNoteActivity
 import com.example.lexiapp.ui.profesionalhome.note.RecordNoteActivity
@@ -34,6 +34,7 @@ import com.journeyapps.barcodescanner.ScanOptions
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
 class ProfesionalHomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfesionalHomeBinding
@@ -41,6 +42,7 @@ class ProfesionalHomeActivity : AppCompatActivity() {
     private val TAG_FRAGMENT_DETAIL = "detail_fragment_tag"
     private var detailFragment: DetailPatientFragment? = null
     private lateinit var notificationPermission: Array<String>
+    private var iconUserColor: Int? = null
 
     @Inject
     lateinit var profileUseCases: ProfileUseCases
@@ -150,13 +152,8 @@ class ProfesionalHomeActivity : AppCompatActivity() {
 
     private fun setColors() {
         val icColor = profileUseCases.getColorRandomForIconProfile()
-
-        //setTextColor(icColor)
+        iconUserColor = icColor
         setBackgroundIconColor(icColor)
-    }
-
-    private fun setTextColor(icColor: Int) {
-        binding.tvUserInitials.setTextColor(ContextCompat.getColor(this, icColor))
     }
 
     private fun setBackgroundIconColor(icColor: Int) {
@@ -175,6 +172,7 @@ class ProfesionalHomeActivity : AppCompatActivity() {
         }
         binding.clIconAccount.setOnClickListener {
             val accountFragment = ProfessionalProfileFragment()
+            accountFragment.arguments = getProfessionalData()
 
             supportFragmentManager
                 .beginTransaction()
@@ -207,7 +205,7 @@ class ProfesionalHomeActivity : AppCompatActivity() {
             binding.rvPatient.adapter = UserAdapter(
                 list,
                 ::viewDetails,
-                ::unbindPatient,
+                ::confirmUnbindPatient,
                 ::startCreateNoteActivity,
                 ::startRecordNoteActivity
             )
@@ -228,6 +226,21 @@ class ProfesionalHomeActivity : AppCompatActivity() {
         }
     }
 
+    private fun confirmUnbindPatient(emailPatient: String) {
+        showConfirmationDialog(emailPatient)
+    }
+
+    private fun showConfirmationDialog(emailPatient: String) {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("¿Esta seguro de que quiere desvincular al paciente: $emailPatient?")
+            .setPositiveButton("Confirmar") { _, _ ->
+                // Llama a la acción de confirmación
+                unbindPatient(emailPatient)
+            }
+            .setNegativeButton("Cancelar", null)
+        builder.create().show()
+    }
+
     private fun unbindPatient(email: String) {
         vM.unbindPatient(email)
     }
@@ -240,9 +253,9 @@ class ProfesionalHomeActivity : AppCompatActivity() {
             .commit()
     }
 
-    private fun startCreateNoteActivity(emailPatient: String) {
+    private fun startCreateNoteActivity(patient: User) {
         val intent = Intent(applicationContext, CreateNoteActivity::class.java)
-        intent.putExtra("emailPatient", emailPatient)
+        intent.putExtra("patient", Gson().toJson(patient))
         startActivity(intent)
     }
 
@@ -265,6 +278,25 @@ class ProfesionalHomeActivity : AppCompatActivity() {
     private fun verifyIsApiVersionIsHigherThan33(): Boolean{
         return Build.VERSION.SDK_INT >=
                 Build.VERSION_CODES.TIRAMISU
+    }
+
+    private fun getProfessionalData(): Bundle{
+        val args = Bundle()
+        val name = profileUseCases.getProfile().userName
+        val email = profileUseCases.getEmail()
+        val initials = profileUseCases.userInitials()
+        val medicalRegistration = profileUseCases.getMedicalRegistration()
+
+        args.putString("name", name)
+        args.putString("email", email)
+        args.putString("initials", initials)
+        args.putString("medical_registration", medicalRegistration)
+
+        iconUserColor?.let {
+            args.putInt("icon_color", it)
+        }
+
+        return args
     }
 
     private companion object {

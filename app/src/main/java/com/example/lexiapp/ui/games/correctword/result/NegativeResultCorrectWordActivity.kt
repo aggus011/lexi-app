@@ -23,8 +23,13 @@ class NegativeResultCorrectWordActivity : AppCompatActivity() {
         binding = ActivityNegativeResultCorrectWordBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
+        checkObjectives()
         getValues()
         setListeners()
+    }
+
+    private fun checkObjectives() {
+        vM.checkIfObjectivesHasBeenCompleted("CW", "play", "Palabra Correcta")
     }
 
     private fun getValues() {

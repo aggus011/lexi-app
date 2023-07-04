@@ -59,7 +59,7 @@
         android:id="@+id/btnNextText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:padding="15dp"
         app:layout_constraintStart_toStartOf="@id/ivClaps"
         app:layout_constraintEnd_toEndOf="@id/ivClaps"
         app:layout_constraintBottom_toTopOf="@id/btnGoInit"

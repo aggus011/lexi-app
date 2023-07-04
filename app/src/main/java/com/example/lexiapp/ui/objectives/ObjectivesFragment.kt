@@ -1,7 +1,8 @@
 package com.example.lexiapp.ui.objectives
 
-import ObjectivesAdapter
+import com.example.lexiapp.ui.adapter.ObjectivesAdapter
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -17,9 +18,6 @@ import com.example.lexiapp.databinding.FragmentObjectivesBinding
 import dagger.hilt.android.AndroidEntryPoint
 import com.google.firebase.auth.FirebaseAuth
 import android.os.Looper
-import android.util.Log
-import android.widget.Button
-import com.example.lexiapp.data.network.FireStoreServiceImpl
 import com.example.lexiapp.domain.model.Objective
 
 @AndroidEntryPoint
@@ -43,6 +41,13 @@ class ObjectivesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
         loadObjectivesWithDelay()
+        setListener()
+    }
+
+    private fun setListener() {
+        binding.imbCompletedObjectives.setOnClickListener {
+            startActivity(Intent(activity, CompletedObjectiveActivity::class.java))
+        }
     }
 
     private fun setUpRecyclerView() {
@@ -73,11 +78,7 @@ class ObjectivesFragment : Fragment() {
     }
 
     private fun saveObjectives() {
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        val userid = currentUser?.uid
-        if (userid != null) {
-            objectivesViewModel.saveObjectivesToFirestore(userid)
-        }
+            objectivesViewModel.saveObjectives()
     }
 
     private fun checkObjectivesCompletion(objectives: List<Objective>) {
@@ -87,7 +88,7 @@ class ObjectivesFragment : Fragment() {
                 if (viewHolder is ObjectivesAdapter.ObjectiveViewHolder) {
                     val button = viewHolder.button
                     val objective = objectives[i]
-                    if (objective.progress == objective.goal) {
+                    if (objective.progress >= objective.goal!!) {
                         val greenColor = Color.parseColor("#71dea2")
                         button.setBackgroundColor(greenColor)
                         val translationXAnimation = ObjectAnimator.ofFloat(

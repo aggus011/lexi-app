@@ -53,12 +53,13 @@
         android:textStyle="bold"
         android:textColor="@color/white"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/title"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnGoInit"
         android:layout_width="175dp"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

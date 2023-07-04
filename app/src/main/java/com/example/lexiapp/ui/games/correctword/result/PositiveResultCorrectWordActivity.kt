@@ -22,7 +22,12 @@ class PositiveResultCorrectWordActivity : AppCompatActivity() {
         binding = ActivityPositiveResultCorrectWordBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
+        checkObjectives()
         setListeners()
+    }
+
+    private fun checkObjectives() {
+        vM.checkIfObjectivesHasBeenCompleted("CW", "hit", "Palabra Correcta")
     }
 
     private fun setListeners() {

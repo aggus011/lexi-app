@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import com.example.lexiapp.data.api.difference_text.model.Rows
 import com.example.lexiapp.domain.model.gameResult.LetsReadGameResult
 import com.example.lexiapp.domain.service.DifferenceService
-import com.example.lexiapp.domain.service.FireStoreService
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -19,6 +18,10 @@ class DifferenceUseCases @Inject constructor(
     suspend fun saveWrongWords(result: LetsReadGameResult) {
         prefs.getString("email", null)?.let { result.email = it }
         service.saveLetsReadResult(result)
+    }
+
+    suspend fun generateNotificationForObjectives(game: String, type: String, gameName: String){
+        service.generateNotificationIfObjectiveHasBeenCompleted(game, type, gameName)
     }
 
 }

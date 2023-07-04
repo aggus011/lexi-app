@@ -42,8 +42,13 @@ class ProfileUseCases @Inject constructor(
                 editor.putString("email", professional.user.email).apply()
                 editor.putString("user_name", professional.user.userName).apply()
                 editor.putString("user_type", "professional").apply()
+                editor.putString("medical_registration", professional.medicalRegistration).apply()
                 editor.putInt("professional_account_state", if(professional.isVerifiedAccount) 2 else 1).apply()
                 fireStoreService.saveTokenToProfessional(professional.user.email)
+            }
+            if(isAdmin(user.email)){
+                editor.putString("email", user.email).apply()
+                editor.putString("user_type", "admin").apply()
             }
         }catch (e: UserNotFoundException){
             Log.v(TAG, "User not found in collections")
@@ -138,12 +143,17 @@ class ProfileUseCases @Inject constructor(
 
     fun haveAccount()= getEmail()!=null
 
-    suspend fun isPatientLinked() = flow<Boolean?> { emit(fireStoreService.getIsLinked(getEmail()!!))}
+    suspend fun isPatientLinked() = fireStoreService.getIsLinked(getEmail()!!)
 
     fun closeSesion()=editor.clear().apply()
 
     fun verifyIfPatientHasRegisteredButNotChooseCategories() = prefs.contains("categories")
 
+    private fun isAdmin(email: String): Boolean {
+        return email == "lexiapp.2023@gmail.com"
+    }
+
+    fun getMedicalRegistration() = prefs.getString("medical_registration", null)
 
     companion object{
         private const val TAG = "ProfileUseCases"

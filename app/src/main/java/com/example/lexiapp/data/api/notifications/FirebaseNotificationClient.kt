@@ -1,6 +1,6 @@
-package com.example.lexiapp.data.network
+package com.example.lexiapp.data.api.notifications
 
-import com.example.lexiapp.data.notification.NotificationRequest
+import com.example.lexiapp.data.model.NotificationRequest
 import com.example.lexiapp.domain.model.Secrets
 import okhttp3.ResponseBody
 import retrofit2.Response

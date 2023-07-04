@@ -93,4 +93,10 @@ class DifferenceViewModel @Inject constructor(
         return words.size
     }
 
+    fun checkIfObjectivesHasBeenCompleted(game: String, typeGame: String, gameName: String) {
+        viewModelScope.launch {
+            differenceUseCases.generateNotificationForObjectives(game, typeGame, gameName)
+        }
+    }
+
 }
