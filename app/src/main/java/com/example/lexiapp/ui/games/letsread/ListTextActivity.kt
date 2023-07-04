@@ -8,26 +8,28 @@ import android.widget.ImageView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lexiapp.databinding.ActivityListTextBinding
+import com.example.lexiapp.domain.useCases.ProfileUseCases
 import com.example.lexiapp.ui.adapter.TextAdapter
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ListTextActivity : AppCompatActivity() {
     private lateinit var binding: ActivityListTextBinding
-    //Should be inject
-    private lateinit var vM: TextViewModel
     private val listTextViewModel: ListTextViewModel by viewModels()
     private lateinit var progressBar: View
     private lateinit var challengeReadingBtn: MaterialButton
     private lateinit var rvReadings: RecyclerView
     private lateinit var backBtn: ImageView
+
+    @Inject
+    lateinit var profileUseCases: ProfileUseCases
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,10 +40,9 @@ class ListTextActivity : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
         getViews()
-        setVM()
         setObservables()
+        getListText()
         setListener()
-        setRecyclerView()
     }
 
     private fun getViews(){
@@ -51,10 +52,10 @@ class ListTextActivity : AppCompatActivity() {
         progressBar = binding.progressLayout
     }
 
-    private fun setVM(){
-        //Should be inject
-        val factory = TextViewModel.Factory() // Factory
-        vM= ViewModelProvider(this, factory)[TextViewModel::class.java]
+    private fun getListText() {
+        profileUseCases.getEmail()?.let {
+            listTextViewModel.getTextsFromCategories(it)
+        }
     }
 
     private fun setObservables(){
@@ -76,6 +77,19 @@ class ListTextActivity : AppCompatActivity() {
                 showRateLimitDialog()
             }
         }
+
+        listTextViewModel.textToReadList.observe(this){ list ->
+            if(list.isNotEmpty()){
+                setRecyclerView()
+                binding.rvText.adapter = TextAdapter(list){
+                    val gson = Gson()
+                    val intent = Intent(this, LetsReadActivity::class.java)
+                    intent.putExtra("TextToRead", gson.toJson(it))
+                    startActivity(intent)
+                    finish()
+                }
+            }
+        }
     }
 
     private fun setListener() {
@@ -91,18 +105,6 @@ class ListTextActivity : AppCompatActivity() {
 
     private fun setRecyclerView() {
         rvReadings.layoutManager=LinearLayoutManager(this)
-        suscribeToVM()
-    }
-
-    private fun suscribeToVM() {
-        val gson = Gson()
-        vM.listText.observe(this) { list ->
-            binding.rvText.adapter = TextAdapter(list){
-                val intent = Intent(this, LetsReadActivity::class.java)
-                intent.putExtra("TextToRead", gson.toJson(it))
-                startActivity(intent)
-            }
-        }
     }
 
     private fun disableButtons(){
