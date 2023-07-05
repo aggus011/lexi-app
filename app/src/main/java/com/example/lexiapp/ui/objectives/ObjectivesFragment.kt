@@ -92,7 +92,7 @@ class ObjectivesFragment : Fragment() {
                         val greenColor = Color.parseColor("#17FF20")
                         val newDrawable = GradientDrawable()
                         newDrawable.shape = GradientDrawable.RECTANGLE
-                        newDrawable.cornerRadius = 50f
+                        newDrawable.cornerRadius = 30f
                         newDrawable.setColor(greenColor)
                         button.background = newDrawable
                         val translationXAnimation = ObjectAnimator.ofFloat(
