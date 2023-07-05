@@ -181,7 +181,7 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvMetricsWITL"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="6dp"
@@ -197,16 +197,26 @@
 
                     <TextView
                         android:id="@+id/txtNameGameWITL"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/WITL_title"
                         android:textColor="@color/black"
                         android:textSize="28sp"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/ivInfoWITL"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/ivInfoWITL"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_info"
+                        app:layout_constraintTop_toTopOf="@id/txtNameGameWITL"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="@id/txtNameGameWITL"
+                        app:layout_constraintStart_toEndOf="@id/txtNameGameWITL"/>
 
                     <TextView
                         android:id="@+id/txtTitlePieTotalGraphWITL"
@@ -312,7 +322,7 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvMetricsCW"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="6dp"
@@ -446,7 +456,7 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvMetricsLR"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="6dp"
@@ -580,7 +590,7 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvMetricsTS"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="6dp"
