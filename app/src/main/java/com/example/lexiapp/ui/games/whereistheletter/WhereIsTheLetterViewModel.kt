@@ -1,10 +1,7 @@
 package com.example.lexiapp.ui.games.whereistheletter
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.lexiapp.domain.model.gameResult.WhereIsTheLetterResult
 import com.example.lexiapp.domain.useCases.LetterGameUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +22,9 @@ class WhereIsTheLetterViewModel @Inject constructor(
     private var _basicWord = MutableStateFlow<String?>(null)
     var basicWord: LiveData<String?> = _basicWord.asLiveData()
 
+    private var _visibleWord = MutableLiveData<String>()
+    var visibleWord: LiveData<String> = _visibleWord
+
     private var _correctPosition = MutableStateFlow(2)
 
     private var _correctAnswerSubmitted = MutableStateFlow(false)
@@ -35,6 +35,10 @@ class WhereIsTheLetterViewModel @Inject constructor(
     private var _letter = MutableStateFlow('*')
     var letter: LiveData<Char> = _letter.asLiveData()
 
+    init {
+        _visibleWord.value = ""
+    }
+
     fun onPositionSelected(position: Int) {
         _selectedPosition.value = position
     }
@@ -42,6 +46,8 @@ class WhereIsTheLetterViewModel @Inject constructor(
     fun onPositionDeselected() {
         _selectedPosition.value = null
     }
+
+    fun setVisibleWord(word: String){ _visibleWord.value = word }
 
     fun isItSelected(position: Int) = _selectedPosition.value == position
 
