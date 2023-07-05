@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.viewModels
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lexiapp.databinding.ActivityAdminBinding
 import com.example.lexiapp.ui.adapter.ProfessionalValidationAdapter
@@ -24,11 +25,12 @@ class AdminActivity : AppCompatActivity() {
 
         setListeners()
         setRecycler()
+        setSearch()
     }
 
     private fun setRecycler() {
         binding.rvProfessionals.layoutManager= LinearLayoutManager(this)
-        vM.professionals.observe(this){ professionals->
+        vM.filterProfessionals.observe(this){ professionals->
             binding.rvProfessionals.adapter= ProfessionalValidationAdapter(professionals, ::setApproval)
         }
     }
@@ -42,6 +44,20 @@ class AdminActivity : AppCompatActivity() {
             closeSession()
             startActivity(Intent(this, LoginActivity::class.java))
         }
+    }
+
+    private fun setSearch() {
+        binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(patientSearch: String?): Boolean {
+                vM.filter(patientSearch)
+                return true
+            }
+
+        })
     }
 
     private fun closeSession() {
