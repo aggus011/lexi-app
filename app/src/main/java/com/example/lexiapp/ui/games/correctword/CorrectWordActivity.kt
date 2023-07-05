@@ -1,6 +1,5 @@
 package com.example.lexiapp.ui.games.correctword
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -10,10 +9,8 @@ import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityCorrectWordBinding
 import com.example.lexiapp.ui.games.correctword.result.NegativeResultCorrectWordActivity
 import com.example.lexiapp.ui.games.correctword.result.PositiveResultCorrectWordActivity
