@@ -126,16 +126,20 @@
 
                 <TextView
                     android:id="@+id/txtEmail"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/email"
                     app:layout_constraintTop_toTopOf="@id/ivEmailIcon"
                     app:layout_constraintStart_toEndOf="@id/ivEmailIcon"
                     app:layout_constraintBottom_toBottomOf="@id/ivEmailIcon"
+                    app:layout_constraintEnd_toEndOf="@id/dividerEmail"
                     android:layout_marginStart="4dp"
-                    android:textAppearance="@style/textProfileData"/>
+                    android:textAppearance="@style/textProfileData"
+                    android:ellipsize="end"
+                    android:maxLines="1"/>
 
                 <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/dividerEmail"
                     app:layout_constraintTop_toBottomOf="@id/ivEmailIcon"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"

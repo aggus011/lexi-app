@@ -143,6 +143,7 @@ class LetsReadActivity : AppCompatActivity() {
         textToSpeech = TextToSpeech(this) {
             if (it != TextToSpeech.ERROR) {
                 textToSpeech.language = language
+                textToSpeech.setSpeechRate(0.6f)
 
                 val audioTextFile = File(this.filesDir, "${tvTextTitle.text}.mp3")
                 generateAudioFromTextToRead(audioTextFile)

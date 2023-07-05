@@ -114,6 +114,16 @@
                 app:layout_constraintStart_toStartOf="@id/etName"
                 app:layout_constraintEnd_toEndOf="@id/etName"/>
 
+            <ImageView
+                android:id="@+id/ivBirthday"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:layout_constraintEnd_toEndOf="@id/datePicker"
+                app:layout_constraintTop_toTopOf="@id/datePicker"
+                android:src="@drawable/ic_birthday"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
