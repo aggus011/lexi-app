@@ -25,35 +25,55 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:text="@string/logo"
+        android:textAppearance="@style/title"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:textColor="@color/black"
-        android:textAppearance="@style/title"/>
+        tools:textColor="@color/black" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/svFilter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_marginTop="-20dp"
+        app:cardBackgroundColor="@color/light_purple"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/animationLogo">
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:closeIcon="@drawable/ic_close"
+            app:iconifiedByDefault="true"
+            app:queryHint="Buscar por nombre o email" />
+    </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvProfessionals"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="-20dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btnLogout"
-        app:layout_constraintTop_toBottomOf="@id/animationLogo"
-        tools:listitem="@layout/item_professional_verification"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/svFilter"
+        app:layout_constraintBottom_toBottomOf="@+id/btnLogout"
+        tools:listitem="@layout/item_professional_verification" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLogout"
+        style="@style/textMaterialButton"
         android:layout_width="350dp"
         android:layout_height="60dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="8dp"
-        android:text="@string/logout"
         android:backgroundTint="@color/red"
+        android:elevation="10dp"
+        android:text="@string/logout"
         app:cornerRadius="10dp"
-        style="@style/textMaterialButton"
-        android:elevation="10dp"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
