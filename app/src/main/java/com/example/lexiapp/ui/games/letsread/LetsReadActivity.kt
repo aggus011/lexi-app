@@ -472,7 +472,7 @@ class LetsReadActivity : AppCompatActivity() {
         differenceVM.difference.observe(this) {
             val result = differenceVM.convertToText()
             Log.d(TAG, "results $result")
-            startResultActivity(result = result)
+            startResultActivity(result)
         }
     }
 
