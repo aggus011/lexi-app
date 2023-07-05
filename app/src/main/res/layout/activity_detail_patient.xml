@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/profile_background"
-    tools:context=".ui.profesionalhome.detailpatient.DetailPatientFragment">
+    tools:context=".ui.profesionalhome.detailpatient.DetailPatientActivity">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/ivMiniLogo"
@@ -126,6 +126,18 @@
         android:textSize="20sp"
         android:textAppearance="@style/subtitle"/>
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:visibility="visible"
+        app:layout_constraintTop_toTopOf="@id/cardContainer"
+        app:layout_constraintStart_toStartOf="@id/cardContainer"
+        app:layout_constraintEnd_toEndOf="@id/cardContainer"
+        app:layout_constraintBottom_toBottomOf="@id/cardContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminateTint="@color/light_purple"/>
+
     <ScrollView
         android:id="@+id/cardContainer"
         android:layout_width="match_parent"
@@ -169,6 +181,7 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvMetricsWITL"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="6dp"
@@ -299,6 +312,7 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvMetricsCW"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="6dp"
@@ -432,6 +446,7 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvMetricsLR"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="6dp"
@@ -565,6 +580,7 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvMetricsTS"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="6dp"

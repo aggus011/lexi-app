@@ -6,7 +6,6 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
@@ -22,7 +21,7 @@ import com.example.lexiapp.domain.model.FirebaseResult
 import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.useCases.ProfileUseCases
 import com.example.lexiapp.ui.adapter.UserAdapter
-import com.example.lexiapp.ui.profesionalhome.detailpatient.DetailPatientFragment
+import com.example.lexiapp.ui.profesionalhome.detailpatient.DetailPatientActivity
 import com.example.lexiapp.ui.profesionalhome.note.CreateNoteActivity
 import com.example.lexiapp.ui.profesionalhome.note.RecordNoteActivity
 import com.example.lexiapp.ui.profesionalhome.resultlink.SuccessfulLinkActivity
@@ -39,8 +38,6 @@ import javax.inject.Inject
 class ProfesionalHomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfesionalHomeBinding
     private val vM: ProfesionalHomeViewModel by viewModels()
-    private val TAG_FRAGMENT_DETAIL = "detail_fragment_tag"
-    private var detailFragment: DetailPatientFragment? = null
     private lateinit var notificationPermission: Array<String>
     private var iconUserColor: Int? = null
 
@@ -71,8 +68,6 @@ class ProfesionalHomeActivity : AppCompatActivity() {
         setListener()
         setRecyclerView()
         setSearch()
-        addFragment()
-        visibilityDetailFragment()
     }
 
     private fun initArrayPermission(){
@@ -104,37 +99,6 @@ class ProfesionalHomeActivity : AppCompatActivity() {
             .requestPermissions(this, notificationPermission,
                 NOTIFICATIONS_REQUEST_CODE
             )
-    }
-
-    private fun visibilityDetailFragment() {
-        supportFragmentManager.addOnBackStackChangedListener {
-            val fragment = supportFragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL)
-            if (fragment == null || !fragment.isVisible) {
-                binding.apply {
-                    rvPatient.visibility = View.VISIBLE
-                    btnAddPatient.visibility = View.VISIBLE
-                    svFilter.visibility = View.VISIBLE
-                    ivMiniLogo.visibility = View.VISIBLE
-                    clIconAccount.visibility = View.VISIBLE
-                }
-            } else {
-                binding.apply {
-                    rvPatient.visibility = View.GONE
-                    btnAddPatient.visibility = View.GONE
-                    svFilter.visibility = View.GONE
-                    ivMiniLogo.visibility = View.GONE
-                    clIconAccount.visibility = View.GONE
-                }
-            }
-        }
-    }
-
-    private fun addFragment() {
-        detailFragment = DetailPatientFragment()
-        supportFragmentManager.beginTransaction()
-            .add(binding.lyFragment.id, detailFragment!!, TAG_FRAGMENT_DETAIL)
-            .hide(detailFragment!!)
-            .commit()
     }
 
     private fun getViews() {
@@ -246,11 +210,9 @@ class ProfesionalHomeActivity : AppCompatActivity() {
     }
 
     private fun viewDetails(patient: User) {
-        vM.setPatientSelected(patient)
-        supportFragmentManager.beginTransaction()
-            .show(detailFragment!!)
-            .addToBackStack(TAG_FRAGMENT_DETAIL)
-            .commit()
+        val intent = Intent(this, DetailPatientActivity::class.java)
+        intent.putExtra("patient", Gson().toJson(patient))
+        startActivity(intent)
     }
 
     private fun startCreateNoteActivity(patient: User) {
@@ -263,16 +225,6 @@ class ProfesionalHomeActivity : AppCompatActivity() {
         val intent = Intent(applicationContext, RecordNoteActivity::class.java)
         intent.putExtra("patient", Gson().toJson(patient))
         startActivity(intent)
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onBackPressed() {
-        supportFragmentManager.findFragmentByTag(TAG_FRAGMENT_DETAIL).let {
-            when (it?.isVisible) {
-                true -> supportFragmentManager.popBackStack()
-                else -> super.onBackPressed()
-            }
-        }
     }
 
     private fun verifyIsApiVersionIsHigherThan33(): Boolean{
