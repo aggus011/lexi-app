@@ -6,14 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lexiapp.data.api.difference_text.model.Rows
 import com.example.lexiapp.domain.model.gameResult.LetsReadGameResult
-import com.example.lexiapp.domain.service.FireStoreService
 import com.example.lexiapp.domain.useCases.DifferenceUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Error
-import java.lang.NullPointerException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -76,7 +73,10 @@ class DifferenceViewModel @Inject constructor(
                     email = "",
                     wrongWords = wrongWords.toList(),
                     totalWords = total,
-                    success = success
+                    success = !success
+                /*Se negó el success porque se guarda al revés el resultado
+                en firestore, se trató cambiando la condicion del if pero no hacia
+                 lo requerido*/
                 )
             )
         }

@@ -39,9 +39,11 @@ class PositiveResultLetsReadActivity : AppCompatActivity() {
     private fun setButton() {
         nextTextBtn.setOnClickListener {
             startActivity(Intent(this, ListTextActivity::class.java))
+            finish()
         }
         homeBtn.setOnClickListener {
             startActivity(Intent(this, HomePatientActivity::class.java))
+            finish()
         }
     }
 }

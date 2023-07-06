@@ -1,14 +1,12 @@
 package com.example.lexiapp.ui.games.letsread.result
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Button
-import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import com.example.lexiapp.databinding.ActivityNegativeResultLetsReadBinding
 import com.example.lexiapp.ui.games.letsread.ListTextActivity
-import com.example.lexiapp.ui.games.letsread.TextViewModel
 import com.example.lexiapp.ui.patienthome.HomePatientActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,7 +15,6 @@ class NegativeResultLetsReadActivity : AppCompatActivity() {
     lateinit var binding: ActivityNegativeResultLetsReadBinding
 
     private lateinit var homeBtn: Button
-    private lateinit var tryAgainBtn: Button
     private lateinit var nextTextBtn: Button
     private lateinit var seeWordsBtn: Button
 
@@ -37,7 +34,6 @@ class NegativeResultLetsReadActivity : AppCompatActivity() {
 
     private fun getViews() {
         homeBtn = binding.btnGoInit
-        tryAgainBtn = binding.btnTryAgain
         nextTextBtn = binding.btnNextText
         seeWordsBtn = binding.btnSeeWords
     }
@@ -49,7 +45,6 @@ class NegativeResultLetsReadActivity : AppCompatActivity() {
 
     private fun setButtons() {
         goHome()
-        goToTryAgain()
         goToNextText()
         goToSeeResult()
     }
@@ -57,11 +52,6 @@ class NegativeResultLetsReadActivity : AppCompatActivity() {
     private fun goHome() {
         homeBtn.setOnClickListener {
             startActivity(Intent(this, HomePatientActivity::class.java))
-        }
-    }
-
-    private fun goToTryAgain() {
-        tryAgainBtn.setOnClickListener {
             finish()
         }
     }
@@ -69,6 +59,7 @@ class NegativeResultLetsReadActivity : AppCompatActivity() {
     private fun goToNextText() {
         nextTextBtn.setOnClickListener {
             startActivity(Intent(this, ListTextActivity::class.java))
+            finish()
         }
     }
 

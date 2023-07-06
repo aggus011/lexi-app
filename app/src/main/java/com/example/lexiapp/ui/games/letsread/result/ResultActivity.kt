@@ -5,28 +5,23 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-import android.text.Html
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.SeekBar
 import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
-import androidx.fragment.app.Fragment
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityResultsLetsReadBinding
-import com.example.lexiapp.ui.games.letsread.DifferenceViewModel
 import com.example.lexiapp.ui.games.letsread.ListTextActivity
 import com.example.lexiapp.ui.patienthome.HomePatientActivity
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
-import java.util.Locale
+import java.util.*
 
 @AndroidEntryPoint
-class ResultActivity() : AppCompatActivity() {
+class ResultActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityResultsLetsReadBinding
 
@@ -80,6 +75,7 @@ class ResultActivity() : AppCompatActivity() {
     private fun setNextTextBtn() {
         nextTextBtn.setOnClickListener {
             startActivity(Intent(this, ListTextActivity::class.java))
+            finish()
         }
     }
 
@@ -92,6 +88,7 @@ class ResultActivity() : AppCompatActivity() {
     private fun setButtonHome() {
         homeBtn.setOnClickListener {
             startActivity(Intent(this, HomePatientActivity::class.java))
+            finish()
         }
     }
 
@@ -187,5 +184,26 @@ class ResultActivity() : AppCompatActivity() {
         this.handlerAudioRecord.postDelayed(this.runnableAudioRecord, 500)
     }
 
+    private fun releaseMediaPlayerAudioRecorder() {
+        mediaPlayerAudioRecord?.stop()
+        mediaPlayerAudioRecord?.release()
+
+        if (mediaPlayerAudioRecord != null) {
+            handlerAudioRecord.removeCallbacks(runnableAudioRecord)
+        }
+
+        mediaPlayerAudioRecord = null
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pauseMediaPlayerAudioRecord()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        pauseMediaPlayerAudioRecord()
+        releaseMediaPlayerAudioRecorder()
+    }
 
 }

@@ -8,8 +8,8 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/ivMiniLogo"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,12 +23,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:text="@string/logo"
         android:textColor="@color/white"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textAppearance="@style/title"
+        tools:textColor="@color/black"/>
 
     <TextView
         android:id="@+id/txtNameText"
@@ -63,7 +64,7 @@
         android:id="@+id/listenMyRecording"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/listen_my_recording"
+        android:text="@string/your_recording"
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toTopOf="@id/clAudioText"
         app:layout_constraintTop_toBottomOf="@id/textScrollView"
@@ -141,13 +142,14 @@
         app:icon="@drawable/ic_end_arrow"
         app:cornerRadius="10dp"
         android:textAppearance="@style/textMaterialButton"
-        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="@id/listenMyRecording"
+        app:iconGravity="end"
+        app:layout_constraintStart_toEndOf="@id/goBackBtn"
         app:layout_constraintTop_toBottomOf="@id/clAudioText"
         app:layout_constraintBottom_toTopOf="@id/homeBtn"
-        app:layout_constraintEnd_toStartOf="@id/goBackBtn"/>
+        app:layout_constraintEnd_toEndOf="@id/listenMyRecording"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/goBackBtn"
@@ -159,28 +161,34 @@
         app:iconPadding="20dp"
         app:cornerRadius="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:textAppearance="@style/textMaterialButton"
         android:layout_marginBottom="5dp"
-        app:layout_constraintStart_toEndOf="@id/btnNextText"
+        app:layout_constraintStart_toStartOf="@id/listenMyRecording"
         app:layout_constraintTop_toBottomOf="@id/clAudioText"
         app:layout_constraintBottom_toTopOf="@id/homeBtn"
-        app:layout_constraintEnd_toEndOf="@id/listenMyRecording"/>
+        app:layout_constraintEnd_toStartOf="@id/btnNextText"
+        android:padding="15dp"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/homeBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="70dp"
-        android:backgroundTint="@color/purple"
-        android:text="@string/home"
-        app:icon="@drawable/ic_home"
-        app:cornerRadius="10dp"
-        android:textAppearance="@style/textMaterialButton"
-        app:iconSize="30dp"
-        android:layout_marginBottom="15dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@id/listenMyRecording"
         app:layout_constraintTop_toBottomOf="@id/goBackBtn"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/listenMyRecording"/>
+        app:layout_constraintEnd_toEndOf="@id/listenMyRecording"
+        android:backgroundTint="@color/white"
+        android:text="@string/home_screen"
+        android:textColor="@color/purple"
+        app:icon="@drawable/ic_home"
+        app:strokeColor="@color/purple"
+        app:strokeWidth="2dp"
+        app:iconPadding="-15dp"
+        app:iconTint="@color/purple"
+        android:padding="15dp"
+        app:cornerRadius="10dp"
+        android:textAppearance="@style/textMaterialButton"
+        android:layout_marginBottom="10dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

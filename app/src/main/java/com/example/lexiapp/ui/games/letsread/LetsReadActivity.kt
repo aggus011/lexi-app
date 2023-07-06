@@ -485,6 +485,7 @@ class LetsReadActivity : AppCompatActivity() {
                 putExtra("title", tvTextTitle.text.toString())
             }
             startActivity(intent)
+            finish()
         }catch (e: Error){
             Log.e(TAG, "Error! $e")
         }
