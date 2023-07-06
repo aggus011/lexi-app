@@ -126,7 +126,6 @@ class ProfileUseCases @Inject constructor(
     fun userInitials(name: String? = prefs.getString("user_name", null)): String{
         val words = name?.split(" ")
         val initials = StringBuilder()
-
         words?.let {
             for(word in it){
                 val initial = word.firstOrNull()
@@ -135,7 +134,6 @@ class ProfileUseCases @Inject constructor(
                 }
             }
         }
-
         return initials.toString()
     }
 
