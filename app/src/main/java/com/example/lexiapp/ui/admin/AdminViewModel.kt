@@ -19,7 +19,6 @@ class AdminViewModel @Inject constructor(
 ): ViewModel() {
 
     private val _professionals = MutableLiveData<List<ProfessionalValidation>>()
-    val professionals = _professionals as LiveData<List<ProfessionalValidation>>
     private val _filterProfessionals = MutableLiveData<List<ProfessionalValidation>>()
     val filterProfessionals  = _filterProfessionals  as LiveData<List<ProfessionalValidation>>
 
@@ -32,6 +31,7 @@ class AdminViewModel @Inject constructor(
             adminUseCases.saveApprovalToProfessional(emailProfessional, approval)
         }
     }
+
     fun filter(patientSearch: String?) {
         val filteredList = mutableListOf<ProfessionalValidation>()
         if (patientSearch != null) {
@@ -50,7 +50,10 @@ class AdminViewModel @Inject constructor(
     private fun getProfessionals() {
         viewModelScope.launch {
             adminUseCases.getRegisteredProfessionals().collect{
-                _professionals.value = it
+                if(it.size != _professionals.value?.size){
+                    _professionals.value = it
+                    _filterProfessionals.value = _professionals.value
+                }
             }
         }
     }

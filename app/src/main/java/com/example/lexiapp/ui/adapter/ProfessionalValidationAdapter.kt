@@ -42,7 +42,7 @@ class ProfessionalValidationAdapter(
             binding.txtName.text = professional.name
             binding.tvUserInitials.text = userInitials(professional.name)
             binding.txtEmail.text = professional.email
-            binding.txtMat.text = professional.medicalRegistration
+            binding.txtValueMat.text = professional.medicalRegistration
             binding.switchValidate.isChecked = professional.validated
         }
 

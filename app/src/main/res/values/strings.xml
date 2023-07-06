@@ -114,11 +114,11 @@
     <string name="dont_objetives_complete">Todavía no tienes objetivos cumplidos de semanas anteriores</string>
     <string name="dont_have_progress">No tiene progresos esta semana</string>
     <string name="not_use_seven_weeks">No se ha usado en las últimas 7 semanas</string>
-    <string name="total_scans">Total histórico de escaneos:</string>
+    <string name="total_scans">Total histórico de escaneos: </string>
     <string name="validate_professional">Habilitar</string>
     <string name="show_more">Ver más</string>
     <string name="medical_registration_number">"Matrícula N°: "</string>
-    <string name="matricula">Matricula</string>
+    <string name="matricula">Matricula: </string>
     <plurals name="days_left">
         <item quantity="one">Día Restante: %d </item>
         <item quantity="other">Días Restantes: %d </item>
