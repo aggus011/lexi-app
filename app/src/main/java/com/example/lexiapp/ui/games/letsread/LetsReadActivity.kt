@@ -449,10 +449,8 @@ class LetsReadActivity : AppCompatActivity() {
         btnShowResultsRecordAudio.setOnClickListener {
             val audioPart = createAudioPart(audioFile)
             val textWithoutLineBreak = convertText()
-            // SEND AUDIO FILE TO ANALYSIS
             vM.transcription(audioPart)
             vM.transcription.observe(this) {
-                Log.d(TAG, "transcription $it")
                 differenceVM.getDifference(originalText = textWithoutLineBreak, results = it)
                 manageResult()
             }
@@ -472,25 +470,21 @@ class LetsReadActivity : AppCompatActivity() {
     private fun manageResult(){
         differenceVM.difference.observe(this) {
             val result = differenceVM.convertToText()
-            Log.d(TAG, "results $result")
             startResultActivity(result = result)
         }
     }
 
     private fun startResultActivity(result: String) {
         try {
-            val intent = if(result == "Correct") {
+            val intent = if(result == "Correct")
                 Intent(this, PositiveResultLetsReadActivity::class.java)
-            }else {
+            else
                 Intent(this, NegativeResultLetsReadActivity::class.java)
-            }
-            Log.d(TAG, "llega al intent")
             intent.apply {
-                putExtra("results", result.toString())
+                putExtra("results", result)
                 putExtra("title", tvTextTitle.text.toString())
             }
-            this.startActivity(intent)
-            Log.d(TAG, "pasa el startActivity")
+            startActivity(intent)
         }catch (e: Error){
             Log.e(TAG, "Error! $e")
         }
