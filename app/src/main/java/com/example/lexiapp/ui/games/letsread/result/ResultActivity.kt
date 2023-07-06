@@ -91,7 +91,7 @@ class ResultActivity() : AppCompatActivity() {
 
     private fun setButtonHome() {
         homeBtn.setOnClickListener {
-            finish()
+            startActivity(Intent(this, HomePatientActivity::class.java))
         }
     }
 
