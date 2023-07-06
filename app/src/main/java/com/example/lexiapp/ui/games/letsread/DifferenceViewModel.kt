@@ -66,7 +66,7 @@ class DifferenceViewModel @Inject constructor(
         val total = wordCounter(originalText)
         val average = errors * 100 / total
         var success = false
-        val result = if (average >= 10) {
+        val result = if (average >= 11) {
             success = true
             diffBuilder.toString()
         } else "Correct"

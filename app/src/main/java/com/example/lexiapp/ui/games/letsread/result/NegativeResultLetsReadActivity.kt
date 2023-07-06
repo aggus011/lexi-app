@@ -15,7 +15,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class NegativeResultLetsReadActivity : AppCompatActivity() {
     lateinit var binding: ActivityNegativeResultLetsReadBinding
-    private val vM: TextViewModel by viewModels()
 
     private lateinit var homeBtn: Button
     private lateinit var tryAgainBtn: Button
@@ -62,7 +61,9 @@ class NegativeResultLetsReadActivity : AppCompatActivity() {
     }
 
     private fun goToTryAgain() {
-        binding.btnTryAgain.setOnClickListener { finish() }
+        tryAgainBtn.setOnClickListener {
+            finish()
+        }
     }
 
     private fun goToNextText() {
