@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lexiapp.databinding.ActivityAdminBinding
+import com.example.lexiapp.domain.model.ProfessionalValidation
 import com.example.lexiapp.ui.adapter.ProfessionalValidationAdapter
 import com.example.lexiapp.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint

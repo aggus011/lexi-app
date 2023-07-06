@@ -1,7 +1,10 @@
 package com.example.lexiapp.ui.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lexiapp.databinding.ItemProfessionalVerificationBinding
 import com.example.lexiapp.domain.model.ProfessionalValidation
@@ -46,10 +49,27 @@ class ProfessionalValidationAdapter(
             binding.switchValidate.isChecked = professional.validated
         }
 
+        @SuppressLint("ClickableViewAccessibility")
         fun setSwitchListener(professional: ProfessionalValidation) {
-            binding.switchValidate.setOnCheckedChangeListener { _, isChecked ->
-                setApproval(professional.email, isChecked)
+            binding.switchValidate.setOnTouchListener { _, event ->
+                if (event.action == MotionEvent.ACTION_UP) {
+                    showConfirmationDialog(professional)
+                }
+                true
             }
+        }
+
+        private fun showConfirmationDialog(professional: ProfessionalValidation) {
+            val message = if (binding.switchValidate.isChecked) "¿Desea habilitar al profesional: " else "¿Desea deshabilitar al profesional: "
+
+            val builder = AlertDialog.Builder(binding.root.context)
+            builder.setMessage("$message ${professional.name}, matrícula ${professional.medicalRegistration}?")
+                .setPositiveButton("Confirmar") { _, _ ->
+                    binding.switchValidate.isChecked = !binding.switchValidate.isChecked // Cambiar el estado del interruptor
+                    setApproval(professional.email, binding.switchValidate.isChecked) // Llama a la acción de confirmación
+                }
+                .setNegativeButton("Cancelar", null)
+            builder.create().show()
         }
 
         private fun userInitials(name: String): String {
