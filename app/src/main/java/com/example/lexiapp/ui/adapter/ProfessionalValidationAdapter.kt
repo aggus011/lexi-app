@@ -60,7 +60,7 @@ class ProfessionalValidationAdapter(
         }
 
         private fun showConfirmationDialog(professional: ProfessionalValidation) {
-            val message = if (binding.switchValidate.isChecked) "¿Desea habilitar al profesional: " else "¿Desea deshabilitar al profesional: "
+            val message = if (!binding.switchValidate.isChecked) "¿Desea habilitar al profesional: " else "¿Desea deshabilitar al profesional: "
 
             val builder = AlertDialog.Builder(binding.root.context)
             builder.setMessage("$message ${professional.name}, matrícula ${professional.medicalRegistration}?")
