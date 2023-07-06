@@ -179,6 +179,17 @@
                     android:textAppearance="@style/textItemsBottomNavigation"/>
             </LinearLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/metrics_source_clarification"
+                android:textAppearance="@style/textItemsBottomNavigation"
+                android:textSize="14sp"
+                android:textStyle="italic"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="4dp"
+                android:maxLines="2"/>
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvMetricsWITL"
                 android:visibility="visible"
@@ -197,7 +208,7 @@
 
                     <TextView
                         android:id="@+id/txtNameGameWITL"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/WITL_title"
@@ -339,16 +350,26 @@
 
                     <TextView
                         android:id="@+id/txtNameGameCW"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/CW_title"
                         android:textColor="@color/black"
                         android:textSize="28sp"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/ivInfoCW"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/ivInfoCW"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_info"
+                        app:layout_constraintTop_toTopOf="@id/txtNameGameCW"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="@id/txtNameGameCW"
+                        app:layout_constraintStart_toEndOf="@id/txtNameGameCW"/>
 
 
                     <TextView
@@ -473,16 +494,26 @@
 
                     <TextView
                         android:id="@+id/txtNameGameLR"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/LR_title"
                         android:textColor="@color/black"
                         android:textSize="28sp"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/ivInfoLR"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/ivInfoLR"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_info"
+                        app:layout_constraintTop_toTopOf="@id/txtNameGameLR"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="@id/txtNameGameLR"
+                        app:layout_constraintStart_toEndOf="@id/txtNameGameLR"/>
 
 
                     <TextView
@@ -607,16 +638,26 @@
 
                     <TextView
                         android:id="@+id/txtNameGameTS"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="ESCANEO DE TEXTOS"
                         android:textColor="@color/black"
                         android:textSize="28sp"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/ivInfoTS"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/ivInfoTS"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_info"
+                        app:layout_constraintTop_toTopOf="@id/txtNameGameTS"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="@id/txtNameGameTS"
+                        app:layout_constraintStart_toEndOf="@id/txtNameGameTS"/>
 
                     <TextView
                         android:id="@+id/txtTotalUsesTS"

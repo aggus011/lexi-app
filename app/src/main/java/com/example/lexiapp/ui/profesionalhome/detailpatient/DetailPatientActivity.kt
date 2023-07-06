@@ -2,15 +2,16 @@ package com.example.lexiapp.ui.profesionalhome.detailpatient
 
 import android.content.ContentValues
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityDetailPatientBinding
@@ -21,6 +22,7 @@ import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
@@ -30,14 +32,19 @@ import java.util.*
 class DetailPatientActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailPatientBinding
     private val viewModel: DetailPatientViewModel by viewModels()
+    private lateinit var tvWITLGameResults: TextView
+    private lateinit var tvCWGameResults: TextView
+    private lateinit var tvLRGameResults: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailPatientBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
         setPatientData(getPatient())
+        getTextViewGamesResults()
         setObservers()
         setBtnClose()
+        setGamesInfoListeners()
     }
 
     private fun getPatient(): User {
@@ -51,6 +58,12 @@ class DetailPatientActivity : AppCompatActivity() {
 
     private fun setView() {
         binding.txtDate.text = SimpleDateFormat("HH:mm:ss").format(Date())
+    }
+
+    private fun getTextViewGamesResults() {
+        tvWITLGameResults = binding.txtValueLettersDificultsWITL
+        tvCWGameResults = binding.txtValueLettersDificultsCW
+        tvLRGameResults = binding.txtValueLettersDificultsLR
     }
 
     private fun setObservers() {
@@ -167,7 +180,8 @@ class DetailPatientActivity : AppCompatActivity() {
             }
         }
         viewModel.hardWordsCW.observe(this) { letter ->
-            binding.txtValueLettersDificultsCW.text = letter.toString()
+            tvCWGameResults.text = letter.toString()
+            evaluateIfTextViewHasBeenEllipsized(tvCWGameResults, letter.toString())
         }
         viewModel.resultsLastWeekCW.observe(this) { resultsLastWeek ->
             setBarGraph(resultsLastWeek, binding.barChartCW)
@@ -209,7 +223,8 @@ class DetailPatientActivity : AppCompatActivity() {
             }
         }
         viewModel.hardLettersWITL.observe(this) { letter ->
-            binding.txtValueLettersDificultsWITL.text = letter.toString()
+            tvWITLGameResults.text = letter.toString()
+            evaluateIfTextViewHasBeenEllipsized(tvWITLGameResults, letter.toString())
         }
         viewModel.resultsLastWeekWITL.observe(this) { resultsLastWeek ->
             setBarGraph(resultsLastWeek, binding.barChartWITL)
@@ -419,8 +434,72 @@ class DetailPatientActivity : AppCompatActivity() {
         binding.progressBar.visibility = View.GONE
     }
 
+    private fun setGamesInfoListeners() {
+        binding.ivInfoWITL.setOnClickListener {
+            showDialogAboutGame("WITL")
+        }
+        binding.ivInfoCW.setOnClickListener {
+            showDialogAboutGame("CW")
+        }
+        binding.ivInfoLR.setOnClickListener {
+            showDialogAboutGame("LR")
+        }
+        binding.ivInfoTS.setOnClickListener {
+            showDialogAboutGame("TS")
+        }
+    }
+
+    private fun showDialogAboutGame(gameType: String) {
+        val gameInfoPair = gameTypeMap[gameType]
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Acerca del juego: ${gameInfoPair?.first}")
+            .setMessage("${gameInfoPair?.second}")
+            .setPositiveButton("Entendido"){dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun evaluateIfTextViewHasBeenEllipsized(textView: TextView, text: String) {
+        textView.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                textView.viewTreeObserver.removeOnPreDrawListener(this)
+                val layout = textView.layout
+                if (layout != null) {
+                    val ellipsisCount = layout.getEllipsisCount(layout.lineCount - 1)
+                    if (ellipsisCount > 0) {
+                        textView.setOnClickListener {
+                            showAllResultsOfTextView(text)
+                        }
+
+                    }
+                }
+                return true
+            }
+        })
+    }
+
+    private fun showAllResultsOfTextView(text: String) {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Listado completo")
+            .setMessage(text)
+            .setPositiveButton("Entendido") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         viewModel.cleanPatient()
+    }
+
+    companion object {
+        private val gameTypeMap = mapOf(
+            "WITL" to Pair("¿DÓNDE ESTÁ LA LETRA?", "El objetivo de este juego es que la/el niña/o consiga ubicar en una palabra una letra solicitada"),
+            "CW" to Pair("PALABRA CORRECTA", "El objetivo de este juego es que la/el niña/o consiga discriminar dentro de un grupo de palabras cuál existe realmente"),
+            "LR" to Pair("VAMOS A LEER", "El objetivo de este juego es que la/el niña/o consiga leer correctamente una lectura breve"),
+            "TS" to Pair("ESCANEO DE TEXTOS", "El objetivo es que la/el niña/o pueda oir el texto detectado a partir de una foto suministrada")
+        )
     }
 }
