@@ -63,7 +63,7 @@ class DetailPatientActivity : AppCompatActivity() {
     private fun getTextViewGamesResults() {
         tvWITLGameResults = binding.txtValueLettersDificultsWITL
         tvCWGameResults = binding.txtValueLettersDificultsCW
-        tvLRGameResults = binding.txtValueLettersDificultsLR
+        tvLRGameResults = binding.txtValueWordsDificultsLR
     }
 
     private fun setObservers() {
@@ -144,7 +144,8 @@ class DetailPatientActivity : AppCompatActivity() {
             setBarGraph(resultsLastWeek, binding.barChartLR)
         }
         viewModel.errorWordsLR.observe(this) { errorWords ->
-            binding.txtValueWordsDificultsLR.text = errorWords.toString()
+            tvLRGameResults.text = errorWords.toString()
+            evaluateIfTextViewHasBeenEllipsized(tvLRGameResults, errorWords.toString())
         }
     }
 
