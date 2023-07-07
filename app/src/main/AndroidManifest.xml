@@ -113,7 +113,7 @@
             android:name=".ui.signup.patient.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.games.letsread.ResultActivity"
+            android:name=".ui.games.letsread.result.ResultActivity"
             android:exported="false" />
         <activity
             android:name=".ui.main.MainActivity"

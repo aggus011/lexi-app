@@ -47,8 +47,9 @@
     <string name="do_not_give_up">¡NO TE RINDAS!</string>
     <string name="loading_results">Cargando resultados…</string>
     <string name="phrase_negative_result">AUNQUE NO ESTÉ DEL TODO CORRECTO, \n ¡NO TE DESANIMES! ¡YA CASI LO LOGRAS!</string>
-    <string name="next_text">SIGUIENTE\nTEXTO</string>
+    <string name="next_text">Siguiente texto</string>
     <string name="try_again">VOLVER A\nINTENTAR</string>
+    <string name="keep_playing">Seguir jugando</string>
     <string name="words_to_exercise">VER PALABRAS A EJERCITAR</string>
     <string name="home">INICIO</string>
     <string name="phrase_positive_result">¡LO HICISTE MUY BIEN!</string>
@@ -109,7 +110,9 @@
     <string name="write_note">Escribe tu nota aquí</string>
     <string name="save_note">Guardar nota</string>
     <string name="LR_title">VAMOS A LEER</string>
-    <string name="dont_give_up_large_message">AUNQUE NO ESTÉ DEL TODO CORRECTO,¡ÁNIMO! ¡YA CASI LO LOGRAS!</string>
+    <string name="dont_give_up_large_message">AUNQUE NO ESTÉ DEL TODO CORRECTO ¡ÁNIMO! ¡YA CASI LO LOGRAS!</string>
+    <string name="listen_my_recording">ESCUCHAR MI GRABACIÓN</string>
+    <string name="go_back">Atrás</string>
     <string name="completed_objective">Mis Objetivos Cumplidos</string>
     <string name="dont_objetives_complete">Todavía no tienes objetivos cumplidos de semanas anteriores</string>
     <string name="dont_have_progress">No tiene progresos esta semana</string>

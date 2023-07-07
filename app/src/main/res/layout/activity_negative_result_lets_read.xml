@@ -8,8 +8,8 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/ivMiniLogo"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,122 +23,143 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:text="@string/logo"
         android:textColor="@color/white"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textAppearance="@style/title"
+        tools:textColor="@color/black"/>
 
-    <TextView
-        android:id="@+id/txtDontGiveUp"
-        android:text="¡NO TE RINDAS!"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:layout_margin="15dp"
-        android:textColor="@color/black"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clIcDontGiveUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivMiniLogo"/>
+        app:layout_constraintTop_toTopOf="@id/cvDontGiveUp"
+        android:elevation="7dp"
+        android:layout_marginTop="-75dp">
 
-    <ImageView
-        android:id="@+id/ivArm"
-        android:layout_margin="15dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ic_arm_flex"
-        app:layout_constraintStart_toStartOf="@id/txtDontGiveUp"
-        app:layout_constraintEnd_toEndOf="@id/txtDontGiveUp"
-        app:layout_constraintTop_toBottomOf="@id/txtDontGiveUp"/>
+        <View
+            android:id="@+id/vBackgroundIconDontGiveUp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:background="@drawable/round_background_with_borders"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="10dp"/>
 
-    <TextView
-        android:id="@+id/txtPositiveMessage"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_margin="15dp"
-        android:text="AUNQUE NO ESTÉ DEL TODO CORRECTO,¡ANIMO! ¡YA CASI LO LOGRAS!"
-        android:textSize="16dp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="@id/ivArm"
-        app:layout_constraintEnd_toEndOf="@id/ivArm"
-        app:layout_constraintTop_toBottomOf="@id/ivArm"/>
+        <ImageView
+            android:id="@+id/ivArm"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/ic_arm_flex"
+            app:layout_constraintStart_toStartOf="@id/vBackgroundIconDontGiveUp"
+            app:layout_constraintEnd_toEndOf="@id/vBackgroundIconDontGiveUp"
+            app:layout_constraintTop_toTopOf="@id/vBackgroundIconDontGiveUp"
+            app:layout_constraintBottom_toBottomOf="@id/vBackgroundIconDontGiveUp"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSeeWords"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        app:layout_constraintStart_toStartOf="@id/txtPositiveMessage"
-        app:layout_constraintEnd_toEndOf="@id/txtPositiveMessage"
-        app:layout_constraintTop_toBottomOf="@id/txtPositiveMessage"
-        android:text="Ver palabras a ejercitar"
-        android:textSize="30dp"
-        android:layout_margin="20dp"
-        android:backgroundTint="@color/purple"
-        android:textColor="@color/white"
-        app:iconTint="@color/white"
-        app:icon="@drawable/ic_end_arrow"
-        app:iconGravity="end"
-        app:cornerRadius="10dp"
-        android:textAppearance="@style/textMaterialButton"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnTryAgain"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/btnSeeWords"
-        app:layout_constraintTop_toBottomOf="@id/btnSeeWords"
-        app:layout_constraintEnd_toStartOf="@id/btnNextText"
-        android:text="Intenta de nuevo"
-        android:layout_marginVertical="20dp"
-        app:icon="@drawable/ic_reload"
-        android:backgroundTint="@color/purple"
-        android:textColor="@color/white"
-        app:iconTint="@color/white"
-        app:iconGravity="end"
-        app:cornerRadius="10dp"
-        android:textAppearance="@style/textMaterialButton"/>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvDontGiveUp"
+        android:layout_width="350dp"
+        android:layout_height="500dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivMiniLogo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnNextText"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/btnTryAgain"
-        app:layout_constraintEnd_toEndOf="@id/btnSeeWords"
-        app:layout_constraintTop_toBottomOf="@id/btnSeeWords"
-        android:text="Siguiente texto"
-        android:layout_marginVertical="20dp"
-        app:icon="@drawable/ic_end_arrow"
-        app:iconGravity="end"
-        android:backgroundTint="@color/purple"
-        android:textColor="@color/white"
-        app:iconTint="@color/white"
-        app:cornerRadius="10dp"
-        android:textAppearance="@style/textMaterialButton"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnGoInit"
-        android:layout_width="175dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/btnTryAgain"
-        app:layout_constraintTop_toBottomOf="@id/btnTryAgain"
-        app:layout_constraintEnd_toEndOf="@id/btnNextText"
-        android:backgroundTint="@color/white"
-        android:text="INICIO"
-        android:textSize="18sp"
-        android:layout_marginEnd="10dp"
-        android:textColor="@color/purple"
-        app:icon="@drawable/ic_home"
-        app:strokeColor="@color/purple"
-        app:strokeWidth="2dp"
-        app:iconPadding="-15dp"
-        app:iconTint="@color/purple"
-        android:layout_marginTop="20dp"
-        app:cornerRadius="10dp"
-        android:textAppearance="@style/textMaterialButton"/>
+            <TextView
+                android:id="@+id/txtDontGiveUp"
+                android:text="@string/dont_give_up_message"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textAppearance="@style/title"
+                android:layout_marginTop="100dp"/>
+
+            <TextView
+                android:id="@+id/txtPositiveMessage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/dont_give_up_large_message"
+                android:textColor="@color/black"
+                android:textAppearance="@style/subtitle"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtDontGiveUp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSeeWords"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                app:layout_constraintStart_toStartOf="@id/txtPositiveMessage"
+                app:layout_constraintEnd_toEndOf="@id/txtPositiveMessage"
+                app:layout_constraintTop_toBottomOf="@id/txtPositiveMessage"
+                android:text="Ver palabras a ejercitar"
+                android:backgroundTint="@color/purple"
+                android:textColor="@color/white"
+                app:iconTint="@color/white"
+                app:icon="@drawable/ic_end_arrow"
+                app:iconGravity="end"
+                app:cornerRadius="10dp"
+                android:layout_marginTop="10dp"
+                android:textAppearance="@style/textMaterialButton"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnNextText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                app:layout_constraintStart_toStartOf="@id/txtPositiveMessage"
+                app:layout_constraintEnd_toEndOf="@id/txtPositiveMessage"
+                app:layout_constraintTop_toBottomOf="@id/btnSeeWords"
+                android:text="@string/next_text"
+                app:icon="@drawable/ic_end_arrow"
+                app:iconGravity="end"
+                android:backgroundTint="@color/purple"
+                android:textColor="@color/white"
+                app:iconTint="@color/white"
+                app:cornerRadius="10dp"
+                android:textAppearance="@style/textMaterialButton" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGoInit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/btnNextText"
+                app:layout_constraintStart_toStartOf="@id/txtPositiveMessage"
+                app:layout_constraintEnd_toEndOf="@id/txtPositiveMessage"
+                android:backgroundTint="@color/white"
+                android:text="@string/home_screen"
+                android:textColor="@color/purple"
+                app:icon="@drawable/ic_home"
+                app:strokeColor="@color/purple"
+                app:strokeWidth="2dp"
+                app:iconPadding="-15dp"
+                app:iconTint="@color/purple"
+                android:padding="15dp"
+                app:cornerRadius="10dp"
+                android:textAppearance="@style/textMaterialButton"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
