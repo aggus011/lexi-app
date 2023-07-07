@@ -19,7 +19,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.text.HtmlCompat
 import com.airbnb.lottie.LottieAnimationView
 import com.example.lexiapp.R
 import com.example.lexiapp.databinding.ActivityLetsReadBinding
@@ -469,13 +468,15 @@ class LetsReadActivity : AppCompatActivity() {
 
     private fun manageResult(){
         differenceVM.difference.observe(this) {
-            val result = differenceVM.convertToText()
+            val result = differenceVM.convertToText(intent.getIntExtra("challenge", 0))
             startResultActivity(result = result)
         }
     }
 
     private fun startResultActivity(result: String) {
         try {
+            val isChallengeReading = intent.hasExtra("challenge")
+            val challengeReadingExtra = if(isChallengeReading) 1 else 0
             val intent = if(result == "Correct")
                 Intent(this, PositiveResultLetsReadActivity::class.java)
             else
@@ -483,6 +484,7 @@ class LetsReadActivity : AppCompatActivity() {
             intent.apply {
                 putExtra("results", result)
                 putExtra("title", tvTextTitle.text.toString())
+                putExtra("challenge", challengeReadingExtra)
             }
             startActivity(intent)
             finish()

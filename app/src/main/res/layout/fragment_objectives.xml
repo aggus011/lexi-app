@@ -61,12 +61,13 @@
             android:id="@+id/txtDaysLeft"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/days_left"
+            tools:text="@string/days_left"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:textAppearance="@style/subtitle"
-            android:layout_marginTop="60dp"/>
+            android:layout_marginTop="60dp"
+            android:gravity="center"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvObjectives"
