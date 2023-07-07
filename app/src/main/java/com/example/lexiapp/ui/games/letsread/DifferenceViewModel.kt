@@ -67,11 +67,12 @@ class DifferenceViewModel @Inject constructor(
             success = true
             diffBuilder.toString()
         } else "Correct"
+        Log.v("NOT_NORMALIZE_WORDS", "${wrongWords.toList()}")
         viewModelScope.launch(Dispatchers.IO) {
             differenceUseCases.saveWrongWords(
                 LetsReadGameResult(
                     email = "",
-                    wrongWords = wrongWords.toList(),
+                    wrongWords = differenceUseCases.normalizeWords(wrongWords.toList()),
                     totalWords = total,
                     success = !success
                 /*Se negó el success porque se guarda al revés el resultado
@@ -80,6 +81,7 @@ class DifferenceViewModel @Inject constructor(
                 )
             )
         }
+        Log.v("NOT_NORMALIZE_WORDS", "${differenceUseCases.normalizeWords(wrongWords.toList())}")
         return result
     }
 

@@ -525,10 +525,10 @@
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/pieTotalChartLR"
-                        app:layout_constraintEnd_toStartOf="@+id/txtValueLettersDificultsLR"/>
+                        app:layout_constraintEnd_toStartOf="@+id/txtValueWordsDificultsLR"/>
 
                     <TextView
-                        android:id="@+id/txtValueLettersDificultsLR"
+                        android:id="@+id/txtValueWordsDificultsLR"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
