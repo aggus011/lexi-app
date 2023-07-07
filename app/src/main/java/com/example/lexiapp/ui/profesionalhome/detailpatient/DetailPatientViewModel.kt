@@ -128,7 +128,7 @@ class DetailPatientViewModel @Inject constructor(
         for (result in results) {
             words.addAll(result.wrongWords)
         }
-        _errorWordsLR.value = words
+        _errorWordsLR.value = words.map{ it.uppercase() }
     }
 
     private suspend fun setCWStats(patient: User) {

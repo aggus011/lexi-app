@@ -24,4 +24,9 @@ class DifferenceUseCases @Inject constructor(
         service.generateNotificationIfObjectiveHasBeenCompleted(game, type, gameName)
     }
 
+    fun normalizeWords(wrongWords: List<String>)= wrongWords
+        .flatMap { it.split(" ") }
+        .map { it.replace(Regex("[^a-zA-ZáéíóúÁÉÍÓÚ]"), "").uppercase() }
+        .distinct()
+
 }

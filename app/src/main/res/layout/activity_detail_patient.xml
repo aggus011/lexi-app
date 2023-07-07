@@ -528,7 +528,7 @@
                         app:layout_constraintEnd_toStartOf="@+id/txtValueLettersDificultsLR"/>
 
                     <TextView
-                        android:id="@+id/txtValueLettersDificultsLR"
+                        android:id="@+id/txtValueWordsDificultsLR"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
