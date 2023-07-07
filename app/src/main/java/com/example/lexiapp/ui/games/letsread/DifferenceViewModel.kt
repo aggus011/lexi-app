@@ -6,14 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lexiapp.data.api.difference_text.model.Rows
 import com.example.lexiapp.domain.model.gameResult.LetsReadGameResult
-import com.example.lexiapp.domain.service.FireStoreService
 import com.example.lexiapp.domain.useCases.DifferenceUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Error
-import java.lang.NullPointerException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -66,20 +63,25 @@ class DifferenceViewModel @Inject constructor(
         val total = wordCounter(originalText)
         val average = errors * 100 / total
         var success = false
-        val result = if (average >= 10) {
+        val result = if (average >= 11) {
             success = true
             diffBuilder.toString()
         } else "Correct"
+        Log.v("NOT_NORMALIZE_WORDS", "${wrongWords.toList()}")
         viewModelScope.launch(Dispatchers.IO) {
             differenceUseCases.saveWrongWords(
                 LetsReadGameResult(
                     email = "",
-                    wrongWords = wrongWords.toList(),
+                    wrongWords = differenceUseCases.normalizeWords(wrongWords.toList()),
                     totalWords = total,
-                    success = success
+                    success = !success
+                /*Se negó el success porque se guarda al revés el resultado
+                en firestore, se trató cambiando la condicion del if pero no hacia
+                 lo requerido*/
                 )
             )
         }
+        Log.v("NOT_NORMALIZE_WORDS", "${differenceUseCases.normalizeWords(wrongWords.toList())}")
         return result
     }
 

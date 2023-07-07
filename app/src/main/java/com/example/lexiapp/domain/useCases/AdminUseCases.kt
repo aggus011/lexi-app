@@ -1,5 +1,6 @@
 package com.example.lexiapp.domain.useCases
 
+import com.example.lexiapp.domain.model.ProfessionalValidation
 import com.example.lexiapp.domain.service.AdminService
 import javax.inject.Inject
 

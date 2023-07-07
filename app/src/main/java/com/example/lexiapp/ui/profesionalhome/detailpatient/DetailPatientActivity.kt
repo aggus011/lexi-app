@@ -143,6 +143,9 @@ class DetailPatientActivity : AppCompatActivity() {
         viewModel.resultsLastWeekLR.observe(this) { resultsLastWeek ->
             setBarGraph(resultsLastWeek, binding.barChartLR)
         }
+        viewModel.errorWordsLR.observe(this) { errorWords ->
+            binding.txtValueWordsDificultsLR.text = errorWords.toString()
+        }
     }
 
     private fun setCWObservers() {

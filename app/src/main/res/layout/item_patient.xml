@@ -98,6 +98,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btnSeeNotes"
+            app:layout_constraintBottom_toTopOf="@+id/vDivider"
             app:layout_constraintTop_toBottomOf="@id/ivPatient"
             android:backgroundTint="@color/white"
             android:text="@string/note"
