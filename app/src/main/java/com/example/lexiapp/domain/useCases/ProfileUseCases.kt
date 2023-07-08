@@ -4,10 +4,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import com.example.lexiapp.R
 import com.example.lexiapp.domain.exceptions.UserNotFoundException
-import com.example.lexiapp.domain.model.User
-import com.example.lexiapp.domain.model.UserLogin
-import com.example.lexiapp.domain.model.UserSignUp
-import com.example.lexiapp.domain.model.UserType
+import com.example.lexiapp.domain.model.*
 import com.example.lexiapp.domain.service.FireStoreService
 import java.text.SimpleDateFormat
 import java.util.*
@@ -147,7 +144,7 @@ class ProfileUseCases @Inject constructor(
     fun verifyIfPatientHasRegisteredButNotChooseCategories() = prefs.contains("categories")
 
     private fun isAdmin(email: String): Boolean {
-        return email == "lexiapp.2023@gmail.com"
+        return Secrets.ADMINS.contains(email)
     }
 
     fun getMedicalRegistration() = prefs.getString("medical_registration", null)
