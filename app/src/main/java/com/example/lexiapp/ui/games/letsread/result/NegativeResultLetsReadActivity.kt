@@ -4,8 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Button
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lexiapp.databinding.ActivityNegativeResultLetsReadBinding
+import com.example.lexiapp.ui.games.letsread.DifferenceViewModel
 import com.example.lexiapp.ui.games.letsread.ListTextActivity
 import com.example.lexiapp.ui.patienthome.HomePatientActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,6 +22,9 @@ class NegativeResultLetsReadActivity : AppCompatActivity() {
 
     private lateinit var result: String
     private lateinit var title: String
+    private var isChallengeReading: Int = 0
+
+    private val differenceVM: DifferenceViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +35,7 @@ class NegativeResultLetsReadActivity : AppCompatActivity() {
         getViews()
         getExtra()
         setButtons()
+        checkObjectives()
     }
 
     private fun getViews() {
@@ -41,6 +47,13 @@ class NegativeResultLetsReadActivity : AppCompatActivity() {
     private fun getExtra() {
         result = intent.getStringExtra("results").toString()
         title = intent.getStringExtra("title").toString()
+
+        val hasChallengeReadingExtras = intent.hasExtra("challenge")
+        isChallengeReading = if(hasChallengeReadingExtras) {
+            intent.getIntExtra("challenge", 0)
+        } else {
+            0
+        }
     }
 
     private fun setButtons() {
@@ -70,6 +83,13 @@ class NegativeResultLetsReadActivity : AppCompatActivity() {
             intent.putExtra("title", title)
             startActivity(intent)
         }
+    }
+
+    private fun checkObjectives() {
+        if(isChallengeReading == 1) {
+            differenceVM.checkIfObjectivesHasBeenCompleted("RC", "play", "Lectura Desafío")
+        }
+        differenceVM.checkIfObjectivesHasBeenCompleted("LR", "play", "¡Vamos a Leer!")
     }
 
 }

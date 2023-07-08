@@ -19,6 +19,8 @@ import com.example.lexiapp.databinding.FragmentObjectivesBinding
 import com.example.lexiapp.domain.model.Objective
 import com.example.lexiapp.ui.adapter.ObjectivesAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalTime
+import java.time.temporal.ChronoUnit
 
 @AndroidEntryPoint
 class ObjectivesFragment : Fragment() {
@@ -73,7 +75,7 @@ class ObjectivesFragment : Fragment() {
         }
         objectivesViewModel.daysLeft.observe(viewLifecycleOwner) { daysLeft ->
             val daysLeftText = resources.getQuantityString(R.plurals.days_left, daysLeft, daysLeft)
-            binding.txtDaysLeft.text = daysLeftText
+            binding.txtDaysLeft.text = if(daysLeftText == "0") calculateHoursLeftToMonday() else daysLeftText
         }
     }
 
@@ -89,7 +91,7 @@ class ObjectivesFragment : Fragment() {
                     val button = viewHolder.button
                     val objective = objectives[i]
                     if (objective.progress >= objective.goal!!) {
-                        val greenColor = Color.parseColor("#17FF20")
+                        val greenColor = Color.parseColor("#71dea2")
                         val newDrawable = GradientDrawable()
                         newDrawable.shape = GradientDrawable.RECTANGLE
                         newDrawable.cornerRadius = 30f
@@ -104,6 +106,17 @@ class ObjectivesFragment : Fragment() {
                 }
             }, 200)
         }
+    }
+
+    private fun calculateHoursLeftToMonday(): String {
+        val currentTime = LocalTime.now()
+        val midnight = LocalTime.MAX
+        val timeDifference = currentTime.until(midnight, ChronoUnit.MINUTES)
+
+        val hoursUntilMidnight = timeDifference / 60
+        val minutesUntilMidnight = timeDifference % 60
+
+        return "Restan $hoursUntilMidnight horas \n $minutesUntilMidnight minutos"
     }
 
 

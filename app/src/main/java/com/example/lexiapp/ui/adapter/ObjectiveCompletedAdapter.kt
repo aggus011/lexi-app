@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.lexiapp.databinding.ItemCompleteObjectiveBinding
 import com.example.lexiapp.domain.model.MiniObjective
 
-class ObjectiveAdapter(
+class ObjectiveCompletedAdapter(
     val objectives: List<MiniObjective>
-): RecyclerView.Adapter<ObjectiveAdapter.ObjectiveViewHolder>() {
+): RecyclerView.Adapter<ObjectiveCompletedAdapter.ObjectiveViewHolder>() {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ObjectiveViewHolder {
         return ObjectiveViewHolder(
