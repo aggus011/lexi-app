@@ -8,7 +8,6 @@ import com.google.gson.reflect.TypeToken
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import com.journeyapps.barcodescanner.ScanOptions
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class CodeQRUseCases @Inject constructor(){

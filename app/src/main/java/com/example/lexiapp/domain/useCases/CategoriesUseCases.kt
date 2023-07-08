@@ -2,15 +2,16 @@ package com.example.lexiapp.domain.useCases
 
 import android.content.SharedPreferences
 import android.util.Log
-import com.example.lexiapp.data.repository.texttoread.*
 import com.example.lexiapp.domain.exceptions.FirestoreException
 import com.example.lexiapp.domain.model.TextToRead
 import com.example.lexiapp.domain.service.FireStoreService
+import com.example.lexiapp.domain.service.TextToReadRepository
 import javax.inject.Inject
 
 class CategoriesUseCases @Inject constructor(
     private val fireStoreServiceImpl: FireStoreService,
-    private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences,
+    private val textToReadRepository: TextToReadRepository
 ) {
     private val editor = sharedPreferences.edit()
 
@@ -47,28 +48,7 @@ class CategoriesUseCases @Inject constructor(
     }
     
     fun getListTextToReadWithCategories(categories: List<String>): List<TextToRead>{
-        val texts = mutableListOf<TextToRead>()
-        
-        if(categories.isNotEmpty()){
-
-            categories.forEach{
-                val textsToAdd = when(it) {
-                    "Animales" -> TextAnimals.getTexts()
-                    "Insectos" -> TextInsects.getTexts()
-                    "Frutas" -> TextFruits.getTexts()
-                    "Verduras" -> TextVegetables.getTexts()
-                    "Colores" -> TextColors.getTexts()
-                    "Nombres" -> TextNames.getTexts()
-                    "Lugares" -> TextPlaces.getTexts()
-                    "Países" -> TextCountries.getTexts()
-                    "Vehículos"-> TextVehicles.getTexts()
-                    else -> TextToReadMocks.getAllTextToReadMocks()
-                }
-                texts.addAll(textsToAdd)
-            }
-        }
-        
-        return texts
+       return textToReadRepository.getTextToRead(categories)
     }
 
     private fun saveCategoriesToSharedPreferences(categories: List<String>) {
