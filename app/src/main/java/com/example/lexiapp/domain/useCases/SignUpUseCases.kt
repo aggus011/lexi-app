@@ -13,7 +13,7 @@ class SignUpUseCases @Inject constructor(
     private val fireStoreServiceImpl: FireStoreService,
     private val sharedPrefs: SharedPreferences
 ) {
-    private val editor=sharedPrefs.edit()
+    private val editor = sharedPrefs.edit()
 
     suspend operator fun invoke(user: UserSignUp): LoginResult {
         if (!verifyEmail(user.email) || user.email != user.emailConfirm) {
@@ -48,7 +48,7 @@ class SignUpUseCases @Inject constructor(
         return true
     }
 
-    suspend fun savePatientAccount(user: UserSignUp){
+    suspend fun savePatientAccount(user: UserSignUp) {
         fireStoreServiceImpl.saveAccount(user.mapToUser())
         editor.putString("email", user.email).apply()
         editor.putString("user_type", "patient").apply()

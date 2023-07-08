@@ -58,6 +58,11 @@ class ResultGamesUseCases @Inject constructor(
         return filteredResults
     }
 
+    fun generateWeeklyMap(dateList: List<String>): Pair<Int, Map<String, Int>> {
+        val results = getScansLastWeek(dateList)
+        return Pair(dateList.size, results)
+    }
+
     private fun convertStringToDate(timeString: String): Date {
         val timeInMillis = timeString.toLong()
         return Date(timeInMillis)
@@ -89,11 +94,6 @@ class ResultGamesUseCases @Inject constructor(
         }
         return calendar1.get(Calendar.DAY_OF_YEAR) == calendar2.get(Calendar.DAY_OF_YEAR) &&
                 calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR)
-    }
-
-    fun generateWeeklyMap(dateList: List<String>): Pair<Int, Map<String, Int>> {
-        val results = getScansLastWeek(dateList)
-        return Pair(dateList.size, results)
     }
 
     private fun getScansLastWeek(allScans: List<String>): Map<String, Int>{
