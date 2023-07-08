@@ -66,6 +66,7 @@ class ListTextActivity : AppCompatActivity() {
                 val gson = Gson()
                 val intent = Intent(this, LetsReadActivity::class.java)
                 intent.putExtra("TextToRead", gson.toJson(it))
+                intent.putExtra("challenge", 1) //Para identificar que es una lectura diferente a las demás
                 startActivity(intent)
             }
         }

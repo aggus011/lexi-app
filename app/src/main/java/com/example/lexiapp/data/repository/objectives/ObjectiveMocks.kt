@@ -22,7 +22,7 @@ object ObjectiveMocks {
                 .build(),
             Objective.Builder()
                 .id(3L)
-                .title("Jugar ¿Donde esta la Letra?")
+                .title("Jugar ¿Dónde está la Letra?")
                 .description("Descripción de Jugar ¿Donde esta la Letra?")
                 .progress(0)
                 .goal(10)
@@ -77,7 +77,7 @@ object ObjectiveMocks {
                 .build(),
             Objective.Builder()
                 .id(8L)
-                .title("Acertar en ¿Donde esta la Letra?")
+                .title("Acertar en ¿Dónde está la Letra?")
                 .description("Descripción de Acertar en ¿Donde esta la Letra?")
                 .progress(0)
                 .goal(5)
@@ -86,6 +86,28 @@ object ObjectiveMocks {
                 .completed(false)
                 .date(formattedDate.toString())
                 .build(),
+            Objective.Builder()
+                .id(9L)
+                .title("Jugar ¡Vamos a Leer!")
+                .description("Descripción de Jugar ¡Vamos a Leer!")
+                .progress(0)
+                .goal(3)
+                .game("LR")
+                .type("play")
+                .completed(false)
+                .date(formattedDate.toString())
+                .build(),
+            Objective.Builder()
+                .id(10L)
+                .title("Acertar en ¡Vamos a Leer!")
+                .description("Descripción de Acertar en ¡Vamos a Leer!")
+                .progress(0)
+                .goal(2)
+                .game("LR")
+                .type("hit")
+                .completed(false)
+                .date(formattedDate.toString())
+                .build()
         )
 
         fun getRandomObjectiveByGame(game: String): Objective {
@@ -93,7 +115,7 @@ object ObjectiveMocks {
             return objectivesByGame.randomOrNull() ?: Objective.Builder().build()
         }
 
-        val games = listOf("CW", "RC", "WL", "SCAN").shuffled()
+        val games = listOf("CW", "RC", "WL", "SCAN", "LR").shuffled().take(4)
         val objectives = games.map { getRandomObjectiveByGame(it) }
 
         return objectives

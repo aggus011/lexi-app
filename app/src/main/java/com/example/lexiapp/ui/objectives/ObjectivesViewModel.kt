@@ -5,20 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.lexiapp.data.api.openaicompletions.OpenAICompletionsGateway.Companion.TAG
 import com.example.lexiapp.domain.model.MiniObjective
 import com.example.lexiapp.domain.model.Objective
 import com.example.lexiapp.domain.useCases.ObjectivesUseCases
-import com.example.lexiapp.domain.service.FireStoreService
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 import java.time.temporal.TemporalAdjusters
 import javax.inject.Inject
 
@@ -60,8 +55,8 @@ class ObjectivesViewModel @Inject constructor(
     }
 
     fun loadObjectives() {
-        val lastMondayDate = getLastMondayDate()
             viewModelScope.launch {
+                val lastMondayDate = getLastMondayDate()
                 objectivesUseCases.getObjectivesActual(lastMondayDate) { objectives ->
                     _objectives.value = objectives
 
@@ -82,6 +77,8 @@ class ObjectivesViewModel @Inject constructor(
         }
     }
 
-
+companion object{
+    private const val TAG = "ObjectivesViewModel"
+}
 
 }
