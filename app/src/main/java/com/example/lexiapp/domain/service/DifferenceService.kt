@@ -7,6 +7,6 @@ import retrofit2.Response
 interface DifferenceService {
 
     suspend fun getDifference(originalText: String, revisedText: String) : Response<Rows>
-    suspend fun saveLetsReadResult(result: LetsReadGameResult)
+    suspend fun saveLetsReadResult(result: LetsReadGameResult, isChallengeReading: Boolean)
     suspend fun generateNotificationIfObjectiveHasBeenCompleted(game: String, typeGame: String, gameName: String)
 }

@@ -4,7 +4,6 @@ import com.example.lexiapp.data.api.difference_text.DifferenceGateway
 import com.example.lexiapp.data.api.difference_text.model.Rows
 import com.example.lexiapp.data.api.difference_text.model.SendInformation
 import com.example.lexiapp.data.model.toLetsReadGameDataResult
-import com.example.lexiapp.data.network.FirebaseNotificationServiceImpl
 import com.example.lexiapp.domain.model.gameResult.LetsReadGameResult
 import com.example.lexiapp.domain.service.DifferenceService
 import com.example.lexiapp.domain.service.FireStoreService
@@ -22,9 +21,12 @@ class DifferenceServiceImpl @Inject constructor(
         return apiDifferenceGateway.getDifference(sendInformation)
     }
 
-    override suspend fun saveLetsReadResult(result: LetsReadGameResult) {
+    override suspend fun saveLetsReadResult(
+        result: LetsReadGameResult,
+        isChallengeReading: Boolean
+    ) {
         db.saveLetsReadResult(result.toLetsReadGameDataResult())
-        saveProgress(result)
+        saveProgress(result, isChallengeReading)
     }
 
     override suspend fun generateNotificationIfObjectiveHasBeenCompleted(
@@ -44,9 +46,24 @@ class DifferenceServiceImpl @Inject constructor(
         }
     }
 
-    private suspend fun saveProgress(result: LetsReadGameResult){
+    private suspend fun saveProgress(result: LetsReadGameResult, isChallengeReading: Boolean) {
+        if (isChallengeReading) {
+            updateChallengeReading(result)
+        } else {
+            updateNotChallengeReading(result)
+        }
+    }
+
+    private suspend fun updateChallengeReading(result: LetsReadGameResult) {
         if (result.success) {
-            db.updateObjectiveProgress("RL", "hit")
+            db.updateObjectiveProgress("RC", "hit")
+        }
+        db.updateObjectiveProgress("RC", "play")
+    }
+
+    private suspend fun updateNotChallengeReading(result: LetsReadGameResult) {
+        if (result.success) {
+            db.updateObjectiveProgress("LR", "hit")
         }
         db.updateObjectiveProgress("LR", "play")
     }
