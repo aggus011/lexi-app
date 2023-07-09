@@ -121,7 +121,7 @@
     <string name="validate_professional">Habilitar</string>
     <string name="show_more">Ver más</string>
     <string name="medical_registration_number">"Matrícula N°: "</string>
-    <string name="matricula">Matricula: </string>
+    <string name="matricula">Matrícula: </string>
     <plurals name="days_left">
         <item quantity="one">Día Restante: %d </item>
         <item quantity="other">Días Restantes: %d </item>
