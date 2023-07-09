@@ -78,14 +78,18 @@
 
         <TextView
             android:id="@+id/txtEmail"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/email"
             android:textColor="@color/white"
             app:layout_constraintTop_toTopOf="@id/ivEmailIcon"
             app:layout_constraintStart_toEndOf="@id/ivEmailIcon"
             app:layout_constraintBottom_toBottomOf="@id/ivEmailIcon"
+            app:layout_constraintEnd_toStartOf="@id/btnTrash"
             android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:textAppearance="@style/textItemsBottomNavigation"/>
 
         <com.google.android.material.button.MaterialButton

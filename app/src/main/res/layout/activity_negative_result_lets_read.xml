@@ -109,8 +109,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
-                app:layout_constraintStart_toStartOf="@id/txtPositiveMessage"
-                app:layout_constraintEnd_toEndOf="@id/txtPositiveMessage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txtPositiveMessage"
                 android:text="Ver palabras a ejercitar"
                 android:backgroundTint="@color/purple"
@@ -120,15 +120,17 @@
                 app:iconGravity="end"
                 app:cornerRadius="10dp"
                 android:layout_marginTop="10dp"
-                android:textAppearance="@style/textMaterialButton"/>
+                app:iconSize="15dp"
+                android:textAppearance="@style/textMaterialButton"
+                android:layout_marginHorizontal="20dp"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnNextText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
-                app:layout_constraintStart_toStartOf="@id/txtPositiveMessage"
-                app:layout_constraintEnd_toEndOf="@id/txtPositiveMessage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/btnSeeWords"
                 android:text="@string/next_text"
                 app:icon="@drawable/ic_end_arrow"
@@ -137,15 +139,17 @@
                 android:textColor="@color/white"
                 app:iconTint="@color/white"
                 app:cornerRadius="10dp"
-                android:textAppearance="@style/textMaterialButton" />
+                app:iconSize="15dp"
+                android:textAppearance="@style/textMaterialButton"
+                android:layout_marginHorizontal="20dp"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnGoInit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/btnNextText"
-                app:layout_constraintStart_toStartOf="@id/txtPositiveMessage"
-                app:layout_constraintEnd_toEndOf="@id/txtPositiveMessage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:backgroundTint="@color/white"
                 android:text="@string/home_screen"
                 android:textColor="@color/purple"
@@ -156,7 +160,8 @@
                 app:iconTint="@color/purple"
                 android:padding="15dp"
                 app:cornerRadius="10dp"
-                android:textAppearance="@style/textMaterialButton"/>
+                android:textAppearance="@style/textMaterialButton"
+                android:layout_marginHorizontal="20dp"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

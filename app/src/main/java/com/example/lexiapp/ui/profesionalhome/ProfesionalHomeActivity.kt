@@ -6,6 +6,7 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
@@ -187,6 +188,9 @@ class ProfesionalHomeActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "No se pudo eliminar", Toast.LENGTH_SHORT).show()
             }
+        }
+        vM.listPatient.observe(this){ list ->
+            binding.clNotPatientsAdded.visibility = if(list.isEmpty()) View.VISIBLE else View.GONE
         }
     }
 

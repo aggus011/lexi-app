@@ -3,6 +3,7 @@ package com.example.lexiapp.ui.profesionalhome.note
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -59,7 +60,12 @@ class RecordNoteActivity : AppCompatActivity() {
     private fun setRV() {
         binding.rvNote.layoutManager=LinearLayoutManager(this)
         vM.notes.observe(this){ notes->
-            binding.rvNote.adapter=NoteAdapter(notes, ::deleteNote)
+            if(notes.isNotEmpty()){
+                binding.cvNotNotesAdded.visibility = View.GONE
+                binding.rvNote.adapter=NoteAdapter(notes, ::deleteNote)
+            }else{
+                binding.cvNotNotesAdded.visibility = View.VISIBLE
+            }
         }
     }
 

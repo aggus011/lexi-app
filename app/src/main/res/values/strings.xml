@@ -105,7 +105,7 @@
     <string name="last_week">Uso en la última semana</string>
     <string name="see_note">Ver notas</string>
     <string name="note">Agregar nota</string>
-    <string name="notes">Notas sobre el paciente</string>
+    <string name="notes">Notas sobre el jugador</string>
     <string name="message_length">Ten en cuenta que el máximo son 200 caracteres</string>
     <string name="write_note">Escribe tu nota aquí</string>
     <string name="save_note">Guardar nota</string>
@@ -115,13 +115,16 @@
     <string name="go_back">Atrás</string>
     <string name="completed_objective">Mis Objetivos Cumplidos</string>
     <string name="dont_objetives_complete">Todavía no tienes objetivos cumplidos de semanas anteriores</string>
-    <string name="dont_have_progress">No tiene progresos esta semana</string>
+    <string name="dont_have_progress">No tiene progresos esta última semana</string>
     <string name="not_use_seven_weeks">No se ha usado en las últimas 7 semanas</string>
     <string name="total_scans">Total histórico de escaneos: </string>
     <string name="validate_professional">Habilitar</string>
     <string name="show_more">Ver más</string>
     <string name="medical_registration_number">"Matrícula N°: "</string>
+    <string name="metrics_source_clarification">Gráficos basados en la actividad del jugador</string>
     <string name="matricula">Matrícula: </string>
+    <string name="not_linked_to_patients">Actualmente no está vinculada/o a ninguna otra cuenta de jugadores</string>
+    <string name="not_notes_added">Aún no registras notas para este jugador</string>
     <plurals name="days_left">
         <item quantity="one">Día Restante: %d </item>
         <item quantity="other">Días Restantes: %d </item>
