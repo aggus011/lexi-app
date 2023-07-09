@@ -123,6 +123,8 @@
     <string name="medical_registration_number">"Matrícula N°: "</string>
     <string name="metrics_source_clarification">Gráficos basados en la actividad del jugador</string>
     <string name="matricula">Matricula: </string>
+    <string name="not_linked_to_patients">Actualmente no está vinculada/o a ninguna otra cuenta de jugadores</string>
+    <string name="not_notes_added">Aún no registras notas para este jugador</string>
     <plurals name="days_left">
         <item quantity="one">Día Restante: %d </item>
         <item quantity="other">Días Restantes: %d </item>

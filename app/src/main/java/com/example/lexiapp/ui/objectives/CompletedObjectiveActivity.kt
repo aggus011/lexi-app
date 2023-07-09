@@ -36,8 +36,8 @@ class CompletedObjectiveActivity : AppCompatActivity() {
 
     private fun suscribeToVM() {
         vM.completedObjectives.observe(this) { objectives ->
-            if (objectives.isEmpty()) binding.txtNotHaveObjectives.visibility = View.VISIBLE
-                else binding.txtNotHaveObjectives.visibility = View.GONE
+            if (objectives.isEmpty()) binding.clNotObjectivesCompleted.visibility = View.VISIBLE
+                else binding.clNotObjectivesCompleted.visibility = View.GONE
             binding.rvCompleteObjectives.adapter = ObjectiveCompletedAdapter(objectives)
         }
     }
