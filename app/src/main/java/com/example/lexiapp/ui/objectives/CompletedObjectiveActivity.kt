@@ -7,7 +7,7 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lexiapp.databinding.ActivityCompletedObjectiveBinding
-import com.example.lexiapp.ui.adapter.ObjectiveAdapter
+import com.example.lexiapp.ui.adapter.ObjectiveCompletedAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,9 +36,9 @@ class CompletedObjectiveActivity : AppCompatActivity() {
 
     private fun suscribeToVM() {
         vM.completedObjectives.observe(this) { objectives ->
-            if (objectives.isEmpty()) binding.txtNotHaveObjectives.visibility = View.VISIBLE
-                else binding.txtNotHaveObjectives.visibility = View.GONE
-            binding.rvCompleteObjectives.adapter = ObjectiveAdapter(objectives)
+            if (objectives.isEmpty()) binding.clNotObjectivesCompleted.visibility = View.VISIBLE
+                else binding.clNotObjectivesCompleted.visibility = View.GONE
+            binding.rvCompleteObjectives.adapter = ObjectiveCompletedAdapter(objectives)
         }
     }
 }

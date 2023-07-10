@@ -8,6 +8,7 @@ import com.example.lexiapp.data.api.openai_audio.SpeechToTextGateway
 import com.example.lexiapp.data.api.openaicompletions.OpenAICompletionsGateway
 import com.example.lexiapp.data.api.word_asociation_api.WordAssociationGateway
 import com.example.lexiapp.data.network.*
+import com.example.lexiapp.data.repository.texttoread.TextToReadRepositoryImpl
 import com.example.lexiapp.domain.service.*
 import dagger.Module
 import dagger.Provides
@@ -105,5 +106,10 @@ object InterfaceModule {
         notifications: FirebaseNotificationServiceImpl
     ): TextScannerService {
         return TextScannerServiceImpl(db, notifications)
+    }
+
+    @Provides
+    fun getTextToReadRepository(): TextToReadRepository {
+        return TextToReadRepositoryImpl()
     }
 }

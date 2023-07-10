@@ -1,8 +1,6 @@
 package com.example.lexiapp.domain.useCases
 
 import android.content.SharedPreferences
-import android.util.Log
-import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.service.FireStoreService
 import com.example.lexiapp.domain.service.FirebaseNotificationService
 import kotlinx.coroutines.flow.flow

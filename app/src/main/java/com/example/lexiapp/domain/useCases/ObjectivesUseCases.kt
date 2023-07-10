@@ -3,9 +3,7 @@ package com.example.lexiapp.domain.useCases
 import android.util.Log
 import com.example.lexiapp.domain.model.MiniObjective
 import com.example.lexiapp.domain.model.Objective
-import com.example.lexiapp.domain.service.FireStoreService
 import com.example.lexiapp.domain.service.ObjectivesService
-import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate

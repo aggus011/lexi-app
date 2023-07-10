@@ -117,9 +117,11 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnReScan"
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvScannedText"
         android:backgroundTint="@color/light_purple"
         android:text="@string/scan_again"
         app:icon="@drawable/ic_text_scanner"
@@ -135,9 +137,11 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnReadText"
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="0dp"
+        android:padding="15dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/btnReScan"
+        app:layout_constraintTop_toTopOf="@id/btnReScan"
         android:backgroundTint="@color/light_purple"
         android:text="@string/read_text"
         app:icon="@drawable/ic_read_text"
@@ -147,7 +151,6 @@
         app:iconSize="30dp"
         app:layout_constraintStart_toEndOf="@id/btnReScan"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
         android:layout_marginStart="5dp"/>
 
         <ProgressBar
@@ -156,27 +159,27 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             style="?android:attr/progressBarStyleLarge"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvScannedTextTitle"
-            app:layout_constraintBottom_toTopOf="@id/btnReScan"
+            app:layout_constraintStart_toStartOf="@id/tvScannedText"
+            app:layout_constraintEnd_toEndOf="@id/tvScannedText"
+            app:layout_constraintTop_toTopOf="@id/tvScannedText"
+            app:layout_constraintBottom_toBottomOf="@id/tvScannedText"
             android:visibility="gone"
             android:indeterminateTint="@color/light_purple"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clNoTextImage"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvScannedTextTitle"
-        app:layout_constraintBottom_toTopOf="@id/btnReScan"
+        app:layout_constraintStart_toStartOf="@id/tvScannedText"
+        app:layout_constraintEnd_toEndOf="@id/tvScannedText"
+        app:layout_constraintTop_toTopOf="@id/tvScannedText"
+        app:layout_constraintBottom_toBottomOf="@id/tvScannedText"
         android:visibility="gone">
 
         <ImageView
             android:id="@+id/ivNoTextRecognized"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:src="@drawable/no_text_recognized"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -48,14 +48,17 @@
 
         <TextView
             android:id="@+id/tvProfessionalEmail"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             tools:text="lucas.doctor@gmail.com"
             android:textAppearance="@style/subtitle"
             app:layout_constraintStart_toEndOf="@id/vBackgroundUserIcon"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
-            app:layout_constraintTop_toBottomOf="@id/tvProfessionalName"/>
+            app:layout_constraintTop_toBottomOf="@id/tvProfessionalName"
+            app:layout_constraintEnd_toStartOf="@id/vIcClose"
+            android:maxLines="1"
+            android:ellipsize="end"/>
 
         <TextView
             android:id="@+id/tvProfessionalMedicalRegistration"
@@ -71,7 +74,8 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogOut"
             android:layout_width="200dp"
-            android:layout_height="70dp"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

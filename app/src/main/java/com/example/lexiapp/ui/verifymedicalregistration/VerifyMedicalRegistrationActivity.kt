@@ -39,6 +39,7 @@ class VerifyMedicalRegistrationActivity : AppCompatActivity() {
         viewModel.errorVerification.observe(this) {
             if (it) {
                 showNoValidatedAccountState()
+                hideValidationAccountState()
                 hideProgressCircular()
             }
         }

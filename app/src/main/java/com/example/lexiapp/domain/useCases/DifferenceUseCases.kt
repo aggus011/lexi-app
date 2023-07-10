@@ -15,13 +15,18 @@ class DifferenceUseCases @Inject constructor(
     suspend fun getDifference(originalText: String, revisedText: String) : Response<Rows> =
         service.getDifference(originalText, revisedText)
 
-    suspend fun saveWrongWords(result: LetsReadGameResult) {
+    suspend fun saveWrongWords(result: LetsReadGameResult, isChallengeReading: Int) {
         prefs.getString("email", null)?.let { result.email = it }
-        service.saveLetsReadResult(result)
+        service.saveLetsReadResult(result, isChallengeReading==1)
     }
 
     suspend fun generateNotificationForObjectives(game: String, type: String, gameName: String){
         service.generateNotificationIfObjectiveHasBeenCompleted(game, type, gameName)
     }
+
+    fun normalizeWords(wrongWords: List<String>)= wrongWords
+        .flatMap { it.split(" ") }
+        .map { it.replace(Regex("[^a-zA-ZáéíóúÁÉÍÓÚ]"), "").uppercase() }
+        .distinct()
 
 }
