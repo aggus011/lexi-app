@@ -11,8 +11,7 @@ import com.journeyapps.barcodescanner.ScanOptions
 import javax.inject.Inject
 
 class CodeQRUseCases @Inject constructor(){
-    private fun isVerified(contents: String) = (CODE_VERIFY == TextUtils.substring(
-        contents,
+    private fun isVerified(contents: String) = (CODE_VERIFY == contents.substring(
         0,
         CODE_VERIFY.length
     ))
@@ -30,7 +29,7 @@ class CodeQRUseCases @Inject constructor(){
 
     private fun deserialize(emailJson: String): String {
         return Gson().fromJson(
-            TextUtils.substring(emailJson, CODE_VERIFY.length, emailJson.length),
+            emailJson.substring(CODE_VERIFY.length, emailJson.length),
             EMAIL_STRING
         )
     }
