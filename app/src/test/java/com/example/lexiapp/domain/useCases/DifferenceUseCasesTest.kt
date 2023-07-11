@@ -46,20 +46,20 @@ class DifferenceUseCasesTest {
         val result = LetsReadGameResult(
             email = "asd@lexi.com",
             success = false,
-            wrongWords = listOf("apple", "banana", "cherry"),
+            wrongWords = listOf("MANZANA", "BANANA", "FRUTILLA"),
             totalWords = 10
         )
         val isChallengeReading = 1
 
-        every { prefs.getString("email", null) } returns "test@example.com"
-        coEvery { service.saveLetsReadResult(result.copy(email = "test@example.com"), true) } just runs
+        every { prefs.getString("email", null) } returns "asd@lexi.com"
+        coEvery { service.saveLetsReadResult(result.copy(email = "asd@lexi.com"), true) } just runs
 
         // When
         differenceUseCases.saveWrongWords(result, isChallengeReading)
 
         // Then
-        assertEquals("test@example.com", result.email)
-        coVerify { service.saveLetsReadResult(result.copy(email = "test@example.com"), true) }
+        assertEquals("asd@lexi.com", result.email)
+        coVerify { service.saveLetsReadResult(result.copy(email = "asd@lexi.com"), true) }
     }
 
 
