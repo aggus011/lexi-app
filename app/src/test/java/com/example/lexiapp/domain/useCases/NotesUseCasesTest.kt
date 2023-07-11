@@ -49,7 +49,7 @@ class NotesUseCasesTest{
     }
 
     @Test
-    fun `when the length note have more than 200 caracters, but not more than letters, return TaskSuccess`() = runBlocking {
+    fun `when the length note have more than 200 caracters, but not more than 200 letters, return TaskSuccess`() = runBlocking {
         //Given
         val note = Note(validTextNote, email, "1687717047605")
         coEvery{ db.saveNote(note) } returns flowOf(FirebaseResult.TaskSuccess)
