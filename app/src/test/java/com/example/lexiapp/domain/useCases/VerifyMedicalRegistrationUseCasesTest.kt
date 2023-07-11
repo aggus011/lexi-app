@@ -2,7 +2,6 @@ package com.example.lexiapp.domain.useCases
 
 import android.content.SharedPreferences
 import com.example.lexiapp.domain.model.Professional
-import com.example.lexiapp.domain.model.User
 import com.example.lexiapp.domain.service.FireStoreService
 import io.mockk.*
 import io.mockk.impl.annotations.RelaxedMockK
@@ -28,7 +27,6 @@ class VerifyMedicalRegistrationUseCasesTest {
         firestoreService = mockk(relaxed = true)
         verifyMedicalRegistrationUseCases = VerifyMedicalRegistrationUseCases(sharedPrefs, firestoreService)
     }
-
 
     @Test
     fun `isBeenTwoDaysSinceRegistration returns true if two days have passed since registration`() {
@@ -56,12 +54,11 @@ class VerifyMedicalRegistrationUseCasesTest {
         assertEquals(false, result)
     }
 
-
     @Test
     fun `getCurrentUserEmail returns the current user's email`() {
         // Given
         val email = "test@example.com"
-        coEvery { sharedPrefs.getString("email", null) } returns email
+        every { sharedPrefs.getString("email", null) } returns email
 
         // When
         val result = verifyMedicalRegistrationUseCases.getCurrentUserEmail()
@@ -70,29 +67,28 @@ class VerifyMedicalRegistrationUseCasesTest {
         assertEquals(email, result)
     }
 
-
     @Test
     fun `getProfessionalAccountState returns professional account state and registration date`() = runBlocking {
         // Given
         val email = "test@example.com"
         val isVerifiedAccount = true
         val registrationDate = Date()
-        val professional = Professional(user = null, medicalRegistration = null, patients = null, isVerifiedAccount = isVerifiedAccount, registrationDate = registrationDate)
-        val firestoreService = mockk<FireStoreService>()
+        val professional = Professional(
+            user = null,
+            medicalRegistration = null,
+            patients = null,
+            isVerifiedAccount = isVerifiedAccount,
+            registrationDate = registrationDate
+        )
         coEvery { firestoreService.getProfessional(email) } returns professional
 
-        val sharedPrefs = mockk<SharedPreferences>()
-        val editor = mockk<SharedPreferences.Editor>()
-
+        val editor = mockk<SharedPreferences.Editor>(relaxed = true)
         every { sharedPrefs.edit() } returns editor
         every { editor.apply() } just runs
 
-        val verifyMedicalRegistrationUseCases = VerifyMedicalRegistrationUseCases(
-            sharedPrefs = sharedPrefs,
-            firestoreServiceImpl = firestoreService
-        )
         // When
         val result = verifyMedicalRegistrationUseCases.getProfessionalAccountState(email)
+
         // Then
         assertEquals(isVerifiedAccount, result.first)
         assertEquals(registrationDate, result.second)
@@ -111,29 +107,17 @@ class VerifyMedicalRegistrationUseCasesTest {
             isVerifiedAccount = isVerifiedAccount,
             registrationDate = registrationDate
         )
-        val firestoreService = mockk<FireStoreService>()
         coEvery { firestoreService.getProfessional(email) } returns professional
 
-        val sharedPrefs = mockk<SharedPreferences>()
-        val editor = mockk<SharedPreferences.Editor>()
-
+        val editor = mockk<SharedPreferences.Editor>(relaxed = true)
         every { sharedPrefs.edit() } returns editor
         every { editor.apply() } just runs
 
-        val verifyMedicalRegistrationUseCases = VerifyMedicalRegistrationUseCases(
-            sharedPrefs = sharedPrefs,
-            firestoreServiceImpl = firestoreService
-        )
         // When
         val result = verifyMedicalRegistrationUseCases.getProfessionalAccountState(email)
+
         // Then
         assertEquals(isVerifiedAccount, result.first)
         assertEquals(registrationDate, result.second)
     }
-
-
-    }
-
-
-
-
+}
