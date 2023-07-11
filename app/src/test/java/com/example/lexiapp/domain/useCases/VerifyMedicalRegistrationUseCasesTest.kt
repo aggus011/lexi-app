@@ -77,13 +77,7 @@ class VerifyMedicalRegistrationUseCasesTest {
         val email = "test@example.com"
         val isVerifiedAccount = true
         val registrationDate = Date()
-        val professional = Professional(
-            user = null,
-            medicalRegistration = null,
-            patients = null,
-            isVerifiedAccount = isVerifiedAccount,
-            registrationDate = registrationDate
-        )
+        val professional = Professional(user = null, medicalRegistration = null, patients = null, isVerifiedAccount = isVerifiedAccount, registrationDate = registrationDate)
         val firestoreService = mockk<FireStoreService>()
         coEvery { firestoreService.getProfessional(email) } returns professional
 
