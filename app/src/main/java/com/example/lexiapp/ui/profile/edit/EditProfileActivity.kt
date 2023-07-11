@@ -31,7 +31,7 @@ class EditProfileActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         val minDate = calendarMin.timeInMillis
 
         val calendarMax = Calendar.getInstance()
-        calendarMax.add(Calendar.YEAR, -1)
+        calendarMax.add(Calendar.YEAR, -6)
         val maxDate=calendarMax.timeInMillis
 
         binding.datePicker.minDate = minDate
