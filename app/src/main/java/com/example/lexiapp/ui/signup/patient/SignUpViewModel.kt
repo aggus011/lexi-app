@@ -26,7 +26,7 @@ class SignUpViewModel @Inject constructor(private val signUpUseCases: SignUpUseC
     val navigateToLogin: LiveData<Event<Boolean>>
         get() = _navigateToLogin
     private var _showErrorDialog = MutableLiveData(false)
-    var errorMessage = "No hemos podido crear tu cuenta, intenta denuevo mas tarde"
+    var errorMessage = "No hemos podido crear tu cuenta, intenta de nuevo más tarde"
     val showErrorDialog: LiveData<Boolean>
         get() = _showErrorDialog
 
@@ -36,7 +36,7 @@ class SignUpViewModel @Inject constructor(private val signUpUseCases: SignUpUseC
             when (signUpUseCases(user)) {
                 LoginResult.Error -> {
                     withContext(Dispatchers.Main) {
-                        errorMessage = "No hemos podido crear tu cuenta, intenta denuevo mas tarde"
+                        errorMessage = "No hemos podido crear tu cuenta, intenta de nuevo más tarde"
                         _showErrorDialog.value = true
                     }
                 }
@@ -71,7 +71,7 @@ class SignUpViewModel @Inject constructor(private val signUpUseCases: SignUpUseC
 
                 LoginResult.PasswordInvalid -> {
                     withContext(Dispatchers.Main) {
-                        errorMessage = "La contraseña debe tenel por lo menos 6 caracteres"
+                        errorMessage = "La contraseña debe tener por lo menos 6 caracteres"
                         _showErrorDialog.value = true
                     }
                 }

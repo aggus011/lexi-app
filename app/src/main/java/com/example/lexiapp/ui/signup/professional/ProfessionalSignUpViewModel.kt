@@ -27,14 +27,14 @@ class ProfessionalSignUpViewModel @Inject constructor(
     private var _isProfessionalAccountBeenVerified = MutableLiveData(false)
     val isProfessionalAccountBeenVerified: LiveData<Boolean>
     get() = _isProfessionalAccountBeenVerified
-    var errorMessage = "No hemos podido crear tu cuenta, intenta denuevo mas tarde"
+    var errorMessage = "No hemos podido crear tu cuenta, intenta de nuevo más tarde"
 
     fun signUpWithEmail(user: ProfessionalSignUp) {
         viewModelScope.launch(Dispatchers.IO) {
             when(professionalSignUpUseCases(user)) {
                 LoginResult.Error -> {
                     withContext(Dispatchers.Main){
-                        errorMessage = "No hemos podido crear tu cuenta, intenta denuevo mas tarde"
+                        errorMessage = "No hemos podido crear tu cuenta, intenta de nuevo más tarde"
                         _showErrorDialog.value = true
                     }
                 }
@@ -67,7 +67,7 @@ class ProfessionalSignUpViewModel @Inject constructor(
 
                 LoginResult.PasswordInvalid -> {
                     withContext(Dispatchers.Main) {
-                        errorMessage = "La contraseña debe tenel por lo menos 6 caracteres"
+                        errorMessage = "La contraseña debe tener por lo menos 6 caracteres"
                         _showErrorDialog.value = true
                     }
                 }
