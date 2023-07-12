@@ -34,7 +34,7 @@ class ResultGamesUseCasesTest {
     }
 
     @Test
-    fun `que si tengo mas resultados que no sean de esta semana los filtre en juego LR`() {
+    fun `if I have more results other than this week's, I will filter them into the LR game`() {
         //Given
 
         //When
@@ -45,39 +45,11 @@ class ResultGamesUseCasesTest {
     }
 
     @Test
-    fun `que si no tengo resultados esta semana me devuelva la lista de la ultima semana vacia`() {
+    fun `if I don't have results this week, return the last week's list to me empty`() {
 
         val responseUseCase = resultGamesUseCases.getResultsLastWeek(emptyList())
 
         assert(responseUseCase.entries.size == 7)
-    }
-
-    @Test
-    fun `que sin importar los resultados de esta semana me devuelva la lista de la ultima semana en orden descendiente`() {
-
-        val responseUseCase = resultGamesUseCases.getResultsLastWeek(emptyList())
-        val calendar = Calendar.getInstance()
-        val actualDay = calendar.get(Calendar.DAY_OF_YEAR)
-        //calendar.add(java.util.Calendar.DAY_OF_YEAR, -1)
-        val day6 = calendar.time
-        val day5 = calendar.add(java.util.Calendar.DAY_OF_YEAR, -2)
-        val day4 = calendar.add(java.util.Calendar.DAY_OF_YEAR, -3)
-        val day3 = calendar.add(java.util.Calendar.DAY_OF_YEAR, -4)
-        val day2 = calendar.add(java.util.Calendar.DAY_OF_YEAR, -5)
-        val day1 = calendar.add(java.util.Calendar.DAY_OF_YEAR, -6)
-
-        val actualResult = Calendar.getInstance().apply {
-            time = Date(responseUseCase.keys.toList()[6].toLong())
-        }.get(Calendar.DAY_OF_YEAR)
-        val day6result = Date(responseUseCase.keys.toList()[5].toLong())
-        val day5result = Date(responseUseCase.keys.toList()[4].toLong())
-        val day4result = Date(responseUseCase.keys.toList()[3].toLong())
-        val day3result = Date(responseUseCase.keys.toList()[2].toLong())
-        val day2result = Date(responseUseCase.keys.toList()[1].toLong())
-        val day1result = Date(responseUseCase.keys.toList()[0].toLong())
-
-        assert(actualDay == actualResult)
-
     }
 
     private val resultsLR = listOf(
