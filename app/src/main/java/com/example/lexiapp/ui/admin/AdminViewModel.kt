@@ -16,23 +16,30 @@ import javax.inject.Inject
 class AdminViewModel @Inject constructor(
     private val profileUseCases: ProfileUseCases,
     private val adminUseCases: AdminUseCases
-): ViewModel() {
+) : ViewModel() {
 
     private val _professionals = MutableLiveData<List<ProfessionalValidation>>()
     private val _filterProfessionals = MutableLiveData<List<ProfessionalValidation>>()
-    val filterProfessionals  = _filterProfessionals  as LiveData<List<ProfessionalValidation>>
+    val filterProfessionals = _filterProfessionals as LiveData<List<ProfessionalValidation>>
 
     init {
         getProfessionals()
     }
 
-    fun setApproval (emailProfessional: String, approval: Boolean) {
+    fun setApproval(emailProfessional: String, approval: Boolean) {
         viewModelScope.launch {
             adminUseCases.saveApprovalToProfessional(emailProfessional, approval)
+            _professionals.value?.forEach {
+                if(it.email == emailProfessional) {
+                    it.validated = approval
+                }
+            }
+
         }
     }
 
     fun filter(patientSearch: String?) {
+        _filterProfessionals.value = emptyList()
         val filteredList = mutableListOf<ProfessionalValidation>()
         if (patientSearch != null) {
             _professionals.value?.forEach {
@@ -43,14 +50,14 @@ class AdminViewModel @Inject constructor(
         _filterProfessionals.value = filteredList
     }
 
-    fun closeSession(){
+    fun closeSession() {
         profileUseCases.closeSesion()
     }
 
     private fun getProfessionals() {
         viewModelScope.launch {
-            adminUseCases.getRegisteredProfessionals().collect{
-                if(it.size != _professionals.value?.size){
+            adminUseCases.getRegisteredProfessionals().collect {
+                if (it.size != _professionals.value?.size) {
                     _professionals.value = it
                     _filterProfessionals.value = _professionals.value
                 }

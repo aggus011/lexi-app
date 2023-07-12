@@ -6,8 +6,9 @@ import javax.inject.Inject
 
 class SpeechToTextUseCases @Inject constructor(
     private val repository: SpeechToTextService
-){
+) {
 
     suspend fun transcription(audioPart: MultipartBody.Part) =
         repository.transcription(audioPart)
+
 }

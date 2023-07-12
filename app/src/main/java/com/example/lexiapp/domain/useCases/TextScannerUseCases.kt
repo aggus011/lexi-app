@@ -9,7 +9,8 @@ class TextScannerUseCases @Inject constructor(
     private val firestore: FireStoreService,
     private val prefs: SharedPreferences,
     private val service: TextScannerService
-){
+
+) {
     private val userEmail = prefs.getString("email", null)!!
 
     suspend fun saveTSResult() {
@@ -17,7 +18,7 @@ class TextScannerUseCases @Inject constructor(
         firestore.updateObjectiveProgress("SCAN", "play")
     }
 
-    suspend fun generateNotificationForObjectives(game: String, type: String, gameName: String){
+    suspend fun generateNotificationForObjectives(game: String, type: String, gameName: String) {
         service.generateNotificationIfObjectiveHasBeenCompleted(game, type, gameName)
     }
 }

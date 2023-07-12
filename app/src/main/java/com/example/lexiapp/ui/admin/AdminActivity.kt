@@ -31,9 +31,10 @@ class AdminActivity : AppCompatActivity() {
     }
 
     private fun setRecycler() {
-        binding.rvProfessionals.layoutManager= LinearLayoutManager(this)
-        vM.filterProfessionals.observe(this){ professionals->
-            binding.rvProfessionals.adapter= ProfessionalValidationAdapter(professionals, ::setApproval)
+        binding.rvProfessionals.layoutManager = LinearLayoutManager(this)
+        vM.filterProfessionals.observe(this) { professionals ->
+            binding.rvProfessionals.adapter =
+                ProfessionalValidationAdapter(professionals, ::setApproval)
         }
     }
 
