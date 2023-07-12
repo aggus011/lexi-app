@@ -16,15 +16,13 @@ class ProfessionalSignUpUseCases @Inject constructor(
     private val firestoreServiceImpl: FireStoreService,
     private val sharedPrefs: SharedPreferences
 ) {
-    private val editor=sharedPrefs.edit()
+    private val editor = sharedPrefs.edit()
 
     suspend operator fun invoke(user: ProfessionalSignUp): LoginResult {
-        if (!verifyEmail(user.email) || user.email != user.emailConfirm) {
-            return LoginResult.Error
-        }
-        if (!verifyPassword(user.password) || user.password != user.passwordConfirm) {
-            return LoginResult.Error
-        }
+        if (!verifyEmail(user.email)) return LoginResult.EmailInvalid
+        if(user.email != user.emailConfirm) return LoginResult.DistinctEmail
+        if (!verifyPassword(user.password)) return LoginResult.PasswordInvalid
+        if(user.password != user.passwordConfirm) return LoginResult.DistinctPassword
         return authenticationServiceImpl.createAccount(user.email, user.password)
     }
 
@@ -34,19 +32,19 @@ class ProfessionalSignUpUseCases @Inject constructor(
     private fun verifyPassword(pass: String): Boolean =
         pass.length >= PASSWORD_MIN_LENGTH
 
-    suspend fun saveProfessional(user: ProfessionalSignUp){
-        try{
+    suspend fun saveProfessional(user: ProfessionalSignUp) {
+        try {
             firestoreServiceImpl.saveProfessionalAccount(user.mapToProfessional(), Date())
             editor.putString("email", user.email).apply()
             editor.putInt("professional_account_state", 1).apply()
             editor.putString("user_type", "professional").apply()
             editor.putString("user_name", user.name.plus(" ${user.surname}")).apply()
-        }catch (e: FirestoreException){
+        } catch (e: FirestoreException) {
             Log.v(TAG, "Error to save professional in db")
         }
     }
 
-    fun getLastProfessionalStatePreference(): Int{
+    fun getLastProfessionalStatePreference(): Int {
         return sharedPrefs.getInt("professional_account_state", 0)
     }
 

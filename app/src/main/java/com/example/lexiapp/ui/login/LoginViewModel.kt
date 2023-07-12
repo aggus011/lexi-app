@@ -68,6 +68,8 @@ class LoginViewModel @Inject constructor(
                     setUserType(email)
                     _navigateToHome.value = Event(true)
                 }
+
+                else -> {}
             }
             //_viewState.value = LoginViewState(isLoading = false)
         }

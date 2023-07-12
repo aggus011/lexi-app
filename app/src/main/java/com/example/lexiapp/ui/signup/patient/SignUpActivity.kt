@@ -20,13 +20,16 @@ import javax.inject.Inject
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
     private val viewModel: SignUpViewModel by viewModels()
+
     @Inject
     lateinit var dialogLauncher: DialogFragmentLauncher
+
     companion object {
         fun create(context: Context): Intent =
             Intent(context, SignUpActivity::class.java)
 
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpBinding.inflate(LayoutInflater.from(this))
@@ -46,17 +49,17 @@ class SignUpActivity : AppCompatActivity() {
             }
         }
         viewModel.showErrorDialog.observe(this) { showError ->
-            if (showError) showErrorDialog()
+            if (showError) showErrorDialog(viewModel.errorMessage)
         }
         binding.tvLogin.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
         }
     }
 
-    private fun showErrorDialog() {
+    private fun showErrorDialog(message: String = "No hemos podido crear tu cuenta, intenta denuevo mas tarde") {
         ErrorDialog.create(
             title = "Ha ocurrido un error",
-            description = "No hemos podido crear tu cuenta, intenta denuevo mas tarde",
+            description = message,
             positiveAction = ErrorDialog.Action("Ok") {
                 it.dismiss()
             }
@@ -72,15 +75,17 @@ class SignUpActivity : AppCompatActivity() {
     private fun initListeners() {
         binding.btnSignUp.setOnClickListener {
             if (fieldsNotEmpty() && fieldsNotNull()) {
+
                 viewModel.singUpWithEmail(
                     UserSignUp(
-                    binding.etName.editText?.text.toString(),
-                    binding.etEmail.editText?.text.toString(),
-                    binding.etConfirmEmail.editText?.text.toString(),
-                    binding.etPassword.editText?.text.toString(),
-                    binding.etConfirmPassword.editText?.text.toString()
+                        binding.etName.editText?.text.toString(),
+                        binding.etEmail.editText?.text.toString(),
+                        binding.etConfirmEmail.editText?.text.toString(),
+                        binding.etPassword.editText?.text.toString(),
+                        binding.etConfirmPassword.editText?.text.toString()
                     )
                 )
+
             }
         }
 
