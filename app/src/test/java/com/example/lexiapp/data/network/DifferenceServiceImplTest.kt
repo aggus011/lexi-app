@@ -26,138 +26,130 @@ class DifferenceServiceImplTest {
     @Before
     fun onBefore() {
         MockKAnnotations.init(this)
-        coEvery { db.getDeviceToken() } returns diviceToken
+        coEvery { db.getDeviceToken() } returns deviceToken
         differenceService = DifferenceServiceImpl(apiDifferenceGateway, db, notificationServiceImpl)
     }
 
     @Test
     fun `when try to save a positive result, save the result and update the play and hit progress`() = runBlocking {
-        //Given
+        // Given
         val result = LetsReadGameResult(
-            email = emailTest,
-            success = positiveSuccess,
+            email = emailTest_DIFF,
+            success = positiveSuccess_DIFF,
             wrongWords = wrongWords,
-            totalWords = totalWords,
-            date = date
+            totalWords = totalWords_DIFF,
+            date = date_DIFF
         )
-        //When
-        differenceService.saveLetsReadResult(result, isNotChallenge)
-        //Then
-        coVerify (exactly = 1) { db.saveLetsReadResult(result.toLetsReadGameDataResult()) }
-        coVerify (exactly = 1) { db.updateObjectiveProgress("LR", "play") }
-        coVerify (exactly = 1) { db.updateObjectiveProgress("LR", "hit") }
+        // When
+        differenceService.saveLetsReadResult(result, isNotChallenge_DIFF)
+        // Then
+        coVerify(exactly = 1) { db.saveLetsReadResult(result.toLetsReadGameDataResult()) }
+        coVerify(exactly = 1) { db.updateObjectiveProgress("LR", "play") }
+        coVerify(exactly = 1) { db.updateObjectiveProgress("LR", "hit") }
     }
 
     @Test
     fun `when try to save a negative result, save the result and update the play progress`() = runBlocking {
-        //Given
+        // Given
         val result = LetsReadGameResult(
-            email = emailTest,
-            success = negativeSuccess,
+            email = emailTest_DIFF,
+            success = negativeSuccess_DIFF,
             wrongWords = wrongWords,
-            totalWords = totalWords,
-            date = date
+            totalWords = totalWords_DIFF,
+            date = date_DIFF
         )
-        //When
-        differenceService.saveLetsReadResult(result, isNotChallenge)
-        //Then
-        coVerify (exactly = 1) { db.saveLetsReadResult(result.toLetsReadGameDataResult()) }
-        coVerify (exactly = 1) { db.updateObjectiveProgress("LR", "play") }
-        coVerify (exactly = 0) { db.updateObjectiveProgress("LR", "hit") }
-
+        // When
+        differenceService.saveLetsReadResult(result, isNotChallenge_DIFF)
+        // Then
+        coVerify(exactly = 1) { db.saveLetsReadResult(result.toLetsReadGameDataResult()) }
+        coVerify(exactly = 1) { db.updateObjectiveProgress("LR", "play") }
+        coVerify(exactly = 0) { db.updateObjectiveProgress("LR", "hit") }
     }
 
     @Test
     fun `when try to save a positive challengeResult, save the result and update the play and hit progress`() = runBlocking {
-        //Given
+        // Given
         val result = LetsReadGameResult(
-            email = emailTest,
-            success = positiveSuccess,
+            email = emailTest_DIFF,
+            success = positiveSuccess_DIFF,
             wrongWords = wrongWords,
-            totalWords = totalWords,
-            date = date
+            totalWords = totalWords_DIFF,
+            date = date_DIFF
         )
-        //When
-        differenceService.saveLetsReadResult(result, isChallenge)
-        //Then
-        coVerify (exactly = 1) { db.saveLetsReadResult(result.toLetsReadGameDataResult()) }
-        coVerify (exactly = 1) { db.updateObjectiveProgress("RC", "play") }
-        coVerify (exactly = 1) { db.updateObjectiveProgress("RC", "hit") }
+        // When
+        differenceService.saveLetsReadResult(result, isChallenge_DIFF)
+        // Then
+        coVerify(exactly = 1) { db.saveLetsReadResult(result.toLetsReadGameDataResult()) }
+        coVerify(exactly = 1) { db.updateObjectiveProgress("RC", "play") }
+        coVerify(exactly = 1) { db.updateObjectiveProgress("RC", "hit") }
     }
 
     @Test
     fun `when try to save a negative challengeResult, save the result and update the play and hit progress`() = runBlocking {
-        //Given
+        // Given
         val result = LetsReadGameResult(
-            email = emailTest,
-            success = negativeSuccess,
+            email = emailTest_DIFF,
+            success = negativeSuccess_DIFF,
             wrongWords = wrongWords,
-            totalWords = totalWords,
-            date = date
+            totalWords = totalWords_DIFF,
+            date = date_DIFF
         )
-        //When
-        differenceService.saveLetsReadResult(result, isChallenge)
-        //Then
-        coVerify (exactly = 1) { db.saveLetsReadResult(result.toLetsReadGameDataResult()) }
-        coVerify (exactly = 1) { db.updateObjectiveProgress("RC", "play") }
-        coVerify (exactly = 0) { db.updateObjectiveProgress("RC", "hit") }
+        // When
+        differenceService.saveLetsReadResult(result, isChallenge_DIFF)
+        // Then
+        coVerify(exactly = 1) { db.saveLetsReadResult(result.toLetsReadGameDataResult()) }
+        coVerify(exactly = 1) { db.updateObjectiveProgress("RC", "play") }
+        coVerify(exactly = 0) { db.updateObjectiveProgress("RC", "hit") }
     }
 
     @Test
     fun `when an objectivePlay is complete, send the notification of that objective`() = runBlocking {
-        //Given
-        coEvery { db.checkIfObjectiveAndWeeklyObjectivesWereCompleted(typeGameLR, typePlay) } returns objectiveComplete
-        //When
-        differenceService.generateNotificationIfObjectiveHasBeenCompleted(typeGameLR, typePlay, nameGame)
-        //Then
-        coVerify (exactly = 1) { notificationServiceImpl.sendNotificationObjectiveCompleted(
-            diviceToken, "Jugar $nameGame")
-        }
-        coVerify (exactly = 0) { notificationServiceImpl.sendNotificationWeeklyObjectivesCompleted(diviceToken) }
+        // Given
+        coEvery { db.checkIfObjectiveAndWeeklyObjectivesWereCompleted(typeGameLR_DIFF, typePlay_DIFF) } returns objectiveComplete_DIFF
+        // When
+        differenceService.generateNotificationIfObjectiveHasBeenCompleted(typeGameLR_DIFF, typePlay_DIFF, nameGame)
+        // Then
+        coVerify(exactly = 1) { notificationServiceImpl.sendNotificationObjectiveCompleted(deviceToken, "Jugar $nameGame") }
+        coVerify(exactly = 0) { notificationServiceImpl.sendNotificationWeeklyObjectivesCompleted(deviceToken) }
     }
 
     @Test
     fun `when an objectiveHit is complete, send the notification of that objective`() = runBlocking {
-        //Given
-        coEvery { db.checkIfObjectiveAndWeeklyObjectivesWereCompleted(typeGameRC, typeHit) } returns objectiveComplete
-        //When
-        differenceService.generateNotificationIfObjectiveHasBeenCompleted(typeGameRC, typeHit, nameGame)
-        //Then
-        coVerify (exactly = 1) { notificationServiceImpl.sendNotificationObjectiveCompleted(
-            diviceToken, "Acertar en $nameGame")
-        }
-        coVerify (exactly = 0) { notificationServiceImpl.sendNotificationWeeklyObjectivesCompleted(diviceToken) }
+        // Given
+        coEvery { db.checkIfObjectiveAndWeeklyObjectivesWereCompleted(typeGameRC_DIFF, typeHit_DIFF) } returns objectiveComplete_DIFF
+        // When
+        differenceService.generateNotificationIfObjectiveHasBeenCompleted(typeGameRC_DIFF, typeHit_DIFF, nameGame)
+        // Then
+        coVerify(exactly = 1) { notificationServiceImpl.sendNotificationObjectiveCompleted(deviceToken, "Acertar en $nameGame") }
+        coVerify(exactly = 0) { notificationServiceImpl.sendNotificationWeeklyObjectivesCompleted(deviceToken) }
     }
 
     @Test
     fun `when all objectives of week are complete, send the weekly notification`() = runBlocking {
-        //Given
-        coEvery { db.checkIfObjectiveAndWeeklyObjectivesWereCompleted(typeGameRC, typeHit) } returns allObjectivesComplete
-        coEvery { db.getDeviceToken() } returns diviceToken
-        //When
-        differenceService.generateNotificationIfObjectiveHasBeenCompleted(typeGameRC, typeHit, nameGame)
-        //Then
-        coVerify (exactly = 0) { notificationServiceImpl.sendNotificationObjectiveCompleted(
-            diviceToken, "Acertar $nameGame")
-        }
-        coVerify (exactly = 1) { notificationServiceImpl.sendNotificationWeeklyObjectivesCompleted(diviceToken) }
+        // Given
+        coEvery { db.checkIfObjectiveAndWeeklyObjectivesWereCompleted(typeGameRC_DIFF, typeHit_DIFF) } returns allObjectivesComplete_DIFF
+        coEvery { db.getDeviceToken() } returns deviceToken
+        // When
+        differenceService.generateNotificationIfObjectiveHasBeenCompleted(typeGameRC_DIFF, typeHit_DIFF, nameGame)
+        // Then
+        coVerify(exactly = 0) { notificationServiceImpl.sendNotificationObjectiveCompleted(deviceToken, "Acertar $nameGame") }
+        coVerify(exactly = 1) { notificationServiceImpl.sendNotificationWeeklyObjectivesCompleted(deviceToken) }
     }
 }
 
-const val emailTest = "test@gmail.com"
-const val positiveSuccess = true
-const val negativeSuccess = false
-const val isChallenge = true
-const val isNotChallenge = false
-val wrongWords = listOf("CASA", "PATO", "BOTA")
-const val totalWords = 20
-var date = System.currentTimeMillis().toString()
-const val diviceToken = "e3eHzqEbRo2JsonyA5dapb:A"
-val objectiveComplete = Pair(true, false)
-val allObjectivesComplete = Pair(true, true)
-const val nameGame = "Vamos a Leer"
-const val typeGameLR = "LR"
-const val typeGameRC = "RC"
-const val typePlay = "play"
-const val typeHit = "hit"
-
+const val emailTest_DIFF: String = "test@gmail.com"
+const val positiveSuccess_DIFF: Boolean = true
+const val negativeSuccess_DIFF: Boolean = false
+const val isChallenge_DIFF: Boolean = true
+const val isNotChallenge_DIFF: Boolean = false
+val wrongWords: List<String> = listOf("CASA", "PATO", "BOTA")
+const val totalWords_DIFF: Int = 20
+val date_DIFF: String = System.currentTimeMillis().toString()
+const val deviceToken: String = "e3eHzqEbRo2JsonyA5dapb:A"
+val objectiveComplete_DIFF: Pair<Boolean, Boolean> = Pair(true, false)
+val allObjectivesComplete_DIFF: Pair<Boolean, Boolean> = Pair(true, true)
+const val nameGame: String = "Vamos a Leer"
+const val typeGameLR_DIFF: String = "LR"
+const val typeGameRC_DIFF: String = "RC"
+const val typePlay_DIFF: String = "play"
+const val typeHit_DIFF: String = "hit"
