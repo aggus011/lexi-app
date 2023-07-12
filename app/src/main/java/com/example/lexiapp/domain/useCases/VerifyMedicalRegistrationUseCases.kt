@@ -15,10 +15,7 @@ class VerifyMedicalRegistrationUseCases @Inject constructor(
 
     suspend fun getProfessionalAccountState(email: String): Pair<Boolean, Date> {
         val professional = firestoreServiceImpl.getProfessional(email)
-        Log.v(
-            TAG,
-            "Professional state: ${professional.isVerifiedAccount}  Date registration: ${professional.registrationDate}"
-        )
+      //  Log.v(TAG, "Professional state: ${professional.isVerifiedAccount}  Date registration: ${professional.registrationDate}")
         return Pair(professional.isVerifiedAccount, professional.registrationDate ?: Date())
     }
 
