@@ -3,6 +3,7 @@ package com.example.lexiapp.domain.useCases
 import android.content.SharedPreferences
 import com.example.lexiapp.data.network.AuthenticationServiceImpl
 import com.example.lexiapp.domain.model.LoginResult
+import com.example.lexiapp.domain.model.ProfessionalSignUp
 import com.example.lexiapp.domain.model.UserSignUp
 import com.example.lexiapp.domain.service.FireStoreService
 import io.mockk.MockKAnnotations
@@ -30,29 +31,53 @@ class SignUpUseCasesTest {
     }
 
     @Test
-    fun `with empty fields do not allow to create the user`() = runBlocking {
+    fun `by entering an invalid mail it will not let me create the user and return EmailInvalid`()  = runBlocking {
         //Given
-        val name = ""
-        val email = ""
-        val password = ""
-        coEvery { mAuth.createAccount(email, password) } returns LoginResult.Success
+        val name = "Name"
+        val email = "invalidemail.com"
+        val password = "my0password"
         //When
         val result = signUpUseCases(UserSignUp(name, email, email, password, password))
         //Then
-        assert(result == LoginResult.Error)
+        assert(result == LoginResult.EmailInvalid)
     }
 
     @Test
-    fun `by entering an invalid main it will not let me create the user`()  = runBlocking {
+    fun `when the emails not match, return DistinctEmail`() = runBlocking {
         //Given
-        val name = "asdfasdfasd"
-        val email = "asdjkfhadsj"
-        val password = "sdfasdsfsad"
-        coEvery { mAuth.createAccount(email, password) } returns LoginResult.Success
+        val name = "Name"
+        val email = "valid@email.com"
+        val confirmEmail = "invalidemail.com"
+        val password = "my0password"
+        //When
+        val result = signUpUseCases(UserSignUp(name, email, confirmEmail, password, password))
+        //Then
+        assert(result == LoginResult.DistinctEmail)
+    }
+
+    @Test
+    fun `when the passwords not match, return DistinctPassword`() = runBlocking {
+        //Given
+        val name = "Name"
+        val email = "valid@email.com"
+        val password = "my0password"
+        val confirmPassword = "cant"
+        //When
+        val result = signUpUseCases(UserSignUp(name, email, email, password, confirmPassword))
+        //Then
+        assert(result == LoginResult.DistinctPassword)
+    }
+
+    @Test
+    fun `when the the password is not valid, return PasswordInvalid`() = runBlocking {
+        //Given
+        val name = "Name"
+        val email = "valid@email.com"
+        val password = "cant"
         //When
         val result = signUpUseCases(UserSignUp(name, email, email, password, password))
         //Then
-        assert(LoginResult.Error == result)
+        assert(result == LoginResult.PasswordInvalid)
     }
 
 }
