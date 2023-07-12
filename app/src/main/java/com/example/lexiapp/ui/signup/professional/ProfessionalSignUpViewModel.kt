@@ -34,6 +34,7 @@ class ProfessionalSignUpViewModel @Inject constructor(
             when(professionalSignUpUseCases(user)) {
                 LoginResult.Error -> {
                     withContext(Dispatchers.Main){
+                        errorMessage = "No hemos podido crear tu cuenta, intenta denuevo mas tarde"
                         _showErrorDialog.value = true
                     }
                 }

@@ -36,6 +36,7 @@ class SignUpViewModel @Inject constructor(private val signUpUseCases: SignUpUseC
             when (signUpUseCases(user)) {
                 LoginResult.Error -> {
                     withContext(Dispatchers.Main) {
+                        errorMessage = "No hemos podido crear tu cuenta, intenta denuevo mas tarde"
                         _showErrorDialog.value = true
                     }
                 }
