@@ -16,12 +16,10 @@ class SignUpUseCases @Inject constructor(
     private val editor=sharedPrefs.edit()
 
     suspend operator fun invoke(user: UserSignUp): LoginResult {
-        if (!verifyEmail(user.email) || user.email != user.emailConfirm) {
-            return LoginResult.Error
-        }
-        if (!verifyPassword(user.password) || user.password != user.passwordConfirm) {
-            return LoginResult.Error
-        }
+        if (!verifyEmail(user.email)) return LoginResult.EmailInvalid
+        if(user.email != user.emailConfirm) return LoginResult.DistinctEmail
+        if (!verifyPassword(user.password)) return LoginResult.PasswordInvalid
+        if(user.password != user.passwordConfirm) return LoginResult.DistinctPassword
         return authenticationServiceImpl.createAccount(user.email, user.password)
     }
 

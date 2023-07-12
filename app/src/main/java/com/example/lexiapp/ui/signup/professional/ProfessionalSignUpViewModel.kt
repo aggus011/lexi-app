@@ -27,6 +27,7 @@ class ProfessionalSignUpViewModel @Inject constructor(
     private var _isProfessionalAccountBeenVerified = MutableLiveData(false)
     val isProfessionalAccountBeenVerified: LiveData<Boolean>
     get() = _isProfessionalAccountBeenVerified
+    var errorMessage = "No hemos podido crear tu cuenta, intenta denuevo mas tarde"
 
     fun signUpWithEmail(user: ProfessionalSignUp) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -40,6 +41,33 @@ class ProfessionalSignUpViewModel @Inject constructor(
                     professionalSignUpUseCases.saveProfessional(user)
                     withContext(Dispatchers.Main){
                         _signUpSuccess.value = true
+                    }
+                }
+                LoginResult.DistinctEmail -> {
+                    withContext(Dispatchers.Main) {
+                        errorMessage = "Los emails no coinciden"
+                        _showErrorDialog.value = true
+                    }
+                }
+
+                LoginResult.EmailInvalid -> {
+                    withContext(Dispatchers.Main) {
+                        errorMessage = "El formato de email es incorrecto"
+                        _showErrorDialog.value = true
+                    }
+                }
+
+                LoginResult.DistinctPassword -> {
+                    withContext(Dispatchers.Main) {
+                        errorMessage = "Las contraseñas no coinciden"
+                        _showErrorDialog.value = true
+                    }
+                }
+
+                LoginResult.PasswordInvalid -> {
+                    withContext(Dispatchers.Main) {
+                        errorMessage = "La contraseña debe tenel por lo menos 6 caracteres"
+                        _showErrorDialog.value = true
                     }
                 }
             }

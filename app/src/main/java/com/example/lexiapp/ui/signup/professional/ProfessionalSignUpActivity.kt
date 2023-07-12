@@ -53,11 +53,11 @@ class ProfessionalSignUpActivity : AppCompatActivity() {
         setListeners()
     }
 
-    private fun checkIfProfessionalIsBeingVerified(){
+    private fun checkIfProfessionalIsBeingVerified() {
         viewModel.isProfessionalAccountBeenVerified()
     }
 
-    private fun getViews(){
+    private fun getViews() {
         userName = binding.etName
         userSurname = binding.etSurname
         medicalRegistration = binding.etMedicalRegistration
@@ -68,37 +68,37 @@ class ProfessionalSignUpActivity : AppCompatActivity() {
         btnSignUp = binding.btnSignUp
     }
 
-    private fun initObservers(){
-        viewModel.showErrorDialog.observe(this){ showError ->
-            if(showError) showErrorDialog()
+    private fun initObservers() {
+        viewModel.showErrorDialog.observe(this) { showError ->
+            if (showError) showErrorDialog(viewModel.errorMessage)
         }
-        viewModel.signUpSuccess.observe(this){
-            if(it){
+        viewModel.signUpSuccess.observe(this) {
+            if (it) {
                 startActivity(Intent(this, VerifyMedicalRegistrationActivity::class.java))
                 finish()
             }
         }
-        viewModel.isProfessionalAccountBeenVerified.observe(this){
-            if(it){
+        viewModel.isProfessionalAccountBeenVerified.observe(this) {
+            if (it) {
                 startActivity(Intent(this, VerifyMedicalRegistrationActivity::class.java))
                 finish()
             }
         }
     }
 
-    private fun showErrorDialog() {
+    private fun showErrorDialog(message: String = "No hemos podido crear tu cuenta, intenta denuevo mas tarde") {
         ErrorDialog.create(
             title = "Ha ocurrido un error",
-            description = "No hemos podido crear tu cuenta, intenta denuevo mas tarde",
+            description = message,
             positiveAction = ErrorDialog.Action("OK") {
                 it.dismiss()
             }
         ).show(dialogLauncher, this)
     }
 
-    private fun setListeners(){
+    private fun setListeners() {
         btnSignUp.setOnClickListener {
-            if(areTextInputLayoutsNotEmpty(
+            if (areTextInputLayoutsNotEmpty(
                     userName,
                     userSurname,
                     medicalRegistration,
@@ -106,7 +106,8 @@ class ProfessionalSignUpActivity : AppCompatActivity() {
                     confirmEmail,
                     password,
                     confirmPassword
-            )){
+                )
+            ) {
                 viewModel.signUpWithEmail(
                     ProfessionalSignUp(
                         userName.editText?.text.toString().trim(),
@@ -118,7 +119,7 @@ class ProfessionalSignUpActivity : AppCompatActivity() {
                         confirmPassword.editText?.text.toString().trim()
                     )
                 )
-            }else{
+            } else {
                 Toast.makeText(this, "Algún campo vacío", Toast.LENGTH_SHORT).show()
             }
         }

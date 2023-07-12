@@ -12,7 +12,7 @@ import androidx.core.view.isGone
 import androidx.fragment.app.DialogFragment
 import com.example.lexiapp.databinding.DialogErrorBinding
 
-class ErrorDialog : DialogFragment() {
+class ErrorDialog() : DialogFragment() {
 
     private var title: String = ""
     private var description: String = ""
