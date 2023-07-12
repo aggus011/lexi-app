@@ -26,7 +26,7 @@ class LetterServiceImpl @Inject constructor(
 
     override suspend fun getWord(count: Int, length: Int, language: String) = flow {
         val errorWords = db.getWordPlayed(userMail)
-        Log.d("WORDS_ERROR", "${errorWords.first}//${errorWords.second}")
+        //Log.d("WORDS_ERROR", "${errorWords.first}//${errorWords.second}")
         val stimulus = if (errorWords.first) errorWords.second else db.getWordCategories(userMail)
         apiWordService.getWordToWhereIsTheLetterGame(count, length, language, stimulus)
             .map { inputList -> inputList.filter { !BlackList.words.contains(it.uppercase()) } }
@@ -37,12 +37,12 @@ class LetterServiceImpl @Inject constructor(
 
     override suspend fun saveResult(result: ResultGame) {
         saveProgress(result)
-        Log.v("SAVE_ANSWER_LETTER_IMPL", "${result.success}")
+        //Log.v("SAVE_ANSWER_LETTER_IMPL", "${result.success}")
         when(result::class){
             WhereIsTheLetterResult::class -> {
-                Log.v("SAVE_ANSWER_LETTER_IMPL", "${result.success}//${result.email}")
+                //Log.v("SAVE_ANSWER_LETTER_IMPL", "${result.success}//${result.email}")
                 val witlRes=(result as WhereIsTheLetterResult).toWhereIsTheLetterDataResult()
-                Log.v("SAVE_ANSWER_LETTER_IMPL", "${witlRes.result}//${witlRes.word}//${witlRes.selectedLetter}")
+                //Log.v("SAVE_ANSWER_LETTER_IMPL", "${witlRes.result}//${witlRes.word}//${witlRes.selectedLetter}")
                 db.saveWhereIsTheLetterResult(witlRes, result.email)
             }
             CorrectWordGameResult::class -> {
@@ -57,7 +57,7 @@ class LetterServiceImpl @Inject constructor(
         language: String
     ) = flow {
         val errorWords = db.getWordPlayed(userMail)
-        Log.d("WORDS_ERROR", "${errorWords.first}//${errorWords.second}")
+        //Log.d("WORDS_ERROR", "${errorWords.first}//${errorWords.second}")
         val stimulus = if (errorWords.first) errorWords.second else db.getWordCategories(userMail)
         apiWordService.getWordToWhereIsTheLetterGame(count, length, language, stimulus)
             .map { inputList -> inputList.filter { !BlackList.words.contains(it.uppercase()) } }
@@ -100,10 +100,5 @@ class LetterServiceImpl @Inject constructor(
                 if (typeGame == "hit") "Acertar en $gameName" else "Jugar $gameName"
             )
         }
-    }
-
-    private suspend fun getErrorWords(){
-        var errorWords = Pair(false,listOf<String>())
-
     }
 }
