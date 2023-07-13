@@ -97,7 +97,7 @@ class NotesUseCasesTest{
     }
 
     @Test
-    fun `when try to delete a note and it is success, returns TaskFailure`() = runBlocking {
+    fun `when try to delete a note and it is success, returns TaskSuccess`() = runBlocking {
         //Given
         val note = Note(textNote, email, "1687717047605")
         coEvery{ db.deleteNote(note.emailPatient, note.date!!) } returns flowOf(FirebaseResult.TaskSuccess)
