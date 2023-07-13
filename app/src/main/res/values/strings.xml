@@ -88,13 +88,13 @@
     <string name="CW_title">PALABRA CORRECTA</string>
     <string name="choose_three_favs">ELIGE TRES FAVORITOS</string>
     <string name="animals">Animales</string>
-    <string name="insects">Incectos</string>
+    <string name="insects">Insectos</string>
     <string name="fruits">Frutas</string>
     <string name="vegetables">Verduras</string>
     <string name="colors">Colores</string>
     <string name="names">Nombres</string>
     <string name="places">Lugares</string>
-    <string name="countries">Paises</string>
+    <string name="countries">Países</string>
     <string name="vehicles">Vehículos</string>
     <string name="login_with_email_and_password">Inicia Sesión con tu email y contraseña</string>
     <string name="complete_with_your_data_for_register_in_lexi">Completá con tus datos para registrarte en LEXI</string>
