@@ -7,6 +7,7 @@ import com.example.lexiapp.domain.service.FireStoreService
 import com.example.lexiapp.domain.service.FirebaseNotificationService
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.CompletableDeferred
@@ -67,6 +68,8 @@ class LinkUseCasesTest{
         linkUseCases.bindProfessionalToPatient(emailPlayerTest).collect{
             assert(it == FirebaseResult.TaskSuccess)
         }
+        coVerify (exactly = 0) { firebaseNotificationService.sendNotificationToPatient(tokenPlayerTest,emailPlayerTest) }
+        coVerify (exactly = 0) { firebaseNotificationService.sendNotificationToProfessional(tokenTest,emailTest) }
     }
 
     @Test
