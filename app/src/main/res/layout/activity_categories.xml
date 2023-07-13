@@ -244,6 +244,7 @@
         android:layout_height="wrap_content"
         android:text="@string/vehicles"
         android:layout_marginTop="30dp"
+        android:paddingEnd="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/checkboxCategory8"

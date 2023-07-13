@@ -126,7 +126,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Crea una nota"
+        android:text="@string/create_note"
         android:textColor="@color/black"
         android:textSize="28sp"
         android:layout_margin="12dp"
