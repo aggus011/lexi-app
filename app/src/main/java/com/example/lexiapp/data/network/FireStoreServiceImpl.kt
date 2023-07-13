@@ -432,7 +432,7 @@ class FireStoreServiceImpl @Inject constructor(
                 if (game != null && game in games) {
                     val goal = objectiveFields["goal"] as Long?
                     if (goal != null) {
-                        val newGoal = ceil(goal * 1.5).toInt()
+                        val newGoal = ceil(goal * 1.3).toInt()
                         batch.update(documentSnapshot.reference, "goal", newGoal)
                     }
                 }
