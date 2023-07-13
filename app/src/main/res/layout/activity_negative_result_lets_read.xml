@@ -112,7 +112,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txtPositiveMessage"
-                android:text="Ver palabras a ejercitar"
+                android:text="@string/see_words_exercise"
                 android:backgroundTint="@color/purple"
                 android:textColor="@color/white"
                 app:iconTint="@color/white"
